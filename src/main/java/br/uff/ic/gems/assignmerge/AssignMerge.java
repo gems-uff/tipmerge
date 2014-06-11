@@ -1,6 +1,7 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
+ * This program only show the statistics about project commits
  */
 package br.uff.ic.gems.assignmerge;
 
@@ -39,9 +40,9 @@ public class AssignMerge {
         File project = file.getSelectedFile();
         String projectName = project.getName();
         String repositoryPath = project.toString();
-        String output = "C:\\Users\\Catarina\\Dropbox\\Doutorado\\Kraken\\OutputAuthorsInBranch";
-        //teste
-        String authorsList;
+        String output = "D:\\Dropbox\\Doutorado\\assignmerge\\Outputs";
+        //test
+        StringBuffer authorsList = new StringBuffer();
         
         List<String> mergeRevisions = getMergeRevisions(repositoryPath);
         List<Committer> allCommiters = new ArrayList<Committer>();
@@ -51,7 +52,7 @@ public class AssignMerge {
         int size = mergeRevisions.size();
         int i = 1;      
         for (String merge : mergeRevisions) {
-            authorsList = "Merge " + i++ +": " + merge;
+            authorsList.append("Merge " + i++ +": " + merge);
            // List<CommitAuthor> authors1 = new ArrayList<CommitAuthor>();
             //List<CommitAuthor> authors2 = new ArrayList<CommitAuthor>();
             if (position % 100 == 0) {
@@ -75,38 +76,47 @@ public class AssignMerge {
             List<Committer> committersOnBranch1 = getAuthorsInBranch(allCommiters, logOneline1), 
                             committersOnBranch2 = getAuthorsInBranch(allCommiters, logOneline2);
             
-            //mostra os dados dos autores incluindo media e desvio padrao de commits por ramos em cada merge
-            //showCommittersStatistics(committersOnBranch1);
+            //showCommittersStatistics(committersOnBranch1, committersOnBranch2, Standard Deviation, mean);
 
-            //verifica a quantidade de autores efetuaram commit em ambos os branchs
+            //checks the amount of authors that commits in both branchs
             Integer commom = getCommomAuthors(committersOnBranch1,committersOnBranch2);
             
-            // busca a quantidade de commits no branch e a quantidade de autores
+            // search the amount of commits and the authors in the branch
             int commitsInBrach = getCommitsInBranch(logOneline1), 
                 authorsInBranch = committersOnBranch1.size();
             Double average = (double)commitsInBrach/authorsInBranch;
-            authorsList += "\t" + commit1 + "\t " +commitsInBrach + "\t" + authorsInBranch + "\t" +  average;
+           
+            //Printing on the File
+            authorsList.append("\t" + commit1 + "\t " +commitsInBrach + "\t" + authorsInBranch + "\t" +  average);
             
-            //mostra a quantidade de commits por autor em cada branch
+            //shows the number of commits per author in each branch
             String commitArray = "[";
             for (Committer eachOne: committersOnBranch1){
-                //commitArray += "\t" + eachOne.getCommits() + ":" + eachOne.getName();
+               
                 commitArray += eachOne.getName() + ": " + eachOne.getCommits() + "\t";
             }commitArray += "]\t";
-            // busca a quantidade de commits no branch e a quantidade de autores
+            
+            // search the amount of commits and the authors in the branch
             commitsInBrach = getCommitsInBranch(logOneline2);
             authorsInBranch = committersOnBranch2.size();
             average = (double)commitsInBrach/authorsInBranch;
-            authorsList += "\t" + commit2 + "\t" + commitsInBrach + "\t" + authorsInBranch + "\t" +  average + "\t" + commom; //imprime os autores em comum, nos dois ramos
-            //acrescenta uma lista com a quantidade de commits por autor
-            authorsList += "\t\t" + commitArray; 
+            
+            //Printing on the File
+            authorsList.append("\t" + commit2 + "\t" + commitsInBrach + "\t" + authorsInBranch + "\t" +  average + "\t" + commom); //prints the authors in common, in the two branches
+            
+            //Printing on the File
+            //Adds a list with the number of commits by author
+            authorsList.append("\t\t" + commitArray);
+            
             commitArray = "[";
             for (Committer eachOne: committersOnBranch2){
                 commitArray += eachOne.getName() + ": " + eachOne.getCommits();
             }commitArray += "]";
-            authorsList += commitArray; 
             
-            //<editor-fold defaultstate="collapsed" desc="Código comentado para impressao de nomes">
+            //Printing on the File
+            authorsList.append(commitArray); 
+            
+            //<editor-fold defaultstate="collapsed" desc="Commented code for printing the authors names">
             /**
              * getAuthorOnline(logOneline1, authors1);
              * getAuthorOnline(logOneline2, authors2);
@@ -135,11 +145,16 @@ public class AssignMerge {
              */
 //</editor-fold>
             
-            System.out.println(authorsList);
+            //Print File
+           //System.out.println(authorsList.toString());
             //System.out.println("Lista de Nomes: " + committersOnBranch1.toString());
-            FileWriter.writeToFile(output, projectName + String.format("%1$tY-%1$tm-%1$td", new Date()) + ".txt", authorsList);
+            //File name saved
+            
+            authorsList.append("\n");
 
         }
+        FileWriter.writeToFile(output, projectName + String.format("%1$tY-%1$tm-%1$td", new Date()) + ".txt", authorsList.toString());
+        
         System.out.println("Count = " + count);
         System.out.println(count + "/" + mergeRevisions.size());
         System.out.println("Committers:    " + allCommiters.size());
@@ -158,7 +173,7 @@ public class AssignMerge {
         File project = file.getSelectedFile();
         String projectName = project.getName();
         String repositoryPath = project.toString();
-        String output = "D:\\Dropbox\\Doutorado\\GitDataExtractor\\Outputs";
+        String output = "D:\\Dropbox\\Doutorado\\assignmerge\\Outputs";
         String authorsList;
 
         List<String> mergeRevisions = getMergeRevisions(repositoryPath);
@@ -192,7 +207,7 @@ public class AssignMerge {
             List<String> logOneline2 = logOneline(repositoryPath, mergeBase, commit2);
             getAuthorOnline(logOneline1, authors1);
             getAuthorOnline(logOneline2, authors2);
-            //System.out.println("Trunk 1 Authors: " + authors1.size());       
+            //System.out.println("Branch 1 Authors: " + authors1.size());       
             authorsList += "Branch 1 \tAuthors: " + authors1.size();
             int countCommits = 0;
             String str = "";
@@ -327,9 +342,9 @@ public class AssignMerge {
 
     public static List<String> logOneline(String repositoryPath, String since, String until) {
         // committers names and emails
-      //  String command = "git log --first-parent --pretty=format:\"%an-%ae\" " + since + ".." + until;//pega todos os ramos envolvidos
-        //String command = "git rev-list --ancestry-path " + since + ".." + until;
-        String command = "git rev-list --ancestry-path --pretty=format:\"%an#%ae\"  " + since + ".." + until;
+        // String command = "git log --first-parent --pretty=format:\"%an-%ae\" " + since + ".." + until; //shows all project branches
+        //String command = "git rev-list --ancestry-path " + since + ".." + until; //gleiph code
+        String command = "git rev-list --ancestry-path --pretty=format:\"%an#%ae\"  " + since + ".." + until; //shows only merge branches
         
         //System.out.println(command);
 
@@ -356,15 +371,14 @@ public class AssignMerge {
 
         } catch (IOException ex) {
         }
-        //System.out.println("Nro de Posicoes Vetor de Saida: " + output.size());
-        //System.out.println("Conteudo do Vetor: " + output.toString());
+        
 
         return output;
     }
 
     private static void getAuthorOnline(List<String> logOneline, List<Committer> authors) {
        for (String authorDatas : logOneline){
-           //separa a string com autor e e-mail em dois dados
+           // separate the string with author and email in two data
            String datas[] = authorDatas.split("-");
            boolean isNew = true;
            for (Committer author : authors){
@@ -385,7 +399,7 @@ public class AssignMerge {
         
         List <Committer> committers = new ArrayList<Committer> ();
         for (int i = 1; i<logOneline.size(); i=i+2){
-           //separa a string com autor e e-mail em dois dados
+           //separate the string with author and email in two data
            String commit = logOneline.get(i);
            String datas[] = commit.split("#");
            boolean isNew = true;
@@ -419,7 +433,7 @@ public class AssignMerge {
 
     private static int getCommitsInBranch(List<String> logOneline1) {
         return logOneline1.size()/2;
-      /*  Integer commitsNumber = 0; //botar 1 para incrementar o commit que não ta vindo
+      /*  Integer commitsNumber = 0; //put 1 to increase the commit is not coming
         for (String commit : logOneline1) {
             if (commit.contains("commit"))
                 commitsNumber++;
@@ -428,10 +442,10 @@ public class AssignMerge {
         */ 
     }
 
-    /* retorno
-     * 0 - ninguem em comum
-     * 1 - há em comum
-     * 2 - todos em comum
+    /* return
+     * 0 - nobody in common
+     * 1 - there is in common
+     * 2 - all in common
      */
     private static Integer getCommomAuthors(List<Committer> authors1, List<Committer> authors2) {
         Integer number = 0;
@@ -443,23 +457,23 @@ public class AssignMerge {
             }
         }
         if (number == 0){
-            //System.out.println("0 - ninguem em comum");
+            //System.out.println("0 - nobody in common");
             return 0;
         }else if ((number == authors1.size()) && (number == authors2.size())){
-            //System.out.println("2 - todos em comum");
+            //System.out.println("2 - all in common");
             return 2;
         }else{
-            //System.out.println("1 - há em comum");
+            //System.out.println("1 - There is common");
             return 1;
         }
-        //return number;
+       
     }
 
     private static void showCommittersStatistics(List<Committer> committersOnBranch1) {
-        System.out.println("Estatística de Autores");
-        System.out.println("Total de Autores:\t" + committersOnBranch1.size());
-        System.out.println("Média de Commits:\t" + StatisticsUtil.getMean(committersOnBranch1) );
-        System.out.println("Desvio Padrão   :\t" + StatisticsUtil.getStandardDeviation(committersOnBranch1));
-        System.out.println("Todos os valores:\t" + committersOnBranch1.toString());
+        System.out.println("Statistics of Authors");
+        System.out.println("Total Authors:\t" + committersOnBranch1.size());
+        System.out.println("Commits Mean:\t" + StatisticsUtil.getMean(committersOnBranch1) );
+        System.out.println("Standard Deviation   :\t" + StatisticsUtil.getStandardDeviation(committersOnBranch1));
+        System.out.println("All values:\t" + committersOnBranch1.toString());
     }
 }
