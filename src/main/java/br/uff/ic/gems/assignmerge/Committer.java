@@ -16,8 +16,8 @@ public class Committer implements Comparable<Committer>{
     
     private String email;
  
-    public Committer(String nome, String email){
-        this.name = nome;
+    public Committer(String name, String email){
+        this.name = name;
         this.email = email;
         this.commits = 1;
     }
