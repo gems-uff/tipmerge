@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -47,6 +48,7 @@ public class AssignMerge {
         List<String> mergeRevisions = getMergeRevisions(repositoryPath);
         List<Committer> allCommiters = new ArrayList<Committer>();
         
+        int branchesMerge = 0;
         int count = 1;
         int position = 1;
         int size = mergeRevisions.size();
@@ -86,8 +88,10 @@ public class AssignMerge {
                 authorsInBranch = committersOnBranch1.size();
             Double average = (double)commitsInBrach/authorsInBranch;
            
+            String averageTxt = new DecimalFormat("#.##").format(average);
+            System.out.println (averageTxt);
             //Printing on the File
-            authorsList.append("\t" + commit1 + "\t " +commitsInBrach + "\t" + authorsInBranch + "\t" +  average);
+            authorsList.append("\t" + commit1 + "\t " +commitsInBrach + "\t" + authorsInBranch + "\t" +  averageTxt);
             
             //shows the number of commits per author in each branch
             String commitArray = "[";
@@ -101,8 +105,16 @@ public class AssignMerge {
             authorsInBranch = committersOnBranch2.size();
             average = (double)commitsInBrach/authorsInBranch;
             
+            averageTxt = new DecimalFormat("#.##").format(average);
+            
+            //Count number of Software Branches Merges (with more than two developers in each branch)
+            if (committersOnBranch1.size() >= 2 && committersOnBranch2.size() >=2){
+                branchesMerge++;
+            }
+            
+            
             //Printing on the File
-            authorsList.append("\t" + commit2 + "\t" + commitsInBrach + "\t" + authorsInBranch + "\t" +  average + "\t" + commom); //prints the authors in common, in the two branches
+            authorsList.append("\t" + commit2 + "\t" + commitsInBrach + "\t" + authorsInBranch + "\t" +  averageTxt + "\t" + commom); //prints the authors in common, in the two branches
             
             //Printing on the File
             //Adds a list with the number of commits by author
@@ -161,6 +173,7 @@ public class AssignMerge {
         System.out.println("Mean:          " + StatisticsUtil.getMean(allCommiters));
         System.out.println("Std Deviation: " + StatisticsUtil.getStandardDeviation(allCommiters));
         System.out.println("Merges:        " + size);
+        System.out.println("Branches Merges: " + branchesMerge);
     }
     
     public static void printMergesAndNames(){
