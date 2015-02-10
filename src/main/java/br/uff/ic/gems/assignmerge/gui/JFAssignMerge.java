@@ -13,6 +13,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -235,6 +236,7 @@ public class JFAssignMerge extends javax.swing.JFrame{
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Analysis Details"));
 
         btRun.setText("Run");
+        btRun.setEnabled(false);
         btRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btRunActionPerformed(evt);
@@ -479,25 +481,32 @@ public class JFAssignMerge extends javax.swing.JFrame{
     private void btSelectProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelectProjectActionPerformed
 		JFileChooser projetctFile = new JFileChooser(new File(jtPathToProjects.getText()));
 		projetctFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int returnVal = projetctFile.showSaveDialog(this.getParent());
+		int returnVal = projetctFile.showDialog(this.getParent(),"Select");
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			String path = projetctFile.getSelectedFile().getParentFile().toString();
 			jtPathToProjects.setText(path);
 			jtProjectName.setText(projetctFile.getSelectedFile().getName());
 			
-			project = new GitProject(projetctFile.getSelectedFile());
-			List<String> branches = project.getListOfBranches();
+			try {
+				project = new GitProject(projetctFile.getSelectedFile());
+				List<String> branches = project.getListOfBranches();
 			
-			txCommits.setText(project.getTotalOfCommits());
-			txLast.setText(project.getDateOfLastCommit());
-			txTotalMerges.setText(project.getTotalOfMerges());
-			txTotalReleases.setText(project.getTotalOfReleases());
-			cbBranchOne.setModel(new JComboBox(branches.toArray()).getModel());
-			cbBranchTwo.setModel(new JComboBox(branches.toArray()).getModel());
+				txCommits.setText(project.getTotalOfCommits());
+				txLast.setText(project.getDateOfLastCommit());
+				txTotalMerges.setText(project.getTotalOfMerges());
+				txTotalReleases.setText(project.getTotalOfReleases());
+				cbBranchOne.setModel(new JComboBox(branches.toArray()).getModel());
+				cbBranchTwo.setModel(new JComboBox(branches.toArray()).getModel());
+				btRun.setEnabled(true);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, 
+					"Please, select a correct git project folder.",
+					"Inane error",
+					JOptionPane.ERROR_MESSAGE);
+			}
+
 		}
-		
-		//int value = 10;
-		//pbRuning.setValue(value);
+
 		
     }//GEN-LAST:event_btSelectProjectActionPerformed
 
@@ -579,7 +588,7 @@ public class JFAssignMerge extends javax.swing.JFrame{
 		 */
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("CDE/Motif".equals(info.getName())) {	//CDE/Motif	//Metal
+				if ("Nimbus".equals(info.getName())) {	//Metal	Nimbus	CDE/Motif	Mac OS X
 					javax.swing.UIManager.setLookAndFeel(info.getClassName());
 					break;
 				}
