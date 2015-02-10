@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
  *
  * @author j2cf
  */
-public class JFAssignMerge extends javax.swing.JFrame{
+public class JFAssignMerge extends javax.swing.JFrame {
 	
 	BasicEvaluator basicDatas;
 	GitProject project;
@@ -498,9 +498,10 @@ public class JFAssignMerge extends javax.swing.JFrame{
 				cbBranchOne.setModel(new JComboBox(branches.toArray()).getModel());
 				cbBranchTwo.setModel(new JComboBox(branches.toArray()).getModel());
 				btRun.setEnabled(true);
+				clearAllFields();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, 
-					"Please, select a correct git project folder.",
+					"Please, select a git project folder.",
 					"Inane error",
 					JOptionPane.ERROR_MESSAGE);
 			}
@@ -510,9 +511,6 @@ public class JFAssignMerge extends javax.swing.JFrame{
 		
     }//GEN-LAST:event_btSelectProjectActionPerformed
 
-	public void updateProgressBar(int value){
-		pbRuning.setValue(value);
-	}
 	
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
 		JFileChooser fcPath = new JFileChooser();
@@ -549,15 +547,16 @@ public class JFAssignMerge extends javax.swing.JFrame{
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
 			List<MergeBranches> merges = project.getMerges();
-			pbRuning.setMaximum( merges.size());
+			int numberOfMerges = merges.size();
+			pbRuning.setMaximum(numberOfMerges);
 			StringBuilder output = new StringBuilder();
 			output.append("Merge List\n");
-			int i = 1;
+			int i = numberOfMerges;
 			for(MergeBranches merge : merges){
-				project.setMergeDetails(merge);
-				updateProgressBar(i);
 				
-				output.append("Merge ").append(i++).append(": ").append(merge.getCommitHash()).append(" ( ").append(merge.getAuthorsBranchOne().size()).append(" , ").append(merge.getAuthorsBranchTwo().size()).append(" )\n");
+				project.setMergeDetails(merge);
+				
+				output.append("Merge ").append(i--).append(": ").append(merge.getCommitHash()).append(" ( ").append(merge.getAuthorsBranchOne().size()).append(" , ").append(merge.getAuthorsBranchTwo().size()).append(" )\n");
 				if(merge.getAuthorsBranchOne() != null){
 					output.append("\tBranch One: ");
 					for(CommitAuthor author : merge.getAuthorsBranchOne())
@@ -571,9 +570,15 @@ public class JFAssignMerge extends javax.swing.JFrame{
 				}
 				output.append("\n");
 				
+				//if(i % (numberOfMerges/100) == 0){
+					pbRuning.setString(String.valueOf(pbRuning.getValue()) + "% complete");
+					pbRuning.setValue(pbRuning.getValue() + 1);
+					pbRuning.update(pbRuning.getGraphics());
+				//}
+				
 			}
 			txResult.setText(output.toString());
-			
+
     }//GEN-LAST:event_btRunActionPerformed
 
 	
@@ -605,7 +610,7 @@ public class JFAssignMerge extends javax.swing.JFrame{
 		//</editor-fold>
 
 		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				new JFAssignMerge().setVisible(true);
 			}
@@ -662,6 +667,10 @@ public class JFAssignMerge extends javax.swing.JFrame{
     private javax.swing.JTextField txTotalMerges;
     private javax.swing.JTextField txTotalReleases;
     // End of variables declaration//GEN-END:variables
+
+	private void clearAllFields() {
+		txResult.setText("");
+	}
 
  
 }
