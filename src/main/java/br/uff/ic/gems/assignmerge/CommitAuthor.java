@@ -8,7 +8,7 @@ package br.uff.ic.gems.assignmerge;
  *
  * @author catarinacosta
  */
-public class Committer implements Comparable<Committer>{
+public class CommitAuthor implements Comparable<CommitAuthor>{
     
     private String name;
     
@@ -16,7 +16,7 @@ public class Committer implements Comparable<Committer>{
     
     private String email;
  
-    public Committer(String name, String email){
+    public CommitAuthor(String name, String email){
         this.name = name;
         this.email = email;
         this.commits = 1;
@@ -51,16 +51,16 @@ public class Committer implements Comparable<Committer>{
     }
 */    
     public void addCommit(){
-        this.commits++;
+		this.setCommits((Integer) (this.getCommits() + 1));
     }
 
     public void addCommit(Integer add){
-        this.commits += add;
+		this.setCommits((Integer) (this.getCommits() + add));
     }
     
     @Override
     public String toString(){
-        return defineSize(this.name, 20) + "\t" + defineSize(this.email, 30)+  "\t" + this.commits;
+        return defineSize(this.name, 20) + "\t" + defineSize(this.email, 30)+  "\t" + this.getCommits();
     }
     
     private String defineSize(String str, Integer lenght) {
@@ -84,16 +84,30 @@ public class Committer implements Comparable<Committer>{
         this.email = email;
     }
 
-    public int compareTo(Committer cmt) {
+    public int compareTo(CommitAuthor cmt) {
         if ( this.getName().equals(cmt.getName()) || this.getEmail().equals(cmt.getEmail()) )
             return 1;
         return 0;
     }
     
-    public Committer clone(){
-        Committer cmt = new Committer(this.name, this.email);
-        cmt.addCommit(this.commits);
+    public CommitAuthor clone(){
+        CommitAuthor cmt = new CommitAuthor(this.name, this.email);
+        cmt.addCommit(this.getCommits());
         return cmt;
     }
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @param commits the commits to set
+	 */
+	public void setCommits(Integer commits) {
+		this.commits = commits;
+	}
 
 }

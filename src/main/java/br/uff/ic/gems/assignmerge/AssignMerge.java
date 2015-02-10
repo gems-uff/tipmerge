@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 /**
@@ -46,7 +44,7 @@ public class AssignMerge {
         StringBuffer authorsList = new StringBuffer();
         
         List<String> mergeRevisions = getMergeRevisions(repositoryPath);
-        List<Committer> allCommiters = new ArrayList<Committer>();
+        List<CommitAuthor> allCommiters = new ArrayList<CommitAuthor>();
         
         int branchesMerge = 0;
         int count = 1;
@@ -75,7 +73,7 @@ public class AssignMerge {
             List<String> logOneline1 = logOneline(repositoryPath, mergeBase, commit1);
             List<String> logOneline2 = logOneline(repositoryPath, mergeBase, commit2);
             
-            List<Committer> committersOnBranch1 = getAuthorsInBranch(allCommiters, logOneline1), 
+            List<CommitAuthor> committersOnBranch1 = getAuthorsInBranch(allCommiters, logOneline1), 
                             committersOnBranch2 = getAuthorsInBranch(allCommiters, logOneline2);
             
             //showCommittersStatistics(committersOnBranch1, committersOnBranch2, Standard Deviation, mean);
@@ -95,7 +93,7 @@ public class AssignMerge {
             
             //shows the number of commits per author in each branch
             String commitArray = "[";
-            for (Committer eachOne: committersOnBranch1){
+            for (CommitAuthor eachOne: committersOnBranch1){
                
                 commitArray += eachOne.getName() + ": " + eachOne.getCommits() + "\t";
             }commitArray += "]\t";
@@ -121,7 +119,7 @@ public class AssignMerge {
             authorsList.append("\t\t" + commitArray);
             
             commitArray = "[";
-            for (Committer eachOne: committersOnBranch2){
+            for (CommitAuthor eachOne: committersOnBranch2){
                 commitArray += eachOne.getName() + ": " + eachOne.getCommits();
             }commitArray += "]";
             
@@ -198,8 +196,8 @@ public class AssignMerge {
         for (String merge : mergeRevisions) {
             //System.out.println("\nMerge " + i++ +": " + merge);
             authorsList = "\nMerge " + i++ +": " + merge + "\n";
-            List<Committer> authors1 = new ArrayList<Committer>();
-            List<Committer> authors2 = new ArrayList<Committer>();
+            List<CommitAuthor> authors1 = new ArrayList<CommitAuthor>();
+            List<CommitAuthor> authors2 = new ArrayList<CommitAuthor>();
             if (position % 100 == 0) {
                 System.out.println("Analising " + position + "/" + size);
                 System.out.println(new Date());
@@ -224,7 +222,7 @@ public class AssignMerge {
             authorsList += "Branch 1 \tAuthors: " + authors1.size();
             int countCommits = 0;
             String str = "";
-            for (Committer author : authors1) {
+            for (CommitAuthor author : authors1) {
                  str += " - " + author.toString() + "\n";
                  countCommits += author.getCommits();
             }
@@ -233,7 +231,7 @@ public class AssignMerge {
             authorsList += "Branch 2 \tAuthors: " + authors2.size();
             countCommits = 0;
             str = "";
-            for (Committer author : authors2) {
+            for (CommitAuthor author : authors2) {
                str += " - " + author.toString() + "\n";
                countCommits += author.getCommits();
             }           
@@ -389,12 +387,12 @@ public class AssignMerge {
         return output;
     }
 
-    private static void getAuthorOnline(List<String> logOneline, List<Committer> authors) {
+    private static void getAuthorOnline(List<String> logOneline, List<CommitAuthor> authors) {
        for (String authorDatas : logOneline){
            // separate the string with author and email in two data
            String datas[] = authorDatas.split("-");
            boolean isNew = true;
-           for (Committer author : authors){
+           for (CommitAuthor author : authors){
                if (     (author.getName().equals(datas[0].toUpperCase())) || 
                         (author.getEmail().equals(datas[1].toLowerCase())) 
                    ){
@@ -404,19 +402,19 @@ public class AssignMerge {
                }
            }
            if (isNew)
-               authors.add(new Committer(datas[0].toUpperCase(), datas[1].toLowerCase()));
+               authors.add(new CommitAuthor(datas[0].toUpperCase(), datas[1].toLowerCase()));
        }
    }
     
-    private static List<Committer> getAuthorsInBranch(List<Committer> allCommitters, List<String> logOneline) {
+    private static List<CommitAuthor> getAuthorsInBranch(List<CommitAuthor> allCommitters, List<String> logOneline) {
         
-        List <Committer> committers = new ArrayList<Committer> ();
+        List <CommitAuthor> committers = new ArrayList<CommitAuthor> ();
         for (int i = 1; i<logOneline.size(); i=i+2){
            //separate the string with author and email in two data
            String commit = logOneline.get(i);
            String datas[] = commit.split("#");
            boolean isNew = true;
-           for (Committer cmt : committers){
+           for (CommitAuthor cmt : committers){
                if (     (cmt.getName().equals(datas[0].toLowerCase())) || 
                         (cmt.getEmail().equals(datas[1].toLowerCase())) 
                    ){
@@ -426,10 +424,10 @@ public class AssignMerge {
                }
            }
            if (isNew){
-               Committer newCmt = new Committer(datas[0].toUpperCase(), datas[1].toLowerCase());
+               CommitAuthor newCmt = new CommitAuthor(datas[0].toUpperCase(), datas[1].toLowerCase());
                committers.add(newCmt);
                 isNew = true;
-                for (Committer cmt : allCommitters){
+                for (CommitAuthor cmt : allCommitters){
                     if (cmt.compareTo(newCmt) == 1){
                         cmt.addCommit(newCmt.getCommits());
                         isNew = false;
@@ -460,10 +458,10 @@ public class AssignMerge {
      * 1 - there is in common
      * 2 - all in common
      */
-    private static Integer getCommomAuthors(List<Committer> authors1, List<Committer> authors2) {
+    private static Integer getCommomAuthors(List<CommitAuthor> authors1, List<CommitAuthor> authors2) {
         Integer number = 0;
-        for (Committer author1 : authors1){
-            for (Committer author2 : authors2){
+        for (CommitAuthor author1 : authors1){
+            for (CommitAuthor author2 : authors2){
                 if (author1.compareTo(author2) == 1){
                     number++;
                 }
@@ -482,7 +480,7 @@ public class AssignMerge {
        
     }
 
-    private static void showCommittersStatistics(List<Committer> committersOnBranch1) {
+    private static void showCommittersStatistics(List<CommitAuthor> committersOnBranch1) {
         System.out.println("Statistics of Authors");
         System.out.println("Total Authors:\t" + committersOnBranch1.size());
         System.out.println("Commits Mean:\t" + StatisticsUtil.getMean(committersOnBranch1) );

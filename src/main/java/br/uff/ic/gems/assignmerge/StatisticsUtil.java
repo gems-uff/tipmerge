@@ -21,10 +21,10 @@ import java.util.List;
  */
 public class StatisticsUtil {
 
-    public static double getMean(List<Committer> commiters) {
+    public static double getMean(List<CommitAuthor> commiters) {
         double mean = 0.0;
         if ((commiters != null) && (commiters.size() > 0)) {
-            for (Committer cmt : commiters){
+            for (CommitAuthor cmt : commiters){
                 mean += cmt.getCommits();
             }
             mean /= commiters.size();
@@ -53,11 +53,11 @@ public class StatisticsUtil {
         }
         return sum;
     }
-    public static double getStandardDeviation(List<Committer> committers) {
+    public static double getStandardDeviation(List<CommitAuthor> committers) {
         double deviation = 0.0;
         if ((committers != null) && (committers.size() > 1)) {
             double mean = getMean(committers);
-            for (Committer cmt : committers){
+            for (CommitAuthor cmt : committers){
                 double delta = cmt.getCommits()-mean;
                 deviation += delta*delta;
             }
