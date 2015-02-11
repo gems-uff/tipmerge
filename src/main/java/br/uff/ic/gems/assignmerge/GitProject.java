@@ -8,7 +8,6 @@ package br.uff.ic.gems.assignmerge;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JProgressBar;
 
 /**
  *
@@ -22,6 +21,7 @@ public class GitProject{
 	final private String totalOfMerges;
 	final private String totalOfReleases;
 	final private List<String> listOfBranches;
+	private List<MergeBranches> listOfMerges;
 	
 	public GitProject(File projectDirectory){
 		
@@ -77,30 +77,30 @@ public class GitProject{
 	}
 	
 	public List<MergeBranches> getMerges(){
-		List<String> hashMerges = CommandLine.getMultiplesResults("git log --merges --pretty=%H", this.projectDirectory);
-		List<MergeBranches> merges = new ArrayList<MergeBranches>();
+		if (this.listOfMerges == null){
 		
-		for (String hashMerge : hashMerges){
-			MergeBranches mergeTemp = new MergeBranches(hashMerge, this);
-/*			String hashParents = CommandLine.getSingleResult("git log --pretty=%P -n 1 " + hashMerge, this.projectDirectory);
-			mergeTemp.setMergeBase(CommandLine.getSingleResult("git merge-base " + hashParents.split(" ")[0] + " " + hashParents.split(" ")[1], this.projectDirectory));
-			mergeTemp.setParent1(hashParents.split(" ")[0]);
-			mergeTemp.setParent2(hashParents.split(" ")[1]); */
-			merges.add(mergeTemp);
+			List<String> hashMerges = CommandLine.getMultiplesResults("git log --merges --pretty=%H", this.projectDirectory);
+			List<MergeBranches> merges = new ArrayList<MergeBranches>();
+
+			for (String hashMerge : hashMerges){
+				MergeBranches mergeTemp = new MergeBranches(hashMerge, this);
+	/*			String hashParents = CommandLine.getSingleResult("git log --pretty=%P -n 1 " + hashMerge, this.projectDirectory);
+				mergeTemp.setMergeBase(CommandLine.getSingleResult("git merge-base " + hashParents.split(" ")[0] + " " + hashParents.split(" ")[1], this.projectDirectory));
+				mergeTemp.setParent1(hashParents.split(" ")[0]);
+				mergeTemp.setParent2(hashParents.split(" ")[1]); */
+				merges.add(mergeTemp);
+			}
+			this.listOfMerges = merges;
+			return merges;
 		}
-		
-		return merges;
+		return this.listOfMerges;
 	}
 	
 	public void setMergeDetails(MergeBranches merge){
 			String hashParents = CommandLine.getSingleResult("git log --pretty=%P -n 1 " + merge.getCommitHash(), this.projectDirectory);
 			merge.setMergeBase(CommandLine.getSingleResult("git merge-base " + hashParents.split(" ")[0] + " " + hashParents.split(" ")[1], this.projectDirectory));
-			merge.setParent1(hashParents.split(" ")[0]);
-			merge.setParent2(hashParents.split(" ")[1]);
+			merge.setParents(hashParents.split(" ")[0],hashParents.split(" ")[1]);
 	}
-	
-	
-	
 	
 	
 }

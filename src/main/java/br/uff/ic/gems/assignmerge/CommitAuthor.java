@@ -60,7 +60,8 @@ public class CommitAuthor implements Comparable<CommitAuthor>{
     
     @Override
     public String toString(){
-        return defineSize(this.name, 20) + "\t" + defineSize(this.email, 30)+  "\t" + this.getCommits();
+        //return defineSize(this.name, 20) + "\t" + defineSize(this.email, 30)+  "\t" + this.getCommits();
+		return this.name + " (" + this.getCommits() + ")";
     }
     
     private String defineSize(String str, Integer lenght) {
