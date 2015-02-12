@@ -33,13 +33,13 @@ public class AssignMerge {
     public static void printStatistics(){
         JFileChooser file = new JFileChooser();
         file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        File f = new File("D:\\repositorio\\");
+        File f = new File("C:\\GitRepository");
         file.setSelectedFile(f);
         file.showSaveDialog(null);
         File project = file.getSelectedFile();
         String projectName = project.getName();
         String repositoryPath = project.toString();
-        String output = "D:\\Dropbox\\Doutorado\\assignmerge\\Outputs";
+        String output = "C:\\GitRepository\\Outputs";
         //test
         StringBuffer authorsList = new StringBuffer();
         
@@ -178,13 +178,13 @@ public class AssignMerge {
 
         JFileChooser file = new JFileChooser();
         file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        File f = new File("D:\\repositorio");
+        File f = new File("C:\\GitRepository");
         file.setSelectedFile(f);
         file.showSaveDialog(null);
         File project = file.getSelectedFile();
         String projectName = project.getName();
         String repositoryPath = project.toString();
-        String output = "D:\\Dropbox\\Doutorado\\assignmerge\\Outputs";
+        String output = "C:\\GitRepository\\Outputs";
         String authorsList;
 
         List<String> mergeRevisions = getMergeRevisions(repositoryPath);

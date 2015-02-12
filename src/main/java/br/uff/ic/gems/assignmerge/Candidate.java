@@ -17,7 +17,7 @@ public class Candidate {
 	private int cBooth = 0;
 	private int cHistory = 0;
 
-	Candidate(CommitAuthor ca) {
+	public Candidate(CommitAuthor ca) {
 		this.author = ca;
 	}
 
