@@ -41,7 +41,8 @@ public class JTCommitsResult extends javax.swing.JFrame {
         tableTest = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Contributions from developers considering commits");
 
         tableTest.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         tableTest.setModel(new javax.swing.table.DefaultTableModel(
