@@ -7,6 +7,7 @@ package br.uff.ic.gems.assignmerge.gui;
 
 import br.uff.ic.gems.assignmerge.AdvancedEvaluator;
 import br.uff.ic.gems.assignmerge.BasicEvaluator;
+import br.uff.ic.gems.assignmerge.Candidate;
 import br.uff.ic.gems.assignmerge.CommitAuthor;
 import br.uff.ic.gems.assignmerge.GitProject;
 import br.uff.ic.gems.assignmerge.MergeBranches;
@@ -576,8 +577,10 @@ public class JFAssignMerge extends javax.swing.JFrame {
 		int totalOne = 0, totalTwo = 0, totalCommon = 0, totalHistory = 0;
 		int mergeSeq = 1;
 		
+		List<Candidate> candidates;
 		for (MergeBranches merge : this.project.getMerges()) {
 			if(merge.isMergeOfBranches()){
+				candidates = AdvancedEvaluator.getCandidatesOfMerge(merge);
 				output.append("Merge ").append(mergeSeq++).append(" ");
 				output.append(AdvancedEvaluator.getMergeStatistics(merge)).append("\n");
 			}
