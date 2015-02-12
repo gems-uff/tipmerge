@@ -14,11 +14,11 @@ import javax.swing.tree.MutableTreeNode;
  *
  * @author j2cf
  */
-public class projectTree extends JTree{
+public class MergesTree extends JTree{
 	
 	GitProject project;
 
-	public projectTree(GitProject project) {
+	public MergesTree(GitProject project) {
 		this.project = project;
 		update();
 	}
@@ -28,7 +28,7 @@ public class projectTree extends JTree{
 		
 		DefaultMutableTreeNode mergeBranchesNode = new DefaultMutableTreeNode("Merges of Branches");
 		DefaultMutableTreeNode allMergesNode = new DefaultMutableTreeNode("All Merges");
-		
+		int mergeSeq = 1;
 		for(MergeBranches merge : project.getMerges()){
 			DefaultMutableTreeNode nodeMerge = new DefaultMutableTreeNode(merge.getCommitHash());
 			
@@ -36,9 +36,9 @@ public class projectTree extends JTree{
 			DefaultMutableTreeNode bTwo = (new DefaultMutableTreeNode("Branch Two"));
 			DefaultMutableTreeNode both = (new DefaultMutableTreeNode("Both branches"));
 
-			int isBranchMerge = 0;
-			
-			if((merge.getAuthorsBranchOne().size() >= 2) && (merge.getAuthorsBranchTwo().size() >= 2)){
+			if (merge.isMergeOfBranches()){
+				
+				nodeMerge = new DefaultMutableTreeNode("Merge " + mergeSeq++ + " "  + merge.getCommitHash());
 				
 				for(CommitAuthor author : merge.getAuthorsBranchOne()){
 					bOne.add(new DefaultMutableTreeNode(author.toString()));
@@ -50,7 +50,7 @@ public class projectTree extends JTree{
 
 				if (merge.getAuthorsInCommon() != null){
 					for(CommitAuthor author : merge.getAuthorsInCommon()){
-						both.add(new DefaultMutableTreeNode(author.getName()));
+						both.add(new DefaultMutableTreeNode(author.toString()));
 					}
 					nodeMerge.add(both);
 				}

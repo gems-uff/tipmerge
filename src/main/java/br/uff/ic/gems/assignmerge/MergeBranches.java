@@ -61,6 +61,7 @@ public class MergeBranches{
 	}
 
 	/**
+	 * @param author
 	 * @return the authorsInCommon
 	 */
 	public void addAuthorsInCommon(CommitAuthor author) {
@@ -121,10 +122,14 @@ public class MergeBranches{
 	public void setMergeBase(String mergeBase) {
 		this.mergeBase = mergeBase;
 	}
+	
+	public boolean isMergeOfBranches(){
+		return (this.getAuthorsBranchOne().size() >= 2) && (this.getAuthorsBranchTwo().size() >= 2);
+	}
 
 	private List<CommitAuthor> getAuthors(String hashParent) {
 		
-		List<String> authorsOnBranch = CommandLine.getMultiplesResults("git shortlog -s " + this.getMergeBase() + ".." + hashParent, this.project.getProjectDirectory());
+		List<String> authorsOnBranch = CommandLine.getMultiplesResults("git shortlog -s " + this.getMergeBase() + ".." + hashParent, this.getProject().getProjectDirectory());
 		List<CommitAuthor> authorList = new ArrayList<CommitAuthor>();
 		for(String line : authorsOnBranch){
 			line = line.trim();
@@ -140,7 +145,7 @@ public class MergeBranches{
 		this.parent2 = hashParent2;
 		this.authorsBranchOne = this.getAuthors(hashParent1);
 		
-		List<String> authorsOnBranch = CommandLine.getMultiplesResults("git shortlog -s " + this.getMergeBase() + ".." + hashParent2, this.project.getProjectDirectory());
+		List<String> authorsOnBranch = CommandLine.getMultiplesResults("git shortlog -s " + this.getMergeBase() + ".." + hashParent2, this.getProject().getProjectDirectory());
 		List<CommitAuthor> authorList = new ArrayList<CommitAuthor>();
 		for(String line : authorsOnBranch){
 			line = line.trim();
@@ -149,13 +154,38 @@ public class MergeBranches{
 			authorList.add(authorTemp);
 			for(CommitAuthor aut : this.getAuthorsBranchOne())
 				if(aut.getName().equals(authorTemp.getName())){
-					this.addAuthorsInCommon(authorTemp);
+					if (authorTemp.getCommits() < aut.getCommits())
+						this.addAuthorsInCommon(authorTemp);
+					else
+						this.addAuthorsInCommon(aut);
 				}
 		}
 		this.authorsBranchTwo = authorList;
-		
+
 	}
-
-
+	//<editor-fold defaultstate="collapsed" desc="comment">
+	/*
+	public Long getCommitsBranchOne(){
+	return this.getSumOfCommits(this.getAuthorsBranchOne());
+	}
 	
+	public Long getCommitsBranchTwo(){
+	return this.getSumOfCommits(this.getAuthorsBranchTwo());
+	}
+	
+	private Long getSumOfCommits(List<CommitAuthor> authors){
+	Long total = new Long("0");
+	for(CommitAuthor ca : authors)
+	total += ca.getCommits();
+	return total;
+	}
+	*/
+//</editor-fold>
+
+	/**
+	 * @return the project
+	 */
+	public GitProject getProject() {
+		return project;
+	}
 }

@@ -22,6 +22,7 @@ public class GitProject{
 	final private String totalOfReleases;
 	final private List<String> listOfBranches;
 	private List<MergeBranches> listOfMerges;
+	private final String firstCommit;
 	
 	public GitProject(File projectDirectory){
 		
@@ -32,6 +33,7 @@ public class GitProject{
 		this.dateOfLastCommit = basicDatas.getDate();
 		this.totalOfReleases = String.valueOf(basicDatas.getTags().size());
 		this.listOfBranches = basicDatas.getBranches();
+		this.firstCommit = basicDatas.getFirstCommit();
 	}
 
 	/**
@@ -95,11 +97,19 @@ public class GitProject{
 		}
 		return this.listOfMerges;
 	}
-	
+
 	public void setMergeDetails(MergeBranches merge){
-			String hashParents = CommandLine.getSingleResult("git log --pretty=%P -n 1 " + merge.getCommitHash(), this.projectDirectory);
-			merge.setMergeBase(CommandLine.getSingleResult("git merge-base " + hashParents.split(" ")[0] + " " + hashParents.split(" ")[1], this.projectDirectory));
-			merge.setParents(hashParents.split(" ")[0],hashParents.split(" ")[1]);
+		String hashParents = CommandLine.getSingleResult("git log --pretty=%P -n 1 " + merge.getCommitHash(), this.projectDirectory);
+		merge.setMergeBase(CommandLine.getSingleResult("git merge-base " + hashParents.split(" ")[0] + " " + hashParents.split(" ")[1], this.projectDirectory));
+		merge.setParents(hashParents.split(" ")[0],hashParents.split(" ")[1]);
+			
+	}
+
+	/**
+	 * @return the firstCommit
+	 */
+	public String getFirstCommit() {
+		return firstCommit;
 	}
 	
 	

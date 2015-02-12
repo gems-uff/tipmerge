@@ -5,12 +5,14 @@
  */
 package br.uff.ic.gems.assignmerge.gui;
 
+import br.uff.ic.gems.assignmerge.AdvancedEvaluator;
 import br.uff.ic.gems.assignmerge.BasicEvaluator;
 import br.uff.ic.gems.assignmerge.CommitAuthor;
 import br.uff.ic.gems.assignmerge.GitProject;
 import br.uff.ic.gems.assignmerge.MergeBranches;
-import br.uff.ic.gems.assignmerge.projectTree;
+import br.uff.ic.gems.assignmerge.MergesTree;
 import java.io.File;
+import java.util.Iterator;
 import javax.swing.JFileChooser;
 import java.util.List;
 import javax.swing.JComboBox;
@@ -45,8 +47,6 @@ public class JFAssignMerge extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         btSelectProject = new javax.swing.JButton();
         jtProjectName = new javax.swing.JTextField();
@@ -69,14 +69,15 @@ public class JFAssignMerge extends javax.swing.JFrame {
         cbBranchTwo = new javax.swing.JComboBox();
         txHashOne = new javax.swing.JTextField();
         txHashTwo = new javax.swing.JTextField();
+        btStep1 = new javax.swing.JButton();
+        btStep2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
         jToolBar1 = new javax.swing.JToolBar();
-        jPanel5 = new javax.swing.JPanel();
+        pbRuning = new javax.swing.JProgressBar();
         jScrollPane3 = new javax.swing.JScrollPane();
         txResult = new javax.swing.JTextArea();
-        pbRuning = new javax.swing.JProgressBar();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -98,11 +99,8 @@ public class JFAssignMerge extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jButton1.setText("Export to XLS");
-
-        jButton3.setText("Export to TXT");
-
-        jButton4.setText("Do nothing");
+        jButton1.setText("Export");
+        jButton1.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -110,19 +108,12 @@ public class JFAssignMerge extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -176,7 +167,7 @@ public class JFAssignMerge extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
-                                .addGap(0, 43, Short.MAX_VALUE))
+                                .addGap(0, 62, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jtProjectName)))
@@ -237,8 +228,10 @@ public class JFAssignMerge extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Analysis Details"));
 
-        btRun.setText("Run");
+        btRun.setText("Scan");
         btRun.setEnabled(false);
+        btRun.setMaximumSize(new java.awt.Dimension(140, 29));
+        btRun.setMinimumSize(new java.awt.Dimension(140, 29));
         btRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btRunActionPerformed(evt);
@@ -272,6 +265,21 @@ public class JFAssignMerge extends javax.swing.JFrame {
 
         txHashTwo.setEditable(false);
 
+        btStep1.setText("Step 1 (Commits)");
+        btStep1.setEnabled(false);
+        btStep1.setMaximumSize(new java.awt.Dimension(140, 29));
+        btStep1.setMinimumSize(new java.awt.Dimension(140, 29));
+        btStep1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btStep1ActionPerformed(evt);
+            }
+        });
+
+        btStep2.setText("Step 2 (Files)");
+        btStep2.setEnabled(false);
+        btStep2.setMaximumSize(new java.awt.Dimension(140, 29));
+        btStep2.setMinimumSize(new java.awt.Dimension(140, 29));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -279,19 +287,24 @@ public class JFAssignMerge extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btRun, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txHashTwo)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbBranchOne, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txHashOne)
-                            .addComponent(cbBranchTwo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txHashTwo))))
+                            .addComponent(txHashOne)))
+                    .addComponent(cbBranchTwo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btStep1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btStep2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 2, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -309,8 +322,11 @@ public class JFAssignMerge extends javax.swing.JFrame {
                 .addComponent(cbBranchTwo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txHashTwo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                .addComponent(btRun))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btStep1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btStep2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
@@ -327,33 +343,18 @@ public class JFAssignMerge extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         jToolBar1.setRollover(true);
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Results"));
+        pbRuning.setStringPainted(true);
 
-        txResult.setEditable(false);
         txResult.setColumns(20);
         txResult.setFont(new java.awt.Font("Menlo", 0, 12)); // NOI18N
         txResult.setRows(5);
+        txResult.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Results", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Menlo", 0, 12))); // NOI18N
         jScrollPane3.setViewportView(txResult);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
-        );
-
-        pbRuning.setStringPainted(true);
 
         jMenu1.setText("File");
 
@@ -425,11 +426,11 @@ public class JFAssignMerge extends javax.swing.JFrame {
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(pbRuning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -438,15 +439,15 @@ public class JFAssignMerge extends javax.swing.JFrame {
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pbRuning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(pbRuning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -521,16 +522,19 @@ public class JFAssignMerge extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
-			List<MergeBranches> merges = project.getMerges();
-			int numberOfMerges = merges.size();
-			pbRuning.setMaximum(numberOfMerges);
-			StringBuilder output = new StringBuilder();
-			output.append("Merge List\n");
-			int i = numberOfMerges;
-			for(MergeBranches merge : merges){
-				
-				project.setMergeDetails(merge);
-				
+		clearAllFields();
+		List<MergeBranches> merges = project.getMerges();
+		int numberOfMerges = merges.size();
+		pbRuning.setMaximum(numberOfMerges);
+		pbRuning.setMinimum(0);
+		StringBuilder output = new StringBuilder();
+		//output.append("Merge Branches Found: ");
+		int i = numberOfMerges, j = 0;
+		for(MergeBranches merge : merges){
+
+			project.setMergeDetails(merge);
+
+			if (merge.isMergeOfBranches()){
 				output.append("Merge ").append(i--).append(": ").append(merge.getCommitHash()).append(" ( ").append(merge.getAuthorsBranchOne().size()).append(" , ").append(merge.getAuthorsBranchTwo().size()).append(" )\n");
 				if(merge.getAuthorsBranchOne() != null){
 					output.append("\tBranch One: ");
@@ -548,18 +552,45 @@ public class JFAssignMerge extends javax.swing.JFrame {
 					output.append("\tCommon: ").append(merge.getAuthorsInCommon().toString());
 				}
 				output.append("\n");
-				
-				//if(i % (numberOfMerges/100) == 0){
-					pbRuning.setString("100% Done");
-					pbRuning.setValue(pbRuning.getValue() + 1);
-					pbRuning.update(pbRuning.getGraphics());
-				//}
-				
-			}
-			txResult.setText(output.toString());
-			updateJTree();
+				j++;
+			} 
+			updateBar();
+			
+
+		}
+
+		//total de merges de branch
+
+		txResult.append("Merge Branches Found: " + j + "\n");
+		txResult.append(output.toString());
+		updateJTree();
+		btStep1.setEnabled(true);
 
     }//GEN-LAST:event_btRunActionPerformed
+
+    private void btStep1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStep1ActionPerformed
+		txResult.setText("");
+		txResult.update(txResult.getGraphics());
+		pbRuning.setValue(0);
+		updateBar();
+
+		StringBuilder output = new StringBuilder();
+		int totalOne = 0, totalTwo = 0, totalCommon = 0, totalHistory = 0;
+		int mergeSeq = 1;
+		
+		for (MergeBranches merge : this.project.getMerges()) {
+			if(merge.isMergeOfBranches()){
+				output.append("Merge ").append(mergeSeq++).append(" ");
+				output.append(AdvancedEvaluator.getMergeStatistics(merge)).append("\n");
+			}
+			updateBar();
+		}
+		txResult.setText(output.toString());
+		
+		
+		
+		
+    }//GEN-LAST:event_btStep1ActionPerformed
 
 	
 	/**
@@ -573,7 +604,7 @@ public class JFAssignMerge extends javax.swing.JFrame {
 		 */
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {	//Metal	Nimbus	CDE/Motif	Mac OS X
+				if ("Mac OS X".equals(info.getName())) {	//Metal	Nimbus	CDE/Motif	Mac OS X
 					javax.swing.UIManager.setLookAndFeel(info.getClassName());
 					break;
 				}
@@ -600,11 +631,11 @@ public class JFAssignMerge extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btRun;
     private javax.swing.JButton btSelectProject;
+    private javax.swing.JButton btStep1;
+    private javax.swing.JButton btStep2;
     private javax.swing.JComboBox cbBranchOne;
     private javax.swing.JComboBox cbBranchTwo;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -631,7 +662,6 @@ public class JFAssignMerge extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar jToolBar1;
@@ -650,18 +680,27 @@ public class JFAssignMerge extends javax.swing.JFrame {
 
 	private void clearAllFields() {
 		txResult.setText("");
+		txResult.update(txResult.getGraphics());
 		pbRuning.setValue(0);
 		pbRuning.setString("0%");
 		pbRuning.update(pbRuning.getGraphics());
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
 		jTree1.setModel(new javax.swing.tree.DefaultTreeModel(root));
-        jScrollPane1.setViewportView(jTree1);	
+        jScrollPane1.setViewportView(jTree1);
+		btStep1.setEnabled(false);
+		btStep2.setEnabled(false);
 	}
 
 	private void updateJTree() {
-		jTree1 = new projectTree(this.project);
+		jTree1 = new MergesTree(this.project);
 		jScrollPane1.setViewportView(jTree1);		
 	}
 
+	private void updateBar() {
+		int max = pbRuning.getMaximum();
+		pbRuning.setValue(pbRuning.getValue() + 1);
+		pbRuning.setString((pbRuning.getValue()*100)/pbRuning.getMaximum() + "% Done");
+		pbRuning.update(pbRuning.getGraphics());
+	}
  
 }

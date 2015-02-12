@@ -55,8 +55,11 @@ public class BasicEvaluator {
 	}
 	
 	public String getLastHashOfBranch(String branchName){
-		String command = "git log -n 1 --pretty=format:%H " + branchName;
-		return CommandLine.getSingleResult(command,repositoryPath);
+		return CommandLine.getSingleResult("git log -n 1 --pretty=format:%H " + branchName,repositoryPath);
+	}
+	
+	public String getFirstCommit(){
+		return CommandLine.getSingleResult("git rev-list --max-parents=0 HEAD", repositoryPath);
 	}
 
 }
