@@ -308,13 +308,11 @@
         <Component class="javax.swing.JTextField" name="jtProjectName">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="voldemort"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jtPathToProjects">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="/Users/j2cf/Desktop"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">

@@ -127,10 +127,8 @@ public class JFAssignMerge extends javax.swing.JFrame {
         });
 
         jtProjectName.setEditable(false);
-        jtProjectName.setText("voldemort");
 
         jtPathToProjects.setEditable(false);
-        jtPathToProjects.setText("/Users/j2cf/Desktop");
 
         jLabel1.setText("Path to Projects");
 
