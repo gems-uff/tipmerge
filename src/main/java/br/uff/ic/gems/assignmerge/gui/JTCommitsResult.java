@@ -50,7 +50,7 @@ public class JTCommitsResult extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Developers", "Branch 1", "Branch 2", "Interseccion", "All History"
+                "Developers", "Branch 1", "Branch 2", "Intersection", "All History"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -94,6 +94,7 @@ public class JTCommitsResult extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
