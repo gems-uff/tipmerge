@@ -45,11 +45,11 @@ public class MergeDao {
 		String hashParents = RunGit.getResult("git log --pretty=%P -n 1 " + merge.getHash(), this.path);
 		merge.setHashBase(RunGit.getResult("git merge-base " + hashParents.split(" ")[0] + " " + hashParents.split(" ")[1], this.path));
 		merge.setParents(hashParents.split(" ")[0],hashParents.split(" ")[1]);
-		setCommiters(merge);
+		setCommitters(merge);
 		
 	}
 
-	public void setCommiters(Merge merge) {
+	public void setCommitters(Merge merge) {
 		merge.setCommittersBranchOne(
 			this.getCommitters(
 				RunGit.getListOfResult(
@@ -58,7 +58,7 @@ public class MergeDao {
 			this.getCommitters(
 				RunGit.getListOfResult(
 					"git shortlog -sne " + merge.getHashBase() + ".." + merge.getParents()[1], merge.getPath())));
-		setCommittersBeforeMerge(merge);
+		//setCommittersBeforeBranches(merge);
 	}
 	
 	private List<Committer> getCommitters(List<String> committerList) {
@@ -72,10 +72,10 @@ public class MergeDao {
 		return cmtList;
 	}
 	
-	private void setCommittersBeforeMerge(Merge merge){
+	public void setCommittersBeforeBranches(Merge merge){
 		//insere a informação do primeiro commit
 		String firstHash = RunGit.getResult("git rev-list --max-parents=0 HEAD", merge.getPath());	
-		merge.setCmtBeforeMerge(this.getCommitters(RunGit.getListOfResult("git shortlog -sne "  + firstHash + ".." +  merge.getHashBase(), merge.getPath())));
+		merge.setCommittersBeforeBranches(this.getCommitters(RunGit.getListOfResult("git shortlog -sne "  + firstHash + ".." +  merge.getHashBase(), merge.getPath())));
 	}
 	
 }

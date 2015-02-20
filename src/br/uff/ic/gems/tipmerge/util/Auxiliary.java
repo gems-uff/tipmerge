@@ -12,7 +12,7 @@ import java.util.Arrays;
  * @author j2cf
  */
 public class Auxiliary {
-	
+	//separa a string recebida do git em um array, contendo o nome, qtde de commmits e o e-mail
 	public static String[] getSplittedLine(String line){
 		line = line.trim();
 		String[] datas = line.split("\t");

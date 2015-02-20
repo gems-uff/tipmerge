@@ -65,14 +65,14 @@ public class Merge {
 	/**
 	 * @return the cmtBeforeMerge
 	 */
-	public List<Committer> getCmtBeforeMerge() {
+	public List<Committer> getCommittersBeforeBranches() {
 		return cmtBeforeMerge;
 	}
 
 	/**
 	 * @param cmtBeforeMerge the cmtBeforeMerge to set
 	 */
-	public void setCmtBeforeMerge(List<Committer> cmtBeforeMerge) {
+	public void setCommittersBeforeBranches(List<Committer> cmtBeforeMerge) {
 		this.cmtBeforeMerge = cmtBeforeMerge;
 	}
 
@@ -188,7 +188,7 @@ public class Merge {
 			});
 		
 		//agora será incluída a lista de todos aqueles que estavam "fora dos ramos"
-		this.getCmtBeforeMerge().stream().forEach((cmter) -> {
+		this.getCommittersBeforeBranches().stream().forEach((cmter) -> {
 			boolean isOnBranches = false;
 			for (Conciliator conciliator : conciliatorCandidates){
 				if (conciliator.getCommitter().compareTo(cmter) == 1){

@@ -235,7 +235,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 			mergeDao.update(merge);
 			if (merge.isMergeOfBranches()){
 				int cmtb1 = 0, cmtb2 = 0, cmtH = 0, cmtrs = 0; 
-				merge.getCmtBeforeMerge();
+				mergeDao.setCommittersBeforeBranches(merge);// merge.getCommittersBeforeBranches();
 				model.insertRow(model.getRowCount(), new Object[] {"Merge Branch: ", merge.getHash(), "", "", ""});
 				for (Conciliator conciliator : merge.getConciliators()){
 					cmtrs++; 
