@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.uff.ic.gems.assignmerge.dao;
+package br.uff.ic.gems.tipmerge.dao;
 
 import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
 import br.uff.ic.gems.tipmerge.model.Repository;
