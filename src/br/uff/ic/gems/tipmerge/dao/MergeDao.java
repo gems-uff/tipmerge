@@ -6,7 +6,7 @@
 package br.uff.ic.gems.tipmerge.dao;
 
 import br.uff.ic.gems.tipmerge.model.Committer;
-import br.uff.ic.gems.tipmerge.model.Merge;
+import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.util.Auxiliary;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.io.File;
@@ -29,39 +29,40 @@ public class MergeDao {
 //		RuntimeFactory execute = RuntimeFactory.getInstance();
 	}
 
-	public List<Merge> getMerges() {
+	public List<MergeCommits> getMerges() {
 		
 		List<String> mergesHashes = RunGit.getListOfResult("git log --merges --pretty=%H", path);
-		List<Merge> merges = new ArrayList<>();
+		List<MergeCommits> merges = new ArrayList<>();
 		
 		mergesHashes.stream().forEach((hashOfMerge) -> {
-			merges.add(new Merge(hashOfMerge,path));
+			merges.add(new MergeCommits(hashOfMerge,path));
 		});
 		
 		return merges;
 	}
 
-	public void update(Merge merge) {
+	public void update(MergeCommits merge) {
+		CommitterDao committerDao = new CommitterDao();
 		String hashParents = RunGit.getResult("git log --pretty=%P -n 1 " + merge.getHash(), this.path);
 		merge.setHashBase(RunGit.getResult("git merge-base " + hashParents.split(" ")[0] + " " + hashParents.split(" ")[1], this.path));
 		merge.setParents(hashParents.split(" ")[0],hashParents.split(" ")[1]);
-		setCommitters(merge);
-		
+		merge.setCommittersBranchOne(committerDao.getCommittersList(merge.getHashBase(), merge.getParents()[0], merge.getPath()));
+		merge.setCommittersBranchTwo(committerDao.getCommittersList(merge.getHashBase(), merge.getParents()[1], merge.getPath()));
 	}
-
-	public void setCommitters(Merge merge) {
+/*
+	public void setCommitters(MergeCommits merge) {
 		merge.setCommittersBranchOne(
-			this.getCommitters(
+			this.getCommittersList(
 				RunGit.getListOfResult(
 					"git shortlog -sne " + merge.getHashBase() + ".." + merge.getParents()[0], merge.getPath())));
 		merge.setCommittersBranchTwo(
-			this.getCommitters(
+			this.getCommittersList(
 				RunGit.getListOfResult(
 					"git shortlog -sne " + merge.getHashBase() + ".." + merge.getParents()[1], merge.getPath())));
 		//setCommittersBeforeBranches(merge);
 	}
 	
-	private List<Committer> getCommitters(List<String> committerList) {
+	private List<Committer> getCommittersList(List<String> committerList) {
 		List<Committer> cmtList = new ArrayList<>();
 		for(String line : committerList){
 			String[] datas = Auxiliary.getSplittedLine(line);
@@ -71,11 +72,14 @@ public class MergeDao {
 		}
 		return cmtList;
 	}
-	
-	public void setCommittersBeforeBranches(Merge merge){
+*/	
+	public void setCommittersBeforeBranches(MergeCommits merge){
 		//insere a informação do primeiro commit
+		CommitterDao committerDao = new CommitterDao();
 		String firstHash = RunGit.getResult("git rev-list --max-parents=0 HEAD", merge.getPath());	
-		merge.setCommittersBeforeBranches(this.getCommitters(RunGit.getListOfResult("git shortlog -sne "  + firstHash + ".." +  merge.getHashBase(), merge.getPath())));
+		merge.setCommittersBeforeBranches(
+			committerDao.getCommittersList(firstHash, merge.getHashBase(), merge.getPath())
+		);
 	}
 	
 }

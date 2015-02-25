@@ -43,8 +43,7 @@ public class RepositoryDao {
 		repo.setCommits(Long.valueOf(RunGit.getResult("git rev-list HEAD --count", path)));
 		
 		//insere os merges somente com o seu hash
-		MergeDao mergeDao = new MergeDao(path);
-		repo.setMerges(mergeDao.getMerges());
+		repo.setListOfMerges(RunGit.getListOfResult("git log --merges --pretty=%H", path));
 
 		//insere a informação da quantidade total de branches
 		repo.setBranches(RunGit.getListOfResult("git branch -a",path));

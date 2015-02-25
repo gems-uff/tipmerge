@@ -19,14 +19,13 @@ public class Repository {
 	private Long commits;
 	private LocalDateTime lastCommit;
 	private String firstCommit;
-	private List<Merge> merges;
+	private List<String> listOfMerges;
 	private List<String> branches;	
 	private List<String> authors;
 	
 	public Repository(File projectPath){
 		this.project = projectPath;
 	}
-
 	/**
 	 * @return the project
 	 */
@@ -48,12 +47,6 @@ public class Repository {
 		this.commits = commits;
 	}
 
-	/**
-	 * @return the merges
-	 */
-	public List<Merge> getMerges() {
-		return merges;
-	}
 
 	/**
 	 * @return the authors
@@ -83,12 +76,6 @@ public class Repository {
 		this.firstCommit = firstCommit;
 	}
 
-	/**
-	 * @param merges the merges to set
-	 */
-	public void setMerges(List<Merge> merges) {
-		this.merges = merges;
-	}
 
 	/**
 	 * @return the branches
@@ -123,6 +110,20 @@ public class Repository {
 	 */
 	public void setLastCommit(LocalDateTime lastCommit) {
 		this.lastCommit = lastCommit;
+	}
+
+	/**
+	 * @return the listOfMerges
+	 */
+	public List<String> getListOfMerges() {
+		return listOfMerges;
+	}
+
+	/**
+	 * @param listOfMerges the listOfMerges to set
+	 */
+	public void setListOfMerges(List<String> listOfMerges) {
+		this.listOfMerges = listOfMerges;
 	}
 	
 	

@@ -339,7 +339,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 							
 				txCommits.setText(repository.getCommits().toString());
 				txLast.setText(" " + repository.getLastCommit().toLocalDate().toString() + repository.getLastCommit().toLocalTime().toString());
-				txTotalMerges.setText(String.valueOf(repository.getMerges().size()));
+				txTotalMerges.setText(String.valueOf(repository.getListOfMerges().size()));
 				txTotalAuthors.setText(String.valueOf(repository.getAuthors().size()));
 				txTotalBranches.setText(String.valueOf(repository.getBranches().size()));
 				btShow.setEnabled(true);

@@ -5,7 +5,7 @@
  */
 package br.uff.ic.gems.tipmerge.gui;
 
-import br.uff.ic.gems.tipmerge.model.Merge;
+import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -39,8 +39,8 @@ public class JTreeRepository extends JTree{
 		//});
 		
 		int i = 1;
-		for (Merge merge: repo.getMerges()){
-			mergeNode.add(new DefaultMutableTreeNode("(" + i++ + ") " + merge.getHash()));
+		for (String merge: repo.getListOfMerges()){
+			mergeNode.add(new DefaultMutableTreeNode("(" + i++ + ") " + merge));
 		}
 		
 		root.add(mergeNode);

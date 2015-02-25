@@ -7,7 +7,8 @@ package br.uff.ic.gems.tipmerge.gui;
 
 import br.uff.ic.gems.tipmerge.dao.MergeDao;
 import br.uff.ic.gems.tipmerge.model.Conciliator;
-import br.uff.ic.gems.tipmerge.model.Merge;
+import br.uff.ic.gems.tipmerge.model.MergeCommits;
+import br.uff.ic.gems.tipmerge.model.RepoCommits;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import javax.swing.JComboBox;
@@ -20,12 +21,16 @@ import javax.swing.table.DefaultTableModel;
 public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 	
 	private Repository repo;
+	private RepoCommits repoCommitts;
 
 	/**
 	 * Creates new form JFrameCommitsAnalysis
+	 * @param repository
 	 */
 	public JFrameCommitsAnalysis(Repository repository) {
+		this.repoCommitts = new RepoCommits(repository);
 		this.repo = repository;
+		//this.repo = repository;
 		initComponents();
 		setParameters();
 	}
@@ -215,7 +220,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_cbBranchTwoActionPerformed
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
-		int i = this.repo.getMerges().size();
+		int i = this.repoCommitts.getMerges().size();
 		float j = (float) (i/100.0);
 
 		barRuning.setValue(0);
@@ -225,7 +230,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 
 		DefaultTableModel model =  (DefaultTableModel)tableResult.getModel();
 		int count = 0;
-		for(Merge merge : this.repo.getMerges()){
+		for(MergeCommits merge : this.repoCommitts.getMerges()){
 		
 //		}
 //		this.repo.getMerges().stream().forEach((merge) -> {
@@ -265,7 +270,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 			project.setMergeDetails(merge);
 
 			if (merge.isMergeOfBranches()){
-				output.append("Merge ").append(i--).append(": ").append(merge.getCommitHash()).append(" ( ").append(merge.getAuthorsBranchOne().size()).append(" , ").append(merge.getAuthorsBranchTwo().size()).append(" )\n");
+				output.append("MergeCommits ").append(i--).append(": ").append(merge.getCommitHash()).append(" ( ").append(merge.getAuthorsBranchOne().size()).append(" , ").append(merge.getAuthorsBranchTwo().size()).append(" )\n");
 				if(merge.getAuthorsBranchOne() != null){
 					output.append("\tBranch One: ");
 					for(CommitAuthor author : merge.getAuthorsBranchOne())

@@ -5,6 +5,8 @@
  */
 package br.uff.ic.gems.tipmerge.model;
 
+import java.util.Objects;
+
 /**
  *
  * @author j2cf
@@ -59,6 +61,32 @@ public class Committer implements Comparable<Committer>{
 		if (this.getEmail().equals(cmter.getEmail()) )
             return 1;
         return 0;	
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		hash = 67 * hash + Objects.hashCode(this.name);
+		hash = 67 * hash + Objects.hashCode(this.email);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Committer other = (Committer) obj;
+//		if (!Objects.equals(this.name, other.name)) {
+//			return false;
+//		}
+		if (!Objects.equals(this.email, other.email)) {
+			return false;
+		}
+		return true;
 	}
 	
 }
