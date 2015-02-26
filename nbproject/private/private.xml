@@ -2,10 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="Apps">
-            <file>file:/Users/j2cf/Apps/ws_netbeans/assignmerge/src/br/uff/ic/gems/assignmerge/gui/JFrameMainWindow.java</file>
-            <file>file:/Users/j2cf/Apps/ws_netbeans/assignmerge/src/br/uff/ic/gems/assignmerge/gui/JFrameCommitsAnalysis.java</file>
-        </group>
         <group>
             <file>file:/C:/Workspace-Netbeans/tipmerge/src/br/uff/ic/gems/tipmerge/dao/MergeDao.java</file>
             <file>file:/C:/Workspace-Netbeans/tipmerge/src/br/uff/ic/gems/tipmerge/TIPMerge.java</file>
@@ -16,6 +12,13 @@
             <file>file:/C:/Workspace-Netbeans/tipmerge/src/br/uff/ic/gems/tipmerge/dao/CommitterDao.java</file>
             <file>file:/C:/Workspace-Netbeans/tipmerge/src/br/uff/ic/gems/tipmerge/model/Repository.java</file>
             <file>file:/C:/Workspace-Netbeans/tipmerge/src/br/uff/ic/gems/tipmerge/model/Committer.java</file>
+        </group>
+        <group name="Apps">
+            <file>file:/Users/j2cf/Apps/netbeans/tipmerge/src/br/uff/ic/gems/tipmerge/model/MergeFiles.java</file>
+            <file>file:/Users/j2cf/Apps/netbeans/tipmerge/src/br/uff/ic/gems/tipmerge/model/RepoCommits.java</file>
+            <file>file:/Users/j2cf/Apps/netbeans/tipmerge/src/br/uff/ic/gems/tipmerge/gui/JFrameMainWindow.java</file>
+            <file>file:/Users/j2cf/Apps/netbeans/tipmerge/src/br/uff/ic/gems/tipmerge/model/MergeCommits.java</file>
+            <file>file:/Users/j2cf/Apps/netbeans/tipmerge/src/br/uff/ic/gems/tipmerge/model/RepoFiles.java</file>
         </group>
     </open-files>
 </project-private>
