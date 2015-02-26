@@ -15,7 +15,7 @@ import java.util.Objects;
 public class EditedFile {
 	
 	private String fileName;
-	private List<Committer> whoEditTheFile;
+	private List<Committer> whoEditFile;
 	
 	public EditedFile(String fileName){
 		this.fileName = fileName;
@@ -30,10 +30,10 @@ public class EditedFile {
 	}
 
 	public List<Committer> getWhoEditTheFile() {
-		return whoEditTheFile;
+		return whoEditFile;
 	}
 	public void setWhoEditTheFile(List<Committer> whoEditTheFile) {
-		this.whoEditTheFile = whoEditTheFile;
+		this.whoEditFile = whoEditTheFile;
 	}
 
 	@Override
@@ -57,5 +57,7 @@ public class EditedFile {
 		}
 		return true;
 	}
-	
+	public String toString(){
+            return this.getFileName();
+        }
 }

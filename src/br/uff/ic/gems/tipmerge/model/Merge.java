@@ -77,5 +77,8 @@ public abstract class Merge {
 	public File getPath() {
 		return pathToRepository;
 	}
-	
+
+        public String toString(){
+            return this.hash + " " + this.hashBase + " " + this.parent1 + " " + this.parent2;
+        }
 }

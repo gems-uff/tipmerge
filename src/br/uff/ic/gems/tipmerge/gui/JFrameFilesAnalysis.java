@@ -5,19 +5,37 @@
  */
 package br.uff.ic.gems.tipmerge.gui;
 
+import br.uff.ic.gems.tipmerge.dao.EditedFilesDao;
+import br.uff.ic.gems.tipmerge.dao.MergeFilesDao;
+import br.uff.ic.gems.tipmerge.model.EditedFile;
+import br.uff.ic.gems.tipmerge.model.MergeFiles;
+import br.uff.ic.gems.tipmerge.model.RepoFiles;
+import br.uff.ic.gems.tipmerge.model.Repository;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComboBox;
+
 /**
  *
  * @author j2cf
  */
 public class JFrameFilesAnalysis extends javax.swing.JFrame {
-
+        
+        private RepoFiles repoFiles;
 	/**
 	 * Creates new form JFrameCommitsAnalysis
 	 */
-	public JFrameFilesAnalysis() {
-		initComponents();
+	public JFrameFilesAnalysis(Repository repository) {
+            this.repoFiles = new RepoFiles(repository);
+            initComponents();
+            setParameters();
 	}
 
+        private void setParameters() {
+		txRepo.setText("Project " +  repoFiles.getRepository().getName());
+		jcBranch1.setModel(new JComboBox(repoFiles.getRepository().getBranches().toArray()).getModel());
+		jcBranch2.setModel(new JComboBox(repoFiles.getRepository().getBranches().toArray()).getModel());
+	}
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,14 +47,14 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         hash1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jComboBox2 = new javax.swing.JComboBox();
+        jcBranch1 = new javax.swing.JComboBox();
+        jcBranch2 = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        txRepo = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -53,12 +71,17 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jLabel8.setText("Branch two's hash");
 
         jButton1.setText("Run");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("<hash>");
 
         jLabel2.setText("<hash>");
 
-        jLabel3.setText("repo");
+        txRepo.setText("repo");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -72,7 +95,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(txRepo)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -81,7 +104,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                                 .addGap(223, 223, 223))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jcBranch1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(18, 18, 18)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,14 +115,14 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                                 .addComponent(jLabel8)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jcBranch2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(22, 22, 22))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3)
+                .addComponent(txRepo)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(7, 7, 7)
@@ -109,8 +132,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                         .addComponent(jLabel7)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcBranch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcBranch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -164,20 +187,42 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        repoFiles.setMergeFiles(new ArrayList<>());
+        for (String hashMerge : repoFiles.getRepository().getListOfMerges()){
+            MergeFilesDao mergeDao = new MergeFilesDao();
+            MergeFiles mergeFiles = mergeDao.getMerge(hashMerge, repoFiles.getRepository().getProject());
+            
+            EditedFilesDao filesDao = new EditedFilesDao();
+            mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[0], mergeFiles.getPath()));
+            mergeFiles.setFilesOnBranchTwo(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[1], mergeFiles.getPath()));
+
+            
+            System.out.println(mergeFiles.toString());
+            System.out.println(mergeFiles.getFilesOnBranchTwo().toString());
+            System.out.println(mergeFiles.getFilesOnBranchOne().toString());
+            
+            repoFiles.getMergeFiles().add(mergeFiles);
+        }
+
+        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel hash1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JComboBox jcBranch1;
+    private javax.swing.JComboBox jcBranch2;
+    private javax.swing.JLabel txRepo;
     // End of variables declaration//GEN-END:variables
 }

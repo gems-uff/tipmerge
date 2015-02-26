@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class MergeFiles extends Merge {
 	
-	private List<EditedFile> filesOnBrancOne;
+	private List<EditedFile> filesOnBranchOne;
 	private List<EditedFile> filesOnBranchTwo;
 
 	public MergeFiles(String hashOfMerge, File pathToRepository) {
@@ -26,7 +26,7 @@ public class MergeFiles extends Merge {
 	//retorna o nome de todos os autores, que alteraram algum arquivo
 	public List<Committer> getCommittersOnMege(){
 		Set<Committer> authors = new HashSet<>();
-		this.getFilesOnBrancOne().stream().forEach((file) -> {
+		this.getFilesOnBranchOne().stream().forEach((file) -> {
 			authors.addAll(file.getWhoEditTheFile());
 		});
 		this.getFilesOnBranchTwo().stream().forEach((file) -> {
@@ -35,11 +35,11 @@ public class MergeFiles extends Merge {
 		return (List<Committer>) authors;
 	}
 
-	public List<EditedFile> getFilesOnBrancOne() {
-		return filesOnBrancOne;
+	public List<EditedFile> getFilesOnBranchOne() {
+		return filesOnBranchOne;
 	}
-	public void setFilesOnBrancOne(List<EditedFile> filesOnBrancOne) {
-		this.filesOnBrancOne = filesOnBrancOne;
+	public void setFilesOnBranchOne(List<EditedFile> filesOnBranchOne) {
+		this.filesOnBranchOne = filesOnBranchOne;
 	}
 
 	public List<EditedFile> getFilesOnBranchTwo() {
@@ -48,6 +48,7 @@ public class MergeFiles extends Merge {
 	public void setFilesOnBranchTwo(List<EditedFile> filesOnBranchTwo) {
 		this.filesOnBranchTwo = filesOnBranchTwo;
 	}
+
 	
 	
 }

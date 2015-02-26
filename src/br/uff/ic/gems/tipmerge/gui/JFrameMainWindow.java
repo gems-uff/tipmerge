@@ -388,7 +388,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_menuCommitsActionPerformed
 
     private void menuFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFilesActionPerformed
-        JFrameFilesAnalysis files = new JFrameFilesAnalysis();
+        JFrameFilesAnalysis files = new JFrameFilesAnalysis(repository);
 		files.setLocationRelativeTo(this.getFocusOwner());
 		files.setVisible(true);
     }//GEN-LAST:event_menuFilesActionPerformed

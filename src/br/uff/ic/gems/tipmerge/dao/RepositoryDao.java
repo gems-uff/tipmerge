@@ -47,8 +47,8 @@ public class RepositoryDao {
 
 		//insere a informação da quantidade total de branches
 		repo.setBranches(RunGit.getListOfResult("git branch -a",path));
-		repo.getBranches().remove(1);
-		repo.getBranches().remove(0);
+		//repo.getBranches().remove(1);
+		//repo.getBranches().remove(0);
 		//repo.getBranches().add(0, " origin/master");
 				
 		//insere a lista de autores com o total de commits de cada um

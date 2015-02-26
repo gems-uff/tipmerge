@@ -80,12 +80,12 @@ public class Committer implements Comparable<Committer>{
 			return false;
 		}
 		final Committer other = (Committer) obj;
-//		if (!Objects.equals(this.name, other.name)) {
-//			return false;
-//		}
-		if (!Objects.equals(this.email, other.email)) {
+		if (!Objects.equals(this.name, other.name) && (!Objects.equals(this.email, other.email))) {
 			return false;
 		}
+		//if (!Objects.equals(this.email, other.email)) {
+		//	return false;
+		//}
 		return true;
 	}
 	

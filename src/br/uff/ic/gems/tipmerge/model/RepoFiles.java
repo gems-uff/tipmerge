@@ -14,6 +14,7 @@ import java.util.List;
 public class RepoFiles {
 	
 	private final Repository repository;
+        
 	private List<MergeFiles> mergeFiles;
 
 	public RepoFiles(Repository repository) {
@@ -24,12 +25,20 @@ public class RepoFiles {
 		return repository;
 	}
 
-	public List<MergeFiles> getFiles() {
-		return mergeFiles;
-	}
-	public void setFiles(List<MergeFiles> files) {
-		this.mergeFiles = files;
-	}
+    /**
+     * @return the mergeFiles
+     */
+    public List<MergeFiles> getMergeFiles() {
+        return mergeFiles;
+    }
+
+    /**
+     * @param mergeFiles the mergeFiles to set
+     */
+    public void setMergeFiles(List<MergeFiles> mergeFiles) {
+        this.mergeFiles = mergeFiles;
+    }
+
 	
 	
 }
