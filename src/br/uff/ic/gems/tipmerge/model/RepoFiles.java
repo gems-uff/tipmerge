@@ -14,7 +14,6 @@ import java.util.List;
 public class RepoFiles {
 	
 	private final Repository repository;
-	
 	private List<MergeFiles> mergeFiles;
 
 	public RepoFiles(Repository repository) {

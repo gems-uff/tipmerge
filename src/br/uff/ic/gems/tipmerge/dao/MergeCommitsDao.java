@@ -5,9 +5,7 @@
  */
 package br.uff.ic.gems.tipmerge.dao;
 
-import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
-import br.uff.ic.gems.tipmerge.util.Auxiliary;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.io.File;
 import java.util.ArrayList;
@@ -17,11 +15,11 @@ import java.util.List;
  *
  * @author j2cf
  */
-public class MergeDao {
+public class MergeCommitsDao {
 	
 	private final File path;
 
-	public MergeDao(File path) {
+	public MergeCommitsDao(File path) {
 		this.path = path;
 	}
 	

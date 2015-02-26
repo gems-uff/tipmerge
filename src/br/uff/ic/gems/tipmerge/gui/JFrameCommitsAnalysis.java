@@ -5,7 +5,7 @@
  */
 package br.uff.ic.gems.tipmerge.gui;
 
-import br.uff.ic.gems.tipmerge.dao.MergeDao;
+import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
 import br.uff.ic.gems.tipmerge.model.Conciliator;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.RepoCommits;
@@ -234,7 +234,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 		
 //		}
 //		this.repo.getMerges().stream().forEach((merge) -> {
-			MergeDao mergeDao = new MergeDao(repo.getProject());
+			MergeCommitsDao mergeDao = new MergeCommitsDao(repo.getProject());
 			mergeDao.update(merge);
 			if (merge.isMergeOfBranches()){
 				int cmtb1 = 0, cmtb2 = 0, cmtH = 0, cmtrs = 0; 
