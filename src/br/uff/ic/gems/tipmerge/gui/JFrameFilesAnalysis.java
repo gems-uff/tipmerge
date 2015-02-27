@@ -14,6 +14,7 @@ import br.uff.ic.gems.tipmerge.model.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -32,9 +33,14 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 	}
 
         private void setParameters() {
-		txRepo.setText("Project " +  repoFiles.getRepository().getName());
-		jcBranch1.setModel(new JComboBox(repoFiles.getRepository().getBranches().toArray()).getModel());
-		jcBranch2.setModel(new JComboBox(repoFiles.getRepository().getBranches().toArray()).getModel());
+            txRepo.setText("Project " +  repoFiles.getRepository().getName());
+            jcBranch1.setModel(new JComboBox(repoFiles.getRepository().getBranches().toArray()).getModel());
+            jcBranch2.setModel(new JComboBox(repoFiles.getRepository().getBranches().toArray()).getModel());
+            jcMerge.setModel(
+                    new JComboBox(
+                            repoFiles.getRepository().getListOfMerges().toArray())
+                            .getModel()
+            );
 	}
 	/**
 	 * This method is called from within the constructor to initialize the form.
@@ -55,9 +61,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txRepo = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        jcMerge = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        barRunning = new javax.swing.JProgressBar();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbResultsFile = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
 
         hash1.setText("<hash>");
@@ -65,6 +73,12 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("")));
+
+        jcBranch1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcBranch1ActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Branch one's hash");
 
@@ -83,20 +97,26 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         txRepo.setText("repo");
 
+        jcMerge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcMergeActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Select Merge");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txRepo)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jcMerge, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -113,10 +133,15 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap(183, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jcBranch2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(22, 22, 22))))))
+                                .addGap(22, 22, 22))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(txRepo))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,16 +159,24 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcBranch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcBranch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jcMerge, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        barRunning.setStringPainted(true);
+
+        tbResultsFile.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -151,8 +184,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 "Developers", "Branch 1", "Branch 2", "Intersection", "All History"
             }
         ));
-        jTable1.setEnabled(false);
-        jScrollPane1.setViewportView(jTable1);
+        tbResultsFile.setEnabled(false);
+        jScrollPane1.setViewportView(tbResultsFile);
 
         jButton2.setText("Export");
 
@@ -164,7 +197,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(barRunning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -177,9 +210,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(barRunning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2))
         );
@@ -188,41 +221,86 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int i = this.repoFiles.getRepository().getListOfMerges().size();
+		float j = (float) (i/100.0);
+		int count = 0;
+
+	barRunning.setValue(0);
+	barRunning.setMaximum(100);
+        
+        
         repoFiles.setMergeFiles(new ArrayList<>());
+                
+        DefaultTableModel model =  (DefaultTableModel)tbResultsFile.getModel();
+        
         for (String hashMerge : repoFiles.getRepository().getListOfMerges()){
+            
             MergeFilesDao mergeDao = new MergeFilesDao();
             MergeFiles mergeFiles = mergeDao.getMerge(hashMerge, repoFiles.getRepository().getProject());
             
             EditedFilesDao filesDao = new EditedFilesDao();
             mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[0], mergeFiles.getPath()));
             mergeFiles.setFilesOnBranchTwo(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[1], mergeFiles.getPath()));
-
             
-            System.out.println(mergeFiles.toString());
-            System.out.println(mergeFiles.getFilesOnBranchTwo().toString());
-            System.out.println(mergeFiles.getFilesOnBranchOne().toString());
+            for (EditedFile  file : mergeFiles.getFilesOnBranchOne()){
+                model.insertRow(
+                        model.getRowCount(), 
+                        new Object[]{file}
+                );
+            }
+              
+            //System.out.println(mergeFiles.toString());
+            //System.out.println(mergeFiles.getFilesOnBranchTwo().toString());
+            //System.out.println(mergeFiles.getFilesOnBranchOne().toString());
             
             repoFiles.getMergeFiles().add(mergeFiles);
+            
+            count++;
+			if(count%j < 1.0){
+				updateBar();
+                        }    
         }
+        
+        tbResultsFile.update(tbResultsFile.getGraphics());
 
         
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jcMergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMergeActionPerformed
+        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcMergeActionPerformed
+
+    private void jcBranch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcBranch1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JProgressBar barRunning;
     private javax.swing.JLabel hash1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JComboBox jcBranch1;
     private javax.swing.JComboBox jcBranch2;
+    private javax.swing.JComboBox jcMerge;
+    private javax.swing.JTable tbResultsFile;
     private javax.swing.JLabel txRepo;
     // End of variables declaration//GEN-END:variables
+
+    private void updateBar() {
+		int max = barRunning.getMaximum();
+		barRunning.setValue(barRunning.getValue() + 1);
+		barRunning.setString(barRunning.getValue() + "% Done");
+		barRunning.update(barRunning.getGraphics());
+	
+	}
+
 }
