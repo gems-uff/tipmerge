@@ -24,7 +24,7 @@ public class MergeFiles extends Merge {
 	}
 	
 	//retorna o nome de todos os autores, que alteraram algum arquivo
-	public List<Committer> getCommittersOnMege(){
+	public Set<Committer> getCommittersOnMege(){
 		Set<Committer> authors = new HashSet<>();
 		this.getFilesOnBranchOne().stream().forEach((file) -> {
 			authors.addAll(file.getWhoEditTheFile());
@@ -32,7 +32,7 @@ public class MergeFiles extends Merge {
 		this.getFilesOnBranchTwo().stream().forEach((file) -> {
 			authors.addAll(file.getWhoEditTheFile());
 		});
-		return (List<Committer>) authors;
+		return authors;
 	}
 
 	public List<EditedFile> getFilesOnBranchOne() {

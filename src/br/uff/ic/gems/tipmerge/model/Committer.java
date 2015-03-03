@@ -49,10 +49,18 @@ public class Committer implements Comparable<Committer>{
 	public void setCommits(Integer commits) {
 		this.commits = commits;
 	}
-	
+
 	@Override
 	public String toString(){
-		return this.getName() + " : " + this.getEmail() + " : " + this.getCommits();
+		return this.formatted(this.getName()) + " <" + this.formatted(this.getEmail()) + "> : " + this.getCommits();
+	}
+
+	private String formatted(String string){
+		int tam = Math.min(string.length(), 20);
+		if (string.length() >= tam)
+			return string.substring(0,tam);
+		else
+			return string.concat("                        ").substring(0,tam);
 	}
 
 	@Override
@@ -66,7 +74,8 @@ public class Committer implements Comparable<Committer>{
 	@Override
 	public int hashCode() {
 		int hash = 3;
-		hash = 67 * hash + Objects.hashCode(this.name);
+		//hash = Math.max(67 * hash + Objects.hashCode(this.name), 67 * hash + Objects.hashCode(this.email));
+		//hash = 67 * hash + Objects.hashCode(this.name);
 		hash = 67 * hash + Objects.hashCode(this.email);
 		return hash;
 	}
@@ -80,13 +89,11 @@ public class Committer implements Comparable<Committer>{
 			return false;
 		}
 		final Committer other = (Committer) obj;
-		if (!Objects.equals(this.name, other.name) && (!Objects.equals(this.email, other.email))) {
-			return false;
+/*		if(this.email.contains("danielprett@gmail.com")){
+			System.out.print(this.getEmail() + " -> " + ((Committer) obj).getEmail() + " :");
+			System.out.println((Objects.equals(this.name, other.name) || (Objects.equals(this.email, other.email))));
 		}
-		//if (!Objects.equals(this.email, other.email)) {
-		//	return false;
-		//}
-		return true;
+*/		return (Objects.equals(this.name, other.name) || (Objects.equals(this.email, other.email)));
 	}
 	
 }

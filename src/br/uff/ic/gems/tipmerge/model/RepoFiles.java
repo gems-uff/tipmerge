@@ -5,6 +5,7 @@
  */
 package br.uff.ic.gems.tipmerge.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public class RepoFiles {
 	
 	private final Repository repository;
         
-	private List<MergeFiles> mergeFiles;
+	private List<MergeFiles> mergeFiles = new ArrayList<>();
 
 	public RepoFiles(Repository repository) {
 		this.repository = repository;

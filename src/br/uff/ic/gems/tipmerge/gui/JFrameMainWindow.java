@@ -266,8 +266,10 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         jMenu2.setText("Analyze");
 
+        menuCommits.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
         menuCommits.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/commits.png"))); // NOI18N
-        menuCommits.setText("Commits Analysis");
+        menuCommits.setText("Commits");
+        menuCommits.setEnabled(false);
         menuCommits.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuCommitsActionPerformed(evt);
@@ -275,8 +277,10 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         });
         jMenu2.add(menuCommits);
 
+        menuFiles.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
         menuFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/search99.png"))); // NOI18N
-        menuFiles.setText("Files Analysis");
+        menuFiles.setText("Files");
+        menuFiles.setEnabled(false);
         menuFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuFilesActionPerformed(evt);

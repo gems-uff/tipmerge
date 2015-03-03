@@ -5,14 +5,19 @@
  */
 package br.uff.ic.gems.tipmerge.gui;
 
+import br.uff.ic.gems.tipmerge.dao.CommitterDao;
 import br.uff.ic.gems.tipmerge.dao.EditedFilesDao;
 import br.uff.ic.gems.tipmerge.dao.MergeFilesDao;
+import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
 import br.uff.ic.gems.tipmerge.model.RepoFiles;
 import br.uff.ic.gems.tipmerge.model.Repository;
+import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,9 +27,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JFrameFilesAnalysis extends javax.swing.JFrame {
         
-        private RepoFiles repoFiles;
+	private final RepoFiles repoFiles;
 	/**
 	 * Creates new form JFrameCommitsAnalysis
+	 * @param repository
 	 */
 	public JFrameFilesAnalysis(Repository repository) {
             this.repoFiles = new RepoFiles(repository);
@@ -32,15 +38,17 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             setParameters();
 	}
 
-        private void setParameters() {
-            txRepo.setText("Project " +  repoFiles.getRepository().getName());
-            jcBranch1.setModel(new JComboBox(repoFiles.getRepository().getBranches().toArray()).getModel());
-            jcBranch2.setModel(new JComboBox(repoFiles.getRepository().getBranches().toArray()).getModel());
-            jcMerge.setModel(
-                    new JComboBox(
-                            repoFiles.getRepository().getListOfMerges().toArray())
-                            .getModel()
-            );
+	private void setParameters() {
+		jcBranch1.setModel(new JComboBox(repoFiles.getRepository().getBranches().toArray()).getModel());
+		jcBranch2.setModel(new JComboBox(repoFiles.getRepository().getBranches().toArray()).getModel());
+		jcMerge.setModel(
+			new JComboBox(
+					repoFiles.getRepository().getListOfMerges().toArray())
+					.getModel()
+		);
+		jPanel1.setBorder(
+			BorderFactory.createTitledBorder(BorderFactory.createTitledBorder(""), "Project " +  repoFiles.getRepository().getName())
+		);
 	}
 	/**
 	 * This method is called from within the constructor to initialize the form.
@@ -52,50 +60,109 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private void initComponents() {
 
         hash1 = new javax.swing.JLabel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        hashBranch1 = new javax.swing.JLabel();
         jcBranch1 = new javax.swing.JComboBox();
-        jcBranch2 = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txRepo = new javax.swing.JLabel();
-        jcMerge = new javax.swing.JComboBox();
+        jcBranch2 = new javax.swing.JComboBox();
+        hashBranch2 = new javax.swing.JLabel();
+        radioBranches = new javax.swing.JRadioButton();
+        jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        jcMerge = new javax.swing.JComboBox();
+        radioHistorical = new javax.swing.JRadioButton();
         barRunning = new javax.swing.JProgressBar();
+        btRun = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbResultsFile = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
+        btAllMerges = new javax.swing.JButton();
 
         hash1.setText("<hash>");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("")));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setEnabled(false);
 
+        hashBranch1.setText("<hash>");
+
+        jcBranch1.setEnabled(false);
         jcBranch1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcBranch1ActionPerformed(evt);
             }
         });
 
-        jLabel7.setText("Branch one's hash");
+        jLabel7.setText("Branch one's hash: ");
 
-        jLabel8.setText("Branch two's hash");
+        jLabel8.setText("Branch two's hash: ");
 
-        jButton1.setText("Run");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jcBranch2.setEnabled(false);
+        jcBranch2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jcBranch2ActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("<hash>");
+        hashBranch2.setText("<hash>");
 
-        jLabel2.setText("<hash>");
+        buttonGroup1.add(radioBranches);
+        radioBranches.setText("Select Branches to Merge");
+        radioBranches.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioBranchesActionPerformed(evt);
+            }
+        });
 
-        txRepo.setText("repo");
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jcBranch2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jcBranch1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(hashBranch2))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(hashBranch1))
+                            .addComponent(radioBranches))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(radioBranches)
+                .addGap(5, 5, 5)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(hashBranch1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcBranch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(hashBranch2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcBranch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel3.setText("Select Merge");
 
         jcMerge.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -103,78 +170,79 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Select Merge");
+        buttonGroup1.add(radioHistorical);
+        radioHistorical.setSelected(true);
+        radioHistorical.setText("Select Historical Merge");
+        radioHistorical.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioHistoricalActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcMerge, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(radioHistorical)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(radioHistorical)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jcMerge, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        barRunning.setStringPainted(true);
+
+        btRun.setText("Run");
+        btRun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btRunActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jcMerge, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(223, 223, 223))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jcBranch1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(18, 18, 18)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addContainerGap(183, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jcBranch2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(22, 22, 22))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(txRepo))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(barRunning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txRepo)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jLabel8))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7)))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jcBranch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jcBranch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jcMerge, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btRun)
+                    .addComponent(barRunning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        barRunning.setStringPainted(true);
 
         tbResultsFile.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -184,10 +252,21 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 "Developers", "Branch 1", "Branch 2", "Intersection", "All History"
             }
         ));
-        tbResultsFile.setEnabled(false);
         jScrollPane1.setViewportView(tbResultsFile);
 
         jButton2.setText("Export");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        btAllMerges.setText("Run All Merges");
+        btAllMerges.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAllMergesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -196,13 +275,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btAllMerges)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(barRunning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton2))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,62 +289,77 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barRunning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(btAllMerges))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int i = this.repoFiles.getRepository().getListOfMerges().size();
-		float j = (float) (i/100.0);
-		int count = 0;
+    private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
 
-	barRunning.setValue(0);
-	barRunning.setMaximum(100);
-        
-        
-        repoFiles.setMergeFiles(new ArrayList<>());
-                
-        DefaultTableModel model =  (DefaultTableModel)tbResultsFile.getModel();
-        
-        for (String hashMerge : repoFiles.getRepository().getListOfMerges()){
-            
-            MergeFilesDao mergeDao = new MergeFilesDao();
-            MergeFiles mergeFiles = mergeDao.getMerge(hashMerge, repoFiles.getRepository().getProject());
-            
-            EditedFilesDao filesDao = new EditedFilesDao();
-            mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[0], mergeFiles.getPath()));
-            mergeFiles.setFilesOnBranchTwo(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[1], mergeFiles.getPath()));
-            
-            for (EditedFile  file : mergeFiles.getFilesOnBranchOne()){
-                model.insertRow(
-                        model.getRowCount(), 
-                        new Object[]{file}
-                );
-            }
-              
-            //System.out.println(mergeFiles.toString());
-            //System.out.println(mergeFiles.getFilesOnBranchTwo().toString());
-            //System.out.println(mergeFiles.getFilesOnBranchOne().toString());
-            
-            repoFiles.getMergeFiles().add(mergeFiles);
-            
-            count++;
-			if(count%j < 1.0){
-				updateBar();
-                        }    
-        }
-        
-        tbResultsFile.update(tbResultsFile.getGraphics());
+		startProgressBar(this.repoFiles.getRepository().getListOfMerges().size());
+		
+		/**
+		 * neste momento vai ser criado um merge ou
+		 * - pela selecao dos ramos
+		 * - pela seleção do merge a partir do histórico
+		 */
+		
+		MergeFiles mergeSelected;
+		MergeFilesDao mergeDao = new MergeFilesDao();
+		if (radioHistorical.isSelected()){
+			mergeSelected = mergeDao.getMerge(jcMerge.getSelectedItem().toString(), repoFiles.getRepository().getProject());
+			
+		}else{
+			mergeSelected = new MergeFiles("", repoFiles.getRepository().getProject());
+			mergeSelected.setParents(hashBranch1.getText(), hashBranch2.getText());
+			mergeSelected.setHashBase(mergeDao.getMergeBase(mergeSelected.getParents()[0], mergeSelected.getParents()[1], mergeSelected.getPath()));
 
+		}
+		
+		/** 
+		 * a partir deste momento o merge já existe com os pais, merge base
+		 * agora é setar os arquivos desse merge bem como os autores que 
+		 * atuaram nas alterações deste arquivo.
+		 */
+
+		EditedFilesDao filesDao = new EditedFilesDao();
+		mergeSelected.setFilesOnBranchOne(filesDao.getFiles(mergeSelected.getHashBase(), mergeSelected.getParents()[0], mergeSelected.getPath()));
+		mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), mergeSelected.getParents()[1], mergeSelected.getPath()));
+		
+		CommitterDao cmtrDao = new CommitterDao();
+		
+		for(EditedFile editedFile : mergeSelected.getFilesOnBranchOne()){
+			editedFile.setWhoEditTheFile(
+				cmtrDao.getWhoEditedFile(mergeSelected.getHashBase(), 
+										mergeSelected.getParents()[0], 
+										editedFile.getFileName(), 
+										mergeSelected.getPath())
+			);
+		}
+
+		for(EditedFile editedFile : mergeSelected.getFilesOnBranchTwo()){
+			editedFile.setWhoEditTheFile(
+				cmtrDao.getWhoEditedFile(mergeSelected.getHashBase(), 
+										mergeSelected.getParents()[1], 
+										editedFile.getFileName(), 
+										mergeSelected.getPath())
+			);
+		}
+		
+		//imprime na linha de comando
+		showCommitters(mergeSelected);
+		repoFiles.getMergeFiles().add(mergeSelected);
+		
+		//organiza os dados na tabela.
+		updateTable(mergeSelected);
         
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btRunActionPerformed
 
     private void jcMergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMergeActionPerformed
         
@@ -273,34 +367,221 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_jcMergeActionPerformed
 
     private void jcBranch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch1ActionPerformed
-        // TODO add your handling code here:
+		hashBranch1.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + jcBranch1.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
     }//GEN-LAST:event_jcBranch1ActionPerformed
+
+    private void radioHistoricalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioHistoricalActionPerformed
+		invertEnabledGroup();
+    }//GEN-LAST:event_radioHistoricalActionPerformed
+
+    private void radioBranchesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBranchesActionPerformed
+		invertEnabledGroup();
+    }//GEN-LAST:event_radioBranchesActionPerformed
+
+    private void jcBranch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch2ActionPerformed
+		hashBranch2.setText(RunGit.getResult("git log -n 1 --pretty=format:%h " + jcBranch2.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
+    }//GEN-LAST:event_jcBranch2ActionPerformed
+
+    private void btAllMergesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAllMergesActionPerformed
+        int i = this.repoFiles.getRepository().getListOfMerges().size();
+		float j = (float) (i/100.0);
+		int count = 0;
+		barRunning.setValue(0);
+		barRunning.setMaximum(100);
+		// aqui é para mostrar todos de alguma outra forma
+    
+        for (String hashMerge : repoFiles.getRepository().getListOfMerges()){
+			
+			if(hashMerge.equals(jcMerge.getSelectedItem().toString())){
+				MergeFilesDao mergeDao = new MergeFilesDao();
+				MergeFiles mergeFiles = mergeDao.getMerge(hashMerge, repoFiles.getRepository().getProject());
+
+				EditedFilesDao filesDao = new EditedFilesDao();
+				mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[0], mergeFiles.getPath()));
+/*
+				model.insertRow(model.getRowCount(), new Object[]{"Branch One","",""});
+				for (EditedFile  file : mergeSelected.getFilesOnBranchOne()){
+					model.insertRow(
+						model.getRowCount(),
+						new Object[]{file,"",""}
+					);
+					CommitterDao cmtrDao = new CommitterDao();
+					file.setWhoEditTheFile(
+						cmtrDao.getWhoEditedFile(
+							mergeSelected.getHashBase(), mergeSelected.getParents()[0], file.getFileName(), mergeSelected.getPath()));
+					
+					for(Committer cmtr : file.getWhoEditTheFile()){
+						model.insertRow(
+							model.getRowCount(), 
+							new Object[]{"",cmtr.getEmail(),cmtr.getCommits()}
+						);
+					}
+					
+				}
+				model.insertRow(model.getRowCount(), new Object[]{"Branch Two"});
+				mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), mergeSelected.getParents()[1], mergeSelected.getPath()));
+				for (EditedFile  file : mergeSelected.getFilesOnBranchTwo()){
+					model.insertRow(
+						model.getRowCount(),
+						new Object[]{file,"",""}
+					);
+					CommitterDao cmtrDao = new CommitterDao();
+					file.setWhoEditTheFile(
+						cmtrDao.getWhoEditedFile(
+							mergeSelected.getHashBase(), mergeSelected.getParents()[1], file.getFileName(), mergeSelected.getPath()));
+
+					for(Committer cmtr : file.getWhoEditTheFile()){
+						model.insertRow(
+							model.getRowCount(),
+							new Object[]{"",cmtr.getEmail(),cmtr.getCommits()}
+						);
+					}
+
+				}				
+				//imprime na linha de comando
+				showCommitters(mergeSelected);
+				repoFiles.getMergeFiles().add(mergeSelected);
+*/
+			}
+			count++;
+			if(count%j < 1.0){
+				updateBar(count);
+			}
+        }
+		
+		
+		//organiza os dados na tabela.
+		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name","Who edited it","Number of changes"}, count);
+		tbResultsFile.setModel(dftModel);
+		
+        DefaultTableModel model =  (DefaultTableModel)tbResultsFile.getModel();
+        
+		
+        
+        tbResultsFile.update(tbResultsFile.getGraphics());
+    }//GEN-LAST:event_btAllMergesActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barRunning;
+    private javax.swing.JButton btAllMerges;
+    private javax.swing.JButton btRun;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel hash1;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel hashBranch1;
+    private javax.swing.JLabel hashBranch2;
     private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox jcBranch1;
     private javax.swing.JComboBox jcBranch2;
     private javax.swing.JComboBox jcMerge;
+    private javax.swing.JRadioButton radioBranches;
+    private javax.swing.JRadioButton radioHistorical;
     private javax.swing.JTable tbResultsFile;
-    private javax.swing.JLabel txRepo;
     // End of variables declaration//GEN-END:variables
 
-    private void updateBar() {
-		int max = barRunning.getMaximum();
-		barRunning.setValue(barRunning.getValue() + 1);
-		barRunning.setString(barRunning.getValue() + "% Done");
-		barRunning.update(barRunning.getGraphics());
+	private void startProgressBar(Integer max){
+		barRunning.setValue(0);
+		//barRunning.setMaximum(100);
+		barRunning.setMaximum(max);
+	}
 	
+	private void updateBar(Integer value) {
+		int max = barRunning.getMaximum();
+		float j = (float) max / 100;
+		if(value % j < 1.0){
+			barRunning.setValue(value);
+			barRunning.setString("processing...");
+			barRunning.update(barRunning.getGraphics());
+		}
+		if(value == max){
+			barRunning.setValue(value);
+			barRunning.setString("100% Done");
+			barRunning.update(barRunning.getGraphics());
+		}
+	}
+
+	private void showCommitters(MergeFiles mergeFiles) {
+		System.out.println("Merge: " + mergeFiles.getHash());
+		System.out.println("Branch One");
+		mergeFiles.getFilesOnBranchOne().stream().forEach((file) ->{
+			System.out.println(file.getFileName());
+			file.getWhoEditTheFile().stream().forEach((cmtr) -> {
+				System.out.println("\t" + cmtr.toString());
+			});
+		});
+		System.out.println("Branch Two");
+		mergeFiles.getFilesOnBranchTwo().stream().forEach((file) ->{
+			System.out.println(file.getFileName());
+			file.getWhoEditTheFile().stream().forEach((cmtr) -> {
+				System.out.println("\t" + cmtr.toString());
+			});
+		});
+		/*
+		mergeFiles.getCommittersOnMege().stream().forEach((cmt) -> {
+			System.out.println(cmt.toString());
+		});
+		*/
+	}
+
+	private void invertEnabledGroup() {
+		jcBranch1.setEnabled(!jcBranch1.isEnabled());
+		jcBranch2.setEnabled(!jcBranch2.isEnabled());
+		jcMerge.setEnabled(!jcMerge.isEnabled());
+		jPanel2.setEnabled(!jPanel2.isEnabled());
+		jPanel3.setEnabled(!jPanel3.isEnabled());
+	}
+
+	private void updateTable(MergeFiles mergeSelected) {
+		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
+
+		Set<Committer> committers = mergeSelected.getCommittersOnMege();
+		
+		int totalCmtr = committers.size();
+		committers.stream().forEach((committer) -> {
+			dftModel.addColumn(committer.getName());
+		});
+		
+		dftModel.addRow(new Object[]{"BRANCH ONE"});
+		
+		mergeSelected.getFilesOnBranchOne().stream().forEach((file) -> {
+			
+			dftModel.addRow(getRowCount(file, committers).toArray());
+			//dftModel.addRow(new Object[]{file.getFileName()});
+			
+		});
+		dftModel.addRow(new Object[]{" "}); //somente para dividir os branches
+		
+		dftModel.addRow(new Object[]{"BRANCH TWO"});
+		mergeSelected.getFilesOnBranchTwo().stream().forEach((file) -> {
+			dftModel.addRow(getRowCount(file, committers).toArray());
+
+		});
+
+		tbResultsFile.setModel(dftModel);
+        tbResultsFile.update(tbResultsFile.getGraphics());	}
+
+	private List<String> getRowCount(EditedFile file, Set<Committer> committers) {
+		List<String> values = new ArrayList<>();
+		values.add(file.getFileName());
+		file.getWhoEditTheFile().stream().forEach((cmtrFile) -> {
+			committers.stream().forEach( (cmtrHeader) -> {
+				if(cmtrFile.equals(cmtrHeader)){
+					values.add(cmtrFile.getCommits().toString());
+				}else
+					values.add(" ");
+			});
+		});
+		return values;
 	}
 
 }
