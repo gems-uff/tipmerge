@@ -384,7 +384,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_radioBranchesActionPerformed
 
     private void jcBranch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch2ActionPerformed
-		hashBranch2.setText(RunGit.getResult("git log -n 1 --pretty=format:%h " + jcBranch2.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
+		hashBranch2.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + jcBranch2.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
     }//GEN-LAST:event_jcBranch2ActionPerformed
 
     private void btAllMergesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAllMergesActionPerformed

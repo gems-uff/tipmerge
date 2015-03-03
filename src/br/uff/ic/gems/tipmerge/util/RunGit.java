@@ -33,10 +33,11 @@ public class RunGit {
 	
 	public static List<String> getListOfResult(String command, File repository) {
 		List<String> result = new ArrayList<>();
-		String line;
 		BufferedReader stdInput = RunGit.executeGitCommand(command, repository);
 		try {
+			String line;
 			while ((line = stdInput.readLine()) != null) {
+				System.out.println(line);
 				result.add(line);
 			}
 		} catch (IOException ex) {
@@ -55,15 +56,15 @@ public class RunGit {
 
 			stdInput = new BufferedReader(new InputStreamReader(exec.getInputStream()));
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(exec.getErrorStream()));
-
-			while ((error = stdError.readLine()) != null) {
-				System.out.println(error);
+			if(stdError.ready()){
+				while ((error = stdError.readLine()) != null) {
+					System.out.println(error);
+				}
 			}
-
 		} catch (IOException e) {
-			
+			System.out.println(e);
+			Logger.getLogger(RunGit.class.getName()).log(Level.SEVERE, null, e);			
 		}
-		
 		return stdInput;
 	}
 	
