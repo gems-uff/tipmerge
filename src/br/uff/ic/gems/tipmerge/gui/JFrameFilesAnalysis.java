@@ -15,6 +15,7 @@ import br.uff.ic.gems.tipmerge.model.RepoFiles;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.swing.BorderFactory;
@@ -358,7 +359,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		}
 		
 		//imprime na linha de comando
-		showCommitters(mergeSelected);
+		//showCommitters(mergeSelected);
 		repoFiles.getMergeFiles().add(mergeSelected);
 		
 		//organiza os dados na tabela.
@@ -367,7 +368,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_btRunActionPerformed
 
     private void jcMergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMergeActionPerformed
-        
         // TODO add your handling code here:
     }//GEN-LAST:event_jcMergeActionPerformed
 
@@ -376,11 +376,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_jcBranch1ActionPerformed
 
     private void radioHistoricalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioHistoricalActionPerformed
-		//invertEnabledGroup();
     }//GEN-LAST:event_radioHistoricalActionPerformed
 
     private void radioBranchesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBranchesActionPerformed
-		//invertEnabledGroup();
     }//GEN-LAST:event_radioBranchesActionPerformed
 
     private void jcBranch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch2ActionPerformed
@@ -556,15 +554,16 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		Set<Committer> committers = mergeSelected.getCommittersOnMege();
 		
 		int totalCmtr = committers.size();
+		//Inclue as colunas com o nome de todos os desenvolvedores (ramos 1 e 2)
 		committers.stream().forEach((committer) -> {
 			dftModel.addColumn(committer.getName());
 		});
 		
 		dftModel.addRow(new Object[]{"BRANCH ONE"});
 		
-		mergeSelected.getFilesOnBranchOne().stream().forEach((file) -> {
+		mergeSelected.getFilesOnBranchOne().stream().forEach((editedfile) -> {
 			
-			dftModel.addRow(getRowCount(file, committers).toArray());
+			dftModel.addRow(getRowCount(editedfile, committers));
 			//dftModel.addRow(new Object[]{file.getFileName()});
 			
 		});
@@ -572,25 +571,47 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		
 		dftModel.addRow(new Object[]{"BRANCH TWO"});
 		mergeSelected.getFilesOnBranchTwo().stream().forEach((file) -> {
-			dftModel.addRow(getRowCount(file, committers).toArray());
+			dftModel.addRow(getRowCount(file, committers));
 
 		});
 
 		tbResultsFile.setModel(dftModel);
         tbResultsFile.update(tbResultsFile.getGraphics());	}
 
-	private List<String> getRowCount(EditedFile file, Set<Committer> committers) {
-		List<String> values = new ArrayList<>();
-		values.add(file.getFileName());
-		file.getWhoEditTheFile().stream().forEach((cmtrFile) -> {
+	private String[] getRowCount(EditedFile editedFile, Set<Committer> committers) {
+		String valuesVector[] = new String[committers.size() + 1];
+		//List<String> values = new ArrayList<>();
+		valuesVector[0] = editedFile.getFileName();
+		//values.add(editedFile.getFileName());
+		//System.out.println(editedFile.getFileName());
+		editedFile.getWhoEditTheFile().stream().forEach((cmtrFile) -> {
+			int index = 1;
+			for(Committer cmtr : committers){
+				
+				//System.out.print(cmtrFile.getName() + " " + cmtr.getName() );
+				if(cmtrFile.equals(cmtr)){
+					//values.add(cmtrFile.getCommits().toString());
+					valuesVector[index] = cmtrFile.getCommits().toString();
+					//values.add(index, cmtrFile.getCommits().toString());
+					//System.out.println(valuesVector);
+				}
+				System.out.println(cmtrFile.equals(cmtr));				
+				index++;
+			}
+			/*
 			committers.stream().forEach( (cmtrHeader) -> {
+				System.out.print(cmtrFile.getName() + " " + cmtrHeader.getName() );
 				if(cmtrFile.equals(cmtrHeader)){
 					values.add(cmtrFile.getCommits().toString());
+					committers.
+					System.out.println(values.toString());
 				}else
 					values.add(" ");
+				System.out.println(cmtrFile.equals(cmtrHeader));
 			});
+				*/
 		});
-		return values;
+		return valuesVector;
 	}
 
 }

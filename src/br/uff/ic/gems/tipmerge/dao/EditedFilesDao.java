@@ -19,8 +19,6 @@ public class EditedFilesDao {
     
     public List<String> getFilesList(String base, String parent, File path){
         String command = "git diff --name-only " + base + ".." + parent;
-        System.out.print(command + " ");
-        System.out.println(path.toString());
         List<String> data = RunGit.getListOfResult(command, path);
         return data;
     }

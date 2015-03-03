@@ -37,7 +37,6 @@ public class RunGit {
 		try {
 			String line;
 			while ((line = stdInput.readLine()) != null) {
-				System.out.println(line);
 				result.add(line);
 			}
 		} catch (IOException ex) {
