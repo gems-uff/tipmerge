@@ -112,6 +112,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         buttonGroup1.add(radioBranches);
         radioBranches.setText("Select Branches to Merge");
+        radioBranches.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                radioBranchesStateChanged(evt);
+            }
+        });
         radioBranches.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 radioBranchesActionPerformed(evt);
@@ -371,11 +376,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_jcBranch1ActionPerformed
 
     private void radioHistoricalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioHistoricalActionPerformed
-		invertEnabledGroup();
+		//invertEnabledGroup();
     }//GEN-LAST:event_radioHistoricalActionPerformed
 
     private void radioBranchesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBranchesActionPerformed
-		invertEnabledGroup();
+		//invertEnabledGroup();
     }//GEN-LAST:event_radioBranchesActionPerformed
 
     private void jcBranch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch2ActionPerformed
@@ -464,6 +469,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void radioBranchesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_radioBranchesStateChanged
+		invertEnabledGroup();  
+    }//GEN-LAST:event_radioBranchesStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barRunning;

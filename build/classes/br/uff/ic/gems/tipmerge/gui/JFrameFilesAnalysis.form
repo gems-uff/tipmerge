@@ -215,6 +215,7 @@
                 <Property name="text" type="java.lang.String" value="Select Branches to Merge"/>
               </Properties>
               <Events>
+                <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="radioBranchesStateChanged"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="radioBranchesActionPerformed"/>
               </Events>
             </Component>
