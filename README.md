@@ -1,4 +1,4 @@
-# tipmerge
+# TIPMerge
 
 <h3>About</h3>
 <strong>TIPMerge</strong> (Tool to assIgn  develoPers to Merge) main goal is to support the merge branch task, helping in the decision to choose the most appropriate developers to perform the merge.<br />
