@@ -77,10 +77,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         radioHistorical = new javax.swing.JRadioButton();
         barRunning = new javax.swing.JProgressBar();
         btRun = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tbResultsFile = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         btAllMerges = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbResultsFile = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbResultsFile1 = new javax.swing.JTable();
 
         hash1.setText("<hash>");
 
@@ -250,16 +253,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tbResultsFile.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Developers", "Branch 1", "Branch 2", "Intersection", "All History"
-            }
-        ));
-        jScrollPane1.setViewportView(tbResultsFile);
-
         jButton2.setText("Export");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -274,6 +267,30 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         });
 
+        tbResultsFile.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "", "", "", "", ""
+            }
+        ));
+        jScrollPane1.setViewportView(tbResultsFile);
+
+        jTabbedPane1.addTab("Branches", jScrollPane1);
+
+        tbResultsFile1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "", "", "", "", ""
+            }
+        ));
+        jScrollPane2.setViewportView(tbResultsFile1);
+
+        jTabbedPane1.addTab("History", jScrollPane2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -286,7 +303,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE))
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -295,8 +312,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(btAllMerges))
@@ -488,12 +505,15 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JComboBox jcBranch1;
     private javax.swing.JComboBox jcBranch2;
     private javax.swing.JComboBox jcMerge;
     private javax.swing.JRadioButton radioBranches;
     private javax.swing.JRadioButton radioHistorical;
     private javax.swing.JTable tbResultsFile;
+    private javax.swing.JTable tbResultsFile1;
     // End of variables declaration//GEN-END:variables
 
 	private void startProgressBar(Integer max){
