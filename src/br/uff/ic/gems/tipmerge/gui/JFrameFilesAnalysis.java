@@ -81,9 +81,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         btAllMerges = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbResultsFile = new javax.swing.JTable();
+        tbResultsBranch1 = new javax.swing.JTable();
+        tbResultsBranch2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tbResultsFile1 = new javax.swing.JTable();
+        tbResultsHistory = new javax.swing.JTable();
+        tbResultsBoth = new javax.swing.JPanel();
 
         hash1.setText("<hash>");
 
@@ -267,7 +269,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         });
 
-        tbResultsFile.setModel(new javax.swing.table.DefaultTableModel(
+        tbResultsBranch1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -275,11 +277,24 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 "", "", "", "", ""
             }
         ));
-        jScrollPane1.setViewportView(tbResultsFile);
+        jScrollPane1.setViewportView(tbResultsBranch1);
 
-        jTabbedPane1.addTab("Branches", jScrollPane1);
+        jTabbedPane1.addTab("Branch 1", jScrollPane1);
 
-        tbResultsFile1.setModel(new javax.swing.table.DefaultTableModel(
+        javax.swing.GroupLayout tbResultsBranch2Layout = new javax.swing.GroupLayout(tbResultsBranch2);
+        tbResultsBranch2.setLayout(tbResultsBranch2Layout);
+        tbResultsBranch2Layout.setHorizontalGroup(
+            tbResultsBranch2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 588, Short.MAX_VALUE)
+        );
+        tbResultsBranch2Layout.setVerticalGroup(
+            tbResultsBranch2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 234, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Branch 2", tbResultsBranch2);
+
+        tbResultsHistory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -287,9 +302,22 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 "", "", "", "", ""
             }
         ));
-        jScrollPane2.setViewportView(tbResultsFile1);
+        jScrollPane2.setViewportView(tbResultsHistory);
 
         jTabbedPane1.addTab("History", jScrollPane2);
+
+        javax.swing.GroupLayout tbResultsBothLayout = new javax.swing.GroupLayout(tbResultsBoth);
+        tbResultsBoth.setLayout(tbResultsBothLayout);
+        tbResultsBothLayout.setHorizontalGroup(
+            tbResultsBothLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 588, Short.MAX_VALUE)
+        );
+        tbResultsBothLayout.setVerticalGroup(
+            tbResultsBothLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 234, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Both Branches", tbResultsBoth);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -303,7 +331,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE))
+                    .addComponent(jTabbedPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -472,13 +500,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		
 		//organiza os dados na tabela.
 		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name","Who edited it","Number of changes"}, count);
-		tbResultsFile.setModel(dftModel);
+		tbResultsBranch1.setModel(dftModel);
 		
-        DefaultTableModel model =  (DefaultTableModel)tbResultsFile.getModel();
+        DefaultTableModel model =  (DefaultTableModel)tbResultsBranch1.getModel();
         
 		
         
-        tbResultsFile.update(tbResultsFile.getGraphics());
+        tbResultsBranch1.update(tbResultsBranch1.getGraphics());
     }//GEN-LAST:event_btAllMergesActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -512,8 +540,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JComboBox jcMerge;
     private javax.swing.JRadioButton radioBranches;
     private javax.swing.JRadioButton radioHistorical;
-    private javax.swing.JTable tbResultsFile;
-    private javax.swing.JTable tbResultsFile1;
+    private javax.swing.JPanel tbResultsBoth;
+    private javax.swing.JTable tbResultsBranch1;
+    private javax.swing.JPanel tbResultsBranch2;
+    private javax.swing.JTable tbResultsHistory;
     // End of variables declaration//GEN-END:variables
 
 	private void startProgressBar(Integer max){
@@ -595,8 +625,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
 		});
 
-		tbResultsFile.setModel(dftModel);
-        tbResultsFile.update(tbResultsFile.getGraphics());	}
+		tbResultsBranch1.setModel(dftModel);
+        tbResultsBranch1.update(tbResultsBranch1.getGraphics());	}
 
 	private String[] getRowCount(EditedFile editedFile, Set<Committer> committers) {
 		String valuesVector[] = new String[committers.size() + 1];
