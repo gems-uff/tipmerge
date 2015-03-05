@@ -52,12 +52,11 @@ public class EditedFile {
 			return false;
 		}
 		final EditedFile other = (EditedFile) obj;
-		if (!Objects.equals(this.fileName, other.fileName)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(this.fileName, other.fileName);
 	}
+	@Override
 	public String toString(){
-            return this.getFileName();
-        }
+		return this.getFileName();
+	}
+
 }

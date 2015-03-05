@@ -7,15 +7,15 @@ package br.uff.ic.gems.tipmerge.gui;
 
 import br.uff.ic.gems.tipmerge.dao.CommitterDao;
 import br.uff.ic.gems.tipmerge.dao.EditedFilesDao;
+import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
 import br.uff.ic.gems.tipmerge.dao.MergeFilesDao;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
+import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
 import br.uff.ic.gems.tipmerge.model.RepoFiles;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.RunGit;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.swing.BorderFactory;
@@ -82,10 +82,12 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbResultsBranch1 = new javax.swing.JTable();
-        tbResultsBranch2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbResultsHistory = new javax.swing.JTable();
-        tbResultsBoth = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tbResultsBranch2 = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tbResultsBothBranches = new javax.swing.JTable();
 
         hash1.setText("<hash>");
 
@@ -237,7 +239,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(barRunning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(barRunning, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -281,19 +283,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Branch 1", jScrollPane1);
 
-        javax.swing.GroupLayout tbResultsBranch2Layout = new javax.swing.GroupLayout(tbResultsBranch2);
-        tbResultsBranch2.setLayout(tbResultsBranch2Layout);
-        tbResultsBranch2Layout.setHorizontalGroup(
-            tbResultsBranch2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 588, Short.MAX_VALUE)
-        );
-        tbResultsBranch2Layout.setVerticalGroup(
-            tbResultsBranch2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 234, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Branch 2", tbResultsBranch2);
-
         tbResultsHistory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -306,18 +295,35 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("History", jScrollPane2);
 
-        javax.swing.GroupLayout tbResultsBothLayout = new javax.swing.GroupLayout(tbResultsBoth);
-        tbResultsBoth.setLayout(tbResultsBothLayout);
-        tbResultsBothLayout.setHorizontalGroup(
-            tbResultsBothLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 588, Short.MAX_VALUE)
-        );
-        tbResultsBothLayout.setVerticalGroup(
-            tbResultsBothLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 234, Short.MAX_VALUE)
-        );
+        tbResultsBranch2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(tbResultsBranch2);
 
-        jTabbedPane1.addTab("Both Branches", tbResultsBoth);
+        jTabbedPane1.addTab("Branch 2", jScrollPane3);
+
+        tbResultsBothBranches.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(tbResultsBothBranches);
+
+        jTabbedPane1.addTab("Both Branches", jScrollPane4);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -330,9 +336,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                         .addComponent(btAllMerges)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTabbedPane1))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,19 +366,24 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		 * - pela selecao dos ramos
 		 * - pela seleção do merge a partir do histórico
 		 */
-		
 		MergeFiles mergeSelected;
-		MergeFilesDao mergeDao = new MergeFilesDao();
+		MergeCommits mCommits;
+		MergeFilesDao mergeFilesDao = new MergeFilesDao();
+		MergeCommitsDao mergeCommittsDao = new MergeCommitsDao(repoFiles.getRepository().getProject());
+
 		if (radioHistorical.isSelected()){
-			mergeSelected = mergeDao.getMerge(jcMerge.getSelectedItem().toString(), repoFiles.getRepository().getProject());
+			mergeSelected = mergeFilesDao.getMerge(jcMerge.getSelectedItem().toString(), repoFiles.getRepository().getProject());
+			mCommits = new MergeCommits(jcMerge.getSelectedItem().toString(), repoFiles.getRepository().getProject());
 			
 		}else{
 			mergeSelected = new MergeFiles("", repoFiles.getRepository().getProject());
 			mergeSelected.setParents(hashBranch1.getText(), hashBranch2.getText());
-			mergeSelected.setHashBase(mergeDao.getMergeBase(mergeSelected.getParents()[0], mergeSelected.getParents()[1], mergeSelected.getPath()));
+			mergeSelected.setHashBase(mergeFilesDao.getMergeBase(mergeSelected.getParents()[0], mergeSelected.getParents()[1], mergeSelected.getPath()));
 
+			mCommits = new MergeCommits("", repoFiles.getRepository().getProject());
 		}
-		
+		mergeCommittsDao.update(mCommits);
+
 		/** 
 		 * a partir deste momento o merge já existe com os pais, merge base
 		 * agora é setar os arquivos desse merge bem como os autores que 
@@ -403,12 +414,25 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 			);
 		}
 		
+		for(EditedFile editedFile : mergeSelected.getFilesOnHistory()){
+			editedFile.setWhoEditTheFile(
+				cmtrDao.getWhoEditedFile(repoFiles.getRepository().getFirstCommit(), 
+										mergeSelected.getHashBase(), 
+										editedFile.getFileName(), 
+										mergeSelected.getPath())
+			);
+		}
+		
 		//imprime na linha de comando
 		//showCommitters(mergeSelected);
 		repoFiles.getMergeFiles().add(mergeSelected);
 		
 		//organiza os dados na tabela.
-		updateTable(mergeSelected);
+		showResBranch1(mergeSelected);
+		showResBranch2(mergeSelected);
+		showResHistory(mergeSelected);
+		showResIntersection(mCommits.getCommittersInCommon());
+
         
     }//GEN-LAST:event_btRunActionPerformed
 
@@ -447,10 +471,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 				EditedFilesDao filesDao = new EditedFilesDao();
 				mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[0], mergeFiles.getPath()));
 /*
-				model.insertRow(model.getRowCount(), new Object[]{"Branch One","",""});
+				model.insertRow(model.getValueToRow(), new Object[]{"Branch One","",""});
 				for (EditedFile  file : mergeSelected.getFilesOnBranchOne()){
 					model.insertRow(
-						model.getRowCount(),
+						model.getValueToRow(),
 						new Object[]{file,"",""}
 					);
 					CommitterDao cmtrDao = new CommitterDao();
@@ -460,17 +484,17 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 					
 					for(Committer cmtr : file.getWhoEditTheFile()){
 						model.insertRow(
-							model.getRowCount(), 
+							model.getValueToRow(), 
 							new Object[]{"",cmtr.getEmail(),cmtr.getCommits()}
 						);
 					}
 					
 				}
-				model.insertRow(model.getRowCount(), new Object[]{"Branch Two"});
+				model.insertRow(model.getValueToRow(), new Object[]{"Branch Two"});
 				mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), mergeSelected.getParents()[1], mergeSelected.getPath()));
 				for (EditedFile  file : mergeSelected.getFilesOnBranchTwo()){
 					model.insertRow(
-						model.getRowCount(),
+						model.getValueToRow(),
 						new Object[]{file,"",""}
 					);
 					CommitterDao cmtrDao = new CommitterDao();
@@ -480,7 +504,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
 					for(Committer cmtr : file.getWhoEditTheFile()){
 						model.insertRow(
-							model.getRowCount(),
+							model.getValueToRow(),
 							new Object[]{"",cmtr.getEmail(),cmtr.getCommits()}
 						);
 					}
@@ -534,15 +558,17 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JComboBox jcBranch1;
     private javax.swing.JComboBox jcBranch2;
     private javax.swing.JComboBox jcMerge;
     private javax.swing.JRadioButton radioBranches;
     private javax.swing.JRadioButton radioHistorical;
-    private javax.swing.JPanel tbResultsBoth;
+    private javax.swing.JTable tbResultsBothBranches;
     private javax.swing.JTable tbResultsBranch1;
-    private javax.swing.JPanel tbResultsBranch2;
+    private javax.swing.JTable tbResultsBranch2;
     private javax.swing.JTable tbResultsHistory;
     // End of variables declaration//GEN-END:variables
 
@@ -598,70 +624,98 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		jPanel3.setEnabled(!jPanel3.isEnabled());
 	}
 
-	private void updateTable(MergeFiles mergeSelected) {
+	private void showResBranch1(MergeFiles mergeSelected) {
 		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
 
-		Set<Committer> committers = mergeSelected.getCommittersOnMege();
+		Set<Committer> committers = mergeSelected.getCommittersOnBranchOne();
 		
-		int totalCmtr = committers.size();
 		//Inclue as colunas com o nome de todos os desenvolvedores (ramos 1 e 2)
 		committers.stream().forEach((committer) -> {
 			dftModel.addColumn(committer.getName());
 		});
 		
 		dftModel.addRow(new Object[]{"BRANCH ONE"});
-		
 		mergeSelected.getFilesOnBranchOne().stream().forEach((editedfile) -> {
-			
-			dftModel.addRow(getRowCount(editedfile, committers));
+			dftModel.addRow(getValueToRow(editedfile, committers));
 			//dftModel.addRow(new Object[]{file.getFileName()});
 			
 		});
-		dftModel.addRow(new Object[]{" "}); //somente para dividir os branches
+
+		tbResultsBranch1.setModel(dftModel);
+	}
+	
+	private void showResBranch2(MergeFiles mergeSelected) {
+		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
+
+		Set<Committer> committers = mergeSelected.getCommittersOnBranchTwo();
+		
+		//Inclue as colunas com o nome de todos os desenvolvedores (ramos 1 e 2)
+		committers.stream().forEach((committer) -> {
+			dftModel.addColumn(committer.getName());
+		});
 		
 		dftModel.addRow(new Object[]{"BRANCH TWO"});
 		mergeSelected.getFilesOnBranchTwo().stream().forEach((file) -> {
-			dftModel.addRow(getRowCount(file, committers));
+			dftModel.addRow(getValueToRow(file, committers));
 
 		});
 
-		tbResultsBranch1.setModel(dftModel);
-        tbResultsBranch1.update(tbResultsBranch1.getGraphics());	}
+		tbResultsBranch2.setModel(dftModel);
+        //tbResultsBranch1.update(tbResultsBranch1.getGraphics());	
+	}
+	
+	
+	private void showResHistory(MergeFiles mergeSelected) {
+		
+		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
 
-	private String[] getRowCount(EditedFile editedFile, Set<Committer> committers) {
+		Set<Committer> committers = mergeSelected.getCommittersOnHistory();
+		 
+		//Inclue as colunas com o nome de todos os desenvolvedores (ramos 1 e 2)
+		committers.stream().forEach((committer) -> {
+			dftModel.addColumn(committer.getName());
+		});
+		
+		dftModel.addRow(new Object[]{"HISTORY"});
+		mergeSelected.getFilesOnHistory().stream().forEach((file) -> {
+			if(file.getWhoEditTheFile().size() > 0)
+				dftModel.addRow(getValueToRow(file, committers));
+
+		});
+
+		tbResultsHistory.setModel(dftModel);
+	}
+	
+	private void showResIntersection(List<Committer> committers) {
+		
+		DefaultTableModel model = new DefaultTableModel( new Object[] {"Author ", "Number of Commits in Both Branches"}, 0);
+		for (Committer cmtr : committers){
+			model.insertRow(model.getRowCount(), 
+							new Object[] {cmtr.getName() + ":" + cmtr.getEmail(), cmtr.getCommits()
+							}
+			);
+		}
+		//return model;
+		tbResultsBothBranches.setModel(model);
+	}
+
+
+	private String[] getValueToRow(EditedFile editedFile, Set<Committer> committers) {
 		String valuesVector[] = new String[committers.size() + 1];
-		//List<String> values = new ArrayList<>();
 		valuesVector[0] = editedFile.getFileName();
-		//values.add(editedFile.getFileName());
-		//System.out.println(editedFile.getFileName());
 		editedFile.getWhoEditTheFile().stream().forEach((cmtrFile) -> {
 			int index = 1;
 			for(Committer cmtr : committers){
 				
-				//System.out.print(cmtrFile.getName() + " " + cmtr.getName() );
 				if(cmtrFile.equals(cmtr)){
-					//values.add(cmtrFile.getCommits().toString());
 					valuesVector[index] = cmtrFile.getCommits().toString();
-					//values.add(index, cmtrFile.getCommits().toString());
-					//System.out.println(valuesVector);
 				}
-				System.out.println(cmtrFile.equals(cmtr));				
 				index++;
 			}
-			/*
-			committers.stream().forEach( (cmtrHeader) -> {
-				System.out.print(cmtrFile.getName() + " " + cmtrHeader.getName() );
-				if(cmtrFile.equals(cmtrHeader)){
-					values.add(cmtrFile.getCommits().toString());
-					committers.
-					System.out.println(values.toString());
-				}else
-					values.add(" ");
-				System.out.println(cmtrFile.equals(cmtrHeader));
-			});
-				*/
+
 		});
 		return valuesVector;
 	}
 
+	
 }

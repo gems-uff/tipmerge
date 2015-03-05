@@ -71,17 +71,16 @@ public class MergeCommits extends Merge{
 	 */
 	public List<Committer> getCommittersInCommon() {
 		if (cmtCommon == null){
-			List<Committer> committerList = new ArrayList<>();
 			this.getCommittersBranchOne().stream().forEach((cmter1) -> {
-				for(Committer cmter2 : this.getCommittersBranchTwo())
+				for(Committer cmter2 : this.getCommittersBranchTwo()){
 					if (cmter1.equals(cmter2)){
 						if (cmter1.getCommits() < cmter2.getCommits())
 							this.addCommitterCommon(cmter1);
 						else
 							this.addCommitterCommon(cmter2);
 					}
+				}
 			});
-			this.cmtCommon = committerList;
 		}
 		return cmtCommon;
 	}
