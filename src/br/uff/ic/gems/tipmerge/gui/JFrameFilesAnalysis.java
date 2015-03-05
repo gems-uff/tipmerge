@@ -78,16 +78,16 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         barRunning = new javax.swing.JProgressBar();
         btRun = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        btAllMerges = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbResultsBranch1 = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tbResultsHistory = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbResultsBranch2 = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbResultsHistory = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         tbResultsBothBranches = new javax.swing.JTable();
+        btAllMerges = new javax.swing.JButton();
 
         hash1.setText("<hash>");
 
@@ -264,13 +264,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         });
 
-        btAllMerges.setText("Run All Merges");
-        btAllMerges.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAllMergesActionPerformed(evt);
-            }
-        });
-
         tbResultsBranch1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -282,18 +275,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tbResultsBranch1);
 
         jTabbedPane1.addTab("Branch 1", jScrollPane1);
-
-        tbResultsHistory.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "", "", "", "", ""
-            }
-        ));
-        jScrollPane2.setViewportView(tbResultsHistory);
-
-        jTabbedPane1.addTab("History", jScrollPane2);
 
         tbResultsBranch2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -310,6 +291,18 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Branch 2", jScrollPane3);
 
+        tbResultsHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "", "", "", "", ""
+            }
+        ));
+        jScrollPane2.setViewportView(tbResultsHistory);
+
+        jTabbedPane1.addTab("History", jScrollPane2);
+
         tbResultsBothBranches.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -324,6 +317,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jScrollPane4.setViewportView(tbResultsBothBranches);
 
         jTabbedPane1.addTab("Both Branches", jScrollPane4);
+
+        btAllMerges.setText("Run All Merges");
+        btAllMerges.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAllMergesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
