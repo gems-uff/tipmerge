@@ -13,8 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
- *
- * @author j2cf
+ * This class is in charge of showing all basic information about the repository project selected and direct to other possible analyzes
+ * @author j2cf, Catarina
  */
 public class JFrameMainWindow extends javax.swing.JFrame {
 	
@@ -327,7 +327,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+	//Allows user to select a project in a directory and show basics information (total merges, total branches, last commit, ...)
     private void btSelectProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelectProjectActionPerformed
 		JFileChooser projetctFile = new JFileChooser(new File(jtPathToProjects.getText()));
 		projetctFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -372,7 +372,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 		}
 */
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+	//shows the committers name information and the Jtree with the merge branch information 
     private void btShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btShowActionPerformed
 		clearAllFields();
 		
@@ -384,13 +384,13 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 		updateJTree();
 
     }//GEN-LAST:event_btShowActionPerformed
-
+	//Directs for the commits analysis
     private void menuCommitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCommitsActionPerformed
         JFrameCommitsAnalysis commits = new JFrameCommitsAnalysis(this.repository);
 		commits.setLocationRelativeTo(this.getFocusOwner());
 		commits.setVisible(true);
     }//GEN-LAST:event_menuCommitsActionPerformed
-
+	//Directs for the files analysis
     private void menuFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFilesActionPerformed
         JFrameFilesAnalysis files = new JFrameFilesAnalysis(repository);
 		files.setLocationRelativeTo(this.getFocusOwner());
@@ -433,6 +433,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField txTotalMerges;
     // End of variables declaration//GEN-END:variables
 
+	
 	private void clearAllFields() {
 		txResult.setText("");
 		txResult.update(txResult.getGraphics());

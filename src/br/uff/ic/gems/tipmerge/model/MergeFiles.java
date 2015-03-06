@@ -12,7 +12,7 @@ import java.util.Set;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public class MergeFiles extends Merge {
 	

@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author j2cf
+ * This class gets the information about the merge - commits on Branch1, on Branch2 e all history before the branch - commit level
+ * @author j2cf, Catarina
  */
 public class MergeCommitsDao {
 	
@@ -26,7 +26,7 @@ public class MergeCommitsDao {
 	public void teste(){
 //		RuntimeFactory execute = RuntimeFactory.getInstance();
 	}
-
+	// get the merges information - only hash information
 	public List<MergeCommits> getMerges() {
 		
 		List<String> mergesHashes = RunGit.getListOfResult("git log --merges --pretty=%H", path);
@@ -38,7 +38,7 @@ public class MergeCommitsDao {
 		
 		return merges;
 	}
-
+	//get and set the commits on Branch1 (base to parent 1) and on Branch2 (base to parent 2)
 	public void update(MergeCommits merge) {
 		CommitterDao committerDao = new CommitterDao();
 		String hashParents = RunGit.getResult("git log --pretty=%P -n 1 " + merge.getHash(), this.path);
@@ -72,6 +72,7 @@ public class MergeCommitsDao {
 		return cmtList;
 	}
 */	
+	//get and set the committers in the history before the Branch (first commit to base)
 	public void setCommittersBeforeBranches(MergeCommits merge){
 		//insere a informação do primeiro commit
 		CommitterDao committerDao = new CommitterDao();

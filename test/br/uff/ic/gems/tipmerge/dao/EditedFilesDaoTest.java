@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Catarina
+ * @author j2cf, Catarina
  */
 public class EditedFilesDaoTest {
     

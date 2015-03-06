@@ -9,7 +9,7 @@ import br.uff.ic.gems.tipmerge.gui.JFrameMainWindow;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public class TIPMerge {
 	

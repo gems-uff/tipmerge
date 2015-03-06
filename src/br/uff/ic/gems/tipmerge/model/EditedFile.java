@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public class EditedFile {
 	

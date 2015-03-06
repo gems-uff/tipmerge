@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public class RunGit {
 	

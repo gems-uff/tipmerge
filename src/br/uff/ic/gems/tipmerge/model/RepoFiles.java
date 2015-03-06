@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public class RepoFiles {
 	

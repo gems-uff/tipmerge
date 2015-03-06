@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public class Auxiliary {
 	//separa a string recebida do git em um array, contendo o nome, qtde de commmits e o e-mail

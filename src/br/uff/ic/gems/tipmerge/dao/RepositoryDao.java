@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- *
- * @author Jair Figueiredo
+ * This class is in charge of setting the repository information from a repository using Gits commands
+ * @author j2cf, Catarina
  */
 public class RepositoryDao {
 	
@@ -25,10 +25,10 @@ public class RepositoryDao {
 	
 	public Repository getRepository(){
 		
-		//seta o diretório e nome do projeto
+		//sets the directory and the project name
 		Repository repo = new Repository(path);
 				
-		//insere a informação do ultimo commit
+		//set the last commit information
 		String[] result = RunGit.getResult("git show -s --format=%ci%x09%H", path).split("\t");
 		String data = result[0].substring(0, 19);
 		String lastHash = result[1];
@@ -36,22 +36,22 @@ public class RepositoryDao {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		repo.setLastCommit(LocalDateTime.parse(data, formatter));
 
-		//insere a informação do primeiro commit
+		//set the first commit information
 		repo.setFirstCommit(RunGit.getResult("git rev-list --max-parents=0 HEAD", path));
 
-		//insere a informação da quantidade total de commits
+		//set the total number of commits information
 		repo.setCommits(Long.valueOf(RunGit.getResult("git rev-list HEAD --count", path)));
 		
-		//insere os merges somente com o seu hash
+		//set the merges information - only hash information
 		repo.setListOfMerges(RunGit.getListOfResult("git log --merges --pretty=%H", path));
 
-		//insere a informação da quantidade total de branches
+		//set the total number of branches information
 		repo.setBranches(RunGit.getListOfResult("git branch -a",path));
 		//repo.getBranches().remove(1);
 		//repo.getBranches().remove(0);
 		//repo.getBranches().add(0, " origin/master");
 				
-		//insere a lista de autores com o total de commits de cada um
+		//set the list of authors with the total of commits each author
 		repo.setAuthors(RunGit.getListOfResult("git shortlog -sne " + repo.getFirstCommit() + ".." + lastHash, path));
 		return repo;
 	}

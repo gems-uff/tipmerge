@@ -13,7 +13,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public class JTreeRepository extends JTree{
 	
@@ -24,6 +24,7 @@ public class JTreeRepository extends JTree{
 		update();
 	}
 	
+	//shows merges and branches in a tree in the main screen
 	public void update(){
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode(repo.getName());
 		

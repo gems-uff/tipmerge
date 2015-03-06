@@ -12,17 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author Catarina
+ * This class gets list of files changed between two commits hash
+ * @author j2cf, Catarina
  */
 public class EditedFilesDao {
     
+	//get one list of files changed between two commits hash
     public List<String> getFilesList(String base, String parent, File path){
         String command = "git diff --name-only " + base + ".." + parent;
         List<String> data = RunGit.getListOfResult(command, path);
         return data;
     }
-    
+    //get one list of Editedfiles (String fileName and List<Committer>) changed between two commits hash
     public List<EditedFile> getFiles(String base, String parent, File path){
         List<EditedFile> list = new ArrayList<>();
         String command = "git diff --name-only " + base + ".." + parent;

@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public class RepositoryDaoTest {
 	

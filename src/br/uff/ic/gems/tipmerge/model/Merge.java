@@ -9,7 +9,7 @@ import java.io.File;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public abstract class Merge {
 	

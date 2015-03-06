@@ -7,7 +7,7 @@ package br.uff.ic.gems.tipmerge.model;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public class Conciliator {
 	

@@ -15,8 +15,8 @@ import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author j2cf
+ * This class is in charge of showing all results about the commit analysis
+ * @author j2cf, Catarina
  */
 public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 	

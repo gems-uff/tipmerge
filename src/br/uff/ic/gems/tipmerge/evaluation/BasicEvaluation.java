@@ -7,7 +7,7 @@ package br.uff.ic.gems.tipmerge.evaluation;
 
 /**
  *
- * @author j2cf
+ * @author j2cf, Catarina
  */
 public class BasicEvaluation {
 	

@@ -10,7 +10,7 @@ import java.io.File;
 
 /**
  *
- * @author catarinacosta
+ * @author j2cf, Catarina
  *
  */
 public class FileWriter {
