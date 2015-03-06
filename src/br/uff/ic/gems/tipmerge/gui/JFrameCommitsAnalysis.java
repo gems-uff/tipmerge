@@ -11,6 +11,8 @@ import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.RepoCommits;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.RunGit;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
@@ -44,6 +46,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableResult = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
@@ -55,8 +58,8 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         cbBranchOne = new javax.swing.JComboBox();
         hash2 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        hash1 = new javax.swing.JLabel();
         cbBranchTwo = new javax.swing.JComboBox();
+        hash1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jRadioButton2 = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
@@ -87,8 +90,11 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 
         jButton1.setText("Export");
         jButton1.setEnabled(false);
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btRun.setText("Run");
         btRun.addActionListener(new java.awt.event.ActionListener() {
@@ -97,7 +103,16 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
             }
         });
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setSelected(true);
         jRadioButton1.setText("Select Branches to Merge");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Branch one's hash");
 
@@ -116,111 +131,134 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 
         jLabel8.setText("Branch two's hash");
 
-        hash1.setText("<hash>");
-
         cbBranchTwo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbBranchTwoActionPerformed(evt);
             }
         });
 
+        hash1.setText("<hash>");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(hash1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(cbBranchTwo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cbBranchOne, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jRadioButton1)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(hash2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(hash1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jRadioButton1)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(hash2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addComponent(cbBranchOne, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbBranchTwo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jRadioButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(hash2))
-                .addGap(13, 13, 13)
-                .addComponent(cbBranchOne, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(hash1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbBranchOne, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(hash2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbBranchTwo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        buttonGroup1.add(jRadioButton2);
         jRadioButton2.setText("Select Historical Merge");
+        jRadioButton2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButton2StateChanged(evt);
+            }
+        });
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Select Merge");
+
+        jComboBox1.setEnabled(false);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jRadioButton2)
-                        .addContainerGap(477, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jRadioButton2))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jRadioButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 11, Short.MAX_VALUE))
         );
 
+        barRuning.setStringPainted(true);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(barRuning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btRun)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(barRuning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-
-        barRuning.setStringPainted(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -229,12 +267,11 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1))
-                    .addComponent(barRuning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -243,22 +280,18 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barRuning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
-
-        jPanel1.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbBranchOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBranchOneActionPerformed
         // TODO add your handling code here:
-        hash1.setText(RunGit.getResult("git log -n 1 --pretty=format:%h " + cbBranchOne.getSelectedItem().toString(), repo.getProject()));
+        hash1.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + cbBranchOne.getSelectedItem().toString(), repo.getProject()));
     }//GEN-LAST:event_cbBranchOneActionPerformed
 
     private void cbBranchOneItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbBranchOneItemStateChanged
@@ -266,7 +299,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_cbBranchOneItemStateChanged
 
     private void cbBranchTwoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBranchTwoActionPerformed
-        hash2.setText(RunGit.getResult("git log -n 1 --pretty=format:%h " + cbBranchTwo.getSelectedItem().toString(), repo.getProject()));
+        hash2.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + cbBranchTwo.getSelectedItem().toString(), repo.getProject()));
     }//GEN-LAST:event_cbBranchTwoActionPerformed
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
@@ -276,76 +309,81 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         barRuning.setValue(0);
         barRuning.setMaximum(100);
 
-        //barRuning.getValue()*100)/barRuning.getMaximum()
-
-        DefaultTableModel model =  (DefaultTableModel)tableResult.getModel();
         int count = 0;
-        for(MergeCommits merge : this.repoCommitts.getMerges()){
+		MergeCommitsDao mergeDao = new MergeCommitsDao(repo.getProject());
+		MergeCommits merge;
+		if(jRadioButton1.isSelected()){
+			merge = new MergeCommits("", this.repo.getProject());
+			merge.setParents(hash1.getText(), hash2.getText());
+			merge.setHashBase(mergeDao.getMergeBase(merge.getParents()[0], merge.getParents()[1], merge.getPath()));
+		}else{
+			String hash = jComboBox1.getSelectedItem().toString();
+			merge = new MergeCommits(hash, this.repo.getProject());
+			mergeDao.update(merge);
+			count++;
+			if(count%j < 1.0){
+				updateBar();
+			}
+		}
+		mergeDao.updateCommitters(merge);
+		mergeDao.setCommittersBeforeBranches(merge);// merge.getCommittersBeforeBranches();
+		updateTableWithResults(merge);
+		
+        
 
-            //		}
-        //		this.repo.getMerges().stream().forEach((merge) -> {
-            MergeCommitsDao mergeDao = new MergeCommitsDao(repo.getProject());
-            mergeDao.update(merge);
-            if (merge.isMergeOfBranches()){
-                int cmtb1 = 0, cmtb2 = 0, cmtH = 0, cmtrs = 0;
-                mergeDao.setCommittersBeforeBranches(merge);// merge.getCommittersBeforeBranches();
-                model.insertRow(model.getRowCount(), new Object[] {"Merge Branch: ", merge.getHash(), "", "", ""});
-                for (Conciliator conciliator : merge.getConciliators()){
-                    cmtrs++;
-                    cmtb1 += conciliator.getCommitsBranch1();
-                    cmtb2 += conciliator.getCommitsBranch2();
-                    cmtH += conciliator.getCommitsHistory();
-                    model.insertRow(model.getRowCount(),
-                        new Object[] {conciliator.getCommitter().getName() + ":" + conciliator.getCommitter().getEmail(),
-                            conciliator.getCommitsBranch1(),
-                            conciliator.getCommitsBranch2(),
-                            conciliator.getCommitsBoothBranchs(),
-                            conciliator.getCommitsHistory()}
-                    );
-                }
-                model.insertRow(model.getRowCount(), new Object[] {"Total of " + cmtrs + " authors", cmtb1, cmtb2, "", cmtH});
-                model.insertRow(model.getRowCount(), new Object[] {"", "", "", "", ""});
-            }
-            count++;
-            if(count%j < 1.0){
-                updateBar();
-            }
-        }
+        //tableResult.update(tableResult.getGraphics());
 
-        tableResult.update(tableResult.getGraphics());
-
-        /*
-        for(MergeBranches merge : merges){
-
-            project.setMergeDetails(merge);
-
-            if (merge.isMergeOfBranches()){
-                output.append("MergeCommits ").append(i--).append(": ").append(merge.getCommitHash()).append(" ( ").append(merge.getAuthorsBranchOne().size()).append(" , ").append(merge.getAuthorsBranchTwo().size()).append(" )\n");
-                if(merge.getAuthorsBranchOne() != null){
-                    output.append("\tBranch One: ");
-                    for(CommitAuthor author : merge.getAuthorsBranchOne())
-                    output.append(author.getName()).append(" (").append(author.getCommits()).append(")\t");
-                }
-                output.append("\n");
-                if(merge.getAuthorsBranchTwo() != null){
-                    output.append("\tBranch Two: ");
-                    for(CommitAuthor author : merge.getAuthorsBranchTwo())
-                    output.append(author.getName()).append(" (").append(author.getCommits()).append(")\t");
-                }
-                output.append("\n");
-                if(merge.getAuthorsInCommon() != null){
-                    output.append("\tCommon: ").append(merge.getAuthorsInCommon().toString());
-                }
-                output.append("\n");
-                j++;
-            }
-        }*/
+		//<editor-fold defaultstate="collapsed" desc="Código pra exportar">
+		/*
+		for(MergeBranches merge : merges){
+		
+		project.setMergeDetails(merge);
+		
+		if (merge.isMergeOfBranches()){
+		output.append("MergeCommits ").append(i--).append(": ").append(merge.getCommitHash()).append(" ( ").append(merge.getAuthorsBranchOne().size()).append(" , ").append(merge.getAuthorsBranchTwo().size()).append(" )\n");
+		if(merge.getAuthorsBranchOne() != null){
+		output.append("\tBranch One: ");
+		for(CommitAuthor author : merge.getAuthorsBranchOne())
+		output.append(author.getName()).append(" (").append(author.getCommits()).append(")\t");
+		}
+		output.append("\n");
+		if(merge.getAuthorsBranchTwo() != null){
+		output.append("\tBranch Two: ");
+		for(CommitAuthor author : merge.getAuthorsBranchTwo())
+		output.append(author.getName()).append(" (").append(author.getCommits()).append(")\t");
+		}
+		output.append("\n");
+		if(merge.getAuthorsInCommon() != null){
+		output.append("\tCommon: ").append(merge.getAuthorsInCommon().toString());
+		}
+		output.append("\n");
+		j++;
+		}
+		}*/
+//</editor-fold>
 
     }//GEN-LAST:event_btRunActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jRadioButton2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton2StateChanged
+       invertEnabledFields();
+    }//GEN-LAST:event_jRadioButton2StateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barRuning;
     private javax.swing.JButton btRun;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cbBranchOne;
     private javax.swing.JComboBox cbBranchTwo;
     private javax.swing.JLabel hash1;
@@ -368,6 +406,10 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 	//	txRepoName.setText("Project " +  repo.getName());
 		cbBranchOne.setModel(new JComboBox(repo.getBranches().toArray()).getModel());
 		cbBranchTwo.setModel(new JComboBox(repo.getBranches().toArray()).getModel());
+		jComboBox1.setModel(
+			new JComboBox(
+					repo.getListOfMerges().toArray()).getModel()
+		);
 	}
 
 	private void updateBar() {
@@ -376,5 +418,35 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 		barRuning.setString(barRuning.getValue() + "% Done");
 		barRuning.update(barRuning.getGraphics());
 	
+	}
+
+	private void invertEnabledFields() {
+
+		jComboBox1.setEnabled(!jComboBox1.isEnabled());
+		cbBranchOne.setEnabled(!cbBranchOne.isEnabled());
+		cbBranchTwo.setEnabled(!cbBranchTwo.isEnabled());
+	}
+
+	private void updateTableWithResults(MergeCommits merge) {
+		DefaultTableModel model =  new DefaultTableModel(new Object[]{"Developers", "Branch 1", "Branch 2", "Intersection", "All History"}, 0);
+		model.insertRow(model.getRowCount(), new Object[] {"Merge Branch: ", merge.getHash(), "", "", ""});
+
+		int cmtb1 = 0, cmtb2 = 0, cmtH = 0, cmtrs = 0;
+
+		for (Conciliator conciliator : merge.getConciliators()){
+			cmtrs++;
+			cmtb1 += conciliator.getCommitsBranch1();
+			cmtb2 += conciliator.getCommitsBranch2();
+			cmtH += conciliator.getCommitsHistory();
+			model.insertRow(model.getRowCount(),
+				new Object[] {conciliator.getCommitter().getName() + ":" + conciliator.getCommitter().getEmail(),
+					conciliator.getCommitsBranch1(),
+					conciliator.getCommitsBranch2(),
+					conciliator.getCommitsBoothBranchs(),
+					conciliator.getCommitsHistory()}
+			);
+		}
+		model.insertRow(model.getRowCount(), new Object[] {"Total of " + cmtrs + " authors", cmtb1 + " commits", cmtb2 + " commits", "", cmtH + " commits"});
+		tableResult.setModel(model);
 	}
 }
