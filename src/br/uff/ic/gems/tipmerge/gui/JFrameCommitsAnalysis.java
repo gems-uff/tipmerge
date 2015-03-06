@@ -49,13 +49,18 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btRun = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jRadioButton1 = new javax.swing.JRadioButton();
         jLabel7 = new javax.swing.JLabel();
-        cbBranchTwo = new javax.swing.JComboBox();
         cbBranchOne = new javax.swing.JComboBox();
-        hash1 = new javax.swing.JLabel();
         hash2 = new javax.swing.JLabel();
-        txRepoName = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        hash1 = new javax.swing.JLabel();
+        cbBranchTwo = new javax.swing.JComboBox();
+        jPanel3 = new javax.swing.JPanel();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
         barRuning = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -83,7 +88,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         jButton1.setText("Export");
         jButton1.setEnabled(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Parameters"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         btRun.setText("Run");
         btRun.addActionListener(new java.awt.event.ActionListener() {
@@ -92,15 +97,9 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
             }
         });
 
-        jLabel8.setText("Branch two's hash");
+        jRadioButton1.setText("Select Branches to Merge");
 
         jLabel7.setText("Branch one's hash");
-
-        cbBranchTwo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbBranchTwoActionPerformed(evt);
-            }
-        });
 
         cbBranchOne.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -113,62 +112,112 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
             }
         });
 
-        hash1.setText("<hash>");
-
         hash2.setText("<hash>");
 
-        txRepoName.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
-        txRepoName.setText("repo");
+        jLabel8.setText("Branch two's hash");
+
+        hash1.setText("<hash>");
+
+        cbBranchTwo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbBranchTwoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(hash1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cbBranchTwo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbBranchOne, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jRadioButton1)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(hash2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jRadioButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(hash2))
+                .addGap(13, 13, 13)
+                .addComponent(cbBranchOne, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(hash1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbBranchTwo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jRadioButton2.setText("Select Historical Merge");
+
+        jLabel1.setText("Select Merge");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jRadioButton2)
+                        .addContainerGap(477, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jRadioButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 11, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txRepoName)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(hash1, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
-                        .addGap(56, 56, 56)
-                        .addComponent(hash2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel8)
-                        .addGap(176, 176, 176))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cbBranchOne, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbBranchTwo, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txRepoName)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbBranchTwo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbBranchOne, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(hash1)
-                    .addComponent(hash2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btRun))
+                .addComponent(btRun)
+                .addContainerGap())
         );
 
         barRuning.setStringPainted(true);
@@ -196,101 +245,102 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(barRuning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbBranchOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBranchOneActionPerformed
+        // TODO add your handling code here:
+        hash1.setText(RunGit.getResult("git log -n 1 --pretty=format:%h " + cbBranchOne.getSelectedItem().toString(), repo.getProject()));
+    }//GEN-LAST:event_cbBranchOneActionPerformed
 
     private void cbBranchOneItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbBranchOneItemStateChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_cbBranchOneItemStateChanged
 
-    private void cbBranchOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBranchOneActionPerformed
-        // TODO add your handling code here:
-		hash1.setText(RunGit.getResult("git log -n 1 --pretty=format:%h " + cbBranchOne.getSelectedItem().toString(), repo.getProject()));
-    }//GEN-LAST:event_cbBranchOneActionPerformed
-
     private void cbBranchTwoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBranchTwoActionPerformed
-		hash2.setText(RunGit.getResult("git log -n 1 --pretty=format:%h " + cbBranchTwo.getSelectedItem().toString(), repo.getProject()));
-
+        hash2.setText(RunGit.getResult("git log -n 1 --pretty=format:%h " + cbBranchTwo.getSelectedItem().toString(), repo.getProject()));
     }//GEN-LAST:event_cbBranchTwoActionPerformed
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
-		int i = this.repoCommitts.getMerges().size();
-		float j = (float) (i/100.0);
+        int i = this.repoCommitts.getMerges().size();
+        float j = (float) (i/100.0);
 
-		barRuning.setValue(0);
-		barRuning.setMaximum(100);
-		
-		//barRuning.getValue()*100)/barRuning.getMaximum()
+        barRuning.setValue(0);
+        barRuning.setMaximum(100);
 
-		DefaultTableModel model =  (DefaultTableModel)tableResult.getModel();
-		int count = 0;
-		for(MergeCommits merge : this.repoCommitts.getMerges()){
-		
-//		}
-//		this.repo.getMerges().stream().forEach((merge) -> {
-			MergeCommitsDao mergeDao = new MergeCommitsDao(repo.getProject());
-			mergeDao.update(merge);
-			if (merge.isMergeOfBranches()){
-				int cmtb1 = 0, cmtb2 = 0, cmtH = 0, cmtrs = 0; 
-				mergeDao.setCommittersBeforeBranches(merge);// merge.getCommittersBeforeBranches();
-				model.insertRow(model.getRowCount(), new Object[] {"Merge Branch: ", merge.getHash(), "", "", ""});
-				for (Conciliator conciliator : merge.getConciliators()){
-					cmtrs++; 
-					cmtb1 += conciliator.getCommitsBranch1();
-					cmtb2 += conciliator.getCommitsBranch2();
-					cmtH += conciliator.getCommitsHistory();
-					model.insertRow(model.getRowCount(), 
-									new Object[] {conciliator.getCommitter().getName() + ":" + conciliator.getCommitter().getEmail(), 
-													conciliator.getCommitsBranch1(), 
-													conciliator.getCommitsBranch2(), 
-													conciliator.getCommitsBoothBranchs(), 
-													conciliator.getCommitsHistory()}
-					);
-				}
-				model.insertRow(model.getRowCount(), new Object[] {"Total of " + cmtrs + " authors", cmtb1, cmtb2, "", cmtH});
-				model.insertRow(model.getRowCount(), new Object[] {"", "", "", "", ""});
-			}
-			count++;
-			if(count%j < 1.0){
-				updateBar();
-			}
-		}
-		
-		tableResult.update(tableResult.getGraphics());
-		
-		/*
-		for(MergeBranches merge : merges){
+        //barRuning.getValue()*100)/barRuning.getMaximum()
 
-			project.setMergeDetails(merge);
+        DefaultTableModel model =  (DefaultTableModel)tableResult.getModel();
+        int count = 0;
+        for(MergeCommits merge : this.repoCommitts.getMerges()){
 
-			if (merge.isMergeOfBranches()){
-				output.append("MergeCommits ").append(i--).append(": ").append(merge.getCommitHash()).append(" ( ").append(merge.getAuthorsBranchOne().size()).append(" , ").append(merge.getAuthorsBranchTwo().size()).append(" )\n");
-				if(merge.getAuthorsBranchOne() != null){
-					output.append("\tBranch One: ");
-					for(CommitAuthor author : merge.getAuthorsBranchOne())
-						output.append(author.getName()).append(" (").append(author.getCommits()).append(")\t");
-				}
-				output.append("\n");
-				if(merge.getAuthorsBranchTwo() != null){
-					output.append("\tBranch Two: ");
-					for(CommitAuthor author : merge.getAuthorsBranchTwo())
-						output.append(author.getName()).append(" (").append(author.getCommits()).append(")\t");
-				}
-				output.append("\n");
-				if(merge.getAuthorsInCommon() != null){
-					output.append("\tCommon: ").append(merge.getAuthorsInCommon().toString());
-				}
-				output.append("\n");
-				j++;
-			} 
-		}*/
-		
+            //		}
+        //		this.repo.getMerges().stream().forEach((merge) -> {
+            MergeCommitsDao mergeDao = new MergeCommitsDao(repo.getProject());
+            mergeDao.update(merge);
+            if (merge.isMergeOfBranches()){
+                int cmtb1 = 0, cmtb2 = 0, cmtH = 0, cmtrs = 0;
+                mergeDao.setCommittersBeforeBranches(merge);// merge.getCommittersBeforeBranches();
+                model.insertRow(model.getRowCount(), new Object[] {"Merge Branch: ", merge.getHash(), "", "", ""});
+                for (Conciliator conciliator : merge.getConciliators()){
+                    cmtrs++;
+                    cmtb1 += conciliator.getCommitsBranch1();
+                    cmtb2 += conciliator.getCommitsBranch2();
+                    cmtH += conciliator.getCommitsHistory();
+                    model.insertRow(model.getRowCount(),
+                        new Object[] {conciliator.getCommitter().getName() + ":" + conciliator.getCommitter().getEmail(),
+                            conciliator.getCommitsBranch1(),
+                            conciliator.getCommitsBranch2(),
+                            conciliator.getCommitsBoothBranchs(),
+                            conciliator.getCommitsHistory()}
+                    );
+                }
+                model.insertRow(model.getRowCount(), new Object[] {"Total of " + cmtrs + " authors", cmtb1, cmtb2, "", cmtH});
+                model.insertRow(model.getRowCount(), new Object[] {"", "", "", "", ""});
+            }
+            count++;
+            if(count%j < 1.0){
+                updateBar();
+            }
+        }
+
+        tableResult.update(tableResult.getGraphics());
+
+        /*
+        for(MergeBranches merge : merges){
+
+            project.setMergeDetails(merge);
+
+            if (merge.isMergeOfBranches()){
+                output.append("MergeCommits ").append(i--).append(": ").append(merge.getCommitHash()).append(" ( ").append(merge.getAuthorsBranchOne().size()).append(" , ").append(merge.getAuthorsBranchTwo().size()).append(" )\n");
+                if(merge.getAuthorsBranchOne() != null){
+                    output.append("\tBranch One: ");
+                    for(CommitAuthor author : merge.getAuthorsBranchOne())
+                    output.append(author.getName()).append(" (").append(author.getCommits()).append(")\t");
+                }
+                output.append("\n");
+                if(merge.getAuthorsBranchTwo() != null){
+                    output.append("\tBranch Two: ");
+                    for(CommitAuthor author : merge.getAuthorsBranchTwo())
+                    output.append(author.getName()).append(" (").append(author.getCommits()).append(")\t");
+                }
+                output.append("\n");
+                if(merge.getAuthorsInCommon() != null){
+                    output.append("\tCommon: ").append(merge.getAuthorsInCommon().toString());
+                }
+                output.append("\n");
+                j++;
+            }
+        }*/
+
     }//GEN-LAST:event_btRunActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -301,16 +351,21 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     private javax.swing.JLabel hash1;
     private javax.swing.JLabel hash2;
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableResult;
-    private javax.swing.JLabel txRepoName;
     // End of variables declaration//GEN-END:variables
 
 	private void setParameters() {
-		txRepoName.setText("Project " +  repo.getName());
+	//	txRepoName.setText("Project " +  repo.getName());
 		cbBranchOne.setModel(new JComboBox(repo.getBranches().toArray()).getModel());
 		cbBranchTwo.setModel(new JComboBox(repo.getBranches().toArray()).getModel());
 	}
