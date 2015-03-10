@@ -93,6 +93,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         hash1.setText("<hash>");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Files Analysis");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setEnabled(false);

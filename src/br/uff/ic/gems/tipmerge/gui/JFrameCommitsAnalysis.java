@@ -13,6 +13,7 @@ import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
@@ -409,6 +410,9 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 		jComboBox1.setModel(
 			new JComboBox(
 					repo.getListOfMerges().toArray()).getModel()
+		);
+		jPanel1.setBorder(
+			BorderFactory.createTitledBorder(BorderFactory.createTitledBorder(""), "Project " +  repoCommitts.getRepository().getName())
 		);
 	}
 
