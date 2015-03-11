@@ -16,6 +16,7 @@ import br.uff.ic.gems.tipmerge.model.MergeFiles;
 import br.uff.ic.gems.tipmerge.model.RepoFiles;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.RunGit;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import javax.swing.BorderFactory;
@@ -677,9 +678,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
 		Set<Committer> committers = mergeSelected.getCommittersOnHistory();
 		 
+	//	Arrays.sort(committers);
 		//Includes columns with the names of all developers (branches 1 and 2)
 		committers.stream().forEach((committer) -> {
 			dftModel.addColumn(committer.getName());
+			System.out.println(committer.toString());
 		});
 		
 		//dftModel.addRow(new Object[]{"HISTORY BEFORE THE BRACH"});

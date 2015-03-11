@@ -6,8 +6,10 @@
 package br.uff.ic.gems.tipmerge.gui;
 
 import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
+import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import java.io.File;
+import java.util.Arrays;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -376,9 +378,15 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     private void btShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btShowActionPerformed
 		clearAllFields();
 		
-		repository.getAuthors().stream().forEach((author) -> {
-			txResult.append(author + "\n");
-		});
+		//show committers (basic information)in order - Get an array list and transforms an array and orders
+		Committer[] committers = new Committer[repository.getCommitters().size()];
+		for (int i =0 ; i< repository.getCommitters().size() ; i++)
+			committers[i]= repository.getCommitters().get(i);
+		Arrays.sort(committers);
+		for (Committer cmtr : committers){
+			txResult.append(formatted(cmtr.getName(),30) + "\t" + cmtr.getEmail() + "\n");
+		}
+		
 
 		//txResult.setText(this.repository.getAuthors().toString());
 		updateJTree();
@@ -447,6 +455,14 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 	private void updateJTree() {
 		jTree1 = new JTreeRepository(this.repository);
 		jScrollPane1.setViewportView(jTree1);		
+	}
+	
+	//Sets a size for one string - It is used to display the names of developers in 30 characters
+	private String formatted(String string, int tam){
+		if (string.length() >= tam)
+			return string.substring(0,tam);
+		else
+			return string.concat("                                                      ").substring(0,tam);
 	}
  
 }

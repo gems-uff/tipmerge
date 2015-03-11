@@ -5,7 +5,10 @@
  */
 package br.uff.ic.gems.tipmerge.model;
 
+import br.uff.ic.gems.tipmerge.util.Auxiliary;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,18 +29,46 @@ public class MergeFiles extends Merge {
 	
 	//retorna o nome de todos os autores, que alteraram algum arquivo
 	public Set<Committer> getCommittersOnMege(){
-		Set<Committer> authors = this.getCommittersOnBranchOne();
+		List<Committer> authors = new ArrayList<>();
+		Set<Committer> committersBranch = this.getCommittersOnBranchOne();
+		
+		for (Committer committer : committersBranch){
+			Auxiliary.addOnlyNew(authors, committer);
+		}
+		
+		committersBranch = this.getCommittersOnBranchTwo();
+		
+		for (Committer cmtrBranch : committersBranch){
+			Auxiliary.addOnlyNew(authors, cmtrBranch);
+		}
+		
+	/*	Set<Committer> authors = this.getCommittersOnBranchOne();
 		authors.addAll(this.getCommittersOnBranchTwo());
-		return authors;
+	*/	imprime("No merge", authors);
+		
+		return new HashSet<>(authors);
 	}
 	
 	
 	public Set<Committer> getCommittersOnHistory() {
-		Set<Committer> authors = this.getCommittersOnMege();
+		List<Committer> authors = new ArrayList<>(this.getCommittersOnMege());
+		Set<EditedFile> files = this.getFilesOnHistory();
+				
+		for (EditedFile editedFile : files){
+			for (Committer cmtrFile : editedFile.getWhoEditTheFile()){
+				Auxiliary.addOnlyNew(authors, cmtrFile);
+			}
+		}
+		
+		
+			//authors.add(committer);
+		
+	/*	Set<Committer> authors = this.getCommittersOnMege();
 		this.getFilesOnHistory().stream().forEach((file) -> {
 			authors.addAll(file.getWhoEditTheFile());
 		});
-		return authors;
+	*/	
+		return new HashSet<>(authors);
 	}
 	
 
@@ -104,4 +135,12 @@ public class MergeFiles extends Merge {
 		}
 	}	
 
+	//TODO DELETE
+	private void imprime(String text, Collection<Committer> authors){
+		System.out.println(text);
+		for (Committer cmtr : authors)
+			System.out.println(cmtr.toString());
+
+	}
+	
 }

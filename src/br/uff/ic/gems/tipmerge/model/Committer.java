@@ -65,11 +65,8 @@ public class Committer implements Comparable<Committer>{
 
 	@Override
 	public int compareTo(Committer cmter) {
-        //if ( this.getName().equals(cmter.getName()) || this.getEmail().equals(cmter.getEmail()) )
-		if (this.getEmail().equals(cmter.getEmail()) )
-            return 1;
-        return 0;	
-	}
+		return this.getName().compareTo(cmter.getName());
+   	}
 
 	@Override
 	public int hashCode() {

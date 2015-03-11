@@ -5,7 +5,9 @@
  */
 package br.uff.ic.gems.tipmerge.util;
 
-import java.util.Arrays;
+import br.uff.ic.gems.tipmerge.model.Committer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,5 +24,41 @@ public class Auxiliary {
 		};
 		return result;
 	}
+	
+		//this metodh return one list of committers 
+	public static List<Committer> getCommittersFromString(List<String> committerList) throws NumberFormatException {
+		List<Committer> cmtList = new ArrayList<>();
+		for(String line : committerList){
+			String[] datas = Auxiliary.getSplittedLine(line);
+			Committer committer = new Committer(datas[0], datas[1]);
+			committer.setCommits(Integer.valueOf(datas[2]));
+			boolean hasIt = false;
+			//check the insertion of the committers in the list 
+			//identifying those that version control is not yet identified
+			//TODO
+			for(Committer cmtr : cmtList){
+				if(cmtr.equals(committer)){
+					cmtr.setCommits(cmtr.getCommits() + committer.getCommits());
+					hasIt = true;
+				}
+			}
+			if(!hasIt) cmtList.add(committer);
+		}
+		return cmtList;
+	}
+	
+	//this method scroll througth list of authors and adds only new committers, avoiding repetitions. It uses the equals method that compares name and e-mail.
+	public static void addOnlyNew(List<Committer> authors, Committer committer) {
+		boolean exist = false;
+		for (Committer cmtrAuthor : authors){
+			if (committer.equals(cmtrAuthor)){
+				exist = true;
+				break;
+			} else exist = false;
+		}
+		if (!exist)
+			authors.add(committer);
+	}
+	
 	
 }

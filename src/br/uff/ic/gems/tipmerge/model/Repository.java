@@ -5,8 +5,10 @@
  */
 package br.uff.ic.gems.tipmerge.model;
 
+import br.uff.ic.gems.tipmerge.util.Auxiliary;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +24,7 @@ public class Repository {
 	private List<String> listOfMerges;
 	private List<String> branches;	
 	private List<String> authors;
+	private List<Committer> committers;
 	
 	public Repository(File projectPath){
 		this.project = projectPath;
@@ -60,6 +63,7 @@ public class Repository {
 	 */
 	public void setAuthors(List<String> authors) {
 		this.authors = authors;
+		setCommitters();
 	}
 
 	/**
@@ -124,6 +128,29 @@ public class Repository {
 	 */
 	public void setListOfMerges(List<String> listOfMerges) {
 		this.listOfMerges = listOfMerges;
+	}
+
+	/**
+	 * @return the committers
+	 */
+	public List<Committer> getCommitters() {
+		return committers;
+	}
+
+	/**
+	 * @param committers the committers to set
+	 */
+	public void setCommitters(List<Committer> committers) {
+		this.committers = committers;
+	}
+	
+	private void setCommitters(){
+		List<Committer> allcmtr = Auxiliary.getCommittersFromString(this.authors);
+		this.committers = new ArrayList<>();
+		
+		for (Committer cmtrMainScreen : allcmtr){
+			Auxiliary.addOnlyNew(this.committers, cmtrMainScreen);
+		}
 	}
 	
 	
