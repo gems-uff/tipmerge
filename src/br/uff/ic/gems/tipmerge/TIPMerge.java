@@ -8,7 +8,7 @@ package br.uff.ic.gems.tipmerge;
 import br.uff.ic.gems.tipmerge.gui.JFrameMainWindow;
 
 /**
- *
+ * Main class that calls the interface
  * @author j2cf, Catarina
  */
 public class TIPMerge {

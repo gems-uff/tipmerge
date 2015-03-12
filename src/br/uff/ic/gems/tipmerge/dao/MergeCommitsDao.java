@@ -60,7 +60,7 @@ public class MergeCommitsDao {
 		//insere a informação do primeiro commit
 		CommitterDao committerDao = new CommitterDao();
 		String firstHash = RunGit.getResult("git rev-list --max-parents=0 HEAD", merge.getPath());	
-		merge.setCommittersBeforeBranches(
+		merge.setCommittersPreviousHistory(
 			committerDao.getCommittersList(firstHash, merge.getHashBase(), merge.getPath())
 		);
 	}

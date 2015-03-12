@@ -6,7 +6,7 @@
 package br.uff.ic.gems.tipmerge.model;
 
 /**
- *
+ * This class has information about who committed on B1, B2, Both and Previous History. This is show in commit analysis
  * @author j2cf, Catarina
  */
 public class Conciliator {
@@ -15,7 +15,7 @@ public class Conciliator {
 	private int commitsBranch1 = 0;
 	private int commitsBranch2 = 0;
 	private int commitsBoothBranchs = 0;
-	private int commitsHistory = 0;
+	private int commitsPreviousHistory = 0;
 
 	public Conciliator(Committer commiter) {
 		this.committer = commiter;
@@ -73,15 +73,15 @@ public class Conciliator {
 	/**
 	 * @return the commitsHistory
 	 */
-	public int getCommitsHistory() {
-		return commitsHistory;
+	public int getCommitsPreviousHistory() {
+		return commitsPreviousHistory;
 	}
 
 	/**
-	 * @param commitsHistory the commitsHistory to set
+	 * @param commitsPreviousHistory the commitsHistory to set
 	 */
-	public void setCommitsHistory(int commitsHistory) {
-		this.commitsHistory = commitsHistory;
+	public void setCommitsPreviousHistory(int commitsPreviousHistory) {
+		this.commitsPreviousHistory = commitsPreviousHistory;
 	}
 	
 }

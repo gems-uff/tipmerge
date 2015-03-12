@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * This class is used to run the GIT commands. Thus, it is only required to have the "variable GIT" installed on your computer to use TIPMerge
  * @author j2cf, Catarina
  */
 public class RunGit {

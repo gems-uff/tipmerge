@@ -8,7 +8,7 @@ package br.uff.ic.gems.tipmerge.model;
 import java.util.Objects;
 
 /**
- *
+ * This class has information about committers, as: name, e-mai and number of commits 
  * @author j2cf, Catarina
  */
 public class Committer implements Comparable<Committer>{
@@ -54,7 +54,7 @@ public class Committer implements Comparable<Committer>{
 	public String toString(){
 		return this.formatted(this.getName()) + " <" + this.formatted(this.getEmail()) + "> : " + this.getCommits();
 	}
-
+	//Sets a size for one string
 	private String formatted(String string){
 		int tam = Math.min(string.length(), 20);
 		if (string.length() >= tam)
@@ -67,7 +67,7 @@ public class Committer implements Comparable<Committer>{
 	public int compareTo(Committer cmter) {
 		return this.getName().compareTo(cmter.getName());
    	}
-
+	//this method compare committer email. It is same equals, but we can't use with OR, only AND. Is not possible to use email OR name.
 	@Override
 	public int hashCode() {
 		int hash = 3;
@@ -76,7 +76,7 @@ public class Committer implements Comparable<Committer>{
 		hash = 67 * hash + Objects.hashCode(this.email);
 		return hash;
 	}
-
+	//this method compare committers name and email to avoid repetition
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {

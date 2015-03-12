@@ -86,7 +86,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tbResultsBranch2 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tbResultsHistory = new javax.swing.JTable();
+        tbResultsPreviousHistory = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         tbResultsBothBranches = new javax.swing.JTable();
         btAllMerges = new javax.swing.JButton();
@@ -294,7 +294,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Branch 2", jScrollPane3);
 
-        tbResultsHistory.setModel(new javax.swing.table.DefaultTableModel(
+        tbResultsPreviousHistory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -302,7 +302,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 "", "", "", "", ""
             }
         ));
-        jScrollPane2.setViewportView(tbResultsHistory);
+        jScrollPane2.setViewportView(tbResultsPreviousHistory);
 
         jTabbedPane1.addTab("History", jScrollPane2);
 
@@ -397,11 +397,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		mergeSelected.setFilesOnBranchOne(filesDao.getFiles(mergeSelected.getHashBase(), mergeSelected.getParents()[0], mergeSelected.getPath()));
 		mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), mergeSelected.getParents()[1], mergeSelected.getPath()));
 		
-		CommitterDao cmtrDao = new CommitterDao();
+		CommitterDao cmterDao = new CommitterDao();
 		
 		for(EditedFile editedFile : mergeSelected.getFilesOnBranchOne()){
-			editedFile.setWhoEditTheFile(
-				cmtrDao.getWhoEditedFile(mergeSelected.getHashBase(), 
+			editedFile.setWhoEditTheFile(cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
 										mergeSelected.getParents()[0], 
 										editedFile.getFileName(), 
 										mergeSelected.getPath())
@@ -409,17 +408,15 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		}
 
 		for(EditedFile editedFile : mergeSelected.getFilesOnBranchTwo()){
-			editedFile.setWhoEditTheFile(
-				cmtrDao.getWhoEditedFile(mergeSelected.getHashBase(), 
+			editedFile.setWhoEditTheFile(cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
 										mergeSelected.getParents()[1], 
 										editedFile.getFileName(), 
 										mergeSelected.getPath())
 			);
 		}
 		
-		for(EditedFile editedFile : mergeSelected.getFilesOnHistory()){
-			editedFile.setWhoEditTheFile(
-				cmtrDao.getWhoEditedFile(repoFiles.getRepository().getFirstCommit(), 
+		for(EditedFile editedFile : mergeSelected.getFilesOnPreviousHistory()){
+			editedFile.setWhoEditTheFile(cmterDao.getWhoEditedFile(repoFiles.getRepository().getFirstCommit(), 
 										mergeSelected.getHashBase(), 
 										editedFile.getFileName(), 
 										mergeSelected.getPath())
@@ -433,7 +430,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		//organizes the data in the table
 		showResBranch1(mergeSelected);
 		showResBranch2(mergeSelected);
-		showResHistory(mergeSelected);
+		showResPreviousHistory(mergeSelected);
 		showResIntersection(mCommits.getCommittersInCommon());
 
         
@@ -482,15 +479,15 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 						model.getValueToRow(),
 						new Object[]{file,"",""}
 					);
-					CommitterDao cmtrDao = new CommitterDao();
+					CommitterDao cmterDao = new CommitterDao();
 					file.setWhoEditTheFile(
-						cmtrDao.getWhoEditedFile(
+						cmterDao.getWhoEditedFile(
 							mergeSelected.getHashBase(), mergeSelected.getParents()[0], file.getFileName(), mergeSelected.getPath()));
 					
-					for(Committer cmtr : file.getWhoEditTheFile()){
+					for(Committer cmter : file.getWhoEditTheFile()){
 						model.insertRow(
 							model.getValueToRow(), 
-							new Object[]{"",cmtr.getEmail(),cmtr.getCommits()}
+							new Object[]{"",cmter.getEmail(),cmter.getCommits()}
 						);
 					}
 					
@@ -502,15 +499,15 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 						model.getValueToRow(),
 						new Object[]{file,"",""}
 					);
-					CommitterDao cmtrDao = new CommitterDao();
+					CommitterDao cmterDao = new CommitterDao();
 					file.setWhoEditTheFile(
-						cmtrDao.getWhoEditedFile(
+						cmterDao.getWhoEditedFile(
 							mergeSelected.getHashBase(), mergeSelected.getParents()[1], file.getFileName(), mergeSelected.getPath()));
 
-					for(Committer cmtr : file.getWhoEditTheFile()){
+					for(Committer cmter : file.getWhoEditTheFile()){
 						model.insertRow(
 							model.getValueToRow(),
-							new Object[]{"",cmtr.getEmail(),cmtr.getCommits()}
+							new Object[]{"",cmter.getEmail(),cmter.getCommits()}
 						);
 					}
 
@@ -574,7 +571,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JTable tbResultsBothBranches;
     private javax.swing.JTable tbResultsBranch1;
     private javax.swing.JTable tbResultsBranch2;
-    private javax.swing.JTable tbResultsHistory;
+    private javax.swing.JTable tbResultsPreviousHistory;
     // End of variables declaration//GEN-END:variables
 
 	private void startProgressBar(Integer max){
@@ -603,15 +600,15 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		System.out.println("Branch One");
 		mergeFiles.getFilesOnBranchOne().stream().forEach((file) ->{
 			System.out.println(file.getFileName());
-			file.getWhoEditTheFile().stream().forEach((cmtr) -> {
-				System.out.println("\t" + cmtr.toString());
+			file.getWhoEditTheFile().stream().forEach((cmter) -> {
+				System.out.println("\t" + cmter.toString());
 			});
 		});
 		System.out.println("Branch Two");
 		mergeFiles.getFilesOnBranchTwo().stream().forEach((file) ->{
 			System.out.println(file.getFileName());
-			file.getWhoEditTheFile().stream().forEach((cmtr) -> {
-				System.out.println("\t" + cmtr.toString());
+			file.getWhoEditTheFile().stream().forEach((cmter) -> {
+				System.out.println("\t" + cmter.toString());
 			});
 		});
 		/*
@@ -672,11 +669,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 	}
 	
 	//shows the number of commits by committers in each file (changed on any branch) that was changed in the history before the branch
-	private void showResHistory(MergeFiles mergeSelected) {
+	private void showResPreviousHistory(MergeFiles mergeSelected) {
 		
 		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
 
-		Set<Committer> committers = mergeSelected.getCommittersOnHistory();
+		Set<Committer> committers = mergeSelected.getCommittersOnPreviousHistory();
 		 
 	//	Arrays.sort(committers);
 		//Includes columns with the names of all developers (branches 1 and 2)
@@ -685,14 +682,14 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 			System.out.println(committer.toString());
 		});
 		
-		//dftModel.addRow(new Object[]{"HISTORY BEFORE THE BRACH"});
-		mergeSelected.getFilesOnHistory().stream().forEach((file) -> {
+		//dftModel.addRow(new Object[]{"PREVIOUS HISTORY"});
+		mergeSelected.getFilesOnPreviousHistory().stream().forEach((file) -> {
 			if(file.getWhoEditTheFile().size() > 0)
 				dftModel.addRow(getValueToRow(file, committers));
 
 		});
 
-		tbResultsHistory.setModel(dftModel);
+		tbResultsPreviousHistory.setModel(dftModel);
 	}
 	
 	//shows the number of commits in both branches, this information considers onlu commits
@@ -700,9 +697,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		
 		DefaultTableModel model = new DefaultTableModel( new Object[] {"Author ", "Number of Commits in Both Branches"}, 0);
 		//model.addRow(new Object[]{"BOTH BRANCHES"});
-		for (Committer cmtr : committers){
+		for (Committer cmter : committers){
 			model.insertRow(model.getRowCount(), 
-							new Object[] {cmtr.getName() , cmtr.getCommits()
+							new Object[] {cmter.getName() , cmter.getCommits()
 							}
 			);
 		}
@@ -716,9 +713,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		valuesVector[0] = editedFile.getFileName();
 		editedFile.getWhoEditTheFile().stream().forEach((cmtrFile) -> {
 			int index = 1;
-			for(Committer cmtr : committers){
+			for(Committer cmter : committers){
 				
-				if(cmtrFile.equals(cmtr)){
+				if(cmtrFile.equals(cmter)){
 					valuesVector[index] = cmtrFile.getCommits().toString();
 				}
 				index++;

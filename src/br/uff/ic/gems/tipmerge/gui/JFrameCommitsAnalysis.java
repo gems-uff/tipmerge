@@ -107,7 +107,6 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
         jRadioButton1.setText("Select Branches to Merge");
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,6 +116,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 
         jLabel7.setText("Branch one's hash");
 
+        cbBranchOne.setEnabled(false);
         cbBranchOne.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbBranchOneItemStateChanged(evt);
@@ -132,6 +132,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 
         jLabel8.setText("Branch two's hash");
 
+        cbBranchTwo.setEnabled(false);
         cbBranchTwo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbBranchTwoActionPerformed(evt);
@@ -167,7 +168,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addComponent(jRadioButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -187,6 +188,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setSelected(true);
         jRadioButton2.setText("Select Historical Merge");
         jRadioButton2.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -200,8 +202,6 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         });
 
         jLabel1.setText("Select Merge");
-
-        jComboBox1.setEnabled(false);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -251,7 +251,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -442,13 +442,13 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 			cmtrs++;
 			cmtb1 += conciliator.getCommitsBranch1();
 			cmtb2 += conciliator.getCommitsBranch2();
-			cmtH += conciliator.getCommitsHistory();
+			cmtH += conciliator.getCommitsPreviousHistory();
 			model.insertRow(model.getRowCount(),
 				new Object[] {conciliator.getCommitter().getName() + ":" + conciliator.getCommitter().getEmail(),
 					conciliator.getCommitsBranch1(),
 					conciliator.getCommitsBranch2(),
 					conciliator.getCommitsBoothBranchs(),
-					conciliator.getCommitsHistory()}
+					conciliator.getCommitsPreviousHistory()}
 			);
 		}
 		model.insertRow(model.getRowCount(), new Object[] {"Total of " + cmtrs + " authors", cmtb1 + " commits", cmtb2 + " commits", "", cmtH + " commits"});

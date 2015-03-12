@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
+ * This class has information about the files and who edited these files. This is show in file analysis
  * @author j2cf, Catarina
  */
 public class EditedFile {
@@ -42,7 +42,8 @@ public class EditedFile {
 		hash = 19 * hash + Objects.hashCode(this.fileName);
 		return hash;
 	}
-
+	
+	//this method compare file names
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {

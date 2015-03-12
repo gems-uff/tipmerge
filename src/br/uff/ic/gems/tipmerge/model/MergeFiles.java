@@ -14,20 +14,20 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * This class has information about each merge, as: files on b1, b2 and previous history and who changed them (and all information in Merge)
  * @author j2cf, Catarina
  */
 public class MergeFiles extends Merge {
 	
 	private List<EditedFile> filesOnBranchOne;
 	private List<EditedFile> filesOnBranchTwo;
-	private Set<EditedFile> filesOnHistory;
+	private Set<EditedFile> filesOnPreviousHistory;
 
 	public MergeFiles(String hashOfMerge, File pathToRepository) {
 		super(hashOfMerge, pathToRepository);
 	}
 	
-	//retorna o nome de todos os autores, que alteraram algum arquivo
+	//This method returns the name of all authors modifying any files on Branch1 and Branch2
 	public Set<Committer> getCommittersOnMege(){
 		List<Committer> authors = new ArrayList<>();
 		Set<Committer> committersBranch = this.getCommittersOnBranchOne();
@@ -38,31 +38,29 @@ public class MergeFiles extends Merge {
 		
 		committersBranch = this.getCommittersOnBranchTwo();
 		
-		for (Committer cmtrBranch : committersBranch){
-			Auxiliary.addOnlyNew(authors, cmtrBranch);
+		for (Committer cmterBranch : committersBranch){
+			Auxiliary.addOnlyNew(authors, cmterBranch);
 		}
 		
 	/*	Set<Committer> authors = this.getCommittersOnBranchOne();
 		authors.addAll(this.getCommittersOnBranchTwo());
-	*/	imprime("No merge", authors);
-		
+	*/			
 		return new HashSet<>(authors);
 	}
 	
-	
-	public Set<Committer> getCommittersOnHistory() {
+	//This method returns the name of all authors modifying any files on Previous History
+	public Set<Committer> getCommittersOnPreviousHistory() {
 		List<Committer> authors = new ArrayList<>(this.getCommittersOnMege());
-		Set<EditedFile> files = this.getFilesOnHistory();
+		Set<EditedFile> files = this.getFilesOnPreviousHistory();
 				
 		for (EditedFile editedFile : files){
-			for (Committer cmtrFile : editedFile.getWhoEditTheFile()){
-				Auxiliary.addOnlyNew(authors, cmtrFile);
+			for (Committer cmterFile : editedFile.getWhoEditTheFile()){
+				Auxiliary.addOnlyNew(authors, cmterFile);
 			}
 		}
-		
-		
+			
 			//authors.add(committer);
-		
+	
 	/*	Set<Committer> authors = this.getCommittersOnMege();
 		this.getFilesOnHistory().stream().forEach((file) -> {
 			authors.addAll(file.getWhoEditTheFile());
@@ -78,7 +76,7 @@ public class MergeFiles extends Merge {
 	public void setFilesOnBranchOne(List<EditedFile> filesOnBranchOne) {
 		this.filesOnBranchOne = filesOnBranchOne;
 		if (this.filesOnBranchTwo != null)
-			this.setFilesOnHistory();
+			this.setFilesOnPreviousHistory();
 	}
 
 	public List<EditedFile> getFilesOnBranchTwo() {
@@ -87,11 +85,10 @@ public class MergeFiles extends Merge {
 	public void setFilesOnBranchTwo(List<EditedFile> filesOnBranchTwo) {
 		this.filesOnBranchTwo = filesOnBranchTwo;
 		if (this.filesOnBranchOne != null)
-			this.setFilesOnHistory();
+			this.setFilesOnPreviousHistory();
 	}
 
 	public Set<Committer> getCommittersOnBranchOne() {
-		System.out.println("Pediu os committers");
 		Set<Committer> authors = new HashSet<>();
 		this.getFilesOnBranchOne().stream().forEach((file) -> {
 			
@@ -111,18 +108,18 @@ public class MergeFiles extends Merge {
 	}
 
 	/**
-	 * @return the filesOnHistory
+	 * @return the filesOnPreviousHistory
 	 */
-	public Set<EditedFile> getFilesOnHistory() {
-		return filesOnHistory;
+	public Set<EditedFile> getFilesOnPreviousHistory() {
+		return filesOnPreviousHistory;
 	}
 
 	/**
-	public void setFilesOnHistory(List<EditedFile> filesOnHistory) {
-		this.filesOnHistory = filesOnHistory;
+	public void setFilesOnPreviousHistory(List<EditedFile> filesOnPreviousHistory) {
+		this.filesOnPreviousHistory = filesOnPreviousHistory;
 	}
 	*/
-	private void setFilesOnHistory() {
+	private void setFilesOnPreviousHistory() {
 		if ((this.filesOnBranchOne != null) && (this.filesOnBranchTwo != null)){
 			Set<EditedFile> filesOnMerge = new HashSet<>();
 			this.getFilesOnBranchOne().stream().forEach((file)->{
@@ -131,16 +128,8 @@ public class MergeFiles extends Merge {
 			this.getFilesOnBranchTwo().stream().forEach((file)->{
 				filesOnMerge.add(new EditedFile(file.getFileName()));
 			});
-			this.filesOnHistory = filesOnMerge;
+			this.filesOnPreviousHistory = filesOnMerge;
 		}
 	}	
 
-	//TODO DELETE
-	private void imprime(String text, Collection<Committer> authors){
-		System.out.println(text);
-		for (Committer cmtr : authors)
-			System.out.println(cmtr.toString());
-
-	}
-	
 }

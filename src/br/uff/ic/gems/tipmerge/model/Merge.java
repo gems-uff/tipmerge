@@ -8,7 +8,7 @@ package br.uff.ic.gems.tipmerge.model;
 import java.io.File;
 
 /**
- *
+ * This has information about each merge, the repository path, hash, parent 1, parent 2 and hash base.
  * @author j2cf, Catarina
  */
 public abstract class Merge {

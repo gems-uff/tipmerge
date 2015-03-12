@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is in charge of getting the Committer information from a repository using Gits commands
+ * This class is in charge of getting the Committers information from a repository using Gits commands
  * @author j2cf, Catarina
  */
 public class CommitterDao {
@@ -22,8 +22,8 @@ public class CommitterDao {
 	//get the committers name and committers e-mail information	from commits
 	public Committer getCommitter(String hash, Repository repository){
 		String datas = RunGit.getResult("git show --format=\"%an#%ae \" " + hash, repository.getProject());
-		Committer cmt = new Committer(datas.split("#")[0], datas.split("#")[1]);
-		return cmt;
+		Committer cmter = new Committer(datas.split("#")[0], datas.split("#")[1]);
+		return cmter;
 	}
 	
     //get the committers that modified a file between two commits     
@@ -43,7 +43,7 @@ public class CommitterDao {
 	
 	//this metodh return one list of committers 
 	private List<Committer> getCommittersFromString(List<String> committerList) throws NumberFormatException {
-		List<Committer> cmtList = new ArrayList<>();
+		List<Committer> cmterList = new ArrayList<>();
 		for(String line : committerList){
 			String[] datas = Auxiliary.getSplittedLine(line);
 			Committer committer = new Committer(datas[0], datas[1]);
@@ -52,21 +52,17 @@ public class CommitterDao {
 			//check the insertion of the committers in the list 
 			//identifying those that version control is not yet identified
 			//TODO
-			for(Committer cmtr : cmtList){
-				if(cmtr.equals(committer)){
-					cmtr.setCommits(cmtr.getCommits() + committer.getCommits());
+			for(Committer cmter : cmterList){
+				if(cmter.equals(committer)){
+					cmter.setCommits(cmter.getCommits() + committer.getCommits());
 					hasIt = true;
 					break;
 				}
 			}
-			if(!hasIt) cmtList.add(committer);
+			if(!hasIt) cmterList.add(committer);
 		}
-		System.out.println("Gerando Lista");
-		cmtList.stream().forEach((cmt) ->{
-			System.out.println(cmt.toString());
-		});
-		
-		return cmtList;
+				
+		return cmterList;
 	}
 
 }

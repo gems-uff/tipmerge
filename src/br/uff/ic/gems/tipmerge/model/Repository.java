@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * This class has a lot of information about one project (repository), as: number of commits, last commit, merges, branches, authors...
  * @author j2cf, Catarina
  */
 public class Repository {
@@ -144,12 +144,13 @@ public class Repository {
 		this.committers = committers;
 	}
 	
+	//this method add committer without repetition in the main screen
 	private void setCommitters(){
-		List<Committer> allcmtr = Auxiliary.getCommittersFromString(this.authors);
+		List<Committer> allcmter = Auxiliary.getCommittersFromString(this.authors);
 		this.committers = new ArrayList<>();
 		
-		for (Committer cmtrMainScreen : allcmtr){
-			Auxiliary.addOnlyNew(this.committers, cmtrMainScreen);
+		for (Committer cmterInMainScreen : allcmter){
+			Auxiliary.addOnlyNew(this.committers, cmterInMainScreen);
 		}
 	}
 	
