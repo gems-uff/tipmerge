@@ -189,7 +189,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 
         buttonGroup1.add(jRadioButton2);
         jRadioButton2.setSelected(true);
-        jRadioButton2.setText("Select Historical Merge");
+        jRadioButton2.setText("Select Previous Merges");
         jRadioButton2.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton2StateChanged(evt);
@@ -321,15 +321,15 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 			String hash = jComboBox1.getSelectedItem().toString();
 			merge = new MergeCommits(hash, this.repo.getProject());
 			mergeDao.update(merge);
-			System.out.println(merge.getHash() + " " + merge.getHashBase() + " " + merge.getParents()[0] + " " + merge.getParents()[1]);
+		//	System.out.println(merge.getHash() + " " + merge.getHashBase() + " " + merge.getParents()[0] + " " + merge.getParents()[1]);
 			count++;
 			if(count%j < 1.0){
 				updateBar();
 			}
 		}
-		mergeDao.updateCommitters(merge);
+		mergeDao.setCommittersOnBranch(merge);
 		
-		mergeDao.setCommittersBeforeBranches(merge);// merge.getCommittersBeforeBranches();
+		mergeDao.setCommittersPreviousHistory(merge);// merge.getCommittersBeforeBranches();
 
 		updateTableWithResults(merge);
 

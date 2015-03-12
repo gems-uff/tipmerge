@@ -47,7 +47,7 @@ public class MergeCommitsDao {
 		//updateCommitters(merge);
 	}
 
-	public void updateCommitters(MergeCommits merge) {
+	public void setCommittersOnBranch(MergeCommits merge) {
 		CommitterDao committerDao = new CommitterDao();
 
 		merge.setCommittersBranchOne(committerDao.getCommittersList(merge.getHashBase(), merge.getParents()[0], merge.getPath()));
@@ -56,7 +56,7 @@ public class MergeCommitsDao {
 	}
 	
 	//get and set the committers in the history before the Branch (first commit to base)
-	public void setCommittersBeforeBranches(MergeCommits merge){
+	public void setCommittersPreviousHistory(MergeCommits merge){
 		//insere a informação do primeiro commit
 		CommitterDao committerDao = new CommitterDao();
 		String firstHash = RunGit.getResult("git rev-list --max-parents=0 HEAD", merge.getPath());	

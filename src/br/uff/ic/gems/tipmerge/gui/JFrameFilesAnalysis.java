@@ -85,10 +85,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         tbResultsBranch1 = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbResultsBranch2 = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tbResultsPreviousHistory = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         tbResultsBothBranches = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbResultsPreviousHistory = new javax.swing.JTable();
         btAllMerges = new javax.swing.JButton();
 
         hash1.setText("<hash>");
@@ -188,7 +188,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         buttonGroup1.add(radioHistorical);
         radioHistorical.setSelected(true);
-        radioHistorical.setText("Select Historical Merge");
+        radioHistorical.setText("Select Previous Merges");
         radioHistorical.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 radioHistoricalActionPerformed(evt);
@@ -294,18 +294,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Branch 2", jScrollPane3);
 
-        tbResultsPreviousHistory.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "", "", "", "", ""
-            }
-        ));
-        jScrollPane2.setViewportView(tbResultsPreviousHistory);
-
-        jTabbedPane1.addTab("Previous History", jScrollPane2);
-
         tbResultsBothBranches.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -320,6 +308,18 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jScrollPane4.setViewportView(tbResultsBothBranches);
 
         jTabbedPane1.addTab("Both Branches", jScrollPane4);
+
+        tbResultsPreviousHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "", "", "", "", ""
+            }
+        ));
+        jScrollPane2.setViewportView(tbResultsPreviousHistory);
+
+        jTabbedPane1.addTab("Previous History", jScrollPane2);
 
         btAllMerges.setText("Run All Merges");
         btAllMerges.setEnabled(false);
@@ -387,7 +387,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 			mCommits = new MergeCommits("", repoFiles.getRepository().getProject());
 		}
 		mergeCommittsDao.update(mCommits);
-
+		mergeCommittsDao.setCommittersOnBranch(mCommits);
 		/** 
 		 * From now the merge already exists with parents and merge base, next steps are:
 		 * Set the files of that merge and committers that changed that files.
@@ -679,7 +679,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		//Includes columns with the names of all developers (branches 1 and 2)
 		committers.stream().forEach((committer) -> {
 			dftModel.addColumn(committer.getName());
-			System.out.println(committer.toString());
+		//	System.out.println(committer.toString());
 		});
 		
 		//dftModel.addRow(new Object[]{"PREVIOUS HISTORY"});
