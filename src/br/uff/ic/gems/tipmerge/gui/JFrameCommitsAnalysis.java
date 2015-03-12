@@ -321,16 +321,17 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 			String hash = jComboBox1.getSelectedItem().toString();
 			merge = new MergeCommits(hash, this.repo.getProject());
 			mergeDao.update(merge);
+			System.out.println(merge.getHash() + " " + merge.getHashBase() + " " + merge.getParents()[0] + " " + merge.getParents()[1]);
 			count++;
 			if(count%j < 1.0){
 				updateBar();
 			}
 		}
 		mergeDao.updateCommitters(merge);
-		mergeDao.setCommittersBeforeBranches(merge);// merge.getCommittersBeforeBranches();
-		updateTableWithResults(merge);
 		
-        
+		mergeDao.setCommittersBeforeBranches(merge);// merge.getCommittersBeforeBranches();
+
+		updateTableWithResults(merge);
 
         //tableResult.update(tableResult.getGraphics());
 

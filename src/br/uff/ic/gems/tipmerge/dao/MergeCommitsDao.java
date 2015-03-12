@@ -44,13 +44,14 @@ public class MergeCommitsDao {
 		merge.setHashBase(RunGit.getResult("git merge-base " + hashParents.split(" ")[0] + " " + hashParents.split(" ")[1], this.path));
 		merge.setParents(hashParents.split(" ")[0],hashParents.split(" ")[1]);
 
-		updateCommitters(merge);
+		//updateCommitters(merge);
 	}
 
 	public void updateCommitters(MergeCommits merge) {
 		CommitterDao committerDao = new CommitterDao();
 
 		merge.setCommittersBranchOne(committerDao.getCommittersList(merge.getHashBase(), merge.getParents()[0], merge.getPath()));
+		
 		merge.setCommittersBranchTwo(committerDao.getCommittersList(merge.getHashBase(), merge.getParents()[1], merge.getPath()));
 	}
 	

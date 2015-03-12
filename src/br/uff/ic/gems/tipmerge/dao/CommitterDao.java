@@ -25,18 +25,22 @@ public class CommitterDao {
 		Committer cmt = new Committer(datas.split("#")[0], datas.split("#")[1]);
 		return cmt;
 	}
+	
     //get the committers that modified a file between two commits     
 	public List<Committer> getWhoEditedFile (String base, String parent, String fileName, File path){
 		String command = "git shortlog -sne " + base + ".." + parent + " -- " + fileName;
 		List<String> committerList = RunGit.getListOfResult(command, path);
 		return getCommittersFromString(committerList);
    }
+	
 	//get the committers that committed between two commits
 	public List<Committer> getCommittersList(String mergeBase, String mergeTarget, File path){
 		List<String> committerList = 
 				RunGit.getListOfResult("git shortlog -sne " + mergeBase + ".." + mergeTarget, path);
-		return getCommittersFromString(committerList);
+		List<Committer> result = getCommittersFromString(committerList);
+		return result;
 	}
+	
 	//this metodh return one list of committers 
 	private List<Committer> getCommittersFromString(List<String> committerList) throws NumberFormatException {
 		List<Committer> cmtList = new ArrayList<>();
@@ -52,10 +56,16 @@ public class CommitterDao {
 				if(cmtr.equals(committer)){
 					cmtr.setCommits(cmtr.getCommits() + committer.getCommits());
 					hasIt = true;
+					break;
 				}
 			}
 			if(!hasIt) cmtList.add(committer);
 		}
+		System.out.println("Gerando Lista");
+		cmtList.stream().forEach((cmt) ->{
+			System.out.println(cmt.toString());
+		});
+		
 		return cmtList;
 	}
 
