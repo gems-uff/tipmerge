@@ -76,7 +76,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Developers", "Branch 1", "Branch 2", "Intersection", "All History"
+                "Developers", "Branch 1", "Branch 2", "Both Branches", "Previous History"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -433,7 +433,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 	}
 
 	private void updateTableWithResults(MergeCommits merge) {
-		DefaultTableModel model =  new DefaultTableModel(new Object[]{"Developers", "Branch 1", "Branch 2", "Intersection", "All History"}, 0);
+		DefaultTableModel model =  new DefaultTableModel(new Object[]{"Developers", "Branch 1", "Branch 2", "Both Branches", "Previous History"}, 0);
 		model.insertRow(model.getRowCount(), new Object[] {"Merge Branch: ", merge.getHash(), "", "", ""});
 
 		int cmtb1 = 0, cmtb2 = 0, cmtH = 0, cmtrs = 0;

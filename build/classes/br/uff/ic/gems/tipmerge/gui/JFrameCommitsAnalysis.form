@@ -74,8 +74,8 @@
                 <Column editable="false" title="Developers" type="java.lang.Object"/>
                 <Column editable="false" title="Branch 1" type="java.lang.Object"/>
                 <Column editable="false" title="Branch 2" type="java.lang.Object"/>
-                <Column editable="false" title="Intersection" type="java.lang.Object"/>
-                <Column editable="false" title="All History" type="java.lang.Object"/>
+                <Column editable="false" title="Both Branches" type="java.lang.Object"/>
+                <Column editable="false" title="Previous History" type="java.lang.Object"/>
               </Table>
             </Property>
           </Properties>

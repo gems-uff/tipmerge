@@ -116,7 +116,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setText("Authors");
+        jLabel6.setText("Committers");
 
         txTotalAuthors.setEditable(false);
 
@@ -229,7 +229,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         txResult.setColumns(20);
         txResult.setFont(new java.awt.Font("Menlo", 0, 12)); // NOI18N
         txResult.setRows(5);
-        txResult.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Authors", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Menlo", 0, 12))); // NOI18N
+        txResult.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Committers", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Menlo", 0, 12))); // NOI18N
         jScrollPane3.setViewportView(txResult);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -343,7 +343,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 				txCommits.setText(repository.getCommits().toString());
 				txLast.setText(" " + repository.getLastCommit().toLocalDate().toString() + repository.getLastCommit().toLocalTime().toString());
 				txTotalMerges.setText(String.valueOf(repository.getListOfMerges().size()));
-				txTotalAuthors.setText(String.valueOf(repository.getAuthors().size()));
+				txTotalAuthors.setText(String.valueOf(repository.getCommitters().size()));
 				txTotalBranches.setText(String.valueOf(repository.getBranches().size()));
 				btShow.setEnabled(true);
 				menuCommits.setEnabled(true);

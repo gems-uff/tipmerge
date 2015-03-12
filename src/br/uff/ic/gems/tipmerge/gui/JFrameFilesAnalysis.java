@@ -304,7 +304,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tbResultsPreviousHistory);
 
-        jTabbedPane1.addTab("History", jScrollPane2);
+        jTabbedPane1.addTab("Previous History", jScrollPane2);
 
         tbResultsBothBranches.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
