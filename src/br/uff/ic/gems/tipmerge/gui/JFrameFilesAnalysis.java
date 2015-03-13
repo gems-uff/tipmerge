@@ -15,13 +15,19 @@ import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
 import br.uff.ic.gems.tipmerge.model.RepoFiles;
 import br.uff.ic.gems.tipmerge.model.Repository;
+import br.uff.ic.gems.tipmerge.util.Export;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * This class is in charge of showing all results about the files analysis
@@ -81,14 +87,14 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         btRun = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tbResultsBranch1 = new javax.swing.JTable();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tbResultsBranch2 = new javax.swing.JTable();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tbResultsBothBranches = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tbResultsPreviousHistory = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jTable4 = new javax.swing.JTable();
         btAllMerges = new javax.swing.JButton();
 
         hash1.setText("<hash>");
@@ -267,19 +273,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         });
 
-        tbResultsBranch1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "", "", "", "", ""
-            }
-        ));
-        jScrollPane1.setViewportView(tbResultsBranch1);
-
-        jTabbedPane1.addTab("Branch 1", jScrollPane1);
-
-        tbResultsBranch2.setModel(new javax.swing.table.DefaultTableModel(
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -290,11 +284,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane3.setViewportView(tbResultsBranch2);
+        jScrollPane5.setViewportView(jTable1);
 
-        jTabbedPane1.addTab("Branch 2", jScrollPane3);
+        jTabbedPane1.addTab("Branch1", jScrollPane5);
 
-        tbResultsBothBranches.setModel(new javax.swing.table.DefaultTableModel(
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -305,21 +299,39 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane4.setViewportView(tbResultsBothBranches);
+        jScrollPane6.setViewportView(jTable2);
 
-        jTabbedPane1.addTab("Both Branches", jScrollPane4);
+        jTabbedPane1.addTab("Branch2", jScrollPane6);
 
-        tbResultsPreviousHistory.setModel(new javax.swing.table.DefaultTableModel(
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "", "", "", "", ""
+
             }
         ));
-        jScrollPane2.setViewportView(tbResultsPreviousHistory);
+        jScrollPane7.setViewportView(jTable3);
 
-        jTabbedPane1.addTab("Previous History", jScrollPane2);
+        jTabbedPane1.addTab("Both Branches", jScrollPane7);
+
+        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane8.setViewportView(jTable4);
+
+        jTabbedPane1.addTab("Previous History", jScrollPane8);
 
         btAllMerges.setText("Run All Merges");
         btAllMerges.setEnabled(false);
@@ -350,7 +362,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
@@ -433,7 +445,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		showResPreviousHistory(mergeSelected);
 		showResIntersection(mCommits.getCommittersInCommon());
 
-        
+        jButton2.setEnabled(true);
     }//GEN-LAST:event_btRunActionPerformed
 
     private void jcMergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMergeActionPerformed
@@ -455,93 +467,99 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		hashBranch2.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + jcBranch2.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
     }//GEN-LAST:event_jcBranch2ActionPerformed
 	
-	//It's not working yet
-    private void btAllMergesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAllMergesActionPerformed
-        int i = this.repoFiles.getRepository().getListOfMerges().size();
-		float j = (float) (i/100.0);
-		int count = 0;
-		barRunning.setValue(0);
-		barRunning.setMaximum(100);
-		// It should show all merges in some other way
-    
-        for (String hashMerge : repoFiles.getRepository().getListOfMerges()){
-			
-			if(hashMerge.equals(jcMerge.getSelectedItem().toString())){
-				MergeFilesDao mergeDao = new MergeFilesDao();
-				MergeFiles mergeFiles = mergeDao.getMerge(hashMerge, repoFiles.getRepository().getProject());
-
-				EditedFilesDao filesDao = new EditedFilesDao();
-				mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[0], mergeFiles.getPath()));
-/*
-				model.insertRow(model.getValueToRow(), new Object[]{"Branch One","",""});
-				for (EditedFile  file : mergeSelected.getFilesOnBranchOne()){
-					model.insertRow(
-						model.getValueToRow(),
-						new Object[]{file,"",""}
-					);
-					CommitterDao cmterDao = new CommitterDao();
-					file.setWhoEditTheFile(
-						cmterDao.getWhoEditedFile(
-							mergeSelected.getHashBase(), mergeSelected.getParents()[0], file.getFileName(), mergeSelected.getPath()));
-					
-					for(Committer cmter : file.getWhoEditTheFile()){
-						model.insertRow(
-							model.getValueToRow(), 
-							new Object[]{"",cmter.getEmail(),cmter.getCommits()}
-						);
-					}
-					
-				}
-				model.insertRow(model.getValueToRow(), new Object[]{"Branch Two"});
-				mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), mergeSelected.getParents()[1], mergeSelected.getPath()));
-				for (EditedFile  file : mergeSelected.getFilesOnBranchTwo()){
-					model.insertRow(
-						model.getValueToRow(),
-						new Object[]{file,"",""}
-					);
-					CommitterDao cmterDao = new CommitterDao();
-					file.setWhoEditTheFile(
-						cmterDao.getWhoEditedFile(
-							mergeSelected.getHashBase(), mergeSelected.getParents()[1], file.getFileName(), mergeSelected.getPath()));
-
-					for(Committer cmter : file.getWhoEditTheFile()){
-						model.insertRow(
-							model.getValueToRow(),
-							new Object[]{"",cmter.getEmail(),cmter.getCommits()}
-						);
-					}
-
-				}				
-				//prints on the command line
-				showCommitters(mergeSelected);
-				repoFiles.getMergeFiles().add(mergeSelected);
-*/
-			}
-			count++;
-			if(count%j < 1.0){
-				updateBar(count);
-			}
-        }
-		
-		
-		//organizes the data in the table
-		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name","Who edited it","Number of changes"}, count);
-		tbResultsBranch1.setModel(dftModel);
-		
-        DefaultTableModel model =  (DefaultTableModel)tbResultsBranch1.getModel();
-        
-		
-        
-        tbResultsBranch1.update(tbResultsBranch1.getGraphics());
-    }//GEN-LAST:event_btAllMergesActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+		Map<String, TableModel> sheet = new LinkedHashMap<>();
+		sheet.put("Branch1", jTable1.getModel());
+		sheet.put("Branch2", jTable2.getModel());
+		sheet.put("Both Branches", jTable3.getModel());
+		sheet.put("Previous History", jTable4.getModel());
+		
+		Export.toExcel(sheet);	
+		JOptionPane.showMessageDialog(this, "File was sucessfully saved", null, JOptionPane.INFORMATION_MESSAGE);
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void radioBranchesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_radioBranchesStateChanged
-		invertEnabledGroup();  
+		invertEnabledGroup();
+		
     }//GEN-LAST:event_radioBranchesStateChanged
+
+	//It's not working yet
+    private void btAllMergesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAllMergesActionPerformed
+        int i = this.repoFiles.getRepository().getListOfMerges().size();
+        float j = (float) (i/100.0);
+        int count = 0;
+        barRunning.setValue(0);
+        barRunning.setMaximum(100);
+        // It should show all merges in some other way
+
+        for (String hashMerge : repoFiles.getRepository().getListOfMerges()){
+
+            if(hashMerge.equals(jcMerge.getSelectedItem().toString())){
+                MergeFilesDao mergeDao = new MergeFilesDao();
+                MergeFiles mergeFiles = mergeDao.getMerge(hashMerge, repoFiles.getRepository().getProject());
+
+                EditedFilesDao filesDao = new EditedFilesDao();
+                mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[0], mergeFiles.getPath()));
+                /*
+                model.insertRow(model.getValueToRow(), new Object[]{"Branch One","",""});
+                for (EditedFile  file : mergeSelected.getFilesOnBranchOne()){
+                    model.insertRow(
+                        model.getValueToRow(),
+                        new Object[]{file,"",""}
+                    );
+                    CommitterDao cmterDao = new CommitterDao();
+                    file.setWhoEditTheFile(
+                        cmterDao.getWhoEditedFile(
+                            mergeSelected.getHashBase(), mergeSelected.getParents()[0], file.getFileName(), mergeSelected.getPath()));
+
+                    for(Committer cmter : file.getWhoEditTheFile()){
+                        model.insertRow(
+                            model.getValueToRow(),
+                            new Object[]{"",cmter.getEmail(),cmter.getCommits()}
+                        );
+                    }
+
+                }
+                model.insertRow(model.getValueToRow(), new Object[]{"Branch Two"});
+                mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), mergeSelected.getParents()[1], mergeSelected.getPath()));
+                for (EditedFile  file : mergeSelected.getFilesOnBranchTwo()){
+                    model.insertRow(
+                        model.getValueToRow(),
+                        new Object[]{file,"",""}
+                    );
+                    CommitterDao cmterDao = new CommitterDao();
+                    file.setWhoEditTheFile(
+                        cmterDao.getWhoEditedFile(
+                            mergeSelected.getHashBase(), mergeSelected.getParents()[1], file.getFileName(), mergeSelected.getPath()));
+
+                    for(Committer cmter : file.getWhoEditTheFile()){
+                        model.insertRow(
+                            model.getValueToRow(),
+                            new Object[]{"",cmter.getEmail(),cmter.getCommits()}
+                        );
+                    }
+
+                }
+                //prints on the command line
+                showCommitters(mergeSelected);
+                repoFiles.getMergeFiles().add(mergeSelected);
+                */
+            }
+            count++;
+            if(count%j < 1.0){
+                updateBar(count);
+            }
+        }
+
+        //organizes the data in the table
+        DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name","Who edited it","Number of changes"}, count);
+        jTable1.setModel(dftModel);
+
+        DefaultTableModel model =  (DefaultTableModel)jTable1.getModel();
+
+        jTable1.update(jTable1.getGraphics());
+    }//GEN-LAST:event_btAllMergesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barRunning;
@@ -558,20 +576,20 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTable4;
     private javax.swing.JComboBox jcBranch1;
     private javax.swing.JComboBox jcBranch2;
     private javax.swing.JComboBox jcMerge;
     private javax.swing.JRadioButton radioBranches;
     private javax.swing.JRadioButton radioHistorical;
-    private javax.swing.JTable tbResultsBothBranches;
-    private javax.swing.JTable tbResultsBranch1;
-    private javax.swing.JTable tbResultsBranch2;
-    private javax.swing.JTable tbResultsPreviousHistory;
     // End of variables declaration//GEN-END:variables
 
 	private void startProgressBar(Integer max){
@@ -624,6 +642,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		jcMerge.setEnabled(!jcMerge.isEnabled());
 		jPanel2.setEnabled(!jPanel2.isEnabled());
 		jPanel3.setEnabled(!jPanel3.isEnabled());
+		jButton2.setEnabled(false);
+
 	}
 	
 	//shows the number of commits by committers in each file on Branch 1
@@ -644,7 +664,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 			
 		});
 
-		tbResultsBranch1.setModel(dftModel);
+		jTable1.setModel(dftModel);
 	}
 	
 	//shows the number of commits by committers in each file on Branch 2
@@ -664,8 +684,23 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
 		});
 
-		tbResultsBranch2.setModel(dftModel);
+		jTable2.setModel(dftModel);
         //tbResultsBranch1.update(tbResultsBranch1.getGraphics());	
+	}
+	
+//shows the number of commits in both branches, this information considers only commits
+	private void showResIntersection(List<Committer> committers) {
+		
+		DefaultTableModel model = new DefaultTableModel( new Object[] {"Author ", "Number of Commits in Both Branches"}, 0);
+		//model.addRow(new Object[]{"BOTH BRANCHES"});
+		for (Committer cmter : committers){
+			model.insertRow(model.getRowCount(), 
+							new Object[] {cmter.getName() , cmter.getCommits()
+							}
+			);
+		}
+		//return model;
+		jTable3.setModel(model);
 	}
 	
 	//shows the number of commits by committers in each file (changed on any branch) that was changed in the history before the branch
@@ -689,25 +724,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
 		});
 
-		tbResultsPreviousHistory.setModel(dftModel);
+		jTable4.setModel(dftModel);
 	}
 	
-	//shows the number of commits in both branches, this information considers onlu commits
-	private void showResIntersection(List<Committer> committers) {
-		
-		DefaultTableModel model = new DefaultTableModel( new Object[] {"Author ", "Number of Commits in Both Branches"}, 0);
-		//model.addRow(new Object[]{"BOTH BRANCHES"});
-		for (Committer cmter : committers){
-			model.insertRow(model.getRowCount(), 
-							new Object[] {cmter.getName() , cmter.getCommits()
-							}
-			);
-		}
-		//return model;
-		tbResultsBothBranches.setModel(model);
-	}
-
-
 	private String[] getValueToRow(EditedFile editedFile, Set<Committer> committers) {
 		String valuesVector[] = new String[committers.size() + 1];
 		valuesVector[0] = editedFile.getFileName();

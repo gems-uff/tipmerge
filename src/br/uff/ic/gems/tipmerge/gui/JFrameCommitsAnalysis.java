@@ -10,12 +10,17 @@ import br.uff.ic.gems.tipmerge.model.Conciliator;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.RepoCommits;
 import br.uff.ic.gems.tipmerge.model.Repository;
+import br.uff.ic.gems.tipmerge.util.Export;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * This class is in charge of showing all results about the commit analysis
@@ -375,7 +380,10 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        Map<String, TableModel> sheet = new HashMap<>();
+		sheet.put("Commit Analisys", tableResult.getModel());
+		Export.toExcel(sheet);
+		JOptionPane.showMessageDialog(this, "File was sucessfully saved", null, JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jRadioButton2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton2StateChanged
@@ -453,5 +461,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 		}
 		model.insertRow(model.getRowCount(), new Object[] {"Total of " + cmtrs + " authors", cmtb1 + " commits", cmtb2 + " commits", "", cmtH + " commits"});
 		tableResult.setModel(model);
+		
+		jButton1.setEnabled(true);
 	}
 }
