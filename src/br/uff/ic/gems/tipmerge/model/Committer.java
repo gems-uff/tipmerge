@@ -15,7 +15,8 @@ public class Committer implements Comparable<Committer>{
 	
 	private final String name;
 	private final String email;
-	private Integer commits;
+	private Integer commits = 0;
+	private double zScoreM;
 	
 	public Committer(String name,String email){
 		this.name = name;
@@ -91,6 +92,20 @@ public class Committer implements Comparable<Committer>{
 			System.out.println((Objects.equals(this.name, other.name) || (Objects.equals(this.email, other.email))));
 		}
 */		return (Objects.equals(this.name, other.name) || (Objects.equals(this.email, other.email)));
+	}
+
+	/**
+	 * @return the zScoreM
+	 */
+	public double getzScoreM() {
+		return zScoreM;
+	}
+
+	/**
+	 * @param zScoreM the zScoreM to set
+	 */
+	public void setzScoreM(double zScoreM) {
+		this.zScoreM = zScoreM;
 	}
 	
 }
