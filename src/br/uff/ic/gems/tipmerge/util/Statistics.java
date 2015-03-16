@@ -45,9 +45,9 @@ public class Statistics {
 		}
     }
 	
-	public static double getMAD(List<Integer> values ){
-		double median = getMedian((Integer[])values.toArray());
-		double[] newValues = new double[values.size()];
+	public static double getMAD(Integer[] values ){
+		double median = getMedian(values);
+		double[] newValues = new double[values.length];
 		int i =0 ;
 		for (Integer listValue : values){
 			newValues[i++] = Math.abs(listValue - median);
@@ -56,9 +56,9 @@ public class Statistics {
 	}
 	
 	
-	public static List<Double> getMZScore(List<Integer> values){
+	public static List<Double> getMZScore(Integer[] values){
 		
-		double median = getMedian((Integer[])values.toArray());
+		double median = getMedian(values);
 		double mad = getMAD(values);
 		
 		List<Double> zScoreValues = new ArrayList<>();
@@ -72,9 +72,10 @@ public class Statistics {
 	}
 	
 	public static List<Committer> getMZScoreCommitter(List<Committer> committer){
-		List<Integer> values = new ArrayList();
-		for (Committer cmter : committer){
-			values.add(cmter.getCommits());
+		Integer[] values = new Integer[committer.size()];
+
+		for(int i = 0 ; i < committer.size() ; i++){
+			values[i] = committer.get(i).getCommits();
 		}
 		List<Double> zScoreM = getMZScore(values);
 		for (int i=0; i <= zScoreM.size(); i++){

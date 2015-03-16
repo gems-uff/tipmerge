@@ -6,12 +6,14 @@
 package br.uff.ic.gems.tipmerge.gui;
 
 import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
+import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Conciliator;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.RepoCommits;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.Export;
 import br.uff.ic.gems.tipmerge.util.RunGit;
+import br.uff.ic.gems.tipmerge.util.Statistics;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 	
 	private Repository repo;
 	private RepoCommits repoCommitts;
+	private MergeCommits mergeCommits;
 
 	/**
 	 * Creates new form JFrameCommitsAnalysis
@@ -53,9 +56,10 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jMenu1 = new javax.swing.JMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableResult = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btExport = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btRun = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -71,6 +75,9 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
         barRuning = new javax.swing.JProgressBar();
+        btZScore = new javax.swing.JButton();
+
+        jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Commits Analysis");
@@ -94,11 +101,11 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableResult);
 
-        jButton1.setText("Export");
-        jButton1.setEnabled(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btExport.setText("Export");
+        btExport.setEnabled(false);
+        btExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btExportActionPerformed(evt);
             }
         });
 
@@ -266,6 +273,14 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btZScore.setText("(M) Z-score");
+        btZScore.setEnabled(false);
+        btZScore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btZScoreActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -277,7 +292,9 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(btZScore)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btExport)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -288,7 +305,9 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btExport)
+                    .addComponent(btZScore))
                 .addContainerGap())
         );
 
@@ -311,63 +330,14 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
         int i = this.repoCommitts.getMerges().size();
         float j = (float) (i/100.0);
-
         barRuning.setValue(0);
         barRuning.setMaximum(100);
-
         int count = 0;
-		MergeCommitsDao mergeDao = new MergeCommitsDao(repo.getProject());
-		MergeCommits merge;
-		if(jRadioButton1.isSelected()){
-			merge = new MergeCommits("", this.repo.getProject());
-			merge.setParents(hash1.getText(), hash2.getText());
-			merge.setHashBase(mergeDao.getMergeBase(merge.getParents()[0], merge.getParents()[1], merge.getPath()));
-		}else{
-			String hash = jComboBox1.getSelectedItem().toString();
-			merge = new MergeCommits(hash, this.repo.getProject());
-			mergeDao.update(merge);
-		//	System.out.println(merge.getHash() + " " + merge.getHashBase() + " " + merge.getParents()[0] + " " + merge.getParents()[1]);
-			count++;
-			if(count%j < 1.0){
-				updateBar();
-			}
-		}
-		mergeDao.setCommittersOnBranch(merge);
-		
-		mergeDao.setCommittersPreviousHistory(merge);// merge.getCommittersBeforeBranches();
 
-		updateTableWithResults(merge);
-
-        //tableResult.update(tableResult.getGraphics());
-
-		//<editor-fold defaultstate="collapsed" desc="Código pra exportar">
-		/*
-		for(MergeBranches merge : merges){
+		this.setMergeCommits();
 		
-		project.setMergeDetails(merge);
-		
-		if (merge.isMergeOfBranches()){
-		output.append("MergeCommits ").append(i--).append(": ").append(merge.getCommitHash()).append(" ( ").append(merge.getAuthorsBranchOne().size()).append(" , ").append(merge.getAuthorsBranchTwo().size()).append(" )\n");
-		if(merge.getAuthorsBranchOne() != null){
-		output.append("\tBranch One: ");
-		for(CommitAuthor author : merge.getAuthorsBranchOne())
-		output.append(author.getName()).append(" (").append(author.getCommits()).append(")\t");
-		}
-		output.append("\n");
-		if(merge.getAuthorsBranchTwo() != null){
-		output.append("\tBranch Two: ");
-		for(CommitAuthor author : merge.getAuthorsBranchTwo())
-		output.append(author.getName()).append(" (").append(author.getCommits()).append(")\t");
-		}
-		output.append("\n");
-		if(merge.getAuthorsInCommon() != null){
-		output.append("\tCommon: ").append(merge.getAuthorsInCommon().toString());
-		}
-		output.append("\n");
-		j++;
-		}
-		}*/
-//</editor-fold>
+		updateTableWithResults(this.getMergeCommits());
+
 
     }//GEN-LAST:event_btRunActionPerformed
 
@@ -379,30 +349,68 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportActionPerformed
         Map<String, TableModel> sheet = new HashMap<>();
 		sheet.put("Commit Analisys", tableResult.getModel());
 		Export.toExcel(sheet);
 		JOptionPane.showMessageDialog(this, "File was sucessfully saved", null, JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btExportActionPerformed
 
     private void jRadioButton2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton2StateChanged
        invertEnabledFields();
     }//GEN-LAST:event_jRadioButton2StateChanged
 
+	/**
+	 * Responsável por gerar o zscore modificado para os commits
+	 * @param evt 
+	 */
+    private void btZScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btZScoreActionPerformed
+       
+		DefaultTableModel model = (DefaultTableModel)this.tableResult.getModel();
+		
+		for(int i = 1 ; i < model.getColumnCount() ; i++){
+			Integer[] values = new Integer[model.getRowCount() - 2];
+			for(int j = 1 ; j < model.getRowCount() - 1 ; j++){
+				//try {
+				System.out.println("i: " + i + " j: " + j + " value: " + model.getValueAt(j, i));
+					values[j - 1] = ((Integer) model.getValueAt(j, i));
+				//} catch (Exception e) {
+				//	System.out.println(model.getValueAt(j, j) + " " + i + "/" + j);
+				//}
+				
+			}
+			List<Double> scores = Statistics.getMZScore(values);
+			//updateModel(model,scores,i);
+		}
+		/*
+		List<Committer> cmterBranch1 = this.mergeCommits.getCommittersBranchOne();
+		cmterBranch1 = Statistics.getMZScoreCommitter(cmterBranch1);
+        List<Committer> cmterBranch2 = this.mergeCommits.getCommittersBranchTwo();
+		cmterBranch1 = Statistics.getMZScoreCommitter(cmterBranch2);
+        List<Committer> cmterBothBranches = this.mergeCommits.getCommittersInCommon();
+		cmterBothBranches = Statistics.getMZScoreCommitter(cmterBothBranches);
+        List<Committer> cmterPreviousHistory = this.mergeCommits.getCommittersPreviousHistory();
+		cmterPreviousHistory = Statistics.getMZScoreCommitter(cmterPreviousHistory);
+		*/
+		
+		
+    }//GEN-LAST:event_btZScoreActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barRuning;
+    private javax.swing.JButton btExport;
     private javax.swing.JButton btRun;
+    private javax.swing.JButton btZScore;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cbBranchOne;
     private javax.swing.JComboBox cbBranchTwo;
     private javax.swing.JLabel hash1;
     private javax.swing.JLabel hash2;
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -462,6 +470,41 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 		model.insertRow(model.getRowCount(), new Object[] {"Total of " + cmtrs + " authors", cmtb1 + " commits", cmtb2 + " commits", "", cmtH + " commits"});
 		tableResult.setModel(model);
 		
-		jButton1.setEnabled(true);
+		btExport.setEnabled(true);
+		btZScore.setEnabled(true);
+	}
+
+	/**
+	 * @return the mergeCommits
+	 */
+	public MergeCommits getMergeCommits() {
+		return mergeCommits;
+	}
+
+	/**
+	 * @param mergeCommits the mergeCommits to set
+	 */
+	public void setMergeCommits() {
+		MergeCommitsDao mergeDao = new MergeCommitsDao(repo.getProject());
+		MergeCommits merge;
+		if(jRadioButton1.isSelected()){
+			merge = new MergeCommits("", this.repo.getProject());
+			merge.setParents(hash1.getText(), hash2.getText());
+			merge.setHashBase(mergeDao.getMergeBase(merge.getParents()[0], merge.getParents()[1], merge.getPath()));
+		}else{
+			String hash = jComboBox1.getSelectedItem().toString();
+			merge = new MergeCommits(hash, this.repo.getProject());
+			mergeDao.update(merge);
+		}
+		mergeDao.setCommittersOnBranch(merge);
+		mergeDao.setCommittersPreviousHistory(merge);
+		this.mergeCommits = merge;
+	}
+
+	private void updateModel(DefaultTableModel model, List<Double> scores, int column) {
+		for(int j = 0 ; j < scores.size() ; j++ ){
+			System.out.println("zscore: " + scores.get(j));
+			model.setValueAt(scores.get(j), j+1, column);
+		}
 	}
 }

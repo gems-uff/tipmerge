@@ -53,7 +53,7 @@ public class StatisticsTest {
 	@Test
 	public void testGetMAD() {
 		System.out.println("getMad");
-		List<Integer> values = Arrays.asList(2, 5, -1, 3, 4, 5, 0, 2);
+		Integer[] values = new Integer[]{2, 5, -1, 3, 4, 5, 0, 2};
 		Statistics instance = new Statistics();
 		Double result = Statistics.getMAD(values);
 		Double valorEsperado = 2.0;
@@ -64,9 +64,15 @@ public class StatisticsTest {
 	@Test
 	public void testGetMZScore() {
 		System.out.println("getMZScore");
-		List<Integer> values = Arrays.asList(-1, 0, 2,2,3,4,5,5);
+		Integer[] values = new Integer[]{-1, 0, 2,2,3,4,5,5};
 		List<Double> expResult = Arrays.asList(-1.180,-0.843, -0.169, -0.169, 0.169, 0.506, 0.843, 0.843);
 		List<Double> result = Statistics.getMZScore(values);
+		
+		Integer[] newValues = new Integer[]{1,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		List<Double> result2 = Statistics.getMZScore(newValues);
+		
+		System.out.println("Resultado: " + result2.toString());
+		
 		assertEquals(expResult, result);
 	}
 
