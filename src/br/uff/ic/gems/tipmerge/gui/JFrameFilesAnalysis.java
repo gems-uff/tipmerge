@@ -17,8 +17,7 @@ import br.uff.ic.gems.tipmerge.model.RepoFiles;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.Export;
 import br.uff.ic.gems.tipmerge.util.RunGit;
-import java.util.Arrays;
-import java.util.HashMap;
+import br.uff.ic.gems.tipmerge.util.Statistics;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +35,7 @@ import javax.swing.table.TableModel;
 public class JFrameFilesAnalysis extends javax.swing.JFrame {
         
 	private final RepoFiles repoFiles;
+	private MergeFiles mergeFiles;
 	/**
 	 * Creates new form JFrameCommitsAnalysis
 	 * @param repository
@@ -95,7 +95,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jTable3 = new javax.swing.JTable();
         jScrollPane8 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
-        btAllMerges = new javax.swing.JButton();
+        btZScore = new javax.swing.JButton();
 
         hash1.setText("<hash>");
 
@@ -267,6 +267,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         );
 
         btExport.setText("Export");
+        btExport.setEnabled(false);
         btExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btExportActionPerformed(evt);
@@ -333,11 +334,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Previous History", jScrollPane8);
 
-        btAllMerges.setText("Run All Merges");
-        btAllMerges.setEnabled(false);
-        btAllMerges.addActionListener(new java.awt.event.ActionListener() {
+        btZScore.setText("(M) Z-score");
+        btZScore.setEnabled(false);
+        btZScore.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAllMergesActionPerformed(evt);
+                btZScoreActionPerformed(evt);
             }
         });
 
@@ -349,8 +350,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btAllMerges)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btZScore)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btExport))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -366,7 +368,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btExport)
-                    .addComponent(btAllMerges))
+                    .addComponent(btZScore))
                 .addContainerGap())
         );
 
@@ -439,15 +441,30 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		//showCommitters(mergeSelected);
 		repoFiles.getMergeFiles().add(mergeSelected);
 		
-		//organizes the data in the table
-		showResBranch1(mergeSelected);
-		showResBranch2(mergeSelected);
-		showResPreviousHistory(mergeSelected);
+		this.setMergeFiles(mergeSelected);
+
+		showResultsTable(this.getMergeFiles());
+		//showResultsTable(this.getMergeFiles(),true);
 		showResIntersection(mCommits.getCommittersInCommon());
 
         btExport.setEnabled(true);
+		btZScore.setEnabled(true);
     }//GEN-LAST:event_btRunActionPerformed
 
+	public void showResultsTable(MergeFiles merge) {
+		//organizes the data in the table
+		showResBranch1(merge, false);
+		showResBranch2(merge, false);
+		showResPreviousHistory(merge, false);
+	}
+	
+	public void showResultsTable(MergeFiles merge, Boolean showScoreZ) {
+		//organizes the data in the table
+		showResBranch1(merge,showScoreZ);
+		showResBranch2(merge,showScoreZ);
+		showResPreviousHistory(merge,showScoreZ);
+	}
+	
     private void jcMergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMergeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jcMergeActionPerformed
@@ -481,91 +498,19 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
     private void radioBranchesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_radioBranchesStateChanged
 		invertEnabledGroup();
-		
+		cleanResults();
     }//GEN-LAST:event_radioBranchesStateChanged
 
 	//It's not working yet
-    private void btAllMergesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAllMergesActionPerformed
-        int i = this.repoFiles.getRepository().getListOfMerges().size();
-        float j = (float) (i/100.0);
-        int count = 0;
-        barRunning.setValue(0);
-        barRunning.setMaximum(100);
-        // It should show all merges in some other way
-
-        for (String hashMerge : repoFiles.getRepository().getListOfMerges()){
-
-            if(hashMerge.equals(jcMerge.getSelectedItem().toString())){
-                MergeFilesDao mergeDao = new MergeFilesDao();
-                MergeFiles mergeFiles = mergeDao.getMerge(hashMerge, repoFiles.getRepository().getProject());
-
-                EditedFilesDao filesDao = new EditedFilesDao();
-                mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), mergeFiles.getParents()[0], mergeFiles.getPath()));
-                /*
-                model.insertRow(model.getValueToRow(), new Object[]{"Branch One","",""});
-                for (EditedFile  file : mergeSelected.getFilesOnBranchOne()){
-                    model.insertRow(
-                        model.getValueToRow(),
-                        new Object[]{file,"",""}
-                    );
-                    CommitterDao cmterDao = new CommitterDao();
-                    file.setWhoEditTheFile(
-                        cmterDao.getWhoEditedFile(
-                            mergeSelected.getHashBase(), mergeSelected.getParents()[0], file.getFileName(), mergeSelected.getPath()));
-
-                    for(Committer cmter : file.getWhoEditTheFile()){
-                        model.insertRow(
-                            model.getValueToRow(),
-                            new Object[]{"",cmter.getEmail(),cmter.getCommits()}
-                        );
-                    }
-
-                }
-                model.insertRow(model.getValueToRow(), new Object[]{"Branch Two"});
-                mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), mergeSelected.getParents()[1], mergeSelected.getPath()));
-                for (EditedFile  file : mergeSelected.getFilesOnBranchTwo()){
-                    model.insertRow(
-                        model.getValueToRow(),
-                        new Object[]{file,"",""}
-                    );
-                    CommitterDao cmterDao = new CommitterDao();
-                    file.setWhoEditTheFile(
-                        cmterDao.getWhoEditedFile(
-                            mergeSelected.getHashBase(), mergeSelected.getParents()[1], file.getFileName(), mergeSelected.getPath()));
-
-                    for(Committer cmter : file.getWhoEditTheFile()){
-                        model.insertRow(
-                            model.getValueToRow(),
-                            new Object[]{"",cmter.getEmail(),cmter.getCommits()}
-                        );
-                    }
-
-                }
-                //prints on the command line
-                showCommitters(mergeSelected);
-                repoFiles.getMergeFiles().add(mergeSelected);
-                */
-            }
-            count++;
-            if(count%j < 1.0){
-                updateBar(count);
-            }
-        }
-
-        //organizes the data in the table
-        DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name","Who edited it","Number of changes"}, count);
-        jTable1.setModel(dftModel);
-
-        DefaultTableModel model =  (DefaultTableModel)jTable1.getModel();
-
-        jTable1.update(jTable1.getGraphics());
-    }//GEN-LAST:event_btAllMergesActionPerformed
+    private void btZScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btZScoreActionPerformed
+        showResultsTable(this.getMergeFiles(), true);
+    }//GEN-LAST:event_btZScoreActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barRunning;
-    private javax.swing.JButton btAllMerges;
     private javax.swing.JButton btExport;
     private javax.swing.JButton btRun;
+    private javax.swing.JButton btZScore;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel hash1;
     private javax.swing.JLabel hashBranch1;
@@ -643,11 +588,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		jPanel2.setEnabled(!jPanel2.isEnabled());
 		jPanel3.setEnabled(!jPanel3.isEnabled());
 		btExport.setEnabled(false);
-
 	}
 	
 	//shows the number of commits by committers in each file on Branch 1
-	private void showResBranch1(MergeFiles mergeSelected) {
+	private void showResBranch1(MergeFiles mergeSelected, Boolean showScoreZ) {
 		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
 
 		Set<Committer> committers = mergeSelected.getCommittersOnBranchOne();
@@ -659,7 +603,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		
 		//dftModel.addRow(new Object[]{"BRANCH ONE"});
 		mergeSelected.getFilesOnBranchOne().stream().forEach((editedfile) -> {
-			dftModel.addRow(getValueToRow(editedfile, committers));
+			dftModel.addRow(getValueToRow(editedfile, committers, showScoreZ));
 			//dftModel.addRow(new Object[]{file.getFileName()});
 			
 		});
@@ -668,7 +612,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 	}
 	
 	//shows the number of commits by committers in each file on Branch 2
-	private void showResBranch2(MergeFiles mergeSelected) {
+	private void showResBranch2(MergeFiles mergeSelected, Boolean showScoreZ) {
 		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
 
 		Set<Committer> committers = mergeSelected.getCommittersOnBranchTwo();
@@ -680,7 +624,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		
 		//dftModel.addRow(new Object[]{"BRANCH TWO"});
 		mergeSelected.getFilesOnBranchTwo().stream().forEach((file) -> {
-			dftModel.addRow(getValueToRow(file, committers));
+			dftModel.addRow(getValueToRow(file, committers, showScoreZ));
 
 		});
 
@@ -704,7 +648,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 	}
 	
 	//shows the number of commits by committers in each file (changed on any branch) that was changed in the history before the branch
-	private void showResPreviousHistory(MergeFiles mergeSelected) {
+	private void showResPreviousHistory(MergeFiles mergeSelected, Boolean showScoreZ) {
 		
 		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
 
@@ -720,28 +664,74 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		//dftModel.addRow(new Object[]{"PREVIOUS HISTORY"});
 		mergeSelected.getFilesOnPreviousHistory().stream().forEach((file) -> {
 			if(file.getWhoEditTheFile().size() > 0)
-				dftModel.addRow(getValueToRow(file, committers));
+				dftModel.addRow(getValueToRow(file, committers, showScoreZ));
 
 		});
 
 		jTable4.setModel(dftModel);
 	}
 	
-	private String[] getValueToRow(EditedFile editedFile, Set<Committer> committers) {
-		String valuesVector[] = new String[committers.size() + 1];
-		valuesVector[0] = editedFile.getFileName();
+	private String[] getValueToRow(EditedFile editedFile, Set<Committer> committers, Boolean showScoreZ) {
+		
+		String fileName = editedFile.getFileName();
+		Integer[] values = new Integer[committers.size()];
 		editedFile.getWhoEditTheFile().stream().forEach((cmtrFile) -> {
-			int index = 1;
+			int index = 0;
 			for(Committer cmter : committers){
 				
 				if(cmtrFile.equals(cmter)){
-					valuesVector[index] = cmtrFile.getCommits().toString();
-				}
+					values[index] = cmtrFile.getCommits();
+				}else
+					values[index] = 0;
 				index++;
 			}
 
 		});
-		return valuesVector;
+		
+		String[] result = getArrayResult(fileName, values, showScoreZ);
+		
+		return result;
+	}
+
+	private void cleanResults() {
+		btExport.setEnabled(false);
+		btZScore.setEnabled(false);
+		jTable1.setModel(new DefaultTableModel());
+		jTable2.setModel(new DefaultTableModel());
+		jTable3.setModel(new DefaultTableModel());
+		jTable4.setModel(new DefaultTableModel());	
+	}
+
+	/**
+	 * @return the mergeFiles
+	 */
+	public MergeFiles getMergeFiles() {
+		return mergeFiles;
+	}
+
+	/**
+	 * @param mergeFiles the mergeFiles to set
+	 */
+	public void setMergeFiles(MergeFiles mergeFiles) {
+		this.mergeFiles = mergeFiles;
+	}
+
+	private String[] getArrayResult(String fileName, Integer[] values, Boolean showScoreZ) {
+		String[] result = new String[values.length + 1];
+		result[0] = fileName;
+		
+		if (showScoreZ){
+			List<Double> scores = Statistics.getMZScore(values);
+			for(int i = 0 ; i < scores.size(); i++){
+				result[i+1] = scores.get(i).toString();
+			}
+			return result;
+		}
+		
+		for(int i = 1 ; i < result.length ; i++){
+			result[i] = values[i-1].toString();
+		}
+		return result;
 	}
 
 	
