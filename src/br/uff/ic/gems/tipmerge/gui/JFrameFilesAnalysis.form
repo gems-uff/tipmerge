@@ -39,7 +39,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="btAllMerges" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                      <Component id="btExport" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jPanel1" max="32767" attributes="0"/>
               </Group>
@@ -57,7 +57,7 @@
               <Component id="jTabbedPane1" pref="157" max="32767" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btExport" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btAllMerges" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -311,12 +311,12 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="btExport">
       <Properties>
         <Property name="text" type="java.lang.String" value="Export"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btExportActionPerformed"/>
       </Events>
     </Component>
     <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">

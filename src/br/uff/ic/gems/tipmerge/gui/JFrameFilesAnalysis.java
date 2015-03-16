@@ -85,7 +85,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         radioHistorical = new javax.swing.JRadioButton();
         barRunning = new javax.swing.JProgressBar();
         btRun = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btExport = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -266,10 +266,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton2.setText("Export");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btExport.setText("Export");
+        btExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btExportActionPerformed(evt);
             }
         });
 
@@ -351,7 +351,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btAllMerges)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2))
+                        .addComponent(btExport))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addComponent(jTabbedPane1)
@@ -365,7 +365,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(btExport)
                     .addComponent(btAllMerges))
                 .addContainerGap())
         );
@@ -445,7 +445,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		showResPreviousHistory(mergeSelected);
 		showResIntersection(mCommits.getCommittersInCommon());
 
-        jButton2.setEnabled(true);
+        btExport.setEnabled(true);
     }//GEN-LAST:event_btRunActionPerformed
 
     private void jcMergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMergeActionPerformed
@@ -467,7 +467,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		hashBranch2.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + jcBranch2.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
     }//GEN-LAST:event_jcBranch2ActionPerformed
 	
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportActionPerformed
 		Map<String, TableModel> sheet = new LinkedHashMap<>();
 		sheet.put("Branch1", jTable1.getModel());
 		sheet.put("Branch2", jTable2.getModel());
@@ -477,7 +477,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		Export.toExcel(sheet);	
 		JOptionPane.showMessageDialog(this, "File was sucessfully saved", null, JOptionPane.INFORMATION_MESSAGE);
 
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btExportActionPerformed
 
     private void radioBranchesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_radioBranchesStateChanged
 		invertEnabledGroup();
@@ -564,12 +564,12 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barRunning;
     private javax.swing.JButton btAllMerges;
+    private javax.swing.JButton btExport;
     private javax.swing.JButton btRun;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel hash1;
     private javax.swing.JLabel hashBranch1;
     private javax.swing.JLabel hashBranch2;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -642,7 +642,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		jcMerge.setEnabled(!jcMerge.isEnabled());
 		jPanel2.setEnabled(!jPanel2.isEnabled());
 		jPanel3.setEnabled(!jPanel3.isEnabled());
-		jButton2.setEnabled(false);
+		btExport.setEnabled(false);
 
 	}
 	
