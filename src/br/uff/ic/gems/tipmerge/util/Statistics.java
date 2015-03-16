@@ -6,11 +6,9 @@
 package br.uff.ic.gems.tipmerge.util;
 
 import br.uff.ic.gems.tipmerge.model.Committer;
-import br.uff.ic.gems.tipmerge.model.Conciliator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -25,7 +23,7 @@ public class Statistics {
 		System.arraycopy(values, 0, valuesCopy, 0, tam);
 		Arrays.sort(valuesCopy);
 
-		if (tam % 2 == 0){
+		if (tam % 2 == 0){ 
 		   return ((double)valuesCopy[(tam / 2) - 1] + (double)valuesCopy[tam / 2]) / 2.0;
 		}  else {
 		   return (double)valuesCopy[tam / 2];
@@ -55,6 +53,17 @@ public class Statistics {
 		return getMedian(newValues);
 	}
 	
+	public static double getMAD(double[] values ){
+		double median = getMedian(values);
+		double[] newValues = new double[values.length];
+		int i =0 ;
+		for (double listValue : values){
+			newValues[i++] = Math.abs(listValue - median);
+		}
+		return getMedian(newValues);
+	}
+	
+	
 	
 	public static List<Double> getMZScore(Integer[] values){
 		
@@ -64,6 +73,21 @@ public class Statistics {
 		List<Double> zScoreValues = new ArrayList<>();
 			
 		for (Integer value : values){
+			double zScoreValue = 0.6745 * (value - median)/mad;
+			zScoreValues.add(zScoreValue);
+		}
+		
+		return zScoreValues;
+	}
+	
+	public static List<Double> getMZScore(double[] values){
+		
+		double median = getMedian(values);
+		double mad = getMAD(values);
+		
+		List<Double> zScoreValues = new ArrayList<>();
+			
+		for (double value : values){
 			double zScoreValue = 0.6745 * (value - median)/mad;
 			zScoreValues.add(zScoreValue);
 		}
