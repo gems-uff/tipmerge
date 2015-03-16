@@ -30,6 +30,8 @@ public class CommitterDao {
 	public List<Committer> getWhoEditedFile (String base, String parent, String fileName, File path){
 		String command = "git shortlog -sne " + base + ".." + parent + " -- " + fileName;
 		List<String> committerList = RunGit.getListOfResult(command, path);
+		//System.out.println("\n\t" + fileName);
+		//System.out.println(committerList);
 		return getCommittersFromString(committerList);
    }
 	
@@ -37,6 +39,7 @@ public class CommitterDao {
 	public List<Committer> getCommittersList(String mergeBase, String mergeTarget, File path){
 		List<String> committerList = 
 				RunGit.getListOfResult("git shortlog -sne " + mergeBase + ".." + mergeTarget, path);
+		//System.out.println("getCommittersList\n" + committerList.toString());
 		List<Committer> result = getCommittersFromString(committerList);
 		return result;
 	}

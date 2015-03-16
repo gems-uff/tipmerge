@@ -18,6 +18,7 @@ import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.Export;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import br.uff.ic.gems.tipmerge.util.Statistics;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -678,16 +679,14 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		editedFile.getWhoEditTheFile().stream().forEach((cmtrFile) -> {
 			int index = 0;
 			for(Committer cmter : committers){
-				
 				if(cmtrFile.equals(cmter)){
 					values[index] = cmtrFile.getCommits();
-				}else
-					values[index] = 0;
+					break;
+				}
 				index++;
 			}
 
 		});
-		
 		String[] result = getArrayResult(fileName, values, showScoreZ);
 		
 		return result;
@@ -729,7 +728,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		}
 		
 		for(int i = 1 ; i < result.length ; i++){
-			result[i] = values[i-1].toString();
+			result[i] = values[i-1] == null ? "0" : values[i-1].toString();
 		}
 		return result;
 	}
