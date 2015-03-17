@@ -451,7 +451,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 		cmterBranch1 = Statistics.getMZScoreCommitter(cmterBranch1);
 		List<Committer> cmterBranch2 = this.mergeCommits.getCommittersBranchTwo();
 		cmterBranch1 = Statistics.getMZScoreCommitter(cmterBranch2);
-		List<Committer> cmterBothBranches = this.mergeCommits.getCommittersInCommon();
+		List<Committer> cmterBothBranches = this.mergeCommits.getCommittersBothBranches();
 		cmterBothBranches = Statistics.getMZScoreCommitter(cmterBothBranches);
 		List<Committer> cmterPreviousHistory = this.mergeCommits.getCommittersPreviousHistory();
 		cmterPreviousHistory = Statistics.getMZScoreCommitter(cmterPreviousHistory);
@@ -564,7 +564,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 	private void updateTableResBothBranches(){
 		DefaultTableModel model =  new DefaultTableModel(new Object[]{"Developers","Number of Commits on Both Branches"}, 0);
 		
-		for (Committer committers : this.mergeCommits.getCommittersInCommon()){
+		for (Committer committers : this.mergeCommits.getCommittersBothBranches()){
 			model.insertRow(model.getRowCount(), new Object[] {committers.getName(), committers.getCommits()});
 		}
 		jTable3.setModel(model);

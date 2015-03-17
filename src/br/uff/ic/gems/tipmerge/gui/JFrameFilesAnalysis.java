@@ -446,7 +446,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
 		showResultsTable(this.getMergeFiles());
 		//showResultsTable(this.getMergeFiles(),true);
-		showResIntersection(mCommits.getCommittersInCommon());
+		showResIntersection(mCommits.getCommittersBothBranches());
 
         btExport.setEnabled(true);
 		btZScore.setEnabled(true);
@@ -502,7 +502,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		cleanResults();
     }//GEN-LAST:event_radioBranchesStateChanged
 
-	//It's not working yet
+	
     private void btZScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btZScoreActionPerformed
         showResultsTable(this.getMergeFiles(), true);
     }//GEN-LAST:event_btZScoreActionPerformed

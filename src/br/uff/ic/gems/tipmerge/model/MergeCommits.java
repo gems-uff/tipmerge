@@ -17,7 +17,7 @@ public class MergeCommits extends Merge{
 	
 	private List<Committer> cmterBranchOne;
 	private List<Committer> cmterBranchTwo;
-	private List<Committer> cmterCommon;
+	private List<Committer> cmterBothBranches;
 	private List<Committer> cmterPreviousHistory;
 
 	public MergeCommits(String hashOfMerge, File pathToRepository) {
@@ -67,35 +67,35 @@ public class MergeCommits extends Merge{
 	}
 
 	/**
-	 * @return the cmterCommon
+	 * @return the cmterBothBranches
 	 */
-	public List<Committer> getCommittersInCommon() {
-		if (cmterCommon == null){
+	public List<Committer> getCommittersBothBranches() {
+		if (cmterBothBranches == null){
 			this.getCommittersBranchOne().stream().forEach((cmter1) -> {
 				for(Committer cmter2 : this.getCommittersBranchTwo()){
 					if (cmter1.equals(cmter2)){
 						if (cmter1.getCommits() < cmter2.getCommits())
-							this.addCommitterCommon(cmter1);
+							this.addCommitterBothBranches(cmter1);
 						else
-							this.addCommitterCommon(cmter2);
+							this.addCommitterBothBranches(cmter2);
 					}
 				}
 			});
 		}
-		return cmterCommon;
+		return cmterBothBranches;
 	}
 
 	/**
-	 * @param cmterInCommon the cmtCommon to set
+	 * @param cmterBothBranches the cmterBothBranches
 	 */
-	public void setCommittersCommon(List<Committer> cmterInCommon) {
-		this.cmterCommon = cmterInCommon;
+	public void setCommittersBothBranches(List<Committer> cmterBothBranches) {
+		this.cmterBothBranches = cmterBothBranches;
 	}
 	
-	public void addCommitterCommon(Committer cmterInCommon){
-		if(this.cmterCommon == null)
-			this.cmterCommon = new ArrayList<>();
-		this.cmterCommon.add(cmterInCommon);
+	public void addCommitterBothBranches(Committer cmterBothBranches){
+		if(this.cmterBothBranches == null)
+			this.cmterBothBranches = new ArrayList<>();
+		this.cmterBothBranches.add(cmterBothBranches);
 	}
 
 	public List<Conciliator> getConciliators() {
