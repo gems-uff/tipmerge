@@ -719,6 +719,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		String[] result = new String[values.length + 1];
 		result[0] = fileName;
 		
+		for(int i = 1 ; i < result.length ; i++){
+			result[i] = values[i-1] == null ? (values[i-1] = 0).toString() : values[i-1].toString();
+		}
+
 		if (showScoreZ){
 			List<Double> scores = Statistics.getMZScore(values);
 			for(int i = 0 ; i < scores.size(); i++){
@@ -727,9 +731,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 			return result;
 		}
 		
-		for(int i = 1 ; i < result.length ; i++){
-			result[i] = values[i-1] == null ? "0" : values[i-1].toString();
-		}
 		return result;
 	}
 
