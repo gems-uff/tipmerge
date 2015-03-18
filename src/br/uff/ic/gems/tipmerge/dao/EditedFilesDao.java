@@ -9,7 +9,9 @@ import br.uff.ic.gems.tipmerge.model.EditedFile;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class gets list of files changed between two commits hash
@@ -19,20 +21,25 @@ public class EditedFilesDao {
     
 	//get one list of files changed between two commits hash
     public List<String> getFilesList(String base, String parent, File path){
-        String command = "git diff --name-only " + base + ".." + parent;
+       // String command = "git diff --name-only " + base + ".." + parent;
+		String command = "git show --pretty=\"format:\" --name-only " + base + ".." + parent;
+		System.out.println("testar método filesList");
         List<String> data = RunGit.getListOfResult(command, path);
         return data;
     }
-    //get one list of Editedfiles (String fileName and List<Committer>) changed between two commits hash
+    //We are using this code. This method gets one list of Editedfiles (String fileName) changed between two commits hash
     public List<EditedFile> getFiles(String base, String parent, File path){
-        List<EditedFile> list = new ArrayList<>();
-        String command = "git diff --name-only " + base + ".." + parent;
+        //String command = "git diff --name-only " + base + ".." + parent;
+		String command = "git show --pretty=\"format:\" --name-only " + base + ".." + parent;
         List<String> data = RunGit.getListOfResult(command, path);
+		Set<EditedFile> files = new HashSet<>();
         for (String file : data){
-            list.add(new EditedFile(file));
+			if (!file.equals("")){
+				files.add(new EditedFile(file));
+			}
         }
         
-        return list;
+        return new ArrayList<>(files);
     }
     
     

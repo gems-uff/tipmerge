@@ -26,19 +26,19 @@ public class CommitterDao {
 		return cmter;
 	}
 	
-    //get the committers that modified a file between two commits     
+    //get the committers that modified a file between two commitswithoud merged files   
 	public List<Committer> getWhoEditedFile (String base, String parent, String fileName, File path){
-		String command = "git shortlog -sne " + base + ".." + parent + " -- " + fileName;
+		String command = "git shortlog -sne --no-merges " + base + ".." + parent + " -- " + fileName;
 		List<String> committerList = RunGit.getListOfResult(command, path);
 		//System.out.println("\n\t" + fileName);
 		//System.out.println(committerList);
 		return getCommittersFromString(committerList);
    }
 	
-	//get the committers that committed between two commits
+	//get the committers that committed between two commits 
 	public List<Committer> getCommittersList(String mergeBase, String mergeTarget, File path){
 		List<String> committerList = 
-				RunGit.getListOfResult("git shortlog -sne " + mergeBase + ".." + mergeTarget, path);
+				RunGit.getListOfResult("git shortlog -sne --no-merges " + mergeBase + ".." + mergeTarget, path);
 		//System.out.println("getCommittersList\n" + committerList.toString());
 		List<Committer> result = getCommittersFromString(committerList);
 		return result;
