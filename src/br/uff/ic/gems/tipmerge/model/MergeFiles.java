@@ -50,7 +50,7 @@ public class MergeFiles extends Merge {
 	
 	//This method returns the name of all authors modifying any files on Previous History
 	public Set<Committer> getCommittersOnPreviousHistory() {
-		List<Committer> authors = new ArrayList<>(this.getCommittersOnMege());
+		List<Committer> authors = new ArrayList<>();
 		Set<EditedFile> files = this.getFilesOnPreviousHistory();
 				
 		for (EditedFile editedFile : files){
@@ -58,14 +58,6 @@ public class MergeFiles extends Merge {
 				Auxiliary.addOnlyNew(authors, cmterFile);
 			}
 		}
-			
-			//authors.add(committer);
-	
-	/*	Set<Committer> authors = this.getCommittersOnMege();
-		this.getFilesOnHistory().stream().forEach((file) -> {
-			authors.addAll(file.getWhoEditTheFile());
-		});
-	*/	
 		return new HashSet<>(authors);
 	}
 	
