@@ -637,13 +637,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 	private void showResIntersection(List<Committer> committers) {
 		
 		DefaultTableModel model = new DefaultTableModel( new Object[] {"Author ", "Number of Commits in Both Branches"}, 0);
-		//model.addRow(new Object[]{"BOTH BRANCHES"});
-		for (Committer cmter : committers){
-			model.insertRow(model.getRowCount(), 
-							new Object[] {cmter.getName() , cmter.getCommits()
-							}
-			);
-		}
+		if (committers != null)
+			for (Committer cmter : committers){
+				model.insertRow(model.getRowCount(), 
+								new Object[] {cmter.getName() , cmter.getCommits()
+								}
+				);
+			}
 		//return model;
 		jTable3.setModel(model);
 	}

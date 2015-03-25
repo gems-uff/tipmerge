@@ -7,15 +7,13 @@ package br.uff.ic.gems.tipmerge.gui;
 
 import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
 import br.uff.ic.gems.tipmerge.model.Committer;
-import br.uff.ic.gems.tipmerge.model.Conciliator;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.RepoCommits;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.Export;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import br.uff.ic.gems.tipmerge.util.Statistics;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +29,8 @@ import javax.swing.table.TableModel;
  */
 public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 	
-	private Repository repo;
-	private RepoCommits repoCommitts;
+	private final Repository repo;
+	private final RepoCommits repoCommitts;
 	private MergeCommits mergeCommits;
 
 	/**
@@ -563,9 +561,13 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 	
 	private void updateTableResBothBranches(){
 		DefaultTableModel model =  new DefaultTableModel(new Object[]{"Developers","Number of Commits on Both Branches"}, 0);
-		
-		for (Committer committers : this.mergeCommits.getCommittersBothBranches()){
-			model.insertRow(model.getRowCount(), new Object[] {committers.getName(), committers.getCommits()});
+
+		List<Committer> lista = this.mergeCommits.getCommittersBothBranches();
+	
+		if (this.mergeCommits.getCommittersBothBranches() != null){
+			for (Committer committers : this.mergeCommits.getCommittersBothBranches()){
+				model.insertRow(model.getRowCount(), new Object[] {committers.getName(), committers.getCommits()});
+			}
 		}
 		jTable3.setModel(model);
 	}
