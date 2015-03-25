@@ -132,4 +132,8 @@ public class MergeFiles extends Merge {
 		}
 	}	
 
+	public void setFilesOnPreviousHistory(Set<EditedFile> files) {
+		this.filesOnPreviousHistory = files;	
+	}
+
 }

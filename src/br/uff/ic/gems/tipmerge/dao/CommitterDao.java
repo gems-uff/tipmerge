@@ -11,6 +11,7 @@ import br.uff.ic.gems.tipmerge.util.Auxiliary;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,9 +30,9 @@ public class CommitterDao {
     //get the committers that modified a file between two commitswithoud merged files   
 	public List<Committer> getWhoEditedFile (String base, String parent, String fileName, File path){
 		String command = "git shortlog -sne --no-merges " + base + ".." + parent + " -- " + fileName;
+		//System.out.println(command);
+		//System.out.println(fileName);
 		List<String> committerList = RunGit.getListOfResult(command, path);
-		//System.out.println("\n\t" + fileName);
-		//System.out.println(committerList);
 		return getCommittersFromString(committerList);
    }
 	

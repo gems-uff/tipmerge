@@ -18,8 +18,11 @@ import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.Export;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import br.uff.ic.gems.tipmerge.util.Statistics;
-import java.util.Arrays;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -413,31 +416,42 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), mergeSelected.getParents()[1], mergeSelected.getPath()));
 		
 		CommitterDao cmterDao = new CommitterDao();
-		
+		List<EditedFile> files = new LinkedList<>();
 		for(EditedFile editedFile : mergeSelected.getFilesOnBranchOne()){
-			editedFile.setWhoEditTheFile(cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
+			List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
 										mergeSelected.getParents()[0], 
 										editedFile.getFileName(), 
-										mergeSelected.getPath())
-			);
-		}
-
+										mergeSelected.getPath());
+			if(whoEdited.size() > 0){
+				editedFile.setWhoEditTheFile(whoEdited);
+				files.add(editedFile);
+			}
+		}mergeSelected.setFilesOnBranchOne(files);
+		
+		files = new LinkedList<>();
 		for(EditedFile editedFile : mergeSelected.getFilesOnBranchTwo()){
-			editedFile.setWhoEditTheFile(cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
+			List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
 										mergeSelected.getParents()[1], 
 										editedFile.getFileName(), 
-										mergeSelected.getPath())
-			);
-		}
+										mergeSelected.getPath());
+			if(whoEdited.size() > 0){
+				editedFile.setWhoEditTheFile(whoEdited);
+				files.add(editedFile);
+			}
+		}mergeSelected.setFilesOnBranchTwo(files);
 		
+		files = new LinkedList<>();
 		for(EditedFile editedFile : mergeSelected.getFilesOnPreviousHistory()){
-			editedFile.setWhoEditTheFile(cmterDao.getWhoEditedFile(repoFiles.getRepository().getFirstCommit(), 
+			List<Committer> whoEdited = cmterDao.getWhoEditedFile(repoFiles.getRepository().getFirstCommit(), 
 										mergeSelected.getHashBase(), 
 										editedFile.getFileName(), 
-										mergeSelected.getPath())
-			);
-		}
-		
+										mergeSelected.getPath());
+			if(whoEdited.size() > 0){
+				editedFile.setWhoEditTheFile(whoEdited);
+				files.add(editedFile);
+			}
+		}mergeSelected.setFilesOnPreviousHistory(new HashSet<>(files));
+				
 		//prints on the command line
 		//showCommitters(mergeSelected);
 		repoFiles.getMergeFiles().add(mergeSelected);
