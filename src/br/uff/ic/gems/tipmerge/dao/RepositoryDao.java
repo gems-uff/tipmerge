@@ -52,7 +52,7 @@ public class RepositoryDao {
 		//repo.getBranches().add(0, " origin/master");
 				
 		//set the list of authors with the total of commits each author
-		repo.setAuthors(RunGit.getListOfResult("git shortlog -sne --no-merges " + repo.getFirstCommit() + ".." + lastHash, path));
+		repo.setCommittersFromString(RunGit.getListOfResult("git shortlog -sne --no-merges " + repo.getFirstCommit() + ".." + lastHash, path));
 		return repo;
 	}
 	

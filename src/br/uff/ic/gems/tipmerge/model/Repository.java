@@ -23,7 +23,6 @@ public class Repository {
 	private String firstCommit;
 	private List<String> listOfMerges;
 	private List<String> branches;	
-	private List<String> authors;
 	private List<Committer> committers;
 	
 	public Repository(File projectPath){
@@ -48,22 +47,6 @@ public class Repository {
 	 */
 	public void setCommits(Long commits) {
 		this.commits = commits;
-	}
-
-
-	/**
-	 * @return the authors
-	 */
-	public List<String> getAuthors() {
-		return authors;
-	}
-
-	/**
-	 * @param authors the authors to set
-	 */
-	public void setAuthors(List<String> authors) {
-		this.authors = authors;
-		setCommitters();
 	}
 
 	/**
@@ -145,14 +128,15 @@ public class Repository {
 	}
 	
 	//this method add committer without repetition in the main screen
-	private void setCommitters(){
-		List<Committer> allcmter = Auxiliary.getCommittersFromString(this.authors);
+	public void setCommittersFromString(List<String> authors){
+		List<Committer> allcmter = Auxiliary.getCommittersFromString(authors);
 		this.committers = new ArrayList<>();
 		
 		for (Committer cmterInMainScreen : allcmter){
 			Auxiliary.addOnlyNew(this.committers, cmterInMainScreen);
 		}
 	}
+        
 	
 	
 }
