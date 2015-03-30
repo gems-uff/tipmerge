@@ -32,8 +32,9 @@ public class RepositoryDao {
 		String[] result = RunGit.getResult("git show -s --format=%ci%x09%H", path).split("\t");
 		String data = result[0].substring(0, 19);
 		String lastHash = result[1];
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                
+                //Changing date format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm/dd/yyyy hh:mm");//yyyy-MM-dd HH:mm:ss");
 		repo.setLastCommit(LocalDateTime.parse(data, formatter));
 
 		//set the first commit information
