@@ -34,7 +34,7 @@ public class RepositoryDao {
 		String lastHash = result[1];
                 
                 //Changing date format
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm/dd/yyyy hh:mm");//yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		repo.setLastCommit(LocalDateTime.parse(data, formatter));
 
 		//set the first commit information
