@@ -9,6 +9,7 @@ import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import java.io.File;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -341,8 +342,10 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 				repository = new RepositoryDao(projetctFile.getSelectedFile()).getRepository();
 							
 				txCommits.setText(repository.getCommits().toString());
-				txLast.setText(" " + repository.getLastCommit().toLocalDate().toString() + "     "
-                                        +repository.getLastCommit().toLocalTime().toString());
+                                txLast.setText(repository.getLastCommit().format(DateTimeFormatter.ofPattern("MM/dd/yyyy \t hh:mm")));
+//				txLast.setText(" "+repository.getLastCommit().toLocalDate().toString() + 
+//                                        repository.getLastCommit().toLocalTime().toString());
+                                
 				txTotalMerges.setText(String.valueOf(repository.getListOfMerges().size()));
 				txTotalAuthors.setText(String.valueOf(repository.getCommitters().size()));
 				txTotalBranches.setText(String.valueOf(repository.getBranches().size()));
