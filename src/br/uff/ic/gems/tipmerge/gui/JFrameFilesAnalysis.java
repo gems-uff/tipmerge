@@ -394,8 +394,21 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		MergeCommitsDao mergeCommittsDao = new MergeCommitsDao(repoFiles.getRepository().getProject());
 
 		if (radioHistorical.isSelected()){
-			mergeSelected = mergeFilesDao.getMerge(jcMerge.getSelectedItem().toString(), repoFiles.getRepository().getProject());
-			mCommits = new MergeCommits(jcMerge.getSelectedItem().toString(), repoFiles.getRepository().getProject());
+                        String hash="";
+			String temp = jcMerge.getSelectedItem().toString();
+                        String temp2;
+                        boolean valid = false;
+                        for(int i=0; i< temp.length();i++){
+                            temp2 = String.valueOf(temp.charAt(i));
+                            if(valid == true) {
+                                hash = hash + temp2;
+                            } else {
+                                 if(temp2.equals(" "))
+                                     valid = true;
+                             }
+                        }
+			mergeSelected = mergeFilesDao.getMerge(hash, repoFiles.getRepository().getProject());
+			mCommits = new MergeCommits(hash, repoFiles.getRepository().getProject());
 			
 		}else{
 			mergeSelected = new MergeFiles("", repoFiles.getRepository().getProject());
