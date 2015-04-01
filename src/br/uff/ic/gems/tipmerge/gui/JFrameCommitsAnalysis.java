@@ -602,8 +602,20 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 			merge = new MergeCommits("", this.repo.getProject());
 			merge.setParents(hash1.getText(), hash2.getText());
 			merge.setHashBase(mergeDao.getMergeBase(merge.getParents()[0], merge.getParents()[1], merge.getPath()));
-		}else{
-			String hash = jComboBox1.getSelectedItem().toString();
+		}else{  
+                        String hash="";
+			String temp = jComboBox1.getSelectedItem().toString();
+                        String temp2;
+                        boolean valid = false;
+                        for(int i=0; i< temp.length();i++){
+                            temp2 = String.valueOf(temp.charAt(i));
+                            if(valid == true) {
+                                hash = hash + temp2;
+                            } else {
+                                 if(temp2.equals(" "))
+                                     valid = true;
+                             }
+                        }
 			merge = new MergeCommits(hash, this.repo.getProject());
 			mergeDao.update(merge);
 		}

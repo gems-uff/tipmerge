@@ -103,7 +103,13 @@ public class Repository {
 	 * @return the listOfMerges
 	 */
 	public List<String> getListOfMerges() {
-		return listOfMerges;
+            int i=1;
+            List<String> listOfMerges2 = new ArrayList<>();
+            for(String s:listOfMerges){
+                listOfMerges2.add(i+" "+s);
+                i++;
+            }
+		return listOfMerges2;
 	}
 
 	/**
