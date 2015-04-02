@@ -345,7 +345,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 							
 				txCommits.setText(repository.getCommits().toString());
                                 txLast.setText(repository.getLastCommit().format(
-                                        DateTimeFormatter.ofPattern("MM/dd/yyyy\thh:mm a")));
+                                        DateTimeFormatter.ofPattern("MM / dd / yyyy\thh:mm a")));
 //				txLast.setText(" "+repository.getLastCommit().toLocalDate().toString() + 
 //                                        repository.getLastCommit().toLocalTime().toString());
                                 
