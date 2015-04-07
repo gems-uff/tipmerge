@@ -397,14 +397,14 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                         String hash="";
 			String temp = jcMerge.getSelectedItem().toString();
                         String temp2;
-                        boolean valid = false;
+                        boolean valid = true;
                         for(int i=0; i< temp.length();i++){
                             temp2 = String.valueOf(temp.charAt(i));
-                            if(valid == true) {
-                                hash = hash + temp2;
+                            if(temp2.equals(" ")) {
+                                valid = false;
                             } else {
-                                 if(temp2.equals(" "))
-                                     valid = true;
+                                 if(valid == true)
+                                     hash = hash + temp2;
                              }
                         }
 			mergeSelected = mergeFilesDao.getMerge(hash, repoFiles.getRepository().getProject());

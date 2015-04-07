@@ -106,7 +106,7 @@ public class Repository {
             int i=1;
             List<String> listOfMerges2 = new ArrayList<>();
             for(String s:listOfMerges){
-                listOfMerges2.add(i+" "+s);
+                listOfMerges2.add(s+" "+"["+i+"]");
                 i++;
             }
 		return listOfMerges2;
