@@ -22,6 +22,12 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  * This class is in charge of showing all results about the commit analysis
@@ -56,6 +62,8 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jMenu1 = new javax.swing.JMenu();
+        jFrame1 = new javax.swing.JFrame();
+        jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         btRun = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -82,11 +90,44 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         btZScore = new javax.swing.JButton();
         btExport = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
 
+        jFrame1.setBounds(500, 150, 500, 500);
+        jFrame1.setResizable(false);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 702, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 322, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Commits Analysis");
+        setResizable(false);
 
         btRun.setText("Run");
         btRun.addActionListener(new java.awt.event.ActionListener() {
@@ -300,6 +341,14 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         jLabel2.setText("Loading ...");
         jLabel2.setVisible(false);
 
+        jButton1.setText("Chart");
+        jButton1.setEnabled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -308,6 +357,8 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btZScore)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btExport))
@@ -333,11 +384,12 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
                     .addComponent(btRun)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btExport)
-                    .addComponent(btZScore))
+                    .addComponent(btZScore)
+                    .addComponent(jButton1))
                 .addContainerGap())
         );
 
@@ -430,6 +482,10 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 		
     }//GEN-LAST:event_btZScoreActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        newGraphic(); 
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 	private void showZscore(DefaultTableModel model1) {
 		
 		Integer[] values = new Integer[model1.getRowCount()];
@@ -466,7 +522,9 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     private javax.swing.JComboBox cbBranchTwo;
     private javax.swing.JLabel hash1;
     private javax.swing.JLabel hash2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
@@ -475,6 +533,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane2;
@@ -574,6 +633,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 		
 		btExport.setEnabled(true);
 		btZScore.setEnabled(true);
+                jButton1.setEnabled(true);
 	}
 	
 
@@ -622,4 +682,46 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 			model.setValueAt(scores.get(j), j+1, column);
 		}
 	}
+        private CategoryDataset createBranch(){
+        DefaultCategoryDataset dataBranch1 = new DefaultCategoryDataset();
+        List<Committer> temp1 =  this.mergeCommits.getCommittersBranchOne();
+        if(jTable1.isShowing()){
+          temp1 =  this.mergeCommits.getCommittersBranchOne();
+        }
+        if(jTable2.isShowing()){
+          temp1 =  this.mergeCommits.getCommittersBranchTwo();
+        }
+        if(jTable3.isShowing()){
+          temp1 =  this.mergeCommits.getCommittersBothBranches();
+        }
+        if(jTable4.isShowing()){
+          temp1 =  this.mergeCommits.getCommittersPreviousHistory();
+        }
+        for (Committer committers : temp1){    
+        dataBranch1.addValue(committers.getCommits(),committers.getName(),"Commiters");
+        }
+        return dataBranch1;
+        }
+        public void newGraphic(){
+            jFrame1.setVisible(true);
+            CategoryDataset cdsBranch1 = createBranch();
+            String title= "";
+            if(jTable1.isShowing())
+                title="Branch 1";
+            if(jTable2.isShowing())
+                title="Branch 2";
+            if(jTable3.isShowing())
+                title="Both Branches";
+            if(jTable4.isShowing())
+                title="Previous History";
+            JFreeChart graphic = ChartFactory.createBarChart3D(title,"Nomes","Committs",cdsBranch1,PlotOrientation.VERTICAL,true,true,true);
+            ChartPanel myPanel = new ChartPanel(graphic,true);
+            myPanel.setSize(jPanel4.getWidth(),jPanel4.getHeight());
+            myPanel.setVisible(true); 
+            jPanel4.removeAll();
+            jPanel4.add(myPanel);
+            jPanel4.revalidate();
+            jPanel4.repaint();
+        }
+
 }
