@@ -10,6 +10,8 @@ import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is in charge of setting the repository information from a repository using Gits commands
@@ -45,8 +47,17 @@ public class RepositoryDao {
 		//set the merges information - only hash information
 		repo.setListOfMerges(RunGit.getListOfResult("git log --merges --pretty=%H", path));
 
+                List<String> branches = RunGit.getListOfResult("git branch -a",path);
+               
+                List<String> branchesTemp = new ArrayList<>();
+                for(String branch : branches){
+                    String hash = RunGit.getResult(
+                            "git log -n 1 --pretty=format:%H " + branch, path);
+                    if( hash != null )
+                        branchesTemp.add(branch);
+                }
 		//set the total number of branches information
-		repo.setBranches(RunGit.getListOfResult("git branch -a",path));
+		repo.setBranches(branchesTemp);
 		//repo.getBranches().remove(1);
 		//repo.getBranches().remove(0);
 		//repo.getBranches().add(0, " origin/master");
