@@ -21,6 +21,7 @@ public class MergeFiles extends Merge {
 	
 	private List<EditedFile> filesOnBranchOne;
 	private List<EditedFile> filesOnBranchTwo;
+	private Set<EditedFile> filesOnBothBranch;
 	private Set<EditedFile> filesOnPreviousHistory;
 
 	public MergeFiles(String hashOfMerge, File pathToRepository) {
@@ -127,5 +128,30 @@ public class MergeFiles extends Merge {
 	public void setFilesOnPreviousHistory(Set<EditedFile> files) {
 		this.filesOnPreviousHistory = files;	
 	}
+
+	/**
+	 * @return the filesOnBothBranch
+	 */
+	public Set<EditedFile> getFilesOnBothBranch() {
+		Set<EditedFile> files = new HashSet<>();
+		if(filesOnBothBranch == null){
+			for(EditedFile efile1 : this.getFilesOnBranchOne()){
+				for(EditedFile efile2 : this.getFilesOnBranchTwo()){
+					if(efile1.equals(efile2)) files.add(efile1);
+				}
+			}
+			filesOnBothBranch = files;
+		}
+		return filesOnBothBranch;
+	}
+
+	/**
+	 * @param filesOnBothBranch the filesOnBothBranch to set
+	 */
+	public void setFilesOnBothBranch(Set<EditedFile> filesOnBothBranch) {
+		this.filesOnBothBranch = filesOnBothBranch;
+	}
+	
+	
 
 }

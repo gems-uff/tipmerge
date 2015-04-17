@@ -389,7 +389,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		 * - by selecting one merge from the history
 		 */
 		MergeFiles mergeSelected;
-		MergeCommits mCommits;
+		//MergeCommits mCommits;
 		MergeFilesDao mergeFilesDao = new MergeFilesDao();
 		MergeCommitsDao mergeCommittsDao = new MergeCommitsDao(repoFiles.getRepository().getProject());
 
@@ -408,17 +408,17 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                              }
                         }
 			mergeSelected = mergeFilesDao.getMerge(hash, repoFiles.getRepository().getProject());
-			mCommits = new MergeCommits(hash, repoFiles.getRepository().getProject());
+			//mCommits = new MergeCommits(hash, repoFiles.getRepository().getProject());
 			
 		}else{
 			mergeSelected = new MergeFiles("", repoFiles.getRepository().getProject());
 			mergeSelected.setParents(hashBranch1.getText(), hashBranch2.getText());
 			mergeSelected.setHashBase(mergeFilesDao.getMergeBase(mergeSelected.getParents()[0], mergeSelected.getParents()[1], mergeSelected.getPath()));
 
-			mCommits = new MergeCommits("", repoFiles.getRepository().getProject());
+			//mCommits = new MergeCommits("", repoFiles.getRepository().getProject());
 		}
-		mergeCommittsDao.update(mCommits);
-		mergeCommittsDao.setCommittersOnBranch(mCommits);
+		//mergeCommittsDao.update(mCommits);
+		//mergeCommittsDao.setCommittersOnBranch(mCommits);
 		/** 
 		 * From now the merge already exists with parents and merge base, next steps are:
 		 * Set the files of that merge and committers that changed that files.
@@ -473,7 +473,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
 		showResultsTable(this.getMergeFiles());
 		//showResultsTable(this.getMergeFiles(),true);
-		showResIntersection(mCommits.getCommittersBothBranches());
+		//showResIntersection(mCommits.getCommittersBothBranches());
 
         btExport.setEnabled(true);
 		btZScore.setEnabled(true);
@@ -483,6 +483,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		//organizes the data in the table
 		showResBranch1(merge, false);
 		showResBranch2(merge, false);
+		showResIntersection(merge.getFilesOnBothBranch(), false);
 		showResPreviousHistory(merge, false);
 	}
 	
@@ -673,6 +674,26 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 			}
 		//return model;
 		jTable3.setModel(model);
+	}
+	
+	private void showResIntersection(Set<EditedFile> filesOnBothBranch, boolean showScoreZ) {
+		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
+
+		/* Set<Committer> committers = mergeSelected.getCommittersOnBranchTwo();
+		
+		//Includes columns with the names of all developers (branches 1 and 2)
+		committers.stream().forEach((committer) -> {
+			dftModel.addColumn(committer.getName());
+		});
+		
+		*/ 
+		//dftModel.addRow(new Object[]{"BRANCH TWO"});
+		filesOnBothBranch.stream().forEach((file) -> {
+			//dftModel.addRow(getValueToRow(file, null , showScoreZ));
+			dftModel.addRow(new String[]{file.getFileName(),""});
+		});
+
+		jTable3.setModel(dftModel);
 	}
 	
 	//shows the number of commits by committers in each file (changed on any branch) that was changed in the history before the branch
