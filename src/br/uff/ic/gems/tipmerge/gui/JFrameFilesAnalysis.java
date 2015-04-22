@@ -488,7 +488,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 	
 	//select and show all merges from branch 1
     private void jcBranch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch1ActionPerformed
-		hashBranch1.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + codHash(jcBranch1.getSelectedItem().toString()), repoFiles.getRepository().getProject()));
+		hashBranch1.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " +jcBranch1.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
     }//GEN-LAST:event_jcBranch1ActionPerformed
 
     private void radioHistoricalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioHistoricalActionPerformed
@@ -498,7 +498,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_radioBranchesActionPerformed
 	//select and show all merges from branch 2
     private void jcBranch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch2ActionPerformed
-		hashBranch2.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " +codHash( jcBranch2.getSelectedItem().toString()), repoFiles.getRepository().getProject()));
+		hashBranch2.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " +jcBranch2.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
     }//GEN-LAST:event_jcBranch2ActionPerformed
 	
     private void btExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportActionPerformed
