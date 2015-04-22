@@ -394,19 +394,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		MergeCommitsDao mergeCommittsDao = new MergeCommitsDao(repoFiles.getRepository().getProject());
 
 		if (radioHistorical.isSelected()){
-                        String hash="";
-			String temp = jcMerge.getSelectedItem().toString();
-                        String temp2;
-                        boolean valid = true;
-                        for(int i=0; i< temp.length();i++){
-                            temp2 = String.valueOf(temp.charAt(i));
-                            if(temp2.equals(" ")) {
-                                valid = false;
-                            } else {
-                                 if(valid == true)
-                                     hash = hash + temp2;
-                             }
-                        }
+                        String hash= codHash(jcMerge.getSelectedItem().toString());
 			mergeSelected = mergeFilesDao.getMerge(hash, repoFiles.getRepository().getProject());
 			//mCommits = new MergeCommits(hash, repoFiles.getRepository().getProject());
 			
@@ -500,7 +488,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 	
 	//select and show all merges from branch 1
     private void jcBranch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch1ActionPerformed
-		hashBranch1.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + jcBranch1.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
+		hashBranch1.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + codHash(jcBranch1.getSelectedItem().toString()), repoFiles.getRepository().getProject()));
     }//GEN-LAST:event_jcBranch1ActionPerformed
 
     private void radioHistoricalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioHistoricalActionPerformed
@@ -510,7 +498,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_radioBranchesActionPerformed
 	//select and show all merges from branch 2
     private void jcBranch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch2ActionPerformed
-		hashBranch2.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + jcBranch2.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
+		hashBranch2.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " +codHash( jcBranch2.getSelectedItem().toString()), repoFiles.getRepository().getProject()));
     }//GEN-LAST:event_jcBranch2ActionPerformed
 	
     private void btExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportActionPerformed
@@ -781,6 +769,22 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		
 		return result;
 	}
+        private String codHash(String hash){
+        String temp = hash;
+        hash = "";
+        String temp2;
+                        boolean valid = true;
+                        for(int i=0; i< temp.length();i++){
+                            temp2 = String.valueOf(temp.charAt(i));
+                            if(temp2.equals(" ")) {
+                                valid = false;
+                            } else {
+                                 if(valid == true)
+                                     hash = hash + temp2;
+                             }
+                        }
+                    return hash;    
+        }
 
 	
 }

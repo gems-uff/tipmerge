@@ -655,19 +655,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 			merge.setParents(hash1.getText(), hash2.getText());
 			merge.setHashBase(mergeDao.getMergeBase(merge.getParents()[0], merge.getParents()[1], merge.getPath()));
 		}else{  
-                        String hash="";
-			String temp = jComboBox1.getSelectedItem().toString();
-                        String temp2;
-                        boolean valid = true;
-                        for(int i=0; i< temp.length();i++){
-                            temp2 = String.valueOf(temp.charAt(i));
-                            if(temp2.equals(" ")) {
-                                valid= false;
-                            } else {
-                                 if(valid == true)
-                                     hash = hash + temp2;
-                             }
-                        }
+                        String hash= codHash(jComboBox1.getSelectedItem().toString());
 			merge = new MergeCommits(hash, this.repo.getProject());
 			mergeDao.update(merge);
 		}
@@ -723,5 +711,20 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
             jPanel4.revalidate();
             jPanel4.repaint();
         }
-
+         private String codHash(String hash){
+        String temp = hash;
+        hash = "";
+        String temp2;
+                        boolean valid = true;
+                        for(int i=0; i< temp.length();i++){
+                            temp2 = String.valueOf(temp.charAt(i));
+                            if(temp2.equals(" ")) {
+                                valid = false;
+                            } else {
+                                 if(valid == true)
+                                     hash = hash + temp2;
+                             }
+                        }
+                    return hash;    
+        }
 }
