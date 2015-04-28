@@ -65,13 +65,14 @@ public class MergeCommitsDao {
 		);
 	}
 	
-	
-	
 	// get the commit base from two commits
 	// @param parent1 (hash of some commit on branch), parent2 (hash of some commit of another branch)
 	public String getMergeBase(String parent1, String parent2, File path){
 		 return RunGit.getResult("git merge-base " + parent1 + " " + parent2, path);
 	}
-
 	
+	public List<String> getHashs(String hashBegin, String hashEnd){
+		return RunGit.getListOfResult("git log --pretty=%H --no-merges " + hashBegin + ".." + hashEnd, this.path);
+	}
+
 }

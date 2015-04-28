@@ -11,13 +11,12 @@ import br.uff.ic.gems.tipmerge.util.Auxiliary;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * This class is in charge of getting the Committers information from a repository using Gits commands
  * @author j2cf, Catarina
- */
+ */	
 public class CommitterDao {
 
 	//get the committers name and committers e-mail information	from commits
@@ -30,8 +29,6 @@ public class CommitterDao {
     //get the committers that modified a file between two commitswithoud merged files   
 	public List<Committer> getWhoEditedFile (String base, String parent, String fileName, File path){
 		String command = "git shortlog -sne --no-merges " + base + ".." + parent + " -- " + fileName;
-		//System.out.println(command);
-		//System.out.println(fileName);
 		List<String> committerList = RunGit.getListOfResult(command, path);
 		return getCommittersFromString(committerList);
    }
@@ -40,7 +37,6 @@ public class CommitterDao {
 	public List<Committer> getCommittersList(String mergeBase, String mergeTarget, File path){
 		List<String> committerList = 
 				RunGit.getListOfResult("git shortlog -sne --no-merges " + mergeBase + ".." + mergeTarget, path);
-		//System.out.println("getCommittersList\n" + committerList.toString());
 		List<Committer> result = getCommittersFromString(committerList);
 		return result;
 	}
