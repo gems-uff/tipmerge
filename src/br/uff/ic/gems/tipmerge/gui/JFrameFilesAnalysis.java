@@ -70,8 +70,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 	 */
 	@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         hash1 = new javax.swing.JLabel();
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -115,10 +114,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         hashBranch1.setText("<hash>");
 
         jcBranch1.setEnabled(false);
-        jcBranch1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jcBranch1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcBranch1ActionPerformed(evt);
             }
         });
@@ -128,10 +125,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jLabel8.setText("Branch two's hash: ");
 
         jcBranch2.setEnabled(false);
-        jcBranch2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jcBranch2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcBranch2ActionPerformed(evt);
             }
         });
@@ -140,17 +135,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         buttonGroup1.add(radioBranches);
         radioBranches.setText("Select Branches to Merge");
-        radioBranches.addChangeListener(new javax.swing.event.ChangeListener()
-        {
-            public void stateChanged(javax.swing.event.ChangeEvent evt)
-            {
+        radioBranches.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 radioBranchesStateChanged(evt);
             }
         });
-        radioBranches.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        radioBranches.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 radioBranchesActionPerformed(evt);
             }
         });
@@ -201,10 +192,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         jLabel3.setText("Select Merge");
 
-        jcMerge.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jcMerge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcMergeActionPerformed(evt);
             }
         });
@@ -212,10 +201,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         buttonGroup1.add(radioHistorical);
         radioHistorical.setSelected(true);
         radioHistorical.setText("Select Previous Merges");
-        radioHistorical.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        radioHistorical.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 radioHistoricalActionPerformed(evt);
             }
         });
@@ -251,17 +238,15 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         barRunning.setStringPainted(true);
 
         btRun.setText("Run");
-        btRun.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btRun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btRunActionPerformed(evt);
             }
         });
 
         jLSelecByExt.setText("Select by ");
 
-        jCSelecFileExt.setModel(new javax.swing.DefaultComboBoxModel(new String[] { ".java", ".c", ".html", ".py", ".php", ".xml", " " }));
+        jCSelecFileExt.setModel(new javax.swing.DefaultComboBoxModel(new String[] { ".java", ".c", ".html", ".py", ".php", ".xml", "All Files" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -299,24 +284,20 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         btExport.setText("Export");
         btExport.setEnabled(false);
-        btExport.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btExportActionPerformed(evt);
             }
         });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
                 {},
                 {},
                 {},
                 {}
             },
-            new String []
-            {
+            new String [] {
 
             }
         ));
@@ -325,15 +306,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jTabbedPane1.addTab("Branch1", jScrollPane5);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
                 {},
                 {},
                 {},
                 {}
             },
-            new String []
-            {
+            new String [] {
 
             }
         ));
@@ -342,15 +321,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jTabbedPane1.addTab("Branch2", jScrollPane6);
 
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
                 {},
                 {},
                 {},
                 {}
             },
-            new String []
-            {
+            new String [] {
 
             }
         ));
@@ -359,15 +336,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jTabbedPane1.addTab("Both Branches", jScrollPane7);
 
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
                 {},
                 {},
                 {},
                 {}
             },
-            new String []
-            {
+            new String [] {
 
             }
         ));
@@ -377,10 +352,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         btZScore.setText("(M) Z-score");
         btZScore.setEnabled(false);
-        btZScore.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btZScore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btZScoreActionPerformed(evt);
             }
         });

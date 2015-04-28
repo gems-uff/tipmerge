@@ -331,7 +331,7 @@
                 <StringItem index="3" value=".py"/>
                 <StringItem index="4" value=".php"/>
                 <StringItem index="5" value=".xml"/>
-                <StringItem index="6" value=" "/>
+                <StringItem index="6" value="All Files"/>
               </StringArray>
             </Property>
           </Properties>

@@ -36,7 +36,7 @@ public class EditedFilesDao {
         //System.out.println(data.size());
         Set<EditedFile> files = new HashSet<>();
         for (String file : data){
-            if (!file.equals("") && file.endsWith(extension)){
+            if (!file.equals("") && (file.endsWith(extension)) || (extension.equals("All Files"))){
                 files.add(new EditedFile(file));
             }
         }
