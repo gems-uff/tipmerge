@@ -18,30 +18,30 @@ import java.util.Set;
  * @author j2cf, Catarina
  */
 public class EditedFilesDao {
-    
-	//get one list of files changed between two commits hash
+
+        //get one list of files changed between two commits hash
     public List<String> getFilesList(String base, String parent, File path){
        // String command = "git diff --name-only " + base + ".." + parent;
-		String command = "git show --pretty=format: --name-only --no-merges " + base + ".." + parent;
-		//System.out.println("testar método filesList");
+                String command = "git show --pretty=format: --name-only --no-merges " + base + ".." + parent;
+                //System.out.println("testar método filesList");
         List<String> data = RunGit.getListOfResult(command, path);
         return data;
     }
     //We are using this code. This method gets one list of Editedfiles (String fileName) changed between two commits hash
-    public List<EditedFile> getFiles(String base, String parent, File path){
-        //String command = "git diff --name-only " + base + ".." + parent;
-		String command = "git show --pretty=format: --name-only --no-merges " + base + ".." + parent;
-		System.out.println(command);
+    public List<EditedFile> getFiles(String base, String parent, File path, String extension){
+//String command = "git diff --name-only " + base + ".." + parent;
+        String command = "git show --pretty=format: --name-only --no-merges " + base + ".." + parent;
+        System.out.println(command);
         List<String> data = RunGit.getListOfResult(command, path);
-		//System.out.println(data.size());
-		Set<EditedFile> files = new HashSet<>();
+        //System.out.println(data.size());
+        Set<EditedFile> files = new HashSet<>();
         for (String file : data){
-			if (!file.equals("")){
-				files.add(new EditedFile(file));
-			}
+            if (!file.equals("") && file.endsWith(extension)){
+                files.add(new EditedFile(file));
+            }
         }
-        
+
         return new ArrayList<>(files);
     }
-    
+
 }
