@@ -43,6 +43,7 @@ public class MergeCommitsDao {
 		String hashParents = RunGit.getResult("git log --pretty=%P -n 1 " + merge.getHash(), this.path);
 		merge.setHashBase(RunGit.getResult("git merge-base " + hashParents.split(" ")[0] + " " + hashParents.split(" ")[1], this.path));
 		merge.setParents(hashParents.split(" ")[0],hashParents.split(" ")[1]);
+		this.getHashs(hashParents.split(" ")[0], hashParents.split(" ")[1]);
 
 		//updateCommitters(merge);
 	}
@@ -68,11 +69,18 @@ public class MergeCommitsDao {
 	// get the commit base from two commits
 	// @param parent1 (hash of some commit on branch), parent2 (hash of some commit of another branch)
 	public String getMergeBase(String parent1, String parent2, File path){
-		 return RunGit.getResult("git merge-base " + parent1 + " " + parent2, path);
+		return RunGit.getResult("git merge-base " + parent1 + " " + parent2, path);
 	}
 	
 	public List<String> getHashs(String hashBegin, String hashEnd){
-		return RunGit.getListOfResult("git log --pretty=%H --no-merges " + hashBegin + ".." + hashEnd, this.path);
+		String command = "git log --format='commit%x09%H%x09%at%x09----sp' --no-merges " + hashBegin + ".." + hashEnd;
+		List<String> temp = RunGit.getListOfResult(command, this.path);
+		List<String> finalList = new ArrayList<>();
+		for(String tmp : temp){
+			finalList.add(tmp.replace("\t", " "));
+		}
+		System.out.println("Dados\n" + finalList.toString());
+		return RunGit.getListOfResult(command, this.path);
 	}
 
 }

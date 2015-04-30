@@ -10,9 +10,7 @@ import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import java.io.File;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Arrays;
-import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -70,8 +68,11 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        menuCommits = new javax.swing.JMenuItem();
-        menuFiles = new javax.swing.JMenuItem();
+        menuCommit = new javax.swing.JMenuItem();
+        menuDependence = new javax.swing.JMenuItem();
+        menuFile = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        menuAssign = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
 
@@ -268,29 +269,51 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         jMenu2.setText("Analyze");
 
-        menuCommits.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
-        menuCommits.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/commits.png"))); // NOI18N
-        menuCommits.setText("Commits");
-        menuCommits.setEnabled(false);
-        menuCommits.addActionListener(new java.awt.event.ActionListener() {
+        menuCommit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
+        menuCommit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/commits.png"))); // NOI18N
+        menuCommit.setText("Commits");
+        menuCommit.setEnabled(false);
+        menuCommit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuCommitsActionPerformed(evt);
+                menuCommitActionPerformed(evt);
             }
         });
-        jMenu2.add(menuCommits);
+        jMenu2.add(menuCommit);
 
-        menuFiles.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
-        menuFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/search99.png"))); // NOI18N
-        menuFiles.setText("Files");
-        menuFiles.setEnabled(false);
-        menuFiles.addActionListener(new java.awt.event.ActionListener() {
+        menuDependence.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.SHIFT_MASK));
+        menuDependence.setText("Dependence");
+        menuDependence.setEnabled(false);
+        menuDependence.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuFilesActionPerformed(evt);
+                menuDependenceActionPerformed(evt);
             }
         });
-        jMenu2.add(menuFiles);
+        jMenu2.add(menuDependence);
+
+        menuFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
+        menuFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/search99.png"))); // NOI18N
+        menuFile.setText("Files");
+        menuFile.setEnabled(false);
+        menuFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuFileActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuFile);
 
         jMenuBar1.add(jMenu2);
+
+        jMenu4.setText("Assign");
+
+        menuAssign.setText("Assign List");
+        menuAssign.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAssignActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menuAssign);
+
+        jMenuBar1.add(jMenu4);
 
         jMenu3.setText("Help");
 
@@ -353,8 +376,9 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 				txTotalAuthors.setText(String.valueOf(repository.getCommitters().size()));
 				txTotalBranches.setText(String.valueOf(repository.getBranches().size()));
 				btShow.setEnabled(true);
-				menuCommits.setEnabled(true);
-				menuFiles.setEnabled(true);
+				menuCommit.setEnabled(true);
+				menuFile.setEnabled(true);
+				menuDependence.setEnabled(true);
 				clearAllFields();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, 
@@ -397,17 +421,29 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btShowActionPerformed
 	//Directs for the commits analysis
-    private void menuCommitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCommitsActionPerformed
+    private void menuCommitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCommitActionPerformed
         JFrameCommitsAnalysis commits = new JFrameCommitsAnalysis(this.repository);
 		commits.setLocationRelativeTo(this.getFocusOwner());
 		commits.setVisible(true);
-    }//GEN-LAST:event_menuCommitsActionPerformed
+    }//GEN-LAST:event_menuCommitActionPerformed
 	//Directs for the files analysis
-    private void menuFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFilesActionPerformed
+    private void menuFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFileActionPerformed
         JFrameFilesAnalysis files = new JFrameFilesAnalysis(repository);
 		files.setLocationRelativeTo(this.getFocusOwner());
 		files.setVisible(true);
-    }//GEN-LAST:event_menuFilesActionPerformed
+    }//GEN-LAST:event_menuFileActionPerformed
+
+    private void menuDependenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDependenceActionPerformed
+        JFrameDependence filesDependence = new JFrameDependence(repository);
+		filesDependence.setLocationRelativeTo(this.getFocusOwner());
+		filesDependence.setVisible(true);
+    }//GEN-LAST:event_menuDependenceActionPerformed
+
+    private void menuAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAssignActionPerformed
+        JFrameAssignMerge jfAssignMerge = new JFrameAssignMerge(repository);
+		jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
+		jfAssignMerge.setVisible(true);
+    }//GEN-LAST:event_menuAssignActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -424,6 +460,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem4;
@@ -435,8 +472,10 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     private javax.swing.JTree jTree1;
     private javax.swing.JTextField jtPathToProjects;
     private javax.swing.JTextField jtProjectName;
-    private javax.swing.JMenuItem menuCommits;
-    private javax.swing.JMenuItem menuFiles;
+    private javax.swing.JMenuItem menuAssign;
+    private javax.swing.JMenuItem menuCommit;
+    private javax.swing.JMenuItem menuDependence;
+    private javax.swing.JMenuItem menuFile;
     private javax.swing.JTextField txCommits;
     private javax.swing.JTextField txLast;
     private javax.swing.JTextArea txResult;
