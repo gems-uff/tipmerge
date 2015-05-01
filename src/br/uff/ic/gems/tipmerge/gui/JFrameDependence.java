@@ -5,11 +5,14 @@
  */
 package br.uff.ic.gems.tipmerge.gui;
 
+import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import dao.DominoesSQLDao;
+import dao.DominoesSQLDao2;
 import domain.Dominoes;
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -50,7 +53,7 @@ public class JFrameDependence extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -127,15 +130,33 @@ public class JFrameDependence extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+		
+		MergeCommitsDao mCommitsDao = new MergeCommitsDao(repo.getProject());
+		List<String> branchOne = mCommitsDao.getHashs("d5ad745f4ee7adcd2e484f18f25c48a650532644", "d2caede35b6687082ce7339bac10549dd1804f01");
+		
+		String sql = "SELECT TU.name, TC.HashCode FROM TUser TU, TCOMMIT TC, TREPOSITORY TR " +
+				"WHERE TC.userID = TU.id AND TC.RepoId = TR.id AND TR.name = '" + repo.getName() + "' ";
+		
+		sql = sql.concat("AND Hash IN ("
+				+  Arrays.toString(branchOne.toArray())
+				+ ") ");
+
+		sql = sql.concat("ORDER BY TC.Date, TU.name;");
+		
+		//System.out.println(sql);
+		
 		try {
 			
-			List<Dominoes> dominoes = DominoesSQLDao.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", new Date(2015, 01, 01), new Date(2015,03,31));
-			
+			//List<Dominoes> dominoes = DominoesSQLDao.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", 
+																		//new Date(2014, 01, 01), new Date(2014,12,31));
+			List<Dominoes> dominoes = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", branchOne);
+
 		} catch (SQLException ex) {
 			Logger.getLogger(JFrameDependence.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (Exception ex) {
 			Logger.getLogger(JFrameDependence.class.getName()).log(Level.SEVERE, null, ex);
 		}
+		
     }//GEN-LAST:event_jButton1ActionPerformed
 
 	/**
