@@ -6,17 +6,18 @@
 package br.uff.ic.gems.tipmerge.gui;
 
 import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
+import br.uff.ic.gems.tipmerge.model.Merge;
+import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.Repository;
-import dao.DominoesSQLDao;
 import dao.DominoesSQLDao2;
 import domain.Dominoes;
 import java.io.File;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
 
 /**
  *
@@ -35,7 +36,9 @@ public class JFrameDependence extends javax.swing.JFrame {
 	public JFrameDependence(Repository repository) {
 		initComponents();
 		repo = repository;
-		this.jTextField1.setText(repo.getName());
+		this.jTextField1.setText(repo.getName());	
+		mergesList.setModel(new JComboBox(repo.getListOfMerges().toArray()).getModel());
+
 	}
 	
 	/**
@@ -51,6 +54,8 @@ public class JFrameDependence extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        mergesList = new javax.swing.JComboBox();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -66,6 +71,14 @@ public class JFrameDependence extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Select Merge");
+
+        mergesList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mergesListActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -78,7 +91,10 @@ public class JFrameDependence extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(mergesList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
                 .addContainerGap())
         );
@@ -90,7 +106,11 @@ public class JFrameDependence extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(mergesList, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -132,24 +152,27 @@ public class JFrameDependence extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 		
 		MergeCommitsDao mCommitsDao = new MergeCommitsDao(repo.getProject());
-		List<String> branchOne = mCommitsDao.getHashs("d5ad745f4ee7adcd2e484f18f25c48a650532644", "d2caede35b6687082ce7339bac10549dd1804f01");
-		
-		String sql = "SELECT TU.name, TC.HashCode FROM TUser TU, TCOMMIT TC, TREPOSITORY TR " +
-				"WHERE TC.userID = TU.id AND TC.RepoId = TR.id AND TR.name = '" + repo.getName() + "' ";
-		
-		sql = sql.concat("AND Hash IN ("
-				+  Arrays.toString(branchOne.toArray())
-				+ ") ");
+		MergeCommits merge = new MergeCommits(mergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
+		mCommitsDao.update(merge);
 
-		sql = sql.concat("ORDER BY TC.Date, TU.name;");
+		//Branch One
+		List<String> branchOne = mCommitsDao.getHashs(merge.getHashBase(), merge.getParents()[0]);
 		
-		//System.out.println(sql);
+		//branch Two
+		List<String> branchTwo = mCommitsDao.getHashs(merge.getHashBase(), merge.getParents()[1]);
+		
+		//Previous History
+		List<String> previousHistory = mCommitsDao.getHashs(repo.getFirstCommit() , merge.getHashBase());
 		
 		try {
-			
-			//List<Dominoes> dominoes = DominoesSQLDao.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", 
-																		//new Date(2014, 01, 01), new Date(2014,12,31));
-			List<Dominoes> dominoes = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", branchOne);
+			System.out.println("\nCriando os dominoes do branch One");
+			List<Dominoes> dominoesBranchOne = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", branchOne);
+
+			System.out.println("\nCriando os dominoes do branch Two");
+			List<Dominoes> dominoesBranchTwo = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", branchTwo);
+
+			System.out.println("\nCriando os dominoes do History");
+			List<Dominoes> dominoesPreviousHistory = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", previousHistory);
 
 		} catch (SQLException ex) {
 			Logger.getLogger(JFrameDependence.class.getName()).log(Level.SEVERE, null, ex);
@@ -158,6 +181,10 @@ public class JFrameDependence extends javax.swing.JFrame {
 		}
 		
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void mergesListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergesListActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mergesListActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -197,8 +224,10 @@ public class JFrameDependence extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JComboBox mergesList;
     // End of variables declaration//GEN-END:variables
 }
