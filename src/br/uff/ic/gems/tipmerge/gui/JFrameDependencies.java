@@ -23,17 +23,17 @@ import javax.swing.JComboBox;
  *
  * @author j2cf
  */
-public class JFrameDependence extends javax.swing.JFrame {
+public class JFrameDependencies extends javax.swing.JFrame {
 
 	public static Repository repo;
 	public static String databaseName = "data/gitdataminer.sqlite";
 	/*	/Users/j2cf/Apps/ws_nb/tipmerge/data  */
 	
 	/**
-	 * Creates new form JFrameDependence
+	 * Creates new form JFrameDependencies
 	 * @param repository
 	 */
-	public JFrameDependence(Repository repository) {
+	public JFrameDependencies(Repository repository) {
 		initComponents();
 		repo = repository;
 		this.jTextField1.setText(repo.getName());	
@@ -59,6 +59,7 @@ public class JFrameDependence extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Dependencies Analysis");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -165,19 +166,19 @@ public class JFrameDependence extends javax.swing.JFrame {
 		List<String> previousHistory = mCommitsDao.getHashs(repo.getFirstCommit() , merge.getHashBase());
 		
 		try {
-			System.out.println("\nCriando os dominoes do branch One");
+			System.out.println("\nCreating the dominoes of Branch One");
 			List<Dominoes> dominoesBranchOne = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", branchOne);
 
-			System.out.println("\nCriando os dominoes do branch Two");
+			System.out.println("\nCreating the dominoes of branch Two");
 			List<Dominoes> dominoesBranchTwo = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", branchTwo);
 
-			System.out.println("\nCriando os dominoes do History");
+			System.out.println("\nCreating the dominoes of History");
 			List<Dominoes> dominoesPreviousHistory = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", previousHistory);
 
 		} catch (SQLException ex) {
-			Logger.getLogger(JFrameDependence.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (Exception ex) {
-			Logger.getLogger(JFrameDependence.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -203,20 +204,21 @@ public class JFrameDependence extends javax.swing.JFrame {
 				}
 			}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(JFrameDependence.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(JFrameDependencies.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(JFrameDependence.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(JFrameDependencies.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(JFrameDependence.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(JFrameDependencies.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(JFrameDependence.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(JFrameDependencies.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
+        //</editor-fold>
         //</editor-fold>
 
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new JFrameDependence(new Repository(new File("/Users/j2cf/Apps/clones/voldemort"))).setVisible(true);
+				new JFrameDependencies(new Repository(new File("/Users/j2cf/Apps/clones/voldemort"))).setVisible(true);
 			}
 		});
 	}

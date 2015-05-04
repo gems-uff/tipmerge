@@ -77,7 +77,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Assign Merges on Git");
+        setTitle("TIPMerge - Tool to assIgn develoPers to Merge on Git");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(500, 500));
 
@@ -110,7 +110,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         txTotalMerges.setEditable(false);
 
-        btShow.setText("Show Basic Datas");
+        btShow.setText("Show Basic Data");
         btShow.setEnabled(false);
         btShow.setMaximumSize(new java.awt.Dimension(140, 29));
         btShow.setMinimumSize(new java.awt.Dimension(140, 29));
@@ -281,7 +281,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         jMenu2.add(menuCommit);
 
         menuDependence.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.SHIFT_MASK));
-        menuDependence.setText("Dependence");
+        menuDependence.setText("Dependencies");
         menuDependence.setEnabled(false);
         menuDependence.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,7 +305,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         jMenu4.setText("Assign");
 
-        menuAssign.setText("Assign List");
+        menuAssign.setText("Ranking");
         menuAssign.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuAssignActionPerformed(evt);
@@ -434,7 +434,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_menuFileActionPerformed
 
     private void menuDependenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDependenceActionPerformed
-        JFrameDependence filesDependence = new JFrameDependence(repository);
+        JFrameDependencies filesDependence = new JFrameDependencies(repository);
 		filesDependence.setLocationRelativeTo(this.getFocusOwner());
 		filesDependence.setVisible(true);
     }//GEN-LAST:event_menuDependenceActionPerformed

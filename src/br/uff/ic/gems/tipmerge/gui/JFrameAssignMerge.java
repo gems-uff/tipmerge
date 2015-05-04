@@ -40,6 +40,7 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
         jPanelBody = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Developer Assignments");
 
         jPanelTop.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
