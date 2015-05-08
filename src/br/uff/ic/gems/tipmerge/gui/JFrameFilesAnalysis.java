@@ -11,8 +11,10 @@ import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
 import br.uff.ic.gems.tipmerge.dao.MergeFilesDao;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
+import br.uff.ic.gems.tipmerge.model.Medalist;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
+import br.uff.ic.gems.tipmerge.model.RankingGenerator;
 import br.uff.ic.gems.tipmerge.model.RepoFiles;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.Export;
@@ -102,6 +104,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jScrollPane8 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
         btZScore = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         hash1.setText("<hash>");
 
@@ -358,6 +361,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Count Medals");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -367,6 +377,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btZScore)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btExport))
@@ -384,7 +396,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btExport)
-                    .addComponent(btZScore))
+                    .addComponent(btZScore)
+                    .addComponent(jButton1))
                 .addContainerGap())
         );
 
@@ -541,6 +554,14 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         showResultsTable(this.getMergeFiles(), true);
     }//GEN-LAST:event_btZScoreActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+		List<Medalist> ranking = RankingGenerator.getMedalists(this.getMergeFiles());
+		for(Medalist m : ranking){
+			System.out.println(m);
+		}
+		
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barRunning;
     private javax.swing.JButton btExport;
@@ -550,6 +571,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JLabel hash1;
     private javax.swing.JLabel hashBranch1;
     private javax.swing.JLabel hashBranch2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jCSelecFileExt;
     private javax.swing.JLabel jLSelecByExt;
     private javax.swing.JLabel jLabel3;
