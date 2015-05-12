@@ -10,7 +10,9 @@ import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import java.io.File;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Arrays;
+import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -368,9 +370,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 							
 				txCommits.setText(repository.getCommits().toString());
                                 txLast.setText(repository.getLastCommit().format(
-                                        DateTimeFormatter.ofPattern("MM / dd / yyyy\thh:mm a")));
-//				txLast.setText(" "+repository.getLastCommit().toLocalDate().toString() + 
-//                                        repository.getLastCommit().toLocalTime().toString());
+                                    DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.US)));
                                 
 				txTotalMerges.setText(String.valueOf(repository.getListOfMerges().size()));
 				txTotalAuthors.setText(String.valueOf(repository.getCommitters().size()));
