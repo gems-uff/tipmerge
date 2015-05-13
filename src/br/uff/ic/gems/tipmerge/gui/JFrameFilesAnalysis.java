@@ -31,8 +31,15 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  * This class is in charge of showing all results about the files analysis
@@ -76,6 +83,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         hash1 = new javax.swing.JLabel();
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jFrame1 = new javax.swing.JFrame();
+        jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         hashBranch1 = new javax.swing.JLabel();
@@ -105,8 +114,40 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jTable4 = new javax.swing.JTable();
         btZScore = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        btnChart2 = new javax.swing.JButton();
+        btnChart1 = new javax.swing.JButton();
 
         hash1.setText("<hash>");
+
+        jFrame1.setBounds(500, 150, 500, 500);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 380, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 278, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Files Analysis");
@@ -368,6 +409,22 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         });
 
+        btnChart2.setText("Chart2");
+        btnChart2.setEnabled(false);
+        btnChart2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChart2ActionPerformed(evt);
+            }
+        });
+
+        btnChart1.setText("Chart1");
+        btnChart1.setEnabled(false);
+        btnChart1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChart1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -377,6 +434,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnChart1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnChart2)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btZScore)
@@ -397,7 +458,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btExport)
                     .addComponent(btZScore)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(btnChart2)
+                    .addComponent(btnChart1))
                 .addContainerGap())
         );
 
@@ -496,6 +559,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         btExport.setEnabled(true);
 		btZScore.setEnabled(true);
+                btnChart1.setEnabled(true);
+                btnChart2.setEnabled(true);
     }//GEN-LAST:event_btRunActionPerformed
 
 	public void showResultsTable(MergeFiles merge) {
@@ -562,17 +627,30 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnChart1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChart1ActionPerformed
+        // Botão do Chart 1:
+        newGraphic(this.getMergeFiles(),1);
+    }//GEN-LAST:event_btnChart1ActionPerformed
+
+    private void btnChart2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChart2ActionPerformed
+        //Botão do Chart 2:
+        newGraphic(this.getMergeFiles(),2);
+    }//GEN-LAST:event_btnChart2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barRunning;
     private javax.swing.JButton btExport;
     private javax.swing.JButton btRun;
     private javax.swing.JButton btZScore;
+    private javax.swing.JButton btnChart1;
+    private javax.swing.JButton btnChart2;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel hash1;
     private javax.swing.JLabel hashBranch1;
     private javax.swing.JLabel hashBranch2;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jCSelecFileExt;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLSelecByExt;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
@@ -580,6 +658,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
@@ -827,6 +906,91 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                         }
                     return hash;    
         }
-
+     private CategoryDataset createBranch(MergeFiles merge, int botao){
+            DefaultCategoryDataset dataBranch1 = new DefaultCategoryDataset();
+                JTable tabela = new JTable();   
+                tabela = jTable4;
+            List<EditedFile> temp1 = mergeFiles.getFilesOnBranchOne();
+          if(jTable1.isShowing()||jTable2.isShowing()){
+                if(jTable1.isShowing()){
+                   temp1 =  merge.getFilesOnBranchOne();}
+                  else{if(jTable2.isShowing())
+                       temp1= merge.getFilesOnBranchTwo();
+                    }
+                   if(botao==1){
+                    for (EditedFile file : temp1){    
+                         for(Committer comitter: file.getWhoEditTheFile()){
+                             if(comitter.getCommits()!=0)
+                             dataBranch1.addValue(comitter.getCommits(),file.getFileName(),comitter.getName());
+                        }
+                    }
+                  }
+                  if(botao==2){
+                       for(int k=0;k<jTable3.getRowCount();k++){
+                     for (EditedFile file : temp1){    
+                         for(Committer comitter: file.getWhoEditTheFile()){
+                             if(file.getFileName().equals(jTable3.getValueAt(k,0)))
+                              if(comitter.getCommits()!=0)
+                             dataBranch1.addValue(comitter.getCommits(),file.getFileName(),comitter.getName());
+                        }
+                    }}}
+                   
+                   }
+        if(jTable4.isShowing()){
+         if(botao==1){
+            double cont = 0;
+            for(int i=1; i<jTable4.getColumnCount();i++){
+               for(int j=0;j<jTable4.getRowCount();j++){
+                     if(Integer.parseInt((String) jTable4.getValueAt(j, i))==0){
+                         
+                     } else {
+                         cont++;
+                     }
+                }
+               dataBranch1.addValue(cont,tabela.getColumnName(i),"Nomes");
+               cont = 0;
+            }
+        }else{  double num;
+             for(int i=1; i<jTable3.getRowCount();i++){
+               for(int j=0;j<jTable4.getRowCount();j++){
+                  if(jTable4.getValueAt(j,0).equals(jTable3.getValueAt(i,0))){
+                        for(int k=1; k<jTable4.getColumnCount();k++){
+                            num = Integer.parseInt((String) jTable4.getValueAt(j,k));
+                            if(num!=0)
+                           dataBranch1.addValue(num,jTable4.getColumnName(k), (Comparable) jTable4.getValueAt(j,0));
+                        }
+                   }
+               }
+             }
+         
+         }
+        
+        }
+        return dataBranch1;
+        }
+       
+        public void newGraphic(MergeFiles merge,int botao){
+            jFrame1.setVisible(true);
+            CategoryDataset cdsBranch1 = createBranch(merge,botao);
+            String title= "";
+            if(jTable1.isShowing())
+                title="Branch 1";
+            if(jTable2.isShowing())
+                title="Branch 2";
+            if(jTable3.isShowing())
+                title="Both Branches";
+            if(jTable4.isShowing())
+                title="Previous History";
+            JFreeChart graphic = ChartFactory.createBarChart3D(title,"Nomes","Modified Files",cdsBranch1,PlotOrientation.VERTICAL,true,true,true);
+            ChartPanel myPanel = new ChartPanel(graphic,true);
+            myPanel.setSize(jPanel4.getWidth(),jPanel4.getHeight());
+            myPanel.setVisible(true); 
+            jPanel4.removeAll();
+            jPanel4.add(myPanel);
+            jPanel4.revalidate();
+            jPanel4.repaint();
+        }
 	
+
+
 }
