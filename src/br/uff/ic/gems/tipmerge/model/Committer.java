@@ -87,11 +87,7 @@ public class Committer implements Comparable<Committer>{
 			return false;
 		}
 		final Committer other = (Committer) obj;
-/*		if(this.email.contains("danielprett@gmail.com")){
-			System.out.print(this.getEmail() + " -> " + ((Committer) obj).getEmail() + " :");
-			System.out.println((Objects.equals(this.name, other.name) || (Objects.equals(this.email, other.email))));
-		}
-*/		return (Objects.equals(this.name, other.name) || (Objects.equals(this.email, other.email)));
+		return (Objects.equals(this.name, other.name) || (Objects.equals(this.email, other.email)));
 	}
 
 	/**

@@ -479,22 +479,18 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		MergeFiles mergeSelected;
 		//MergeCommits mCommits;
 		MergeFilesDao mergeFilesDao = new MergeFilesDao();
-		MergeCommitsDao mergeCommittsDao = new MergeCommitsDao(repoFiles.getRepository().getProject());
 
 		if (radioHistorical.isSelected()){
                         String hash= codHash(jcMerge.getSelectedItem().toString());
 			mergeSelected = mergeFilesDao.getMerge(hash, repoFiles.getRepository().getProject());
-			//mCommits = new MergeCommits(hash, repoFiles.getRepository().getProject());
 			
 		}else{
 			mergeSelected = new MergeFiles("", repoFiles.getRepository().getProject());
 			mergeSelected.setParents(hashBranch1.getText(), hashBranch2.getText());
 			mergeSelected.setHashBase(mergeFilesDao.getMergeBase(mergeSelected.getParents()[0], mergeSelected.getParents()[1], mergeSelected.getPath()));
 
-			//mCommits = new MergeCommits("", repoFiles.getRepository().getProject());
 		}
-		//mergeCommittsDao.update(mCommits);
-		//mergeCommittsDao.setCommittersOnBranch(mCommits);
+		
 		/** 
 		 * From now the merge already exists with parents and merge base, next steps are:
 		 * Set the files of that merge and committers that changed that files.
@@ -512,6 +508,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		
 		CommitterDao cmterDao = new CommitterDao();
 		List<EditedFile> files = new LinkedList<>();
+		
 		for(EditedFile editedFile : mergeSelected.getFilesOnBranchOne()){
 			List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
 										mergeSelected.getParents()[0], 
@@ -533,7 +530,8 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 				editedFile.setWhoEditTheFile(whoEdited);
 				files.add(editedFile);
 			}
-		}mergeSelected.setFilesOnBranchTwo(files);
+		}
+		mergeSelected.setFilesOnBranchTwo(files);
 		
 		files = new LinkedList<>();
 		for(EditedFile editedFile : mergeSelected.getFilesOnPreviousHistory()){
@@ -567,7 +565,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		//organizes the data in the table
 		showResBranch1(merge, false);
 		showResBranch2(merge, false);
-		showResIntersection(merge.getFilesOnBothBranch(), false);
+		showResIntersection(merge.getFilesOnBothBranch());
 		showResPreviousHistory(merge, false);
 	}
 	
@@ -732,7 +730,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 	private void showResBranch1(MergeFiles mergeSelected, Boolean showScoreZ) {
 		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
 
-		Set<Committer> committers = mergeSelected.getCommittersOnBranchOne();
+		List<Committer> committers = mergeSelected.getCommittersOnBranchOne();
 		
 		//Includes columns with the names of all developers (branches 1 and 2)
 		committers.stream().forEach((committer) -> {
@@ -753,7 +751,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 	private void showResBranch2(MergeFiles mergeSelected, Boolean showScoreZ) {
 		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
 
-		Set<Committer> committers = mergeSelected.getCommittersOnBranchTwo();
+		List<Committer> committers = mergeSelected.getCommittersOnBranchTwo();
 		
 		//Includes columns with the names of all developers (branches 1 and 2)
 		committers.stream().forEach((committer) -> {
@@ -769,36 +767,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		jTable2.setModel(dftModel);
         //tbResultsBranch1.update(tbResultsBranch1.getGraphics());	
 	}
-	
-//shows the number of commits in both branches, this information considers only commits
-	private void showResIntersection(List<Committer> committers) {
 		
-		DefaultTableModel model = new DefaultTableModel( new Object[] {"Author ", "Number of Commits in Both Branches"}, 0);
-		if (committers != null)
-			for (Committer cmter : committers){
-				model.insertRow(model.getRowCount(), 
-								new Object[] {cmter.getName() , cmter.getCommits()
-								}
-				);
-			}
-		//return model;
-		jTable3.setModel(model);
-	}
-	
-	private void showResIntersection(Set<EditedFile> filesOnBothBranch, boolean showScoreZ) {
+	private void showResIntersection(Set<EditedFile> filesOnBothBranch) {
 		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
 
-		/* Set<Committer> committers = mergeSelected.getCommittersOnBranchTwo();
-		
-		//Includes columns with the names of all developers (branches 1 and 2)
-		committers.stream().forEach((committer) -> {
-			dftModel.addColumn(committer.getName());
-		});
-		
-		*/ 
-		//dftModel.addRow(new Object[]{"BRANCH TWO"});
 		filesOnBothBranch.stream().forEach((file) -> {
-			//dftModel.addRow(getValueToRow(file, null , showScoreZ));
 			dftModel.addRow(new String[]{file.getFileName(),""});
 		});
 
@@ -810,7 +783,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		
 		DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
 
-		Set<Committer> committers = mergeSelected.getCommittersOnPreviousHistory();
+		List<Committer> committers = mergeSelected.getCommittersOnPreviousHistory();
 		 
 	//	Arrays.sort(committers);
 		//Includes columns with the names of all developers (branches 1 and 2)
@@ -829,7 +802,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		jTable4.setModel(dftModel);
 	}
 	
-	private String[] getValueToRow(EditedFile editedFile, Set<Committer> committers, Boolean showScoreZ) {
+	private String[] getValueToRow(EditedFile editedFile, List<Committer> committers, Boolean showScoreZ) {
 		
 		String fileName = editedFile.getFileName();
 		Integer[] values = new Integer[committers.size()];

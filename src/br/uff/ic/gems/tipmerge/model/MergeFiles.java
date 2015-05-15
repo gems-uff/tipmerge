@@ -8,7 +8,6 @@ package br.uff.ic.gems.tipmerge.model;
 import br.uff.ic.gems.tipmerge.util.Auxiliary;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +30,7 @@ public class MergeFiles extends Merge {
 	//This method returns the name of all authors modifying any files on Branch1 and Branch2
 	public Set<Committer> getCommittersOnMege(){
 		List<Committer> authors = new ArrayList<>();
-		Set<Committer> committersBranch = this.getCommittersOnBranchOne();
+		List<Committer> committersBranch = this.getCommittersOnBranchOne();
 		
 		for (Committer committer : committersBranch){
 			Auxiliary.addOnlyNew(authors, committer);
@@ -47,21 +46,7 @@ public class MergeFiles extends Merge {
 		authors.addAll(this.getCommittersOnBranchTwo());
 	*/			
 		return new HashSet<>(authors);
-	}
-	
-	//This method returns the name of all authors modifying any files on Previous History
-	public Set<Committer> getCommittersOnPreviousHistory() {
-		List<Committer> authors = new ArrayList<>();
-		Set<EditedFile> files = this.getFilesOnPreviousHistory();
-				
-		for (EditedFile editedFile : files){
-			for (Committer cmterFile : editedFile.getWhoEditTheFile()){
-				Auxiliary.addOnlyNew(authors, cmterFile);
-			}
-		}
-		return new HashSet<>(authors);
-	}
-	
+	}	
 
 	public List<EditedFile> getFilesOnBranchOne() {
 		return filesOnBranchOne;
@@ -80,24 +65,26 @@ public class MergeFiles extends Merge {
 		if (this.filesOnBranchOne != null)
 			this.setFilesOnPreviousHistory();
 	}
-
-	public Set<Committer> getCommittersOnBranchOne() {
-		Set<Committer> authors = new HashSet<>();
-		this.getFilesOnBranchOne().stream().forEach((file) -> {
-			
-			//EditedFile newFile = file.clone();
-			
-			authors.addAll(file.getWhoEditTheFile());
+	
+	public List<Committer> getCommitters(List<EditedFile> files){
+		List<Committer> authors = new ArrayList<>();
+		files.stream().forEach((file) -> {
+			addNewCommitters(authors,file.getWhoEditTheFile());
 		});
-		return authors;	
+		return authors;
 	}
 
-	public Set<Committer> getCommittersOnBranchTwo() {
-		Set<Committer> authors = new HashSet<>();
-		this.getFilesOnBranchTwo().stream().forEach((file) -> {
-			authors.addAll(file.getWhoEditTheFile());
-		});
-		return authors;	
+	public List<Committer> getCommittersOnBranchOne() {
+		return getCommitters(this.getFilesOnBranchOne());
+	}
+
+	public List<Committer> getCommittersOnBranchTwo() {
+		return getCommitters(this.getFilesOnBranchTwo());
+	}
+	
+	//This method returns the name of all authors modifying any files on Previous History
+	public List<Committer> getCommittersOnPreviousHistory() {
+		return getCommitters(new ArrayList<>(this.getFilesOnPreviousHistory()));
 	}
 
 	/**
@@ -107,11 +94,6 @@ public class MergeFiles extends Merge {
 		return filesOnPreviousHistory;
 	}
 
-	/**
-	public void setFilesOnPreviousHistory(List<EditedFile> filesOnPreviousHistory) {
-		this.filesOnPreviousHistory = filesOnPreviousHistory;
-	}
-	*/
 	private void setFilesOnPreviousHistory() {
 		if ((this.filesOnBranchOne != null) && (this.filesOnBranchTwo != null)){
 			Set<EditedFile> filesOnMerge = new HashSet<>();
@@ -150,6 +132,15 @@ public class MergeFiles extends Merge {
 	 */
 	public void setFilesOnBothBranch(Set<EditedFile> filesOnBothBranch) {
 		this.filesOnBothBranch = filesOnBothBranch;
+	}
+
+	private void addNewCommitters(List<Committer> authors, List<Committer> cmters) {
+		
+		for(Committer cmter : cmters ){
+			
+			if (!authors.contains(cmter))
+				authors.add(cmter);
+		}
 	}
 	
 	
