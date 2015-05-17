@@ -222,7 +222,6 @@ public class JFrameDependencies extends javax.swing.JFrame {
 			MergeFilesDao mergeFilesDao = new MergeFilesDao();
 			MergeFiles mergeFiles = mergeFilesDao.getMerge(mergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
 
-
 			EditedFilesDao filesDao = new EditedFilesDao();
 			mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), 
 																		mergeFiles.getParents()[0], 
@@ -326,7 +325,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
 				for(int j = 0 ; j < cols ; j++){
 
-					if(i != j)
+					if((i != j) && (filesEdited.contains(new EditedFile(matrix.getMatrixDescriptor().getColumnAt(j)))))
 
 						for(Cell c : cells){
 							if((c.value >= threshold) && (c.row == i) && (c.col == j))
