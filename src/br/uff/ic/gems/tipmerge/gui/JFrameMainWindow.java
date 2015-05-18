@@ -71,7 +71,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuCommit = new javax.swing.JMenuItem();
-        menuDependence = new javax.swing.JMenuItem();
         menuFile = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         menuAssign = new javax.swing.JMenuItem();
@@ -282,16 +281,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         });
         jMenu2.add(menuCommit);
 
-        menuDependence.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.SHIFT_MASK));
-        menuDependence.setText("Dependencies");
-        menuDependence.setEnabled(false);
-        menuDependence.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuDependenceActionPerformed(evt);
-            }
-        });
-        jMenu2.add(menuDependence);
-
         menuFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
         menuFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/search99.png"))); // NOI18N
         menuFile.setText("Files");
@@ -378,7 +367,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 				btShow.setEnabled(true);
 				menuCommit.setEnabled(true);
 				menuFile.setEnabled(true);
-				menuDependence.setEnabled(true);
 				clearAllFields();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, 
@@ -433,12 +421,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 		files.setVisible(true);
     }//GEN-LAST:event_menuFileActionPerformed
 
-    private void menuDependenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDependenceActionPerformed
-        JFrameDependencies filesDependence = new JFrameDependencies(repository);
-		filesDependence.setLocationRelativeTo(this.getFocusOwner());
-		filesDependence.setVisible(true);
-    }//GEN-LAST:event_menuDependenceActionPerformed
-
     private void menuAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAssignActionPerformed
         JFrameAssignMerge jfAssignMerge = new JFrameAssignMerge(repository);
 		jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
@@ -474,7 +456,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jtProjectName;
     private javax.swing.JMenuItem menuAssign;
     private javax.swing.JMenuItem menuCommit;
-    private javax.swing.JMenuItem menuDependence;
     private javax.swing.JMenuItem menuFile;
     private javax.swing.JTextField txCommits;
     private javax.swing.JTextField txLast;

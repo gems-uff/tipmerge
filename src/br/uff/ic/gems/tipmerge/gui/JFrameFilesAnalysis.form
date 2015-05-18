@@ -141,11 +141,10 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       <Component id="btnChart1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnChart2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="jButtonDependencies" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btZScore" min="-2" max="-2" attributes="0"/>
@@ -623,7 +622,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButtonDependencies">
       <Properties>
-        <Property name="text" type="java.lang.String" value="See File Dependencies"/>
+        <Property name="text" type="java.lang.String" value="See Logical Dependencies"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
