@@ -116,7 +116,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jScrollPane8 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
         btZScore = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jButtonDependencies = new javax.swing.JButton();
         btnChart2 = new javax.swing.JButton();
         btnChart1 = new javax.swing.JButton();
 
@@ -447,10 +447,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Count Medals");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonDependencies.setText("See File Dependencies");
+        jButtonDependencies.setEnabled(false);
+        jButtonDependencies.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonDependenciesActionPerformed(evt);
             }
         });
 
@@ -483,7 +484,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnChart2)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1)
+                        .addComponent(jButtonDependencies)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btZScore)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -503,7 +504,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btExport)
                     .addComponent(btZScore)
-                    .addComponent(jButton1)
+                    .addComponent(jButtonDependencies)
                     .addComponent(btnChart2)
                     .addComponent(btnChart1))
                 .addContainerGap())
@@ -602,8 +603,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         btExport.setEnabled(true);
 		btZScore.setEnabled(true);
-                btnChart1.setEnabled(true);
-                btnChart2.setEnabled(true);
+		btnChart1.setEnabled(true);
+		btnChart2.setEnabled(true);
+		jButtonDependencies.setEnabled(true);
     }//GEN-LAST:event_btRunActionPerformed
 
 	public void showResultsTable(MergeFiles merge) {
@@ -662,22 +664,25 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         showResultsTable(this.getMergeFiles(), true);
     }//GEN-LAST:event_btZScoreActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-		 DefaultTableModel model = new DefaultTableModel();
-                 jranking.setVisible(true);
-             List<Medalist> ranking = RankingGenerator.getMedalists(this.getMergeFiles());
-             model.addColumn("Commiter");
-             model.addColumn("Gold");
-             model.addColumn("Silver");
-             model.addColumn("Bronze");
+    private void jButtonDependenciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDependenciesActionPerformed
+		DefaultTableModel model = new DefaultTableModel();
+		jranking.setVisible(true);
+		List<Medalist> ranking = RankingGenerator.getMedalists(this.getMergeFiles());
+		model.addColumn("Commiter");
+		model.addColumn("Gold");
+		model.addColumn("Silver");
+		model.addColumn("Bronze");
 		for(Medalist m : ranking){
-			System.out.println(m);
-                        model.addRow(new Object[]{m.getCommitter().getName(),m.getGoldMedals(),m.getSilverMedals(),m.getBronzeMedals()});
+			model.addRow(new Object[]{m.getCommitter().getName(),m.getGoldMedals(),m.getSilverMedals(),m.getBronzeMedals()});
 		}
-                jTableRanking.setModel(model);
-                jScrollPane2.setViewportView(jTableRanking);
+		jTableRanking.setModel(model);
+		jScrollPane2.setViewportView(jTableRanking);
 	
-    }//GEN-LAST:event_jButton1ActionPerformed
+		JFrameDependencies filesDependence = new JFrameDependencies(this.repoFiles.getRepository(), this.getMergeFiles());
+		filesDependence.setLocationRelativeTo(this.getFocusOwner());
+		filesDependence.setVisible(true);		
+				
+    }//GEN-LAST:event_jButtonDependenciesActionPerformed
 
     private void btnChart1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChart1ActionPerformed
         // Botão do Chart 1:
@@ -700,7 +705,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JLabel hash1;
     private javax.swing.JLabel hashBranch1;
     private javax.swing.JLabel hashBranch2;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonDependencies;
     private javax.swing.JComboBox jCSelecFileExt;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLSelecByExt;

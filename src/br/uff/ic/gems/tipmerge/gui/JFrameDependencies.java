@@ -7,27 +7,33 @@ package br.uff.ic.gems.tipmerge.gui;
 
 import arch.Cell;
 import arch.IMatrix2D;
-import arch.MatrixDescriptor;
+import br.uff.ic.gems.tipmerge.dao.CommitterDao;
 import br.uff.ic.gems.tipmerge.dao.EditedFilesDao;
 import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
 import br.uff.ic.gems.tipmerge.dao.MergeFilesDao;
+import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
-import br.uff.ic.gems.tipmerge.model.Merge;
+import br.uff.ic.gems.tipmerge.model.Medalist;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
+import br.uff.ic.gems.tipmerge.model.RankingGenerator;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import dao.DominoesSQLDao2;
 import domain.Dominoes;
 import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -37,6 +43,9 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
 	public static Repository repo;
 	public static String databaseName = "data/gitdataminer.sqlite";
+	public MergeFiles mergeFiles;
+	public Set<EditedFile> dependenciesBranchOne;
+	public Set<EditedFile> dependenciesBranchTwo;
 	/*	/Users/j2cf/Apps/ws_nb/tipmerge/data  */
 	
 	/**
@@ -50,6 +59,16 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		mergesList.setModel(new JComboBox(repo.getListOfMerges().toArray()).getModel());
 
 	}
+
+	public JFrameDependencies(Repository repository, MergeFiles mergeFiles){
+		initComponents();
+		this.repo = repository;
+		this.mergeFiles = mergeFiles;
+		this.jTextField1.setText(repo.getName());
+		
+		mergesList.setModel(new JComboBox(new String[]{mergeFiles.getHash()}).getModel());
+	}
+
 	
 	/**
 	 * This method is called from within the constructor to initialize the form.
@@ -62,15 +81,16 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jButtonRun = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         mergesList = new javax.swing.JComboBox();
         spinnerThreshold = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
+        btnRanking = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtDependencies = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Dependencies Analysis");
@@ -79,10 +99,10 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         jLabel1.setText("Repository Name");
 
-        jButton1.setText("Run");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRun.setText("Run");
+        jButtonRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonRunActionPerformed(evt);
             }
         });
 
@@ -98,6 +118,14 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         jLabel2.setText("Threshold:");
 
+        btnRanking.setText("Ranking");
+        btnRanking.setEnabled(false);
+        btnRanking.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRankingActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -107,11 +135,13 @@ public class JFrameDependencies extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnRanking)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spinnerThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
+                        .addComponent(jButtonRun))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -119,7 +149,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(mergesList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE))))
+                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -133,20 +163,21 @@ public class JFrameDependencies extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(mergesList, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
-                        .addComponent(spinnerThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(spinnerThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRanking))
+                    .addComponent(jButtonRun))
                 .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtDependencies.setColumns(20);
+        txtDependencies.setRows(5);
+        jScrollPane1.setViewportView(txtDependencies);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -161,7 +192,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -179,35 +210,26 @@ public class JFrameDependencies extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-		
+    private void jButtonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRunActionPerformed
+
+		btnRanking.setEnabled(true);
 		MergeCommitsDao mCommitsDao = new MergeCommitsDao(repo.getProject());
 		MergeCommits merge = new MergeCommits(mergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
 		mCommitsDao.update(merge);
 
-		//Branch One
-		List<String> branchOne = mCommitsDao.getHashs(merge.getHashBase(), merge.getParents()[0]);
-		
-		//branch Two
-		List<String> branchTwo = mCommitsDao.getHashs(merge.getHashBase(), merge.getParents()[1]);
-		
 		//Previous History
 		List<String> previousHistory = mCommitsDao.getHashs(repo.getFirstCommit() , merge.getHashBase());
 		
+		
 		try {
-			System.out.println("\nCreating the dominoes of Branch One");
-			//List<Dominoes> dominoesBranchOne = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", branchOne);
-
-			System.out.println("\nCreating the dominoes of branch Two");
-			//List<Dominoes> dominoesBranchTwo = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", branchTwo);
 
 			System.out.println("\nCreating the dominoes of History");
 			List<Dominoes> dominoesPreviousHistory = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", previousHistory);
@@ -219,23 +241,72 @@ public class JFrameDependencies extends javax.swing.JFrame {
 			Dominoes domFF = domCFt.multiply(domCF);
 			domFF.confidence();
 			
-			MergeFilesDao mergeFilesDao = new MergeFilesDao();
-			MergeFiles mergeFiles = mergeFilesDao.getMerge(mergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
+			if(mergeFiles == null){
+				System.out.println("O merge files é null");
+				MergeFilesDao mergeFilesDao = new MergeFilesDao();
+				mergeFiles = mergeFilesDao.getMerge(mergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
 
-			EditedFilesDao filesDao = new EditedFilesDao();
-			mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), 
-																		mergeFiles.getParents()[0], 
-																		mergeFiles.getPath(),
-																		".java"));
-			mergeFiles.setFilesOnBranchTwo(filesDao.getFiles(mergeFiles.getHashBase(), 
-																		mergeFiles.getParents()[1], 
-																		mergeFiles.getPath(),
-																		".java"));
+				EditedFilesDao filesDao = new EditedFilesDao();
+				mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), 
+																			mergeFiles.getParents()[0], 
+																			mergeFiles.getPath(),
+																			".java"));
+				mergeFiles.setFilesOnBranchTwo(filesDao.getFiles(mergeFiles.getHashBase(), 
+																			mergeFiles.getParents()[1], 
+																			mergeFiles.getPath(),
+																			".java"));
+
+				CommitterDao cmterDao = new CommitterDao();
+				List<EditedFile> files = new LinkedList<>();
+				for(EditedFile editedFile : mergeFiles.getFilesOnBranchOne()){
+					List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeFiles.getHashBase(), 
+												mergeFiles.getParents()[0], 
+												editedFile.getFileName(), 
+												mergeFiles.getPath());
+					if(whoEdited.size() > 0){
+						editedFile.setWhoEditTheFile(whoEdited);
+						files.add(editedFile);
+					}
+				}mergeFiles.setFilesOnBranchOne(files);
+
+				files = new LinkedList<>();
+				for(EditedFile editedFile : mergeFiles.getFilesOnBranchTwo()){
+					List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeFiles.getHashBase(), 
+												mergeFiles.getParents()[1], 
+												editedFile.getFileName(), 
+												mergeFiles.getPath());
+					if(whoEdited.size() > 0){
+						editedFile.setWhoEditTheFile(whoEdited);
+						files.add(editedFile);
+					}
+				}mergeFiles.setFilesOnBranchTwo(files);	
+				
+				files = new LinkedList<>();
+				for(EditedFile editedFile : mergeFiles.getFilesOnPreviousHistory()){
+					List<Committer> whoEdited = cmterDao.getWhoEditedFile(repo.getFirstCommit(), 
+												mergeFiles.getHashBase(), 
+												editedFile.getFileName(), 
+												mergeFiles.getPath());
+					if(whoEdited.size() > 0){
+						editedFile.setWhoEditTheFile(whoEdited);
+						files.add(editedFile);
+					}
+				}mergeFiles.setFilesOnPreviousHistory(new HashSet<>(files));
+	
+				
+			}
+			Set<EditedFile> filesEdited;
 			
-			Set<EditedFile> filesEdited =  new HashSet<>(mergeFiles.getFilesOnBranchOne());
-			filesEdited.addAll(filesEdited);
+			System.out.println("Dependencies Branch ONe");
+			filesEdited =  new HashSet<>(mergeFiles.getFilesOnBranchOne());
+			this.dependenciesBranchOne = getFileDependencies2(domFF, (double) spinnerThreshold.getValue(), filesEdited);
+
+			System.out.println("Dependencies Branch Two");
+			filesEdited =  new HashSet<>(mergeFiles.getFilesOnBranchTwo());
+			this.dependenciesBranchTwo = getFileDependencies2(domFF, (double) spinnerThreshold.getValue(), filesEdited);
 			
-			printDominoes(domFF, (double) spinnerThreshold.getValue(), filesEdited);
+			filesEdited.addAll(mergeFiles.getFilesOnBranchOne());
+			txtDependencies.setText(printDominoes(domFF, (double)spinnerThreshold.getValue(),filesEdited).toString());
 			
 		} catch (SQLException ex) {
 			Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
@@ -243,11 +314,36 @@ public class JFrameDependencies extends javax.swing.JFrame {
 			Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonRunActionPerformed
 
     private void mergesListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergesListActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_mergesListActionPerformed
+
+    private void btnRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRankingActionPerformed
+		RankingGenerator rGenerator = new RankingGenerator();
+		rGenerator.updateGoldMedals(mergeFiles);
+		rGenerator.updateSilverMedals(mergeFiles, this.dependenciesBranchOne, this.dependenciesBranchTwo);
+		rGenerator.updateBronzeMedals(mergeFiles);
+		List<Medalist> ranking = rGenerator.getRanking();
+		for(Medalist medalist : ranking){
+			System.out.println(medalist);
+		}
+		
+/*		
+		DefaultTableModel model = new DefaultTableModel();
+		jranking.setVisible(true);
+		model.addColumn("Commiter");
+		model.addColumn("Gold");
+		model.addColumn("Silver");
+		model.addColumn("Bronze");
+		for(Medalist m : ranking){
+			model.addRow(new Object[]{m.getCommitter().getName(),m.getGoldMedals(),m.getSilverMedals(),m.getBronzeMedals()});
+		}
+		jTableRanking.setModel(model);
+		jScrollPane2.setViewportView(jTableRanking);	
+*/
+    }//GEN-LAST:event_btnRankingActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -286,30 +382,35 @@ public class JFrameDependencies extends javax.swing.JFrame {
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnRanking;
+    private javax.swing.JButton jButtonRun;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JComboBox mergesList;
     private javax.swing.JSpinner spinnerThreshold;
+    private javax.swing.JTextArea txtDependencies;
     // End of variables declaration//GEN-END:variables
 
-	private void printDominoes(Dominoes dominoes, double threshold, Collection<EditedFile> filesEdited) {
+	private StringBuilder printDominoes(Dominoes dominoes, double threshold, Collection<EditedFile> filesEdited) {
 		
-		//System.out.println("getDevice\t" + dominoes.getDevice());
-		//System.out.println("getHistoric\t" + dominoes.getHistoric().toString());
-	
+		StringBuilder strBuilder = new StringBuilder();
+		
 		IMatrix2D matrix = dominoes.getMat();
 
-		//System.out.println("getColType\t" + matrix.getMatrixDescriptor().getColType());
-		//System.out.println("getRowType\t" + matrix.getMatrixDescriptor().getRowType());
-		//System.out.println("getNumRows\t" + matrix.getMatrixDescriptor().getNumRows());
-		//System.out.println("getNumCols\t" + matrix.getMatrixDescriptor().getNumCols());
+		System.out.println("getDevice\t" + dominoes.getDevice());
+		System.out.println("getHistoric\t" + dominoes.getHistoric().toString());
+
+		System.out.println("getColType\t" + matrix.getMatrixDescriptor().getColType());
+		System.out.println("getRowType\t" + matrix.getMatrixDescriptor().getRowType());
+		System.out.println("getNumRows\t" + matrix.getMatrixDescriptor().getNumRows());
+		System.out.println("getNumCols\t" + matrix.getMatrixDescriptor().getNumCols());
+		
+		strBuilder.append("File Dependencies.\n\n");
 		
 		List<Cell> cells = matrix.getNonZeroData();
 		int rows = matrix.getMatrixDescriptor().getNumRows();
@@ -321,24 +422,70 @@ public class JFrameDependencies extends javax.swing.JFrame {
 			
 			if(filesEdited.contains(efTemp)){
 			
-				System.out.println(matrix.getMatrixDescriptor().getRowAt(i));
-
+				System.out.println(efTemp);
+				strBuilder.append(efTemp).append("\n");
+				boolean hasDepencies = false;
+				
 				for(int j = 0 ; j < cols ; j++){
+
+					if((i != j) && (filesEdited.contains(new EditedFile(matrix.getMatrixDescriptor().getColumnAt(j))))){
+
+						for(Cell c : cells){
+							if((c.value >= threshold) && (c.row == i) && (c.col == j)){
+								System.out.println("\t" + c.value + "\t" + matrix.getMatrixDescriptor().getColumnAt(j));
+								strBuilder.append("\t").append(c.value)
+									.append("\t").append(matrix.getMatrixDescriptor().getColumnAt(j))
+									.append("\n");
+								hasDepencies = true;
+							}
+						}
+					}
+				}
+				if(!hasDepencies){
+					int lastIndex = strBuilder.lastIndexOf(efTemp.getFileName());
+					strBuilder.replace(lastIndex, lastIndex + efTemp.getFileName().length(), "");
+				}
+				System.out.println();
+			}
+		}
+		return strBuilder;
+	}
+
+	/**
+	 * Returns a list of files that have some dependence with the 
+	 * list of filesEdited files, following the defined threshold.
+	 * @param dominoes
+	 * @param threshold
+	 * @param filesEdited
+	 * @return 
+	 */
+	private Set<EditedFile> getFileDependencies2(Dominoes dominoes, double threshold, Collection<EditedFile> filesEdited) {
+		
+		Set<EditedFile> dependecies = new HashSet<>();
+
+		IMatrix2D matrix = dominoes.getMat();
+
+		int rows = matrix.getMatrixDescriptor().getNumRows();
+		int cols = matrix.getMatrixDescriptor().getNumCols();
+		
+		List<Cell> cells = matrix.getNonZeroData();
+		
+		for(int i = 0 ; i < rows ; i++){
+			
+			EditedFile efTemp = new EditedFile(matrix.getMatrixDescriptor().getRowAt(i));
+			
+			if(filesEdited.contains(efTemp))
+				
+				for(int j = 0 ; j < cols ; j++)
 
 					if((i != j) && (filesEdited.contains(new EditedFile(matrix.getMatrixDescriptor().getColumnAt(j)))))
 
-						for(Cell c : cells){
+						for(Cell c : cells)
 							if((c.value >= threshold) && (c.row == i) && (c.col == j))
-								System.out.println("\t" + c.value + "\t" + matrix.getMatrixDescriptor().getColumnAt(j));
-
-						}
-
-				}System.out.println();
-			
-			}
-
+								dependecies.add(new EditedFile(matrix.getMatrixDescriptor().getColumnAt(j)));
+						
 		}
-		
+		return dependecies;
 	}
 
 }
