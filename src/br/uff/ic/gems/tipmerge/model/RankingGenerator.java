@@ -6,6 +6,7 @@
 package br.uff.ic.gems.tipmerge.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -48,7 +49,7 @@ public class RankingGenerator {
 		
 		
 		//TODO ordenar o ranking
-
+                 Collections.sort(medalists, new Compara());
 		return medalists;
 	}
 
