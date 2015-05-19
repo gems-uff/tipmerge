@@ -20,10 +20,10 @@ public class Compara implements Comparator<Medalist> {
         else if(o1.getGoldMedals()== o2.getGoldMedals())
                 if(o1.getSilverMedals()>o2.getSilverMedals()) return -1;
                  else if(o1.getSilverMedals()<o2.getSilverMedals())  return+1;
-                  else if(o1.getSilverMedals()== o2.getSilverMedals()){
+                  else if(o1.getSilverMedals()== o2.getSilverMedals())
                               if(o1.getBronzeMedals()>o2.getBronzeMedals()) return -1;
                                 else if(o1.getBronzeMedals()<o2.getBronzeMedals())  return+1;
-                                }
+                                
      
         return 0;
     }

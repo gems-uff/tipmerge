@@ -22,6 +22,7 @@ public class RankingGenerator {
 	 * @return the ranking
 	 */
 	public List<Medalist> getRanking() {
+               Collections.sort(ranking, new Compara());
 		return ranking;
 	}
 

@@ -79,6 +79,9 @@ public class JFrameDependencies extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jRanking = new javax.swing.JFrame();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableRanking = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jButtonRun = new javax.swing.JButton();
@@ -91,6 +94,40 @@ public class JFrameDependencies extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDependencies = new javax.swing.JTextArea();
+
+        jRanking.setTitle("Ranking");
+        jRanking.setBounds(50,50,500, 500);
+
+        jTableRanking.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTableRanking.setSize(500,500);
+        jScrollPane2.setViewportView(jTableRanking);
+
+        javax.swing.GroupLayout jRankingLayout = new javax.swing.GroupLayout(jRanking.getContentPane());
+        jRanking.getContentPane().setLayout(jRankingLayout);
+        jRankingLayout.setHorizontalGroup(
+            jRankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jRankingLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        jRankingLayout.setVerticalGroup(
+            jRankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jRankingLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Dependencies Analysis");
@@ -321,6 +358,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
     private void btnRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRankingActionPerformed
 		RankingGenerator rGenerator = new RankingGenerator();
+                DefaultTableModel model = new DefaultTableModel();
+                jRanking.setVisible(true);
 		rGenerator.updateGoldMedals(mergeFiles);
 		rGenerator.updateSilverMedals(mergeFiles, this.dependenciesBranchOne, this.dependenciesBranchTwo);
 		rGenerator.updateBronzeMedals(mergeFiles);
@@ -328,7 +367,14 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		for(Medalist medalist : ranking){
 			System.out.println(medalist);
 		}
-		
+                model.addColumn("Commiter");
+		model.addColumn("Gold");
+		model.addColumn("Silver");
+		model.addColumn("Bronze");
+                for(Medalist m : ranking){
+			model.addRow(new Object[]{m.getCommitter().getName(),m.getGoldMedals(),m.getSilverMedals(),m.getBronzeMedals()});
+		}
+		jTableRanking.setModel(model);
 /*		
 		DefaultTableModel model = new DefaultTableModel();
 		jranking.setVisible(true);
@@ -388,7 +434,10 @@ public class JFrameDependencies extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JFrame jRanking;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTableRanking;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JComboBox mergesList;
     private javax.swing.JSpinner spinnerThreshold;

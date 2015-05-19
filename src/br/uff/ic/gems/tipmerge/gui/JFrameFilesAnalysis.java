@@ -85,9 +85,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jFrame1 = new javax.swing.JFrame();
         jPanel4 = new javax.swing.JPanel();
-        jranking = new javax.swing.JFrame();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTableRanking = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         hashBranch1 = new javax.swing.JLabel();
@@ -150,48 +147,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-        );
-
-        jranking.setTitle("Ranking");
-        jranking.setBounds(100,200,500, 500);
-
-        jTableRanking.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-
-        javax.swing.GroupLayout jrankingLayout = new javax.swing.GroupLayout(jranking.getContentPane());
-        jranking.getContentPane().setLayout(jrankingLayout);
-        jrankingLayout.setHorizontalGroup(
-            jrankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jrankingLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(jrankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jrankingLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jTableRanking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        jrankingLayout.setVerticalGroup(
-            jrankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jrankingLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
-            .addGroup(jrankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jrankingLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jTableRanking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -664,18 +619,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_btZScoreActionPerformed
 
     private void jButtonDependenciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDependenciesActionPerformed
-		DefaultTableModel model = new DefaultTableModel();
-		jranking.setVisible(true);
+
 		List<Medalist> ranking = RankingGenerator.getMedalists(this.getMergeFiles());
-		model.addColumn("Commiter");
-		model.addColumn("Gold");
-		model.addColumn("Silver");
-		model.addColumn("Bronze");
-		for(Medalist m : ranking){
-			model.addRow(new Object[]{m.getCommitter().getName(),m.getGoldMedals(),m.getSilverMedals(),m.getBronzeMedals()});
-		}
-		jTableRanking.setModel(model);
-		jScrollPane2.setViewportView(jTableRanking);
+		
 	
 		JFrameDependencies filesDependence = new JFrameDependencies(this.repoFiles.getRepository(), this.getMergeFiles());
 		filesDependence.setLocationRelativeTo(this.getFocusOwner());
@@ -715,7 +661,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
@@ -725,11 +670,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTableRanking;
     private javax.swing.JComboBox jcBranch1;
     private javax.swing.JComboBox jcBranch2;
     private javax.swing.JComboBox jcMerge;
-    private javax.swing.JFrame jranking;
     private javax.swing.JRadioButton radioBranches;
     private javax.swing.JRadioButton radioHistorical;
     // End of variables declaration//GEN-END:variables
