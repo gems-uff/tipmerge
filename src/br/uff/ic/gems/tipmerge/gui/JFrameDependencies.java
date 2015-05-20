@@ -118,16 +118,16 @@ public class JFrameDependencies extends javax.swing.JFrame {
         jRankingLayout.setHorizontalGroup(
             jRankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jRankingLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         jRankingLayout.setVerticalGroup(
             jRankingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jRankingLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -156,7 +156,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         jLabel2.setText("Threshold:");
 
-        btnRanking.setText("Generate the Ranking");
+        btnRanking.setText("Generate Ranking");
         btnRanking.setEnabled(false);
         btnRanking.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
