@@ -12,6 +12,7 @@ import br.uff.ic.gems.tipmerge.dao.EditedFilesDao;
 import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
 import br.uff.ic.gems.tipmerge.dao.MergeFilesDao;
 import br.uff.ic.gems.tipmerge.model.Committer;
+import br.uff.ic.gems.tipmerge.model.Dependencies;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
 import br.uff.ic.gems.tipmerge.model.Medalist;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
@@ -44,8 +45,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
 	public static Repository repo;
 	public static String databaseName = "data/gitdataminer.sqlite";
 	public MergeFiles mergeFiles;
-	public Set<EditedFile> dependenciesBranchOne;
-	public Set<EditedFile> dependenciesBranchTwo;
+	public Map<EditedFile,Set<EditedFile>> dependenciesBranchOne;
+	public Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo;
 	/*	/Users/j2cf/Apps/ws_nb/tipmerge/data  */
 	
 	/**
@@ -329,20 +330,29 @@ public class JFrameDependencies extends javax.swing.JFrame {
 					}
 				}mergeFiles.setFilesOnPreviousHistory(new HashSet<>(files));
 	
-				
 			}
-			Set<EditedFile> filesEdited;
 			
-			System.out.println("Dependencies Branch ONe");
-			filesEdited =  new HashSet<>(mergeFiles.getFilesOnBranchOne());
-			this.dependenciesBranchOne = getFileDependencies2(domFF, (double) spinnerThreshold.getValue(), filesEdited);
+			Dependencies dependencies = new Dependencies(domFF);
+			double threshold = (double) spinnerThreshold.getValue();
+			
+			//System.out.println("Dependencies Branch One");
+			this.dependenciesBranchOne = 
+				dependencies.getDependenciesAcrossBranches(
+					mergeFiles.getFilesOnBranchOne(), 
+					mergeFiles.getFilesOnBranchTwo(),
+					threshold);
 
-			System.out.println("Dependencies Branch Two");
-			filesEdited =  new HashSet<>(mergeFiles.getFilesOnBranchTwo());
-			this.dependenciesBranchTwo = getFileDependencies2(domFF, (double) spinnerThreshold.getValue(), filesEdited);
+			//System.out.println("Dependencies Branch Two");
+			this.dependenciesBranchTwo = 
+				dependencies.getDependenciesAcrossBranches(
+					mergeFiles.getFilesOnBranchTwo(), 
+					mergeFiles.getFilesOnBranchOne(),
+					threshold);
 			
-			filesEdited.addAll(mergeFiles.getFilesOnBranchOne());
-			txtDependencies.setText(printDominoes(domFF, (double)spinnerThreshold.getValue(),filesEdited).toString());
+			txtDependencies.setText("Dependencies Branch One\n");
+			addListDependences(this.dependenciesBranchOne);
+			txtDependencies.append("\nDependencies Branch Two\n");
+			addListDependences(this.dependenciesBranchTwo);
 			
 		} catch (SQLException ex) {
 			Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
@@ -352,32 +362,33 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		
     }//GEN-LAST:event_jButtonRunActionPerformed
 
+	private void addListDependences(Map<EditedFile,Set<EditedFile>> dependencies) {
+		
+		dependencies.entrySet().stream().forEach((dependence) -> {
+			EditedFile key = dependence.getKey();
+			Set<EditedFile> value = dependence.getValue();
+			txtDependencies.append(key.toString() + "\n" + "\t" + value.toString() + "\n");
+		});
+	}
+
     private void mergesListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergesListActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_mergesListActionPerformed
 
     private void btnRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRankingActionPerformed
-		RankingGenerator rGenerator = new RankingGenerator();
-                DefaultTableModel model = new DefaultTableModel();
-                jRanking.setVisible(true);
+		RankingGenerator rGenerator = new RankingGenerator();	
 		rGenerator.updateGoldMedals(mergeFiles);
-		rGenerator.updateSilverMedals(mergeFiles, this.dependenciesBranchOne, this.dependenciesBranchTwo);
 		rGenerator.updateBronzeMedals(mergeFiles);
+		//rGenerator.updateSilverMedals(mergeFiles, this.dependenciesBranchOne, this.dependenciesBranchTwo);
+		System.out.println("RAMO 1");
+		rGenerator.setMedalFromDependencies(this.dependenciesBranchOne, mergeFiles.getFilesOnBothBranch(), mergeFiles.getFilesOnPreviousHistory());
+		System.out.println("RAMO 2");
+		rGenerator.setMedalFromDependencies(this.dependenciesBranchTwo, mergeFiles.getFilesOnBothBranch(), mergeFiles.getFilesOnPreviousHistory());
 		List<Medalist> ranking = rGenerator.getRanking();
-		for(Medalist medalist : ranking){
-			System.out.println(medalist);
-		}
-                model.addColumn("Commiter");
-		model.addColumn("Gold");
-		model.addColumn("Silver");
-		model.addColumn("Bronze");
-                for(Medalist m : ranking){
-			model.addRow(new Object[]{m.getCommitter().getName(),m.getGoldMedals(),m.getSilverMedals(),m.getBronzeMedals()});
-		}
-		jTableRanking.setModel(model);
-/*		
+		
+		
 		DefaultTableModel model = new DefaultTableModel();
-		jranking.setVisible(true);
+		jRanking.setVisible(true);
 		model.addColumn("Commiter");
 		model.addColumn("Gold");
 		model.addColumn("Silver");
@@ -386,8 +397,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 			model.addRow(new Object[]{m.getCommitter().getName(),m.getGoldMedals(),m.getSilverMedals(),m.getBronzeMedals()});
 		}
 		jTableRanking.setModel(model);
-		jScrollPane2.setViewportView(jTableRanking);	
-*/
+
     }//GEN-LAST:event_btnRankingActionPerformed
 
 	/**
@@ -509,6 +519,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 	 */
 	private Set<EditedFile> getFileDependencies2(Dominoes dominoes, double threshold, Collection<EditedFile> filesEdited) {
 		
+		//TODO colocar a informação do across ramos
 		Set<EditedFile> dependecies = new HashSet<>();
 
 		IMatrix2D matrix = dominoes.getMat();

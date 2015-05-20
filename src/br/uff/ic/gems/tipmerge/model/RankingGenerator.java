@@ -6,8 +6,10 @@
 package br.uff.ic.gems.tipmerge.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -22,7 +24,7 @@ public class RankingGenerator {
 	 * @return the ranking
 	 */
 	public List<Medalist> getRanking() {
-               Collections.sort(ranking, new Compara());
+        Collections.sort(ranking, new Compara());
 		return ranking;
 	}
 
@@ -31,42 +33,6 @@ public class RankingGenerator {
 	 */
 	public void setRanking(List<Medalist> ranking) {
 		this.ranking = ranking;
-	}
-
-	public static List<Medalist> getMedalists(MergeFiles merge){
-		List<Medalist> medalists = new ArrayList<>();
-		Set<EditedFile> filesTarget = merge.getFilesOnBothBranch();
-		
-		for(EditedFile file : merge.getFilesOnBranchOne()){
-			if(filesTarget.contains(file)){
-
-				countGoldMedals(file, medalists);
-				
-			}
-		}
-
-		for(EditedFile file : merge.getFilesOnBranchTwo()){
-			if(filesTarget.contains(file)){
-
-				countGoldMedals(file, medalists);
-				
-			}
-		}
-		
-		for(EditedFile file : merge.getFilesOnPreviousHistory()){
-			if(filesTarget.contains(file)){
-
-				 countBronzeMedals(file, medalists);
-				
-			}
-		}
-		
-		//TODO incluir a medalhas de prata
-		
-		
-		//TODO ordenar o ranking
-		Collections.sort(medalists, new Compara());
-		return medalists;
 	}
 
 	private static void countGoldMedals(EditedFile file, List<Medalist> medalists) {
@@ -107,84 +73,85 @@ public class RankingGenerator {
 				medalists.get(pos).setSilverMedals(medalists.get(pos).getSilverMedals() + 1);
 		}
 	}
-	/*
-	public static void main(String args[]){
-		Committer c = new Committer("Jair", "jair@ufac");	
-		Committer c2 = new Committer("Catarina", "Catarina@ufac");
-		Committer c3 = new Committer("Catarina", "Catarina@ufac");
-		Committer c4 = new Committer("Catarina1", "caty@ufac");
-		List<Committer> cList = new ArrayList<>();
-		cList.add(c); cList.add(c2); cList.add(c3); cList.add(c4);
-		List<Medalist> medalists = new ArrayList<>();
-		//medalists.add(new Medalist(c));
-		//medalists.add(new Medalist(c2));
-
-				for(Committer cmter : cList){
-					Medalist medalist = new Medalist(cmter);
-					int pos = medalists.indexOf(medalist);
-					if(pos == -1){
-						medalist.setGoldMedals(1);
-						medalists.add(medalist);
-					}
-					else
-						medalists.get(pos).setGoldMedals(medalists.get(pos).getGoldMedals() + 1);				
-					System.out.println(pos);
-
-				}
-
-		System.out.println(medalists.toString());
-		
-	}
-	*/
 
 	public void updateGoldMedals(MergeFiles mergeFiles) {
-		Set<EditedFile> filesTarget = mergeFiles.getFilesOnBothBranch();
+		System.out.println("Medalhas de Ouro: editou no RAMO os arquivos de both");
 		
+		Set<EditedFile> filesTarget = mergeFiles.getFilesOnBothBranch();
+
+		System.out.println("RAMO 1");
 		for(EditedFile file : mergeFiles.getFilesOnBranchOne()){
 			if(filesTarget.contains(file)){
-
+				System.out.println("File: " + file + "\n\t" + file.getWhoEditTheFile());
 				countGoldMedals(file, this.getRanking());
-				
 			}
 		}
 		
+		System.out.println("RAMO 2");
 		for(EditedFile file : mergeFiles.getFilesOnBranchTwo()){
 			if(filesTarget.contains(file)){
-
+				System.out.println("File: " + file + "\n\t" + file.getWhoEditTheFile());
 				countGoldMedals(file, this.getRanking());
-				
 			}
 		}
+
+		System.out.println(this.toString());
 
 	}
 
 	public void updateBronzeMedals(MergeFiles mergeFiles) {
+		System.out.println("Medalhas de Bronze: editou no HISTORICO os arquivos de both");
+
 		Set<EditedFile> filesTarget = mergeFiles.getFilesOnBothBranch();
 
 		for(EditedFile file : mergeFiles.getFilesOnPreviousHistory()){
 			if(filesTarget.contains(file)){
 
+				System.out.println("File: " + file + "\n\t" + file.getWhoEditTheFile());
 				 countBronzeMedals(file, this.getRanking());
 				
 			}
 		}
+		System.out.println(this.toString());
+
+	}
+	
+	public void setMedalFromDependencies(Map<EditedFile,Set<EditedFile>> dependenciesList, Collection<EditedFile> excepiontFiles, Set<EditedFile> historyFiles){
+		
+		System.out.println("Medalhas das: DEPENDENCIAS");
+
+		dependenciesList.entrySet().stream().forEach((dependence) -> {
+			EditedFile ascendent = dependence.getKey();
+			if(!excepiontFiles.contains(ascendent)){
+				System.out.println("OURO (ascendente): " + ascendent + "\n\t" + ascendent.getWhoEditTheFile());
+				countGoldMedals(ascendent, ranking);
+				
+				for(EditedFile ascOnHistory : historyFiles){
+					if(ascOnHistory.equals(ascendent)){
+						System.out.println("BRONZE (ascedente no historico): " + ascOnHistory + "\n\t" + ascOnHistory.getWhoEditTheFile());
+						countBronzeMedals(ascOnHistory, ranking);
+					}
+				}
+				
+				Set<EditedFile> consequenteList = dependence.getValue();
+				consequenteList.stream().forEach((consequent) -> {
+					System.out.println("PRATA (consequente): " + consequent + "\n\t" + consequent.getWhoEditTheFile());
+					countSilverMedals(consequent, ranking);
+				});
+			}
+		});
+		
+		System.out.println(this.toString());
+
 	}
 
-	public void updateSilverMedals(MergeFiles mergeFiles, Set<EditedFile> dependenciesBranchOne, Set<EditedFile> dependenciesBranchTwo) {
-		System.out.println("Silver Medals in Branch One");
-		for(EditedFile file : mergeFiles.getFilesOnBranchOne()){
-			if(dependenciesBranchTwo.contains(file)){
-				countSilverMedals(file, this.getRanking());
-				System.out.println("Prata: " + file.toString() + "\t" + file.getWhoEditTheFile());
-			}
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		for(Medalist medalist : ranking){
+			result.append(medalist).append("\n");
 		}
-		System.out.println("Silver Medals in Branch Two");
-		for(EditedFile file : mergeFiles.getFilesOnBranchTwo()){
-			if(dependenciesBranchOne.contains(file)){
-				countSilverMedals(file, this.getRanking());
-				System.out.println("Prata: " + file.toString() + "\t" + file.getWhoEditTheFile());
-			}
-		}
+		return result.toString();
 	}
 
 	

@@ -620,9 +620,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
     private void jButtonDependenciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDependenciesActionPerformed
 
-		List<Medalist> ranking = RankingGenerator.getMedalists(this.getMergeFiles());
-		
-	
 		JFrameDependencies filesDependence = new JFrameDependencies(this.repoFiles.getRepository(), this.getMergeFiles());
 		filesDependence.setLocationRelativeTo(this.getFocusOwner());
 		filesDependence.setVisible(true);		
