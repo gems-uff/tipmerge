@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -400,6 +401,13 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		model.addColumn("Bronze");
                 model.addColumn("Total");
                 int rank = 0;
+                 try{
+                   Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
+                   Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
+                   Icon mBronze = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/bronze1.png"));
+                   model.addRow(new Object[]{"Rank","Committer",mGold,mSilver,mBronze,"Total"});
+                }catch(Exception e){
+                }
 		for(Medalist m : ranking){
                        rank++;              
                        int gold = m.getGoldMedals();
@@ -407,8 +415,13 @@ public class JFrameDependencies extends javax.swing.JFrame {
                        int bronze = m.getBronzeMedals();
                        int total = gold + silver + bronze;
 			model.addRow(new Object[]{rank,m.getCommitter().getName(),gold,silver,bronze,total});
-		}
+		}            
 		jTableRanking.setModel(model);
+                JTableRenderer jTableRender = new JTableRenderer();
+                jTableRanking.getColumnModel().getColumn(2).setCellRenderer(jTableRender);
+                jTableRanking.getColumnModel().getColumn(3).setCellRenderer(jTableRender);
+                jTableRanking.getColumnModel().getColumn(4).setCellRenderer(jTableRender);
+                
     }//GEN-LAST:event_btnRankingActionPerformed
 
 	/**
