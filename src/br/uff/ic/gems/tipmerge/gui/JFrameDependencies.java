@@ -33,8 +33,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -389,15 +392,24 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		
 		DefaultTableModel model = new DefaultTableModel();
 		jRanking.setVisible(true);
+                model.addColumn("Rank");
 		model.addColumn("Commiter");
 		model.addColumn("Gold");
 		model.addColumn("Silver");
 		model.addColumn("Bronze");
+                model.addColumn("Total Medals");
+                int rank = 0;
+           ImageIcon imgGold = new ImageIcon(this.getClass().getResource("gold1.png"));
+             model.addRow(new Object[]{"Nome","Teste","","t","t","t"});
 		for(Medalist m : ranking){
-			model.addRow(new Object[]{m.getCommitter().getName(),m.getGoldMedals(),m.getSilverMedals(),m.getBronzeMedals()});
+                       rank++;              
+                       int gold = m.getGoldMedals();
+                       int silver = m.getSilverMedals();
+                       int bronze = m.getBronzeMedals();
+                       int total = gold + silver + bronze;
+			model.addRow(new Object[]{rank,m.getCommitter().getName(),gold,silver,bronze,total});
 		}
 		jTableRanking.setModel(model);
-
     }//GEN-LAST:event_btnRankingActionPerformed
 
 	/**
