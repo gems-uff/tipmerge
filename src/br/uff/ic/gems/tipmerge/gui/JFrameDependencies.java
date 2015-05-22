@@ -39,6 +39,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 /**
@@ -394,22 +395,22 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		
 		DefaultTableModel model = new DefaultTableModel();
 		jRanking.setVisible(true);
+                Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
+                   Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
+                   Icon mBronze = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/bronze1.png"));
+                   JLabel lblGold = new JLabel("Gold");
+                   JLabel lblSilver = new JLabel("Silver");
+                   JLabel lblBronze = new JLabel("Bronze");
+                   lblGold.setIcon(mGold);
+                   lblSilver.setIcon(mSilver);
+                   lblBronze.setIcon(mBronze);
                 model.addColumn("Rank");
 		model.addColumn("Commiter");
 		model.addColumn("Gold");
 		model.addColumn("Silver");
 		model.addColumn("Bronze");
                 model.addColumn("Total");
-                int rank = 0;
-				/*
-                 try{
-                   Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
-                   Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
-                   Icon mBronze = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/bronze1.png"));
-                   model.addRow(new Object[]{"Rank","Committer",mGold,mSilver,mBronze,"Total"});
-                }catch(Exception e){
-                }
-				*/
+                int rank = 0;				
 		for(Medalist m : ranking){
                        rank++;              
                        int gold = m.getGoldMedals();
@@ -420,9 +421,12 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		}            
 		jTableRanking.setModel(model);
                 JTableRenderer jTableRender = new JTableRenderer();
-                jTableRanking.getColumnModel().getColumn(2).setCellRenderer(jTableRender);
-                jTableRanking.getColumnModel().getColumn(3).setCellRenderer(jTableRender);
-                jTableRanking.getColumnModel().getColumn(4).setCellRenderer(jTableRender);
+                jTableRanking.getColumnModel().getColumn(2).setHeaderValue(lblGold);
+                jTableRanking.getColumnModel().getColumn(2).setHeaderRenderer(jTableRender);
+                jTableRanking.getColumnModel().getColumn(3).setHeaderValue(lblSilver);
+                jTableRanking.getColumnModel().getColumn(3).setHeaderRenderer(jTableRender);
+                jTableRanking.getColumnModel().getColumn(4).setHeaderValue(lblBronze);
+                jTableRanking.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
                 
     }//GEN-LAST:event_btnRankingActionPerformed
 
