@@ -401,6 +401,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		model.addColumn("Bronze");
                 model.addColumn("Total");
                 int rank = 0;
+				/*
                  try{
                    Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
                    Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
@@ -408,6 +409,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
                    model.addRow(new Object[]{"Rank","Committer",mGold,mSilver,mBronze,"Total"});
                 }catch(Exception e){
                 }
+				*/
 		for(Medalist m : ranking){
                        rank++;              
                        int gold = m.getGoldMedals();
