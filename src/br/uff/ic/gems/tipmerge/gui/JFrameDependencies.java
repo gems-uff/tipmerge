@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -397,10 +398,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		model.addColumn("Gold");
 		model.addColumn("Silver");
 		model.addColumn("Bronze");
-                model.addColumn("Total Medals");
+                model.addColumn("Total");
                 int rank = 0;
-           ImageIcon imgGold = new ImageIcon(this.getClass().getResource("gold1.png"));
-             model.addRow(new Object[]{"Nome","Teste","","t","t","t"});
 		for(Medalist m : ranking){
                        rank++;              
                        int gold = m.getGoldMedals();
