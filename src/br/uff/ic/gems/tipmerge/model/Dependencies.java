@@ -59,9 +59,9 @@ public class Dependencies {
 		
 		List<Cell> cells = matrix.getNonZeroData();
 		
-		for(int i = 0 ; i < rows ; i++){
+		for(int i = 0 ; i < cols ; i++){
 			
-			EditedFile antecendentTmp = new EditedFile(matrix.getMatrixDescriptor().getRowAt(i));
+			EditedFile antecendentTmp = new EditedFile(matrix.getMatrixDescriptor().getColumnAt(i));
 			Set<EditedFile> fileDependencies = new HashSet<>();
 			boolean hasDependencies = false;
 
@@ -70,13 +70,13 @@ public class Dependencies {
 				
 				antecendentTmp = antecedentFiles.get(indexOf);
 				
-				for(int j = 0 ; j < cols ; j++){
-					EditedFile consequentTmp = new EditedFile(matrix.getMatrixDescriptor().getColumnAt(j));
+				for(int j = 0 ; j < rows ; j++){
+					EditedFile consequentTmp = new EditedFile(matrix.getMatrixDescriptor().getRowAt(j));
 					indexOf = consequentFiles.indexOf(consequentTmp);
 					if((i != j) && (indexOf > -1))
 
 						for(Cell c : cells)
-							if((c.value >= threshold) && (c.row == i) && (c.col == j)){						
+							if((c.value >= threshold) && (c.row == j) && (c.col == i)){						
 								fileDependencies.add(consequentFiles.get(indexOf));
 								hasDependencies = true;
 							}

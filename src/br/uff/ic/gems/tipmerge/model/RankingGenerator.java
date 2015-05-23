@@ -8,6 +8,7 @@ package br.uff.ic.gems.tipmerge.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -119,12 +120,16 @@ public class RankingGenerator {
 	public void setMedalFromDependencies(Map<EditedFile,Set<EditedFile>> dependenciesList, Collection<EditedFile> excepiontFiles, Set<EditedFile> historyFiles){
 		
 		System.out.println("Medalhas das: DEPENDENCIAS");
-
+		
+		historyFiles.removeAll(excepiontFiles);
+		Set<EditedFile> consequents = new HashSet<>();
 		dependenciesList.entrySet().stream().forEach((dependence) -> {
 			EditedFile ascendent = dependence.getKey();
 			if(!excepiontFiles.contains(ascendent)){
 				System.out.println("OURO (ascendente): " + ascendent + "\n\t" + ascendent.getWhoEditTheFile());
 				countGoldMedals(ascendent, ranking);
+				System.out.println("PRATA (ascendente): " + ascendent + "\n\t" + ascendent.getWhoEditTheFile());
+				countSilverMedals(ascendent, ranking);
 				
 				for(EditedFile ascOnHistory : historyFiles){
 					if(ascOnHistory.equals(ascendent)){
@@ -133,11 +138,21 @@ public class RankingGenerator {
 					}
 				}
 				
-				Set<EditedFile> consequenteList = dependence.getValue();
-				consequenteList.stream().forEach((consequent) -> {
-					System.out.println("PRATA (consequente): " + consequent + "\n\t" + consequent.getWhoEditTheFile());
-					countSilverMedals(consequent, ranking);
+				Set<EditedFile> consequentList = dependence.getValue();
+				consequentList.stream().forEach((consequent) -> {
+					System.out.println("OURO (consequente): " + consequent + "\n\t" + consequent.getWhoEditTheFile());
+					consequents.add(consequent);
+					countGoldMedals(consequent, ranking);					
 				});
+				
+			}
+		});
+		consequents.stream().forEach((consequent) -> {
+			for(EditedFile consOnHistory : historyFiles){
+				if(consOnHistory.equals(consequent)){
+					System.out.println("BRONZE (consequente no historico): " + consOnHistory + "\n\t" + consOnHistory.getWhoEditTheFile());
+					countBronzeMedals(consOnHistory, ranking);
+				}
 			}
 		});
 		
