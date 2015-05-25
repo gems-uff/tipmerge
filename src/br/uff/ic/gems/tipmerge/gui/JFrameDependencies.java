@@ -417,7 +417,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
                        int silver = m.getSilverMedals();
                        int bronze = m.getBronzeMedals();
                        int total = gold + silver + bronze;
-			model.addRow(new Object[]{rank,m.getCommitter().getName(),gold,silver,bronze,total});
+			model.addRow(new Object[]{rank+"º",m.getCommitter().getName(),gold,silver,bronze,total});
 		}            
 		jTableRanking.setModel(model);
                 JTableRenderer jTableRender = new JTableRenderer();
@@ -427,6 +427,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
                 jTableRanking.getColumnModel().getColumn(3).setHeaderRenderer(jTableRender);
                 jTableRanking.getColumnModel().getColumn(4).setHeaderValue(lblBronze);
                 jTableRanking.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
+                jTableRanking.setDefaultRenderer(Object.class,new JTableRenderer());
                 
     }//GEN-LAST:event_btnRankingActionPerformed
 

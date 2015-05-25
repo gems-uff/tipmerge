@@ -5,6 +5,7 @@
  */
 package br.uff.ic.gems.tipmerge.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -19,29 +20,31 @@ public class JTableRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
          boolean hasFocus, int row, int column)
      {
- 
+   JLabel cell = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         if(value instanceof JLabel){
            //This time return only the JLabel without icon
             return (JLabel)value;
         }
- 
-        else
-            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
- 
+        if(value instanceof Object){
+        if(column==1)
+            setHorizontalAlignment(JLabel.LEFT);
+        if(column==2)
+            setBackground(Color.YELLOW);
+            setForeground(Color.BLACK);
+        if(column==3)
+            setBackground(Color.LIGHT_GRAY);
+            setForeground(Color.BLACK);
+        if(column==4)
+            setBackground(Color.ORANGE);
+            setForeground(Color.BLACK);
+            
+        }
+           return cell;
      }
     protected void setValue(Object value){
-       if(value instanceof ImageIcon){
-          if(value != null){
-             ImageIcon imageIcon = (ImageIcon) value;
-             setIcon(imageIcon);
-          }
-          else{
-             setText("");
-             setIcon(null);
-          }
-       }
-       else{
-           super.setValue(value);
-       }
+       setHorizontalAlignment(JLabel.CENTER);
+       setBackground(Color.WHITE);
+       setForeground(Color.BLACK);
+       super.setValue(value);
     }
 }
