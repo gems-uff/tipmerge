@@ -79,6 +79,16 @@ public class Medalist
 		}
 		return true;
 	}
+
+	public void addGoldMedal() {
+		this.goldMedals++;
+	}
+	public void addSilverMedal() {
+		this.silverMedals++;
+	}
+	public void addBronzeMedal() {
+		this.bronzeMedals++;
+	}
 	
 	
 	

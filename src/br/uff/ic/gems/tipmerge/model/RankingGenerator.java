@@ -169,5 +169,173 @@ public class RankingGenerator {
 		return result.toString();
 	}
 
+	public void setMedalFromDependencies(Map<EditedFile, Set<EditedFile>> dependencies, MergeFiles mergeFiles) {
+		System.out.println("Medalhas das: DEPENDENCIAS");
+		
+		Set<EditedFile> aaaab1 = new HashSet<>();
+		Set<EditedFile> ccccb2 = new HashSet<>();
+		Set<EditedFile> ccccb1 = new HashSet<>();
+		Set<EditedFile> aaaab2 = new HashSet<>();
+		
+		List<EditedFile> filesOnBoth = new ArrayList<>(mergeFiles.getFilesOnBothBranch());
+		List<EditedFile> filesOnBranch1 = mergeFiles.getFilesOnBranchOne();
+		List<EditedFile> filesOnBranch2 = mergeFiles.getFilesOnBranchTwo();
+		List<EditedFile> filesOnHistory = new ArrayList<>(mergeFiles.getFilesOnPreviousHistory());
+		
+		List<Committer> goldList = new ArrayList<>();
+		List<Committer> silverList = new ArrayList<>();
+		List<Committer> bronzeList = new ArrayList<>();
+
+
+		dependencies.entrySet().stream().forEach((dependence) -> {
+			
+			EditedFile ascendentCand = dependence.getKey();
+			int index1 = filesOnBranch1.indexOf(ascendentCand);		
+			//verifica se encontrou um ascendent
+			if(index1 > -1){
+				boolean hasConsequent = false;
+				//se tem um ascendent entao vamos procurar o conseguent
+				Set<EditedFile> consequentList = dependence.getValue();
+
+				for(EditedFile consequent : consequentList){
+				//consequentList.stream().forEach((consequent) -> {
+					int index2 = filesOnBranch2.indexOf(consequent);
+					if((index2 > -1) && (!ccccb2.contains(consequent))){
+						hasConsequent = true;
+						ccccb2.add(consequent);
+						List<Committer> cmterList2 = findThisFileOnHistory(consequent,filesOnHistory);
+						bronzeList.addAll(cmterList2);
+						goldList.addAll(filesOnBranch2.get(index2).getWhoEditTheFile());
+//						for(Committer cmter : cmterList2)
+//							if(!bronzeList.contains(cmter))
+//								bronzeList.add(cmter);
+//						for(Committer cmter : filesOnBranch2.get(index2).getWhoEditTheFile())
+//							if(!goldList.contains(cmter)){
+//								goldList.add(cmter);
+//							}
+					}
+				}		
+				if((hasConsequent) && (aaaab1.contains(ascendentCand))){
+					aaaab1.add(ascendentCand);
+					if(!filesOnBoth.contains(ascendentCand)){
+						bronzeList.addAll(findThisFileOnHistory(ascendentCand,filesOnHistory));
+						silverList.addAll(filesOnBranch1.get(index1).getWhoEditTheFile());
+						goldList.addAll(filesOnBranch1.get(index1).getWhoEditTheFile());
+					}
+//					List<Committer> cmterList = findThisFileOnHistory(ascendentCand,filesOnHistory);
+//					for(Committer cmter : cmterList)
+//						if(!bronzeList.contains(cmter))
+//							bronzeList.add(cmter);
+//					if(!filesOnBoth.contains(ascendentCand)){
+//						for(Committer cmter : filesOnBranch1.get(index1).getWhoEditTheFile()){
+//							if(!goldList.contains(cmter))
+//								goldList.add(cmter);
+//							if(!silverList.contains(cmter))
+//								silverList.add(cmter);
+//							}
+//					}					
+				}		
+			
+			}
+			//Agora vamos fazer para o outro branch
+			int indexb2 = filesOnBranch2.indexOf(ascendentCand);		
+			//verifica se encontrou um ascendent
+			if(indexb2 > -1){
+				boolean hasConsequent = false;
+				//se tem um ascendent entao vamos procurar o conseguent
+				Set<EditedFile> consequentList = dependence.getValue();
+
+				for(EditedFile consequent : consequentList){
+				//consequentList.stream().forEach((consequent) -> {
+					int indexb1 = filesOnBranch1.indexOf(consequent);
+					if((indexb1 > -1) && !(ccccb1.contains(consequent))){
+						ccccb1.add(consequent);
+						hasConsequent = true;
+						goldList.addAll(filesOnBranch1.get(indexb1).getWhoEditTheFile());
+						bronzeList.addAll(findThisFileOnHistory(consequent,filesOnHistory));
+//						List<Committer> cmterList2 = findThisFileOnHistory(consequent,filesOnHistory);
+//						for(Committer cmter : cmterList2)
+//							if(!bronzeList.contains(cmter))
+//								bronzeList.add(cmter);
+//						for(Committer cmter : filesOnBranch1.get(indexb1).getWhoEditTheFile())
+//							if(!goldList.contains(cmter)){
+//								goldList.add(cmter);
+//							}
+					}
+				}		
+				if((hasConsequent) && (!aaaab2.contains(ascendentCand))){
+					aaaab2.add(ascendentCand);
+					if(!filesOnBoth.contains(ascendentCand)){
+						bronzeList.addAll(findThisFileOnHistory(ascendentCand,filesOnHistory));
+						silverList.addAll(filesOnBranch2.get(indexb2).getWhoEditTheFile());
+						goldList.addAll(filesOnBranch2.get(indexb2).getWhoEditTheFile());
+					}
+//					List<Committer> cmterList = findThisFileOnHistory(ascendentCand,filesOnHistory);
+//					for(Committer cmter : cmterList)
+//						if(!bronzeList.contains(cmter))
+//							bronzeList.add(cmter);
+//					if(!filesOnBoth.contains(ascendentCand)){
+//						for(Committer cmter : filesOnBranch2.get(indexb2).getWhoEditTheFile()){
+//							if(!goldList.contains(cmter))
+//								goldList.add(cmter);
+//							if(!silverList.contains(cmter))
+//								silverList.add(cmter);
+//							}
+//					}					
+				}		
+			
+			}
+			
+		});
+
+		setMedals(goldList, silverList, bronzeList);
+		
+		System.out.println(this.toString());
+		
+	}
+	
+	private void setMedals(Collection<Committer> cmterGold, Collection<Committer> cmterSilver, Collection<Committer> cmterBronze){
+//		for(Medalist m : this.ranking){
+			for(Committer cmter : cmterGold){
+				Medalist medalist = new Medalist(cmter);
+				medalist.setGoldMedals(1);
+				int index = ranking.indexOf(medalist);
+				if(index == -1)
+					ranking.add(medalist);
+				else{
+					ranking.get(index).addGoldMedal();
+				}
+			}
+
+			for(Committer cmter : cmterSilver){
+				Medalist medalist = new Medalist(cmter);
+				medalist.setSilverMedals(1);
+				int index = ranking.indexOf(medalist);
+				if(index == -1)
+					ranking.add(medalist);
+				else{
+					ranking.get(index).addSilverMedal();
+				}
+			}
+			for(Committer cmter : cmterBronze){
+				Medalist medalist = new Medalist(cmter);
+				medalist.setBronzeMedals(1);
+				int index = ranking.indexOf(medalist);
+				if(index == -1)
+					ranking.add(medalist);
+				else{
+					ranking.get(index).addBronzeMedal();
+				}
+			}
+	}
+	
+
+	private List<Committer> findThisFileOnHistory(EditedFile ascendentCand, List<EditedFile> filesOnHistory) {
+		int index = filesOnHistory.indexOf(ascendentCand);
+		if(index > -1)
+			return  filesOnHistory.get(index).getWhoEditTheFile();
+		return null;
+	}
+
 	
 }
