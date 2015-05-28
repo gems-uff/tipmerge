@@ -8,6 +8,7 @@ package br.uff.ic.gems.tipmerge.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -131,7 +132,7 @@ public class RankingGenerator {
 		List<Committer> gold = new ArrayList<>();
 		List<Committer> bronze = new ArrayList<>();
 		
-		Set<EditedFile> files =  mergeFiles.getFilesOnBothBranch();
+		Set<EditedFile> files = new HashSet<>( mergeFiles.getFilesOnBothBranch() );
 		for(EditedFile file : files){
 			int index = mergeFiles.getFilesOnBranchOne().indexOf(file);
 			if(index > -1){

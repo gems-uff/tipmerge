@@ -398,9 +398,10 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		System.out.println("Medalhas para arquivos comuns");
 		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
 		System.out.println("Medalhas para dependencias no ramo 1");
-		rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
+		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
 		System.out.println("Medalhas para dependencias no ramo 2");
-		rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
+		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
+		excepiontFiles.removeAll(excepiontFiles);
 		
 		//rGenerator.updateGoldMedals(mergeFiles);
 		//rGenerator.updateBronzeMedals(mergeFiles);
