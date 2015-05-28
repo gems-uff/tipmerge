@@ -154,6 +154,11 @@ public class JFrameDependencies extends javax.swing.JFrame {
         });
 
         spinnerThreshold.setModel(new javax.swing.SpinnerNumberModel(0.5d, 0.0d, 1.0d, 0.1d));
+        spinnerThreshold.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spinnerThresholdStateChanged(evt);
+            }
+        });
 
         jLabel2.setText("Threshold:");
 
@@ -417,6 +422,10 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		showRanking(ranking);
                 
     }//GEN-LAST:event_btnRankingActionPerformed
+
+    private void spinnerThresholdStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerThresholdStateChanged
+		btnRanking.setEnabled(false);
+    }//GEN-LAST:event_spinnerThresholdStateChanged
 
 	private void showRanking(List<Medalist> ranking) {
 		DefaultTableModel model = new DefaultTableModel();
