@@ -58,7 +58,9 @@ public class RankingGenerator {
 				
 				excepiontFiles.add(ascendentCand);
 				System.out.println("Excep: " + excepiontFiles.toString());
-			}
+			}else if(mergeFiles.getFilesOnBothBranch().contains(ascendentCand))
+				this.setSilverMedals(ascendentCand.getWhoEditTheFile());
+			
 			
 			Set<EditedFile> consequentList = dependency.getValue();
 			for(EditedFile consequent : consequentList){
