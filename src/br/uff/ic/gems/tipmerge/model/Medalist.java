@@ -51,7 +51,7 @@ public class Medalist
 	
 	@Override
 	public String toString(){
-		return this.getCommitter().getName() + "\t"
+		return this.getCommitter().getName().substring(0, Math.min(20, this.getCommitter().getName().length())) + "\t"
 			+ this.getGoldMedals()  + "\t"
 			+ this.getSilverMedals()  + "\t"
 			+ this.getBronzeMedals();

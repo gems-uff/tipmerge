@@ -21,11 +21,8 @@ import br.uff.ic.gems.tipmerge.model.RankingGenerator;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import dao.DominoesSQLDao2;
 import domain.Dominoes;
-import java.io.File;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,14 +30,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -52,7 +46,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
 	public static String databaseName = "data/gitdataminer.sqlite";
 	public MergeFiles mergeFiles;
 	public Map<EditedFile,Set<EditedFile>> dependenciesBranchOne;
-	public Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo;
+	public Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo;	
+	public Map<EditedFile,Set<EditedFile>> dependenciesMap;
 	/*	/Users/j2cf/Apps/ws_nb/tipmerge/data  */
 	
 	/**
@@ -269,73 +264,30 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		mCommitsDao.update(merge);
 
 		//Previous History
-		List<String> previousHistory = mCommitsDao.getHashs(repo.getFirstCommit() , merge.getHashBase());
+		List<String> hashsOnPreviousHistory = mCommitsDao.getHashs(repo.getFirstCommit() , merge.getHashBase());
 		
 		
 		try {
 
 			System.out.println("\nCreating the dominoes of History");
-			List<Dominoes> dominoesPreviousHistory = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", previousHistory);
+			List<Dominoes> dominoesHistory = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", hashsOnPreviousHistory);
 
+			Dominoes domCF;
+			for(Dominoes dominoe : dominoesHistory){
+				System.out.println(dominoe.getHistoric());
+				if(dominoe.getHistoric().equals("CF"))
+					domCF = dominoe;
+			}
+			
 			//multiplicando as matrizes e gerando a confidence
-			Dominoes domCF = dominoesPreviousHistory.get(6);
+			domCF = dominoesHistory.get(6);
 			Dominoes domCFt = domCF.cloneNoMatrix();
 			domCFt.transpose();
 			Dominoes domFF = domCFt.multiply(domCF);
 			domFF.confidence();
 			
 			if(mergeFiles == null){
-				System.out.println("O merge files é null");
-				MergeFilesDao mergeFilesDao = new MergeFilesDao();
-				mergeFiles = mergeFilesDao.getMerge(mergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
-
-				EditedFilesDao filesDao = new EditedFilesDao();
-				mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(), 
-																			mergeFiles.getParents()[0], 
-																			mergeFiles.getPath(),
-																			".java"));
-				mergeFiles.setFilesOnBranchTwo(filesDao.getFiles(mergeFiles.getHashBase(), 
-																			mergeFiles.getParents()[1], 
-																			mergeFiles.getPath(),
-																			".java"));
-
-				CommitterDao cmterDao = new CommitterDao();
-				List<EditedFile> files = new LinkedList<>();
-				for(EditedFile editedFile : mergeFiles.getFilesOnBranchOne()){
-					List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeFiles.getHashBase(), 
-												mergeFiles.getParents()[0], 
-												editedFile.getFileName(), 
-												mergeFiles.getPath());
-					if(whoEdited.size() > 0){
-						editedFile.setWhoEditTheFile(whoEdited);
-						files.add(editedFile);
-					}
-				}mergeFiles.setFilesOnBranchOne(files);
-
-				files = new LinkedList<>();
-				for(EditedFile editedFile : mergeFiles.getFilesOnBranchTwo()){
-					List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeFiles.getHashBase(), 
-												mergeFiles.getParents()[1], 
-												editedFile.getFileName(), 
-												mergeFiles.getPath());
-					if(whoEdited.size() > 0){
-						editedFile.setWhoEditTheFile(whoEdited);
-						files.add(editedFile);
-					}
-				}mergeFiles.setFilesOnBranchTwo(files);	
-				
-				files = new LinkedList<>();
-				for(EditedFile editedFile : mergeFiles.getFilesOnPreviousHistory()){
-					List<Committer> whoEdited = cmterDao.getWhoEditedFile(repo.getFirstCommit(), 
-												mergeFiles.getHashBase(), 
-												editedFile.getFileName(), 
-												mergeFiles.getPath());
-					if(whoEdited.size() > 0){
-						editedFile.setWhoEditTheFile(whoEdited);
-						files.add(editedFile);
-					}
-				}mergeFiles.setFilesOnPreviousHistory(new HashSet<>(files));
-	
+				setValuesToMerge();
 			}
 			
 			Dependencies dependencies = new Dependencies(domFF);
@@ -354,11 +306,19 @@ public class JFrameDependencies extends javax.swing.JFrame {
 					mergeFiles.getFilesOnBranchTwo(), 
 					mergeFiles.getFilesOnBranchOne(),
 					threshold);
+					
+			Set<EditedFile> allFiles = new HashSet<>( mergeFiles.getFilesOnBranchOne() );
+			allFiles.addAll(mergeFiles.getFilesOnBranchTwo());
+			this.dependenciesMap = dependencies.getFilesDependencies(allFiles, threshold);
 			
+			//gera o texto para mostrar na tela
 			txtDependencies.setText("Dependencies Branch One\n");
 			addListDependences(this.dependenciesBranchOne);
 			txtDependencies.append("\nDependencies Branch Two\n");
 			addListDependences(this.dependenciesBranchTwo);
+			txtDependencies.append("\n\nAll Files Dependencies\n");
+			addListDependences(this.dependenciesMap);
+
 			
 		} catch (SQLException ex) {
 			Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
@@ -368,11 +328,63 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		
     }//GEN-LAST:event_jButtonRunActionPerformed
 
+	private void setValuesToMerge() {
+		MergeFilesDao mergeFilesDao = new MergeFilesDao();
+		mergeFiles = mergeFilesDao.getMerge(mergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
+		
+		EditedFilesDao filesDao = new EditedFilesDao();
+		mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(),
+			mergeFiles.getParents()[0],
+			mergeFiles.getPath(),
+			".java"));
+		mergeFiles.setFilesOnBranchTwo(filesDao.getFiles(mergeFiles.getHashBase(),
+			mergeFiles.getParents()[1],
+			mergeFiles.getPath(),
+			".java"));
+		
+		CommitterDao cmterDao = new CommitterDao();
+		List<EditedFile> files = new LinkedList<>();
+		for(EditedFile editedFile : mergeFiles.getFilesOnBranchOne()){
+			List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeFiles.getHashBase(),
+				mergeFiles.getParents()[0],
+				editedFile.getFileName(),
+				mergeFiles.getPath());
+			if(whoEdited.size() > 0){
+				editedFile.setWhoEditTheFile(whoEdited);
+				files.add(editedFile);
+			}
+		}mergeFiles.setFilesOnBranchOne(files);
+		
+		files = new LinkedList<>();
+		for(EditedFile editedFile : mergeFiles.getFilesOnBranchTwo()){
+			List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeFiles.getHashBase(),
+				mergeFiles.getParents()[1],
+				editedFile.getFileName(),
+				mergeFiles.getPath());
+			if(whoEdited.size() > 0){
+				editedFile.setWhoEditTheFile(whoEdited);
+				files.add(editedFile);
+			}
+		}mergeFiles.setFilesOnBranchTwo(files);
+		
+		files = new LinkedList<>();
+		for(EditedFile editedFile : mergeFiles.getFilesOnPreviousHistory()){
+			List<Committer> whoEdited = cmterDao.getWhoEditedFile(repo.getFirstCommit(),
+				mergeFiles.getHashBase(),
+				editedFile.getFileName(),
+				mergeFiles.getPath());
+			if(whoEdited.size() > 0){
+				editedFile.setWhoEditTheFile(whoEdited);
+				files.add(editedFile);
+			}
+		}mergeFiles.setFilesOnPreviousHistory(new HashSet<>(files));
+	}
+
 	private void addListDependences(Map<EditedFile,Set<EditedFile>> dependencies) {
 		
-		dependencies.entrySet().stream().forEach((dependence) -> {
-			EditedFile key = dependence.getKey();
-			Set<EditedFile> value = dependence.getValue();
+		dependencies.entrySet().stream().forEach((dependency) -> {
+			EditedFile key = dependency.getKey();
+			Set<EditedFile> value = dependency.getValue();
 			txtDependencies.append(key.toString() + "\n" + "\t" + value.toString() + "\n");
 		});
 	}
@@ -382,89 +394,61 @@ public class JFrameDependencies extends javax.swing.JFrame {
     }//GEN-LAST:event_mergesListActionPerformed
 
     private void btnRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRankingActionPerformed
-		RankingGenerator rGenerator = new RankingGenerator();	
-		rGenerator.updateGoldMedals(mergeFiles);
-		rGenerator.updateBronzeMedals(mergeFiles);
+		RankingGenerator rGenerator = new RankingGenerator();
+		System.out.println("Medalhas para arquivos comuns");
+		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
+		System.out.println("Medalhas para dependencias no ramo 1");
+		rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
+		System.out.println("Medalhas para dependencias no ramo 2");
+		rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
+		
+		//rGenerator.updateGoldMedals(mergeFiles);
+		//rGenerator.updateBronzeMedals(mergeFiles);
 		//rGenerator.updateSilverMedals(mergeFiles, this.dependenciesBranchOne, this.dependenciesBranchTwo);
-		System.out.println("RAMO 1");
-		rGenerator.setMedalFromDependencies(this.dependenciesBranchOne, mergeFiles.getFilesOnBothBranch(), mergeFiles.getFilesOnPreviousHistory());
-		System.out.println("RAMO 2");
-		rGenerator.setMedalFromDependencies(this.dependenciesBranchTwo, mergeFiles.getFilesOnBothBranch(), mergeFiles.getFilesOnPreviousHistory());
+		//System.out.println("RAMO 1");
+		//rGenerator.setMedalFromDependencies(this.dependenciesBranchOne, mergeFiles.getFilesOnBothBranch(), mergeFiles.getFilesOnPreviousHistory());
+		//System.out.println("RAMO 2");
+		//rGenerator.setMedalFromDependencies(this.dependenciesBranchTwo, mergeFiles.getFilesOnBothBranch(), mergeFiles.getFilesOnPreviousHistory());
+		
 		List<Medalist> ranking = rGenerator.getRanking();
 		
 		
-		DefaultTableModel model = new DefaultTableModel();
-		jRanking.setVisible(true);
-                Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
-                   Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
-                   Icon mBronze = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/bronze1.png"));
-                   JLabel lblGold = new JLabel("Gold");
-                   JLabel lblSilver = new JLabel("Silver");
-                   JLabel lblBronze = new JLabel("Bronze");
-                   lblGold.setIcon(mGold);
-                   lblSilver.setIcon(mSilver);
-                   lblBronze.setIcon(mBronze);
-                model.addColumn("Rank");
-		model.addColumn("Commiter");
-		model.addColumn("Gold");
-		model.addColumn("Silver");
-		model.addColumn("Bronze");
-                model.addColumn("Total");
-                int rank = 0;				
-		for(Medalist m : ranking){
-                       rank++;              
-                       int gold = m.getGoldMedals();
-                       int silver = m.getSilverMedals();
-                       int bronze = m.getBronzeMedals();
-                       int total = gold + silver + bronze;
-			model.addRow(new Object[]{rank+"º",m.getCommitter().getName(),gold,silver,bronze,total});
-		}            
-		jTableRanking.setModel(model);
-                JTableRenderer jTableRender = new JTableRenderer();
-                jTableRanking.getColumnModel().getColumn(2).setHeaderValue(lblGold);
-                jTableRanking.getColumnModel().getColumn(2).setHeaderRenderer(jTableRender);
-                jTableRanking.getColumnModel().getColumn(3).setHeaderValue(lblSilver);
-                jTableRanking.getColumnModel().getColumn(3).setHeaderRenderer(jTableRender);
-                jTableRanking.getColumnModel().getColumn(4).setHeaderValue(lblBronze);
-                jTableRanking.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
-                jTableRanking.setDefaultRenderer(Object.class,new JTableRenderer());
+		showRanking(ranking);
                 
     }//GEN-LAST:event_btnRankingActionPerformed
 
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-		 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(JFrameDependencies.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(JFrameDependencies.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(JFrameDependencies.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(JFrameDependencies.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	private void showRanking(List<Medalist> ranking) {
+		DefaultTableModel model = new DefaultTableModel();
+		jRanking.setVisible(true);
+		Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
+		Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
+		Icon mBronze = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/bronze1.png"));
+		JLabel lblGold = new JLabel("Gold");
+		JLabel lblSilver = new JLabel("Silver");
+		JLabel lblBronze = new JLabel("Bronze");
+		lblGold.setIcon(mGold);
+		lblSilver.setIcon(mSilver);
+		lblBronze.setIcon(mBronze);
+		String[] columnLabels = {"Rank", "Commiter", "Gold", "Silver", "Bronze", "Total"};
+		model.setColumnIdentifiers(columnLabels);
+		int rank = 1;
+		for(Medalist m : ranking){
+			int gold = m.getGoldMedals();
+			int silver = m.getSilverMedals();
+			int bronze = m.getBronzeMedals();
+			int total = gold + silver + bronze;
+			String name = m.getCommitter().getName();
+			model.addRow(new Object[]{rank++ + "º", name, gold, silver, bronze, total});
 		}
-        //</editor-fold>
-        //</editor-fold>
-
-		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new JFrameDependencies(new Repository(new File("/Users/j2cf/Apps/clones/voldemort"))).setVisible(true);
-			}
-		});
+		jTableRanking.setModel(model);
+		JTableRenderer jTableRender = new JTableRenderer();
+		jTableRanking.getColumnModel().getColumn(2).setHeaderValue(lblGold);
+		jTableRanking.getColumnModel().getColumn(2).setHeaderRenderer(jTableRender);
+		jTableRanking.getColumnModel().getColumn(3).setHeaderValue(lblSilver);
+		jTableRanking.getColumnModel().getColumn(3).setHeaderRenderer(jTableRender);
+		jTableRanking.getColumnModel().getColumn(4).setHeaderValue(lblBronze);
+		jTableRanking.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
+		jTableRanking.setDefaultRenderer(Object.class,new JTableRenderer());
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
