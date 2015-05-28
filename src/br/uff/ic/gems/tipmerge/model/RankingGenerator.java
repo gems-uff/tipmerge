@@ -44,10 +44,12 @@ public class RankingGenerator {
 			
 			EditedFile ascendentCand = dependency.getKey();
 			
+			List<Committer> silverRights = new ArrayList<>();
+			
 			if(!excepiontFiles.contains(ascendentCand)){
 				
 				this.setGoldMedals(ascendentCand.getWhoEditTheFile());
-				this.setSilverMedals(ascendentCand.getWhoEditTheFile());
+				silverRights = ascendentCand.getWhoEditTheFile();
 				
 				for(EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()){
 					if(fileHistory.equals(ascendentCand)){
@@ -57,17 +59,18 @@ public class RankingGenerator {
 				}
 				
 				excepiontFiles.add(ascendentCand);
-				System.out.println("Excep: " + excepiontFiles.toString());
-			}else if(mergeFiles.getFilesOnBothBranch().contains(ascendentCand))
-				this.setSilverMedals(ascendentCand.getWhoEditTheFile());
-			
+
+			}else
+				silverRights = ascendentCand.getWhoEditTheFile();
 			
 			Set<EditedFile> consequentList = dependency.getValue();
 			for(EditedFile consequent : consequentList){
+
+				this.setSilverMedals(silverRights);
+				
 				if(!excepiontFiles.contains(consequent)){
 					
 					this.setGoldMedals(consequent.getWhoEditTheFile());
-					this.setSilverMedals(consequent.getWhoEditTheFile());
 					
 					for(EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()){
 						if(fileHistory.equals(consequent)){
@@ -77,12 +80,11 @@ public class RankingGenerator {
 					}
 					
 					excepiontFiles.add(consequent);
-					System.out.println("Excep: " + excepiontFiles.toString());
 
 				}
 			}
 			
-			System.out.println(ascendentCand + "\n" + this.toString());
+			System.out.println(this.toString());
 			
 		});
 
