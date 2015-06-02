@@ -21,6 +21,7 @@ import br.uff.ic.gems.tipmerge.util.Export;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import br.uff.ic.gems.tipmerge.util.Statistics;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -37,7 +38,10 @@ import javax.swing.table.TableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -885,9 +889,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 JTable tabela = new JTable();   
                 tabela = jTable4;
             List<EditedFile> temp1 = mergeFiles.getFilesOnBranchOne();
-          if(jTable1.isShowing()||jTable2.isShowing()){
-                if(jTable1.isShowing()){
-                   temp1 =  merge.getFilesOnBranchOne();}
+                 if(jTable1.isShowing()||jTable2.isShowing()){
+                 if(jTable1.isShowing()){
+                     temp1 =  merge.getFilesOnBranchOne();}
                   else{if(jTable2.isShowing())
                        temp1= merge.getFilesOnBranchTwo();
                     }
@@ -898,16 +902,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                              dataBranch1.addValue(comitter.getCommits(),file.getFileName(),comitter.getName());
                         }
                     }
-                  }
-                  if(botao==2){
-                       for(int k=0;k<jTable3.getRowCount();k++){
-                     for (EditedFile file : temp1){    
-                         for(Committer comitter: file.getWhoEditTheFile()){
-                             if(file.getFileName().equals(jTable3.getValueAt(k,0)))
-                              if(comitter.getCommits()!=0)
-                             dataBranch1.addValue(comitter.getCommits(),file.getFileName(),comitter.getName());
-                        }
-                    }}}
+                   }
                    
                    }
         if(jTable4.isShowing()){
@@ -921,26 +916,45 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                          cont++;
                      }
                 }
-               dataBranch1.addValue(cont,tabela.getColumnName(i),"Nomes");
+               dataBranch1.addValue(cont,tabela.getColumnName(i),"Number of Files");
                cont = 0;
             }
-        }else{  double num;
-             for(int i=1; i<jTable3.getRowCount();i++){
-               for(int j=0;j<jTable4.getRowCount();j++){
-                  if(jTable4.getValueAt(j,0).equals(jTable3.getValueAt(i,0))){
-                        for(int k=1; k<jTable4.getColumnCount();k++){
-                            num = Integer.parseInt((String) jTable4.getValueAt(j,k));
-                            if(num!=0)
-                           dataBranch1.addValue(num,jTable4.getColumnName(k), (Comparable) jTable4.getValueAt(j,0));
-                        }
-                   }
-               }
-             }
-         
-         }
-        
+        }  
         }
-        return dataBranch1;
+        if(botao ==2){
+                                for(int k=0;k<jTable3.getRowCount();k++){
+                                     for (EditedFile file : mergeFiles.getFilesOnBranchOne()){    
+                                         for(Committer comitter: file.getWhoEditTheFile()){
+                                             if(file.getFileName().equals(jTable3.getValueAt(k,0)))
+                                                if(comitter.getCommits()!=0)
+                                                     dataBranch1.addValue(comitter.getCommits(),comitter.getName(), "1 "+file.getFileName());
+                                            }
+                                        }
+                                }
+                                for(int k=0;k<jTable3.getRowCount();k++){
+                                     for (EditedFile file : mergeFiles.getFilesOnBranchTwo()){    
+                                         for(Committer comitter: file.getWhoEditTheFile()){
+                                             if(file.getFileName().equals(jTable3.getValueAt(k,0)))
+                                                if(comitter.getCommits()!=0)
+                                                     dataBranch1.addValue(comitter.getCommits(),comitter.getName(),"2 "+file.getFileName());
+                                            }
+                                        }
+                                }
+                               double num;
+                               for(int i=1; i<jTable3.getRowCount();i++){
+                                    for(int j=0;j<jTable4.getRowCount();j++){
+                                         if(jTable4.getValueAt(j,0).equals(jTable3.getValueAt(i,0))){
+                                            for(int k=1; k<jTable4.getColumnCount();k++){
+                                              num = Integer.parseInt((String) jTable4.getValueAt(j,k));
+                                              if(num!=0)
+                                              dataBranch1.addValue(num,jTable4.getColumnName(k),"H "+(Comparable) jTable4.getValueAt(j,0));
+                                            }
+                                        }
+                                    }
+                                 }
+          
+                            }
+           return dataBranch1;
         }
        
         public void newGraphic(MergeFiles merge,int botao){
@@ -955,7 +969,15 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 title="Both Branches";
             if(jTable4.isShowing())
                 title="Previous History";
-            JFreeChart graphic = ChartFactory.createBarChart3D(title,"Nomes","Modified Files",cdsBranch1,PlotOrientation.VERTICAL,true,true,true);
+            JFreeChart graphic;
+            if(botao ==1)
+               graphic = ChartFactory.createBarChart3D(title,"Names","Commit",cdsBranch1,PlotOrientation.VERTICAL,true,true,true);
+            else
+               graphic = ChartFactory.createStackedBarChart("Modified Files in Both Branches","History/Branch2/Branch1","Commiters Name",cdsBranch1,PlotOrientation.HORIZONTAL,true,true,true);
+            CategoryPlot plot = graphic.getCategoryPlot();  
+            CategoryItemRenderer itemRerender = plot.getRenderer();   
+             itemRerender.setItemLabelGenerator(new StandardCategoryItemLabelGenerator("{2}", new DecimalFormat("0")));  
+             itemRerender.setItemLabelsVisible(true);  
             ChartPanel myPanel = new ChartPanel(graphic,true);
             myPanel.setSize(jPanel4.getWidth(),jPanel4.getHeight());
             myPanel.setVisible(true); 
@@ -964,7 +986,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             jPanel4.revalidate();
             jPanel4.repaint();
         }
-	
 
 
 }
