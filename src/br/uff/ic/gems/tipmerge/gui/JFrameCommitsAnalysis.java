@@ -28,6 +28,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.RefineryUtilities;
 
 /**
  * This class is in charge of showing all results about the commit analysis
@@ -63,7 +64,6 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jMenu1 = new javax.swing.JMenu();
         jFrame1 = new javax.swing.JFrame();
-        jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         btRun = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -95,34 +95,17 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
         jMenu1.setText("jMenu1");
 
         jFrame1.setBounds(500, 150, 500, 500);
-        jFrame1.setResizable(false);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 702, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 322, Short.MAX_VALUE)
-        );
+        jFrame1.setResizable(true);
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
         jFrame1Layout.setHorizontalGroup(
             jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jFrame1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jFrame1Layout.setVerticalGroup(
             jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -533,7 +516,6 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane2;
@@ -703,13 +685,12 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
             if(jTable4.isShowing())
                 title="Previous History";
             JFreeChart graphic = ChartFactory.createBarChart3D(title,"Nomes","Committs",cdsBranch1,PlotOrientation.VERTICAL,true,true,true);
-            ChartPanel myPanel = new ChartPanel(graphic,true);
-            myPanel.setSize(jPanel4.getWidth(),jPanel4.getHeight());
-            myPanel.setVisible(true); 
-            jPanel4.removeAll();
-            jPanel4.add(myPanel);
-            jPanel4.revalidate();
-            jPanel4.repaint();
+            ChartPanel chartPanel = new ChartPanel(graphic);
+               chartPanel.setPreferredSize(new java.awt.Dimension(590, 350));
+               jFrame1.setContentPane(chartPanel);
+               jFrame1.pack();
+               RefineryUtilities.centerFrameOnScreen(jFrame1);
+               jFrame1.setVisible(true);
         }
          private String codHash(String hash){
         String temp = hash;
