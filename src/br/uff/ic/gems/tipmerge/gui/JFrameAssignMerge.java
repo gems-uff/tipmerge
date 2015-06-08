@@ -5,13 +5,26 @@
  */
 package br.uff.ic.gems.tipmerge.gui;
 
+import br.uff.ic.gems.tipmerge.model.EditedFile;
+import br.uff.ic.gems.tipmerge.model.Medalist;
+import br.uff.ic.gems.tipmerge.model.MergeFiles;
+import br.uff.ic.gems.tipmerge.model.RankingGenerator;
 import br.uff.ic.gems.tipmerge.model.Repository;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author j2cf
  */
 public class JFrameAssignMerge extends javax.swing.JFrame {
+    private JTable jTableRanking = new JTable();
 
 	/**
 	 * Creates new form JFrameAssignMerge
@@ -19,9 +32,22 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 	public JFrameAssignMerge() {
 		initComponents();
 	}
-
+        
 	public JFrameAssignMerge(Repository repository) {
-		initComponents();
+            		initComponents();
+//                        MergeFiles mergeFiles= null;
+//            RankingGenerator rGenerator = new RankingGenerator();
+//            Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
+//                System.out.println("Medalhas para arquivos comuns");		
+//		System.out.println("Medalhas para dependencias no ramo 1");
+//        Map<EditedFile, Set<EditedFile>> dependenciesBranchOne = null;
+//		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
+//		System.out.println("Medalhas para dependencias no ramo 2");
+//        Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo = null;
+//		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
+//		excepiontFiles.removeAll(excepiontFiles);
+//		List<Medalist> ranking = rGenerator.getRanking();
+		showRanking();
 		//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
@@ -38,6 +64,7 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
         jButtonRun = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanelBody = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Developer Assignments");
@@ -82,11 +109,11 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
         jPanelBody.setLayout(jPanelBodyLayout);
         jPanelBodyLayout.setHorizontalGroup(
             jPanelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         jPanelBodyLayout.setVerticalGroup(
             jPanelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 267, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -112,6 +139,8 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRunActionPerformed
+       
+		
     }//GEN-LAST:event_jButtonRunActionPerformed
 
 
@@ -120,5 +149,40 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanelBody;
     private javax.swing.JPanel jPanelTop;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+   private void showRanking(/*List<Medalist> ranking*/) {
+		DefaultTableModel model = new DefaultTableModel();
+		Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
+		Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
+		Icon mBronze = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/bronze1.png"));
+		JLabel lblGold = new JLabel("Gold");
+		JLabel lblSilver = new JLabel("Silver");
+		JLabel lblBronze = new JLabel("Bronze");
+		lblGold.setIcon(mGold);
+		lblSilver.setIcon(mSilver);
+		lblBronze.setIcon(mBronze);
+		String[] columnLabels = {"Rank", "Commiter", "Gold", "Silver", "Bronze", "Total"};
+		model.setColumnIdentifiers(columnLabels);
+		int rank = 1;
+//		for(Medalist m : ranking){
+//			int gold = m.getGoldMedals();
+//			int silver = m.getSilverMedals();
+//			int bronze = m.getBronzeMedals();
+//			int total = gold + silver + bronze;
+//			String name = m.getCommitter().getName();
+//			model.addRow(new Object[]{rank++ + "º", name, gold, silver, bronze, total});
+//		}
+		jTableRanking.setModel(model);
+		JTableRenderer jTableRender = new JTableRenderer();
+		jTableRanking.getColumnModel().getColumn(2).setHeaderValue(lblGold);
+		jTableRanking.getColumnModel().getColumn(2).setHeaderRenderer(jTableRender);
+		jTableRanking.getColumnModel().getColumn(3).setHeaderValue(lblSilver);
+		jTableRanking.getColumnModel().getColumn(3).setHeaderRenderer(jTableRender);
+		jTableRanking.getColumnModel().getColumn(4).setHeaderValue(lblBronze);
+		jTableRanking.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
+		jTableRanking.setDefaultRenderer(Object.class,new JTableRenderer());
+                jScrollPane1.setViewportView(jTableRanking);
+	}
+
 }

@@ -866,6 +866,13 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                         }
                     return hash;    
         }
+     public static  String limit(String nameFile){
+    int length = nameFile.length();
+    if( length > 30){
+     return nameFile.substring(length -30, length);
+    }
+    return nameFile;
+    }
      private CategoryDataset createBranch(MergeFiles merge, int botao){
             DefaultCategoryDataset dataBranch1 = new DefaultCategoryDataset();
                 JTable tabela = new JTable();   
@@ -903,13 +910,15 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         }  
         }
-        if(botao ==2){
+        if(botao ==2){ String  nameFile = " ";
                                 for(int k=0;k<jTable3.getRowCount();k++){
                                      for (EditedFile file : mergeFiles.getFilesOnBranchOne()){    
                                          for(Committer comitter: file.getWhoEditTheFile()){
                                              if(file.getFileName().equals(jTable3.getValueAt(k,0)))
-                                                if(comitter.getCommits()!=0)
-                                                     dataBranch1.addValue(comitter.getCommits(),comitter.getName(), "1 "+file.getFileName());
+                                                if(comitter.getCommits()!=0){
+                                                       nameFile = limit(file.getFileName());
+                                                     dataBranch1.addValue(comitter.getCommits(),comitter.getName(), "B1 "+nameFile);
+                                                }
                                             }
                                         }
                                 }
@@ -917,8 +926,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                                      for (EditedFile file : mergeFiles.getFilesOnBranchTwo()){    
                                          for(Committer comitter: file.getWhoEditTheFile()){
                                              if(file.getFileName().equals(jTable3.getValueAt(k,0)))
-                                                if(comitter.getCommits()!=0)
-                                                     dataBranch1.addValue(comitter.getCommits(),comitter.getName(),"2 "+file.getFileName());
+                                                if(comitter.getCommits()!=0){
+                                                       nameFile = limit(file.getFileName());
+                                                     dataBranch1.addValue(comitter.getCommits(),comitter.getName(), "B2 "+nameFile);
+                                                }
                                             }
                                         }
                                 }
@@ -928,9 +939,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                                          if(jTable4.getValueAt(j,0).equals(jTable3.getValueAt(i,0))){
                                             for(int k=1; k<jTable4.getColumnCount();k++){
                                               num = Integer.parseInt((String) jTable4.getValueAt(j,k));
-                                              if(num!=0)
-                                              dataBranch1.addValue(num,jTable4.getColumnName(k),"H "+(Comparable) jTable4.getValueAt(j,0));
-                                            }
+                                              if(num!=0){
+                                                  nameFile = limit((String)jTable4.getValueAt(j,0));
+                                                  dataBranch1.addValue(num,jTable4.getColumnName(k),"H "+nameFile);
+                                                }
+                                              }
                                         }
                                     }
                                  }
