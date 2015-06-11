@@ -399,15 +399,19 @@ public class JFrameDependencies extends javax.swing.JFrame {
     }//GEN-LAST:event_mergesListActionPerformed
 
     private void btnRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRankingActionPerformed
-		RankingGenerator rGenerator = new RankingGenerator();
-		System.out.println("Medals for common files");
-		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
-		System.out.println("Medals for dependencies in branch 1");
-		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
-		System.out.println("Medals for dependencies in branch 2");
-		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
-		excepiontFiles.removeAll(excepiontFiles);
-		
+		JFrameAssignMerge jfAssignMerge = new JFrameAssignMerge(mergeFiles,dependenciesBranchOne,dependenciesBranchTwo);
+                jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
+		jfAssignMerge.setVisible(true);
+//                RankingGenerator rGenerator = new RankingGenerator();
+//		System.out.println("Medals for common files");
+//		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
+//		System.out.println("Medals for dependencies in branch 1");
+//		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
+//		System.out.println("Medals for dependencies in branch 2");
+//		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
+//		excepiontFiles.removeAll(excepiontFiles);
+//		
+                
 		//rGenerator.updateGoldMedals(mergeFiles);
 		//rGenerator.updateBronzeMedals(mergeFiles);
 		//rGenerator.updateSilverMedals(mergeFiles, this.dependenciesBranchOne, this.dependenciesBranchTwo);
@@ -416,10 +420,10 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		//System.out.println("RAMO 2");
 		//rGenerator.setMedalFromDependencies(this.dependenciesBranchTwo, mergeFiles.getFilesOnBothBranch(), mergeFiles.getFilesOnPreviousHistory());
 		
-		List<Medalist> ranking = rGenerator.getRanking();
-		
-		
-		showRanking(ranking);
+//		List<Medalist> ranking = rGenerator.getRanking();
+//		
+//		
+//		showRanking(ranking);
                 
     }//GEN-LAST:event_btnRankingActionPerformed
 

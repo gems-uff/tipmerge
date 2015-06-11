@@ -32,22 +32,21 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 	public JFrameAssignMerge() {
 		initComponents();
 	}
-        
-	public JFrameAssignMerge(Repository repository) {
+        public JFrameAssignMerge(Repository repository) {
+                  initComponents();
+        }
+	public JFrameAssignMerge(MergeFiles mergeFiles,Map<EditedFile,Set<EditedFile>> dependenciesBranchOne,Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo) {
             		initComponents();
-//                        MergeFiles mergeFiles= null;
-//            RankingGenerator rGenerator = new RankingGenerator();
-//            Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
-//                System.out.println("Medalhas para arquivos comuns");		
-//		System.out.println("Medalhas para dependencias no ramo 1");
-//        Map<EditedFile, Set<EditedFile>> dependenciesBranchOne = null;
-//		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
-//		System.out.println("Medalhas para dependencias no ramo 2");
-//        Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo = null;
-//		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
-//		excepiontFiles.removeAll(excepiontFiles);
-//		List<Medalist> ranking = rGenerator.getRanking();
-		showRanking();
+                 System.out.println("Medals for common files");
+                 RankingGenerator rGenerator = new RankingGenerator();
+                 Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
+		System.out.println("Medals for dependencies in branch 1");
+		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
+		System.out.println("Medals for dependencies in branch 2");
+		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
+		excepiontFiles.removeAll(excepiontFiles);
+		List<Medalist> ranking = rGenerator.getRanking();
+		showRanking(ranking);
 		//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
@@ -151,7 +150,7 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelTop;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
-   private void showRanking(/*List<Medalist> ranking*/) {
+   private void showRanking(List<Medalist> ranking) {
 		DefaultTableModel model = new DefaultTableModel();
 		Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
 		Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
@@ -162,17 +161,17 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 		lblGold.setIcon(mGold);
 		lblSilver.setIcon(mSilver);
 		lblBronze.setIcon(mBronze);
-		String[] columnLabels = {"Rank", "Commiter", "Gold", "Silver", "Bronze", "Total"};
+		String[] columnLabels = {"Ranking", "Committer", "Gold", "Silver", "Bronze", "Total"};
 		model.setColumnIdentifiers(columnLabels);
 		int rank = 1;
-//		for(Medalist m : ranking){
-//			int gold = m.getGoldMedals();
-//			int silver = m.getSilverMedals();
-//			int bronze = m.getBronzeMedals();
-//			int total = gold + silver + bronze;
-//			String name = m.getCommitter().getName();
-//			model.addRow(new Object[]{rank++ + "º", name, gold, silver, bronze, total});
-//		}
+		for(Medalist m : ranking){
+			int gold = m.getGoldMedals();
+			int silver = m.getSilverMedals();
+			int bronze = m.getBronzeMedals();
+			int total = gold + silver + bronze;
+			String name = m.getCommitter().getName();
+			model.addRow(new Object[]{rank++ + "º", name, gold, silver, bronze, total});
+		}
 		jTableRanking.setModel(model);
 		JTableRenderer jTableRender = new JTableRenderer();
 		jTableRanking.getColumnModel().getColumn(2).setHeaderValue(lblGold);
