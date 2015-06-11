@@ -400,11 +400,11 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
     private void btnRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRankingActionPerformed
 		RankingGenerator rGenerator = new RankingGenerator();
-		System.out.println("Medalhas para arquivos comuns");
+		System.out.println("Medals for common files");
 		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
-		System.out.println("Medalhas para dependencias no ramo 1");
+		System.out.println("Medals for dependencies in branch 1");
 		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
-		System.out.println("Medalhas para dependencias no ramo 2");
+		System.out.println("Medals for dependencies in branch 2");
 		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
 		excepiontFiles.removeAll(excepiontFiles);
 		
@@ -439,7 +439,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		lblGold.setIcon(mGold);
 		lblSilver.setIcon(mSilver);
 		lblBronze.setIcon(mBronze);
-		String[] columnLabels = {"Rank", "Commiter", "Gold", "Silver", "Bronze", "Total"};
+		String[] columnLabels = {"Ranking", "Committer", "Gold", "Silver", "Bronze", "Total"};
 		model.setColumnIdentifiers(columnLabels);
 		int rank = 1;
 		for(Medalist m : ranking){
