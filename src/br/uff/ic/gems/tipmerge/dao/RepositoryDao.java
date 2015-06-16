@@ -45,7 +45,7 @@ public class RepositoryDao {
 		repo.setCommits(Long.valueOf(RunGit.getResult("git rev-list HEAD --count", path)));
 		
 		//set the merges information - only hash information
-		repo.setListOfMerges(RunGit.getListOfResult("git log --merges --pretty=%H", path));
+		repo.setListOfMerges(RunGit.getListOfResult("git log --all --merges --pretty=%H", path));
 
                 List<String> branches = RunGit.getListOfResult("git branch -a",path);
                

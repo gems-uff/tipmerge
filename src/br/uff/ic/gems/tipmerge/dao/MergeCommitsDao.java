@@ -29,7 +29,7 @@ public class MergeCommitsDao {
 	// get the merges information - only hash information
 	public List<MergeCommits> getMerges() {
 		
-		List<String> mergesHashes = RunGit.getListOfResult("git log --merges --pretty=%H", path);
+		List<String> mergesHashes = RunGit.getListOfResult("git log --merges --all --pretty=%H", path);
 		List<MergeCommits> merges = new ArrayList<>();
 		
 		mergesHashes.stream().forEach((hashOfMerge) -> {
