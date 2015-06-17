@@ -411,8 +411,11 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
         int i = this.repoCommitts.getMerges().size();
         float j = (float) (i/100.0);
-        jLabel2.setVisible(true);
-        int count = 0;
+//        jLabel2.setVisible(true);
+           Runnable r = () -> {
+              jLabel2.setVisible(true);
+              btRun.setEnabled(false);
+              int count = 0;
 
 		this.setMergeCommits();
 		
@@ -421,6 +424,12 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 		updateTableResBranch2();
 		updateTableResBothBranches();
 		updateTableResPreviousHistory();
+                jLabel2.setVisible(false);
+                btRun.setEnabled(true);
+           };
+           Thread t = new Thread(r);
+           t.start();
+        
 
     }//GEN-LAST:event_btRunActionPerformed
 

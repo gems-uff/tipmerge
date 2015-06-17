@@ -103,10 +103,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jcMerge = new javax.swing.JComboBox();
         radioHistorical = new javax.swing.JRadioButton();
-        barRunning = new javax.swing.JProgressBar();
         btRun = new javax.swing.JButton();
         jLSelecByExt = new javax.swing.JLabel();
         jCSelecFileExt = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
         btExport = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -267,8 +267,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        barRunning.setStringPainted(true);
-
         btRun.setText("Run");
         btRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,6 +278,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         jCSelecFileExt.setModel(new javax.swing.DefaultComboBoxModel(new String[] { ".java", ".c", ".html", ".py", ".php", ".xml", "All Files" }));
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
+        jLabel1.setText("Loading ...");
+        jLabel1.setVisible(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -289,9 +291,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(barRunning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(177, 177, 177)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLSelecByExt)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCSelecFileExt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -310,7 +312,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                     .addComponent(btRun)
                     .addComponent(jLSelecByExt)
                     .addComponent(jCSelecFileExt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(barRunning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -456,8 +458,10 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
-
-		startProgressBar(this.repoFiles.getRepository().getListOfMerges().size());
+             Runnable r = () -> {
+                 jLabel1.setVisible(true);
+                 btRun.setEnabled(false);
+//		startProgressBar(this.repoFiles.getRepository().getListOfMerges().size());
 		
 		/**
 		 * At this time a merge will be created or
@@ -548,6 +552,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		btnChart1.setEnabled(true);
 		btnChart2.setEnabled(true);
 		jButtonDependencies.setEnabled(true);
+                jLabel1.setVisible(false);
+                btRun.setEnabled(true);
+             };
+             Thread t = new Thread(r);
+             t.start();
     }//GEN-LAST:event_btRunActionPerformed
 
 	public void showResultsTable(MergeFiles merge) {
@@ -625,7 +634,6 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }//GEN-LAST:event_btnChart2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JProgressBar barRunning;
     private javax.swing.JButton btExport;
     private javax.swing.JButton btRun;
     private javax.swing.JButton btZScore;
@@ -639,6 +647,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JComboBox jCSelecFileExt;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLSelecByExt;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -661,26 +670,26 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioHistorical;
     // End of variables declaration//GEN-END:variables
 
-	private void startProgressBar(Integer max){
-		barRunning.setValue(0);
-		//barRunning.setMaximum(100);
-		barRunning.setMaximum(max);
-	}
+//	private void startProgressBar(Integer max){
+//		barRunning.setValue(0);
+//		//barRunning.setMaximum(100);
+//		barRunning.setMaximum(max);
+//	}
 	
-	private void updateBar(Integer value) {
-		int max = barRunning.getMaximum();
-		float j = (float) max / 100;
-		if(value % j < 1.0){
-			barRunning.setValue(value);
-			barRunning.setString("processing...");
-			barRunning.update(barRunning.getGraphics());
-		}
-		if(value == max){
-			barRunning.setValue(value);
-			barRunning.setString("100% Done");
-			barRunning.update(barRunning.getGraphics());
-		}
-	}
+//	private void updateBar(Integer value) {
+//		int max = barRunning.getMaximum();
+//		float j = (float) max / 100;
+//		if(value % j < 1.0){
+//			barRunning.setValue(value);
+//			barRunning.setString("processing...");
+//			barRunning.update(barRunning.getGraphics());
+//		}
+//		if(value == max){
+//			barRunning.setValue(value);
+//			barRunning.setString("100% Done");
+//			barRunning.update(barRunning.getGraphics());
+//		}
+//	}
 
 	private void showCommitters(MergeFiles mergeFiles) {
 		System.out.println("Merge: " + mergeFiles.getHash());
