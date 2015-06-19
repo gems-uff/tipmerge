@@ -93,6 +93,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
         spinnerThreshold = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         btnRanking = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDependencies = new javax.swing.JTextArea();
@@ -170,6 +171,10 @@ public class JFrameDependencies extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
+        jLabel4.setText("Loading ...");
+        jLabel4.setVisible(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -185,6 +190,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
                         .addComponent(jButtonRun, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnRanking)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,7 +219,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(spinnerThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonRun)
-                    .addComponent(btnRanking))
+                    .addComponent(btnRanking)
+                    .addComponent(jLabel4))
                 .addContainerGap())
         );
 
@@ -235,7 +243,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -263,7 +271,10 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
     private void jButtonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRunActionPerformed
 
-		btnRanking.setEnabled(true);
+                Runnable r = () -> {
+                 btnRanking.setEnabled(false);
+                 jButtonRun.setEnabled(false);
+                 jLabel4.setVisible(true);
 		MergeCommitsDao mCommitsDao = new MergeCommitsDao(repo.getProject());
 		MergeCommits merge = new MergeCommits(mergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
 		mCommitsDao.update(merge);
@@ -330,7 +341,12 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		} catch (Exception ex) {
 			Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		
+		  jLabel4.setVisible(false);
+                  btnRanking.setEnabled(true);
+                  jButtonRun.setEnabled(true);
+                };
+             Thread t = new Thread(r);
+             t.start();
     }//GEN-LAST:event_jButtonRunActionPerformed
 
 	private void setValuesToMerge() {
@@ -471,6 +487,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JFrame jRanking;

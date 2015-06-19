@@ -880,7 +880,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                   int length = fileName.length();
                   if( length > 30){
                           String[] parts = fileName.split("/");
-                          System.out.println(parts[parts.length - 1]);
+//                          System.out.println(parts[parts.length - 1]);
                           return parts[parts.length-1];
                         }
                        return fileName;
@@ -953,7 +953,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                                         }
                                 }
                                double num;
-                               for(int i=1; i<jTable3.getRowCount();i++){
+                               for(int i=0; i<jTable3.getRowCount();i++){
                                     for(int j=0;j<jTable4.getRowCount();j++){
                                          if(jTable4.getValueAt(j,0).equals(jTable3.getValueAt(i,0))){
                                             for(int k=1; k<jTable4.getColumnCount();k++){
