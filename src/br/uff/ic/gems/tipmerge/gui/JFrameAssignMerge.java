@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -25,21 +26,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JFrameAssignMerge extends javax.swing.JFrame {
     private JTable jTableRanking = new JTable();
-
-	/**
-	 * Creates new form JFrameAssignMerge
-	 */
-	public JFrameAssignMerge() {
+	
+	public JFrameAssignMerge(Repository repository) {
 		initComponents();
+		this.textRepoName.setText(repository.getName());	
+		mergesList.setModel(new JComboBox(repository.getListOfMerges().toArray()).getModel());
 	}
-        public JFrameAssignMerge(Repository repository) {
-                  initComponents();
-        }
+		
 	public JFrameAssignMerge(MergeFiles mergeFiles,Map<EditedFile,Set<EditedFile>> dependenciesBranchOne,Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo) {
-            		initComponents();
-                 System.out.println("Medals for common files");
-                 RankingGenerator rGenerator = new RankingGenerator();
-                 Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
+		initComponents();
+		paneResult.setContinuousLayout(true);
+		System.out.println("Medals for common files");
+		RankingGenerator rGenerator = new RankingGenerator();
+		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
 		System.out.println("Medals for dependencies in branch 1");
 		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
 		System.out.println("Medals for dependencies in branch 2");
@@ -59,98 +58,150 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanelTop = new javax.swing.JPanel();
-        jButtonRun = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jPanelBody = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jButtonRun3 = new javax.swing.JButton();
+        textRepoName = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        mergesList = new javax.swing.JComboBox();
+        jLabel16 = new javax.swing.JLabel();
+        paneResult = new javax.swing.JSplitPane();
+        panelRanking = new javax.swing.JScrollPane();
+        panelCoverage = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Developer Assignments");
 
-        jPanelTop.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jButtonRun.setText("Run");
-        jButtonRun.addActionListener(new java.awt.event.ActionListener() {
+        jLabel13.setText("Repository Name");
+
+        jButtonRun3.setText("Coverage");
+        jButtonRun3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRunActionPerformed(evt);
+                jButtonRun3ActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("jLabel1");
+        jLabel14.setText("Selected Merge");
 
-        javax.swing.GroupLayout jPanelTopLayout = new javax.swing.GroupLayout(jPanelTop);
-        jPanelTop.setLayout(jPanelTopLayout);
-        jPanelTopLayout.setHorizontalGroup(
-            jPanelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelTopLayout.createSequentialGroup()
-                .addContainerGap(398, Short.MAX_VALUE)
-                .addComponent(jButtonRun)
-                .addContainerGap())
-            .addGroup(jPanelTopLayout.createSequentialGroup()
+        mergesList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mergesListActionPerformed(evt);
+            }
+        });
+
+        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
+        jLabel16.setText("Loading ...");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 223, Short.MAX_VALUE)
+                        .addComponent(jButtonRun3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(mergesList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(textRepoName))))
+                .addContainerGap())
         );
-        jPanelTopLayout.setVerticalGroup(
-            jPanelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelTopLayout.createSequentialGroup()
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jButtonRun)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(textRepoName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(mergesList, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonRun3)
+                    .addComponent(jLabel16))
                 .addContainerGap())
         );
 
-        jPanelBody.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        paneResult.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        paneResult.setDividerSize(10);
+        paneResult.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        paneResult.setResizeWeight(0.4);
+        paneResult.setToolTipText("");
+        paneResult.setMinimumSize(new java.awt.Dimension(115, 143));
+        paneResult.setPreferredSize(new java.awt.Dimension(154, 152));
 
-        javax.swing.GroupLayout jPanelBodyLayout = new javax.swing.GroupLayout(jPanelBody);
-        jPanelBody.setLayout(jPanelBodyLayout);
-        jPanelBodyLayout.setHorizontalGroup(
-            jPanelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-        );
-        jPanelBodyLayout.setVerticalGroup(
-            jPanelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-        );
+        panelRanking.setBorder(javax.swing.BorderFactory.createTitledBorder("Ranking"));
+        paneResult.setLeftComponent(panelRanking);
+
+        panelCoverage.setBorder(javax.swing.BorderFactory.createTitledBorder("Coverage"));
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Coverage datas");
+        panelCoverage.setViewportView(jTextArea1);
+
+        paneResult.setRightComponent(panelCoverage);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanelBody, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(paneResult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanelTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanelBody, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(paneResult, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRunActionPerformed
-       
-		
-    }//GEN-LAST:event_jButtonRunActionPerformed
+    private void jButtonRun3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRun3ActionPerformed
+/*
+        Runnable r = () -> {
+
+        };
+        Thread t = new Thread(r);
+        t.start();
+	*/
+    }//GEN-LAST:event_jButtonRun3ActionPerformed
+
+    private void mergesListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergesListActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mergesListActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonRun;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanelBody;
-    private javax.swing.JPanel jPanelTop;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jButtonRun3;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JComboBox mergesList;
+    private javax.swing.JSplitPane paneResult;
+    private javax.swing.JScrollPane panelCoverage;
+    private javax.swing.JScrollPane panelRanking;
+    private javax.swing.JTextField textRepoName;
     // End of variables declaration//GEN-END:variables
-   private void showRanking(List<Medalist> ranking) {
+
+	private void showRanking(List<Medalist> ranking) {
 		DefaultTableModel model = new DefaultTableModel();
 		Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
 		Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
@@ -163,6 +214,7 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 		lblBronze.setIcon(mBronze);
 		String[] columnLabels = {"Ranking", "Committer", "Gold", "Silver", "Bronze", "Total"};
 		model.setColumnIdentifiers(columnLabels);
+		
 		int rank = 1;
 		for(Medalist m : ranking){
 			int gold = m.getGoldMedals();
@@ -181,7 +233,7 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 		jTableRanking.getColumnModel().getColumn(4).setHeaderValue(lblBronze);
 		jTableRanking.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
 		jTableRanking.setDefaultRenderer(Object.class,new JTableRenderer());
-                jScrollPane1.setViewportView(jTableRanking);
+		panelRanking.setViewportView(jTableRanking);
 	}
 
 }

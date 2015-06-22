@@ -157,7 +157,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="mergesList" max="32767" attributes="0"/>
-                              <Component id="jTextField1" pref="409" max="32767" attributes="0"/>
+                              <Component id="jTextField1" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
