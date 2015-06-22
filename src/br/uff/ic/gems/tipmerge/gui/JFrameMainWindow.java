@@ -8,14 +8,34 @@ package br.uff.ic.gems.tipmerge.gui;
 import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Repository;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Arrays;
 import java.util.Locale;
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.category.SlidingCategoryDataset;
 
 /**
  * This class is in charge of showing all basic information about the repository project selected and direct to other possible analyzes
@@ -23,7 +43,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  */
 public class JFrameMainWindow extends javax.swing.JFrame {
 	
-	Repository repository;
+	 Repository repository;
 
 	/**
 	 * Creates new form JFrameMainWindows
@@ -58,6 +78,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrame1 = new javax.swing.JFrame();
         jPanel2 = new javax.swing.JPanel();
         btSelectProject = new javax.swing.JButton();
         jtProjectName = new javax.swing.JTextField();
@@ -80,9 +101,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txResult = new javax.swing.JTextArea();
+        InternalFrame = new javax.swing.JInternalFrame();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -93,6 +112,17 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         menuAssign = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TIPMerge - Tool to assIgn develoPers to Merge on Git");
@@ -249,36 +279,33 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
         );
 
-        jButton1.setText("Export");
-        jButton1.setEnabled(false);
+        InternalFrame.setResizable(true);
+        InternalFrame.setTitle("Commiters Names");
+        InternalFrame.setVisible(true);
 
-        txResult.setEditable(false);
-        txResult.setColumns(20);
-        txResult.setFont(new java.awt.Font("Menlo", 0, 12)); // NOI18N
-        txResult.setRows(5);
-        txResult.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Committers", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Menlo", 0, 12))); // NOI18N
-        jScrollPane3.setViewportView(txResult);
+        javax.swing.GroupLayout InternalFrameLayout = new javax.swing.GroupLayout(InternalFrame.getContentPane());
+        InternalFrame.getContentPane().setLayout(InternalFrameLayout);
+        InternalFrameLayout.setHorizontalGroup(
+            InternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 516, Short.MAX_VALUE)
+        );
+        InternalFrameLayout.setVerticalGroup(
+            InternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addContainerGap())
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
+            .addComponent(InternalFrame)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addContainerGap())
+            .addComponent(InternalFrame)
         );
 
         jMenu1.setText("File");
@@ -349,9 +376,9 @@ public class JFrameMainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -409,7 +436,76 @@ public class JFrameMainWindow extends javax.swing.JFrame {
                 t.start();
     }//GEN-LAST:event_btSelectProjectActionPerformed
 
-	
+    static class MyChartPanel extends PartPanel implements ChangeListener {
+
+        private static final long serialVersionUID = 1L;
+        JScrollBar scroller;
+        SlidingCategoryDataset dataset;
+
+        
+
+        private static JFreeChart createChart(CategoryDataset dataset){
+            JFreeChart chart = ChartFactory.createBarChart("", "", "", dataset, PlotOrientation.HORIZONTAL, false, true, false);
+            CategoryPlot plot = (CategoryPlot) chart.getPlot();
+            CategoryAxis domainAxis = plot.getDomainAxis();
+            domainAxis.setMaximumCategoryLabelWidthRatio(0.8F);
+            domainAxis.setLowerMargin(0.02D);
+            domainAxis.setUpperMargin(0.02D);
+            NumberAxis valueAxis = (NumberAxis) plot.getRangeAxis();
+            valueAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+//            valueAxis.setRange(0.0D, 100D);
+            BarRenderer renderer = (BarRenderer) plot.getRenderer();
+            renderer.setDrawBarOutline(false);
+            GradientPaint gradientpaint = new GradientPaint(0.0F, 0.0F, Color.blue, 0.0F, 0.0F, new Color(0, 0, 64));
+            renderer.setSeriesPaint(0, gradientpaint);
+            return chart;
+        }
+
+        public void stateChanged(ChangeEvent changeevent) {
+            //SlidingCategoryDataset
+            //A {@link CategoryDataset} implementation that presents a subset of the
+            // categories in an underlying dataset.  The index of the first "visible"
+            // category can be modified, which provides a means of "sliding" through
+            // the categories in the underlying dataset.
+            dataset.setFirstCategoryIndex(scroller.getValue());
+        }
+
+        public MyChartPanel(CategoryDataset dateRepository) {
+            super(new BorderLayout());
+            CategoryDataset categoryData = dateRepository;
+            int sizeTab = categoryData.getColumnCount();
+            dataset = new SlidingCategoryDataset(categoryData, 0,30);
+//            System.out.print(createDataset().getColumnCount());
+            JFreeChart jfreechart = createChart(dataset);
+            addChart(jfreechart);
+            ChartPanel chartpanel = new ChartPanel(jfreechart);
+                chartpanel.setPreferredSize(new Dimension(500, 505));
+                     if(sizeTab <30){
+                            sizeTab = 30;
+                     }
+            scroller = new JScrollBar(1, 0, 30, 0, sizeTab);
+            add(chartpanel);
+            scroller.getModel().addChangeListener(this);
+                JPanel jpanel = new JPanel(new BorderLayout());
+                jpanel.add(scroller);
+                jpanel.setBorder(BorderFactory.createEmptyBorder(66, 2, 2, 2));
+                jpanel.setBackground(Color.white);
+            add(jpanel, "East");
+        }
+    }
+    private CategoryDataset createDataset(){
+            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+            Committer[] committers = new Committer[repository.getCommitters().size()];
+                for (int i =0 ; i< repository.getCommitters().size() ; i++)
+			committers[i]= repository.getCommitters().get(i);     
+                
+//		Arrays.sort(committers);       
+                
+		for (Committer cmtr : committers){
+			dataset.addValue((double)cmtr.getCommits(),"",cmtr.getName());
+		}
+            return dataset;
+        }
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
 /*		JFileChooser fcPath = new JFileChooser();
 		fcPath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -420,23 +516,11 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 		}
 */
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-	//shows the committers name information and the Jtree with the merge branch information 
+//shows the committers name information and the Jtree with the merge branch information 
     private void btShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btShowActionPerformed
 		clearAllFields();
-		
-		//show committers (basic information)in order - Get an array list and transforms an array and orders
-		Committer[] committers = new Committer[repository.getCommitters().size()];
-		for (int i =0 ; i< repository.getCommitters().size() ; i++)
-			committers[i]= repository.getCommitters().get(i);
-		Arrays.sort(committers);
-		for (Committer cmtr : committers){
-			txResult.append(formatted(cmtr.getName(),30) + "\t" + cmtr.getEmail() + "\n");
-		}
-		
-
-		//txResult.setText(this.repository.getAuthors().toString());
 		updateJTree();
-
+                InternalFrame.setContentPane(new MyChartPanel(createDataset()));
     }//GEN-LAST:event_btShowActionPerformed
 	//Directs for the commits analysis
     private void menuCommitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCommitActionPerformed
@@ -459,9 +543,10 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JInternalFrame InternalFrame;
     private javax.swing.JButton btSelectProject;
     private javax.swing.JButton btShow;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -481,7 +566,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTree jTree1;
     private javax.swing.JTextField jtPathToProjects;
     private javax.swing.JTextField jtProjectName;
@@ -490,7 +574,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuFile;
     private javax.swing.JTextField txCommits;
     private javax.swing.JTextField txLast;
-    private javax.swing.JTextArea txResult;
     private javax.swing.JTextField txTotalAuthors;
     private javax.swing.JTextField txTotalBranches;
     private javax.swing.JTextField txTotalMerges;
@@ -498,12 +581,9 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
 	
 	private void clearAllFields() {
-		txResult.setText("");
-		txResult.update(txResult.getGraphics());
-
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
 		jTree1.setModel(new javax.swing.tree.DefaultTreeModel(root));
-        jScrollPane1.setViewportView(jTree1);
+                jScrollPane1.setViewportView(jTree1);
 
 	}
 
