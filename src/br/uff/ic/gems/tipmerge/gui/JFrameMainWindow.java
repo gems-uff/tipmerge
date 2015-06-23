@@ -5,6 +5,7 @@
  */
 package br.uff.ic.gems.tipmerge.gui;
 
+import br.uff.ic.gems.tipmerge.model.SortByCommit;
 import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Repository;
@@ -15,7 +16,10 @@ import java.awt.GradientPaint;
 import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
@@ -482,11 +486,9 @@ public class JFrameMainWindow extends javax.swing.JFrame {
             CategoryDataset categoryData = dateRepository;
             int sizeTab = categoryData.getColumnCount();
             dataset = new SlidingCategoryDataset(categoryData, 0,30);
-//            System.out.print(createDataset().getColumnCount());
             JFreeChart jfreechart = createChart(dataset);
             addChart(jfreechart);
             ChartPanel chartpanel = new ChartPanel(jfreechart);
-//                chartpanel.setPreferredSize(new Dimension(500, 505));
                      if(sizeTab <30){
                             sizeTab = 30;
                      }
@@ -502,13 +504,17 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     }
     private CategoryDataset createDataset(){
             DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-            Committer[] committers = new Committer[repository.getCommitters().size()];
-                for (int i =0 ; i< repository.getCommitters().size() ; i++)
-			committers[i]= repository.getCommitters().get(i);     
+//            Committer[] committers = new Committer[repository.getCommitters().size()];
+            List<Committer> committer = new ArrayList<>();
+//                for (int i =0 ; i< repository.getCommitters().size() ; i++)
+//			committers[i]= repository.getCommitters().get(i);     
+                 for (int i =0 ; i< repository.getCommitters().size() ; i++)
+                       committer.add(repository.getCommitters().get(i));
+                 
+//		Arrays.sort(committers);   
+                Collections.sort(committer, new SortByCommit());
                 
-//		Arrays.sort(committers);       
-                
-		for (Committer cmtr : committers){
+		for (Committer cmtr : committer){
 			dataset.addValue((double)cmtr.getCommits(),"",cmtr.getName());
 		}
             return dataset;
