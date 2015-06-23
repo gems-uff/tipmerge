@@ -14,7 +14,6 @@ import br.uff.ic.gems.tipmerge.dao.MergeFilesDao;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Dependencies;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
-import br.uff.ic.gems.tipmerge.model.Medalist;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
 import br.uff.ic.gems.tipmerge.model.Repository;
@@ -29,11 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -41,13 +36,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JFrameDependencies extends javax.swing.JFrame {
 
-	public static Repository repo;
-	public static String databaseName = "data/gitdataminer.sqlite";
-	public MergeFiles mergeFiles;
-	public Map<EditedFile,Set<EditedFile>> dependenciesBranchOne;
-	public Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo;	
-	public Map<EditedFile,Set<EditedFile>> dependenciesMap;
-	/*	/Users/j2cf/Apps/ws_nb/tipmerge/data  */
+	private static Repository repo;
+	private static String databaseName = "data/gitdataminer.sqlite";
+	private MergeFiles mergeFiles;
+	private Map<EditedFile,Set<EditedFile>> dependenciesBranchOne;
+	private Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo;	
+	private Map<EditedFile,Set<EditedFile>> dependenciesMap;
 	
 	/**
 	 * Creates new form JFrameDependencies
@@ -333,8 +327,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 				addListDependences(this.dependenciesBranchTwo);
 				txtDependencies.append("\n\nAll Files Dependencies\n");
 				addListDependences(this.dependenciesMap);
-
-
+				
 			} catch (SQLException ex) {
 				Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
 			} catch (Exception ex) {
@@ -417,68 +410,11 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		JFrameAssignMerge jfAssignMerge = new JFrameAssignMerge(repo, mergeFiles,dependenciesBranchOne,dependenciesBranchTwo);
 		jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
 		jfAssignMerge.setVisible(true);
-//      RankingGenerator rGenerator = new RankingGenerator();
-//		System.out.println("Medals for common files");
-//		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
-//		System.out.println("Medals for dependencies in branch 1");
-//		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
-//		System.out.println("Medals for dependencies in branch 2");
-//		excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
-//		excepiontFiles.removeAll(excepiontFiles);
-//		
-                
-		//rGenerator.updateGoldMedals(mergeFiles);
-		//rGenerator.updateBronzeMedals(mergeFiles);
-		//rGenerator.updateSilverMedals(mergeFiles, this.dependenciesBranchOne, this.dependenciesBranchTwo);
-		//System.out.println("RAMO 1");
-		//rGenerator.setMedalFromDependencies(this.dependenciesBranchOne, mergeFiles.getFilesOnBothBranch(), mergeFiles.getFilesOnPreviousHistory());
-		//System.out.println("RAMO 2");
-		//rGenerator.setMedalFromDependencies(this.dependenciesBranchTwo, mergeFiles.getFilesOnBothBranch(), mergeFiles.getFilesOnPreviousHistory());
-		
-//		List<Medalist> ranking = rGenerator.getRanking();
-//		
-//		
-//		showRanking(ranking);
-                
     }//GEN-LAST:event_btGenRankingActionPerformed
 
     private void spinnerThresholdStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerThresholdStateChanged
 		btGenRanking.setEnabled(false);
     }//GEN-LAST:event_spinnerThresholdStateChanged
-
-	private void showRanking(List<Medalist> ranking) {
-		DefaultTableModel model = new DefaultTableModel();
-		jRanking.setVisible(true);
-		Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
-		Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
-		Icon mBronze = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/bronze1.png"));
-		JLabel lblGold = new JLabel("Gold");
-		JLabel lblSilver = new JLabel("Silver");
-		JLabel lblBronze = new JLabel("Bronze");
-		lblGold.setIcon(mGold);
-		lblSilver.setIcon(mSilver);
-		lblBronze.setIcon(mBronze);
-		String[] columnLabels = {"Ranking", "Committer", "Gold", "Silver", "Bronze", "Total"};
-		model.setColumnIdentifiers(columnLabels);
-		int rank = 1;
-		for(Medalist m : ranking){
-			int gold = m.getGoldMedals();
-			int silver = m.getSilverMedals();
-			int bronze = m.getBronzeMedals();
-			int total = gold + silver + bronze;
-			String name = m.getCommitter().getName();
-			model.addRow(new Object[]{rank++ + "º", name, gold, silver, bronze, total});
-		}
-		jTableRanking.setModel(model);
-		JTableRenderer jTableRender = new JTableRenderer();
-		jTableRanking.getColumnModel().getColumn(2).setHeaderValue(lblGold);
-		jTableRanking.getColumnModel().getColumn(2).setHeaderRenderer(jTableRender);
-		jTableRanking.getColumnModel().getColumn(3).setHeaderValue(lblSilver);
-		jTableRanking.getColumnModel().getColumn(3).setHeaderRenderer(jTableRender);
-		jTableRanking.getColumnModel().getColumn(4).setHeaderValue(lblBronze);
-		jTableRanking.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
-		jTableRanking.setDefaultRenderer(Object.class,new JTableRenderer());
-	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGenRanking;
@@ -552,44 +488,6 @@ public class JFrameDependencies extends javax.swing.JFrame {
 			}
 		}
 		return strBuilder;
-	}
-
-	/**
-	 * Returns a list of files that have some dependence with the 
-	 * list of filesEdited files, following the defined threshold.
-	 * @param dominoes
-	 * @param threshold
-	 * @param filesEdited
-	 * @return 
-	 */
-	private Set<EditedFile> getFileDependencies2(Dominoes dominoes, double threshold, Collection<EditedFile> filesEdited) {
-		
-		//TODO colocar a informação do across ramos
-		Set<EditedFile> dependecies = new HashSet<>();
-
-		IMatrix2D matrix = dominoes.getMat();
-
-		int rows = matrix.getMatrixDescriptor().getNumRows();
-		int cols = matrix.getMatrixDescriptor().getNumCols();
-		
-		List<Cell> cells = matrix.getNonZeroData();
-		
-		for(int i = 0 ; i < rows ; i++){
-			
-			EditedFile efTemp = new EditedFile(matrix.getMatrixDescriptor().getRowAt(i));
-			
-			if(filesEdited.contains(efTemp))
-				
-				for(int j = 0 ; j < cols ; j++)
-
-					if((i != j) && (filesEdited.contains(new EditedFile(matrix.getMatrixDescriptor().getColumnAt(j)))))
-
-						for(Cell c : cells)
-							if((c.value >= threshold) && (c.row == i) && (c.col == j))
-								dependecies.add(new EditedFile(matrix.getMatrixDescriptor().getColumnAt(j)));
-						
-		}
-		return dependecies;
 	}
 
 }

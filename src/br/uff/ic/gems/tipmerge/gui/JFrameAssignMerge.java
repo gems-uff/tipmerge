@@ -7,6 +7,7 @@ package br.uff.ic.gems.tipmerge.gui;
 
 import arch.Cell;
 import arch.IMatrix2D;
+import arch.MatrixDescriptor;
 import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
 import br.uff.ic.gems.tipmerge.model.Coverage;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
@@ -20,7 +21,6 @@ import domain.Dominoes;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,9 +42,10 @@ import javax.swing.table.DefaultTableModel;
 public class JFrameAssignMerge extends javax.swing.JFrame {
 
 	private JTable jTableRanking = new JTable();
-	private static String databaseName = "data/gitdataminer.sqlite";
-	private static Repository repository;
-	
+	private String databaseName = "data/gitdataminer.sqlite";
+	private Repository repository;
+	public Set<EditedFile> filesOfInterest = new HashSet<>();
+
 	public JFrameAssignMerge(Repository repository) {
 		initComponents();
 		initVariables(repository);
@@ -56,6 +57,20 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 		initVariables(repository);
 		mergesList.setModel(new JComboBox(new String[]{mergeFiles.getHash()}).getModel());
 
+//		if(dependenciesBranchOne.size() > 0)
+			for(EditedFile file : dependenciesBranchOne.keySet()){
+				this.filesOfInterest.add(file);
+				this.filesOfInterest.addAll(dependenciesBranchOne.get(file));
+			}
+//		if(dependenciesBranchTwo.size() > 0)
+			for(EditedFile file : dependenciesBranchTwo.keySet()){
+				this.filesOfInterest.add(file);
+				this.filesOfInterest.addAll(dependenciesBranchTwo.get(file));
+			}
+		this.filesOfInterest.addAll(mergeFiles.getFilesOnBothBranch());
+		
+		//System.out.println("Files Of Interest\t" + filesOfInterest);
+	
 		System.out.println("Medals for common files");
 		RankingGenerator rGenerator = new RankingGenerator();
 		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
@@ -211,7 +226,6 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 					
 					List<Dominoes> dominoesList = DominoesSQLDao2.loadAllMatrices(databaseName, txProjectName.getText(), "CPU", hashsList);
 					
-					int cols, rows;
 					Dominoes dominoesDC = null, dominoesCM = null, dominoesFM = null;
 					for(Dominoes dominoe : dominoesList){
 						if(dominoe.getHistoric().toString().equals("DC"))
@@ -242,95 +256,109 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 				
 				labelLoading.setVisible(false);
 			}
-
-			private List<String[]> getFilesList(Dominoes dominoesFM) {
-				int cols;
-				IMatrix2D matrixFM = dominoesFM.getMat();
-				cols = matrixFM.getMatrixDescriptor().getNumCols();
-				List<String[]> files = new ArrayList<>();
-				for(int i = 0 ; i < cols ; i++){
-					int j = 0;
-					String[] file = dominoesFM.getMat().getMatrixDescriptor().getColumnAt(i).split("\\$", 2);
-					while((j < files.size()) && (files.get(j)[0].compareTo(file[0]) < 0))
-						j++;
-					files.add(j,dominoesFM.getMat().getMatrixDescriptor().getColumnAt(i).split("\\$", 2));
-				}
-				return files;
-			}
-
-			private List<Coverage> getCoverageList(Dominoes dominoesDM, List<String[]> files) {
-				int rows;
-				int cols;
-				IMatrix2D matrixDM = dominoesDM.getMat();
-				rows = matrixDM.getMatrixDescriptor().getNumRows();
-				cols = matrixDM.getMatrixDescriptor().getNumCols();
-				List<Cell> cells = matrixDM.getNonZeroData();
-				List<Coverage> coverageList = new ArrayList<>();
-				for(int i = 0 ; i < rows ; i++){
-					
-					Coverage coverage = new Coverage();
-					coverage.setDeveloper(matrixDM.getMatrixDescriptor().getRowAt(i));
-					
-					for(int j = 0 ; j < cols ; j++){
-						
-						for(Cell c : cells)
-							if((c.row == i) && (c.col == j)){
-								
-								for(String[] fullName : files)
-									if(fullName[1].equals(matrixDM.getMatrixDescriptor().getColumnAt(j)))
-										coverage.addValue(fullName);
-								
-							}
-						
-					}
-					coverageList.add(coverage);
-					
-				}
-				return coverageList;
-			}
-
-			private void appendCoverageToGui(List<String[]> files, List<Coverage> coverageList, Map<String, Integer[]> fileNames) {
-				txtCoverage.setText("+-------- Files and Methods ---------+");
-				files.stream().forEach((file) -> {
-					txtCoverage.append("\n\t" + Arrays.toString(file));
-				});
-				
-				txtCoverage.append("\n\n+-------- Coverage Sumary ---------+");
-				for(Coverage coverage : coverageList){
-					txtCoverage.append("\n" + coverage.getDeveloper());
-					Map<String, Integer[]> cover = coverage.getCoverage(fileNames);
-					for(String file : cover.keySet())
-						txtCoverage.append("\n\t" + file + "\t" + Arrays.toString(cover.get(file)));
-				}
-				
-				
-				txtCoverage.append("\n\n+-------- Coverage Files ---------+");
-				for(Coverage coverage : coverageList)
-					txtCoverage.append(coverage.toString());
-			}
-
-			private Map<String, Integer[]> countsEditedMethods(List<String[]> files) {
-				Map<String, Integer[]> fileNames = new HashMap<>();
-				int totalMethodsFile = 0;
-				String fileName = "";
-				for(String[] fullFileName : files){
-					if(!fileName.equals(fullFileName[0])){
-						if (!fileName.isEmpty())
-							fileNames.put(fileName, new Integer[]{totalMethodsFile});
-						fileName = fullFileName[0];
-						totalMethodsFile = 1;
-					}else
-						totalMethodsFile++;
-				}
-				fileNames.put(fileName, new Integer[]{totalMethodsFile});
-				return fileNames;
-			}
+			
 		};
 		Thread t = new Thread(r);
 		t.start();
 			
     }//GEN-LAST:event_btRunCoverageActionPerformed
 
+	private List<String[]> getFilesList(Dominoes dominoesFM) {
+		int cols;
+		MatrixDescriptor matrixFM = dominoesFM.getMat().getMatrixDescriptor();
+		cols = matrixFM.getNumCols();
+		List<String[]> files = new ArrayList<>();
+		for(int i = 0 ; i < cols ; i++){
+			String[] file = matrixFM.getColumnAt(i).split("\\$", 2);
+			if(filesOfInterest.contains(new EditedFile(file[0]))){
+				int j = 0;
+				while((j < files.size()) && (files.get(j)[0].compareTo(file[0]) < 0))
+					j++;
+				files.add(j,file);
+			}
+		}
+		return files;
+	}
+
+	private List<Coverage> getCoverageList(Dominoes dominoesDM, List<String[]> files) {
+		int rows;
+		int cols;
+		IMatrix2D matrixDM = dominoesDM.getMat();
+		rows = matrixDM.getMatrixDescriptor().getNumRows();
+		cols = matrixDM.getMatrixDescriptor().getNumCols();
+		List<Cell> cells = matrixDM.getNonZeroData();
+		List<Coverage> coverageList = new ArrayList<>();
+		for(int i = 0 ; i < rows ; i++){
+
+			Coverage coverage = new Coverage();
+			coverage.setDeveloper(matrixDM.getMatrixDescriptor().getRowAt(i));
+
+			for(int j = 0 ; j < cols ; j++){
+
+				for(Cell c : cells)
+					if((c.row == i) && (c.col == j)){
+
+						for(String[] fullName : files)
+							if(fullName[1].equals(matrixDM.getMatrixDescriptor().getColumnAt(j)))
+								coverage.addValue(fullName);
+
+					}
+
+			}
+			coverageList.add(coverage);
+
+		}
+		return coverageList;
+	}
+
+	private void appendCoverageToGui(List<String[]> files, List<Coverage> coverageList, Map<String, Integer[]> fileNames) {
+		txtCoverage.setText("+-------- Files and Methods ---------+");
+		files.stream().forEach((file) -> {
+			txtCoverage.append("\n\t" + Arrays.toString(file));
+		});
+
+		txtCoverage.append("\n\n+-------- Coverage Sumary ---------+");
+		for(Coverage coverage : coverageList){
+			txtCoverage.append("\n" + coverage.getDeveloper());
+			Map<String, Integer[]> cover = coverage.getCoverage(fileNames);
+			for(String file : cover.keySet())
+				txtCoverage.append("\n\t" + file + "\t" + Arrays.toString(cover.get(file)));
+		}
+
+
+		txtCoverage.append("\n\n+-------- Coverage Files ---------+");
+		for(Coverage coverage : coverageList)
+			txtCoverage.append(coverage.toString());
+	}
+
+	private Map<String, Integer[]> countsEditedMethods(List<String[]> files) {
+		Map<String, Integer[]> fileNames = new HashMap<>();
+		int totalMethodsFile = 0;
+		String fileName = "";
+		for(String[] fullFileName : files){
+			if(!fileName.equals(fullFileName[0])){
+				if (!fileName.isEmpty())
+					fileNames.put(fileName, new Integer[]{totalMethodsFile});
+				fileName = fullFileName[0];
+				totalMethodsFile = 1;
+			}else
+				totalMethodsFile++;
+		}
+		fileNames.put(fileName, new Integer[]{totalMethodsFile});
+		return fileNames;
+	}
+
+	/*
+	private List<String[]> getFilesOfInterest(List<String[]> files) {
+		List<String[]> newFileList = new ArrayList<>();
+		for(String[] file : files){
+			if(filesOfInterest.contains(new EditedFile(file[0])))
+				newFileList.add(file);
+		}
+		return newFileList;
+	}
+	*/
+	
     private void mergesListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergesListActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_mergesListActionPerformed
