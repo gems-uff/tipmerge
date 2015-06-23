@@ -56,8 +56,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
 	public JFrameDependencies(Repository repository) {
 		initComponents();
 		repo = repository;
-		this.jTextField1.setText(repo.getName());	
-		mergesList.setModel(new JComboBox(repo.getListOfMerges().toArray()).getModel());
+		this.txRepositoryName.setText(repo.getName());	
+		comboMergesList.setModel(new JComboBox(repo.getListOfMerges().toArray()).getModel());
 
 	}
 
@@ -65,9 +65,9 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		initComponents();
 		this.repo = repository;
 		this.mergeFiles = mergeFiles;
-		this.jTextField1.setText(repo.getName());
+		this.txRepositoryName.setText(repo.getName());
 		
-		mergesList.setModel(new JComboBox(new String[]{mergeFiles.getHash()}).getModel());
+		comboMergesList.setModel(new JComboBox(new String[]{mergeFiles.getHash()}).getModel());
 	}
 
 	
@@ -84,18 +84,18 @@ public class JFrameDependencies extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableRanking = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jButtonRun = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        mergesList = new javax.swing.JComboBox();
+        labelRepository = new javax.swing.JLabel();
+        btRun = new javax.swing.JButton();
+        txRepositoryName = new javax.swing.JTextField();
+        labelMerge = new javax.swing.JLabel();
+        comboMergesList = new javax.swing.JComboBox();
         spinnerThreshold = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
-        btnRanking = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        labelThreshold = new javax.swing.JLabel();
+        btGenRanking = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDependencies = new javax.swing.JTextArea();
+        labelLoading = new javax.swing.JLabel();
 
         jRanking.setTitle("Ranking");
         jRanking.setBounds(50,50,500, 500);
@@ -136,20 +136,20 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setText("Repository Name");
+        labelRepository.setText("Repository Name");
 
-        jButtonRun.setText("Run");
-        jButtonRun.addActionListener(new java.awt.event.ActionListener() {
+        btRun.setText("Run Dependencies");
+        btRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRunActionPerformed(evt);
+                btRunActionPerformed(evt);
             }
         });
 
-        jLabel3.setText("Selected Merge");
+        labelMerge.setText("Selected Merge");
 
-        mergesList.addActionListener(new java.awt.event.ActionListener() {
+        comboMergesList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mergesListActionPerformed(evt);
+                comboMergesListActionPerformed(evt);
             }
         });
 
@@ -160,19 +160,15 @@ public class JFrameDependencies extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Threshold:");
+        labelThreshold.setText("Threshold:");
 
-        btnRanking.setText("Generate Ranking");
-        btnRanking.setEnabled(false);
-        btnRanking.addActionListener(new java.awt.event.ActionListener() {
+        btGenRanking.setText("Generate Ranking");
+        btGenRanking.setEnabled(false);
+        btGenRanking.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRankingActionPerformed(evt);
+                btGenRankingActionPerformed(evt);
             }
         });
-
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
-        jLabel4.setText("Loading ...");
-        jLabel4.setVisible(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -182,24 +178,21 @@ public class JFrameDependencies extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(labelThreshold)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spinnerThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonRun, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnRanking)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btRun)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btGenRanking))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3))
+                            .addComponent(labelRepository)
+                            .addComponent(labelMerge))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(mergesList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))))
+                            .addComponent(comboMergesList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txRepositoryName))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -207,19 +200,18 @@ public class JFrameDependencies extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelRepository)
+                    .addComponent(txRepositoryName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(mergesList, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                    .addComponent(labelMerge)
+                    .addComponent(comboMergesList, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(labelThreshold)
                     .addComponent(spinnerThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonRun)
-                    .addComponent(btnRanking)
-                    .addComponent(jLabel4))
+                    .addComponent(btRun)
+                    .addComponent(btGenRanking))
                 .addContainerGap())
         );
 
@@ -242,9 +234,13 @@ public class JFrameDependencies extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        labelLoading.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
+        labelLoading.setText("Loading ...");
+        labelLoading.setVisible(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -253,13 +249,18 @@ public class JFrameDependencies extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(labelLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelLoading)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -268,89 +269,88 @@ public class JFrameDependencies extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRunActionPerformed
+    private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
 
-                Runnable r = () -> {
-                 btnRanking.setEnabled(false);
-                 jButtonRun.setEnabled(false);
-                 jLabel4.setVisible(true);
-		MergeCommitsDao mCommitsDao = new MergeCommitsDao(repo.getProject());
-		MergeCommits merge = new MergeCommits(mergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
-		mCommitsDao.update(merge);
+		Runnable r = () -> {
+			btGenRanking.setEnabled(false);
+			btRun.setEnabled(false);
+			labelLoading.setVisible(true);
+			MergeCommitsDao mCommitsDao = new MergeCommitsDao(repo.getProject());
+			MergeCommits merge = new MergeCommits(comboMergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
+			mCommitsDao.update(merge);
 
-		//Previous History
-		List<String> hashsOnPreviousHistory = mCommitsDao.getHashs(repo.getFirstCommit() , merge.getHashBase());
-		
-		
-		try {
+			//Previous History
+			List<String> hashsOnPreviousHistory = mCommitsDao.getHashs(repo.getFirstCommit() , merge.getHashBase());
 
-			System.out.println("\nCreating the dominoes of History");
-			List<Dominoes> dominoesHistory = DominoesSQLDao2.loadAllMatrices(databaseName, jTextField1.getText(), "CPU", hashsOnPreviousHistory);
+			try {
 
-			Dominoes domCF;
-			for(Dominoes dominoe : dominoesHistory){
-				System.out.println(dominoe.getHistoric());
-				if(dominoe.getHistoric().equals("CF"))
-					domCF = dominoe;
+				System.out.println("\nCreating the dominoes of History");
+				List<Dominoes> dominoesHistory = DominoesSQLDao2.loadAllMatrices(databaseName, txRepositoryName.getText(), "CPU", hashsOnPreviousHistory);
+
+				Dominoes domCF;
+				for(Dominoes dominoe : dominoesHistory){
+					System.out.println(dominoe.getHistoric());
+					if(dominoe.getHistoric().equals("CF"))
+						domCF = dominoe;
+				}
+
+				//multiplicando as matrizes e gerando a confidence
+				domCF = dominoesHistory.get(6);
+				Dominoes domCFt = domCF.cloneNoMatrix();
+				domCFt.transpose();
+				Dominoes domFF = domCFt.multiply(domCF);
+				domFF.confidence();
+
+				if(mergeFiles == null){
+					setValuesToMerge();
+				}
+
+				Dependencies dependencies = new Dependencies(domFF);
+				double threshold = (double) spinnerThreshold.getValue();
+
+				//System.out.println("Dependencies Branch One");
+				this.dependenciesBranchOne = 
+					dependencies.getDependenciesAcrossBranches(
+						mergeFiles.getFilesOnBranchOne(), 
+						mergeFiles.getFilesOnBranchTwo(),
+						threshold);
+
+				//System.out.println("Dependencies Branch Two");
+				this.dependenciesBranchTwo = 
+					dependencies.getDependenciesAcrossBranches(
+						mergeFiles.getFilesOnBranchTwo(), 
+						mergeFiles.getFilesOnBranchOne(),
+						threshold);
+
+				Set<EditedFile> allFiles = new HashSet<>( mergeFiles.getFilesOnBranchOne() );
+				allFiles.addAll(mergeFiles.getFilesOnBranchTwo());
+				this.dependenciesMap = dependencies.getFilesDependencies(allFiles, threshold);
+
+				//gera o texto para mostrar na tela
+				txtDependencies.setText("Dependencies Branch One\n");
+				addListDependences(this.dependenciesBranchOne);
+				txtDependencies.append("\nDependencies Branch Two\n");
+				addListDependences(this.dependenciesBranchTwo);
+				txtDependencies.append("\n\nAll Files Dependencies\n");
+				addListDependences(this.dependenciesMap);
+
+
+			} catch (SQLException ex) {
+				Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
+			} catch (Exception ex) {
+				Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
 			}
-			
-			//multiplicando as matrizes e gerando a confidence
-			domCF = dominoesHistory.get(6);
-			Dominoes domCFt = domCF.cloneNoMatrix();
-			domCFt.transpose();
-			Dominoes domFF = domCFt.multiply(domCF);
-			domFF.confidence();
-			
-			if(mergeFiles == null){
-				setValuesToMerge();
-			}
-			
-			Dependencies dependencies = new Dependencies(domFF);
-			double threshold = (double) spinnerThreshold.getValue();
-			
-			//System.out.println("Dependencies Branch One");
-			this.dependenciesBranchOne = 
-				dependencies.getDependenciesAcrossBranches(
-					mergeFiles.getFilesOnBranchOne(), 
-					mergeFiles.getFilesOnBranchTwo(),
-					threshold);
-
-			//System.out.println("Dependencies Branch Two");
-			this.dependenciesBranchTwo = 
-				dependencies.getDependenciesAcrossBranches(
-					mergeFiles.getFilesOnBranchTwo(), 
-					mergeFiles.getFilesOnBranchOne(),
-					threshold);
-					
-			Set<EditedFile> allFiles = new HashSet<>( mergeFiles.getFilesOnBranchOne() );
-			allFiles.addAll(mergeFiles.getFilesOnBranchTwo());
-			this.dependenciesMap = dependencies.getFilesDependencies(allFiles, threshold);
-			
-			//gera o texto para mostrar na tela
-			txtDependencies.setText("Dependencies Branch One\n");
-			addListDependences(this.dependenciesBranchOne);
-			txtDependencies.append("\nDependencies Branch Two\n");
-			addListDependences(this.dependenciesBranchTwo);
-			txtDependencies.append("\n\nAll Files Dependencies\n");
-			addListDependences(this.dependenciesMap);
-
-			
-		} catch (SQLException ex) {
-			Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (Exception ex) {
-			Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		  jLabel4.setVisible(false);
-                  btnRanking.setEnabled(true);
-                  jButtonRun.setEnabled(true);
-                };
-             Thread t = new Thread(r);
-             t.start();
-    }//GEN-LAST:event_jButtonRunActionPerformed
+			labelLoading.setVisible(false);
+			btGenRanking.setEnabled(true);
+			btRun.setEnabled(true);
+		};
+		Thread t = new Thread(r);
+		t.start();
+    }//GEN-LAST:event_btRunActionPerformed
 
 	private void setValuesToMerge() {
 		MergeFilesDao mergeFilesDao = new MergeFilesDao();
-		mergeFiles = mergeFilesDao.getMerge(mergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
+		mergeFiles = mergeFilesDao.getMerge(comboMergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
 		
 		EditedFilesDao filesDao = new EditedFilesDao();
 		mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(),
@@ -409,15 +409,15 @@ public class JFrameDependencies extends javax.swing.JFrame {
 		});
 	}
 
-    private void mergesListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergesListActionPerformed
+    private void comboMergesListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboMergesListActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_mergesListActionPerformed
+    }//GEN-LAST:event_comboMergesListActionPerformed
 
-    private void btnRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRankingActionPerformed
-		JFrameAssignMerge jfAssignMerge = new JFrameAssignMerge(mergeFiles,dependenciesBranchOne,dependenciesBranchTwo);
-                jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
+    private void btGenRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGenRankingActionPerformed
+		JFrameAssignMerge jfAssignMerge = new JFrameAssignMerge(repo, mergeFiles,dependenciesBranchOne,dependenciesBranchTwo);
+		jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
 		jfAssignMerge.setVisible(true);
-//                RankingGenerator rGenerator = new RankingGenerator();
+//      RankingGenerator rGenerator = new RankingGenerator();
 //		System.out.println("Medals for common files");
 //		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
 //		System.out.println("Medals for dependencies in branch 1");
@@ -440,10 +440,10 @@ public class JFrameDependencies extends javax.swing.JFrame {
 //		
 //		showRanking(ranking);
                 
-    }//GEN-LAST:event_btnRankingActionPerformed
+    }//GEN-LAST:event_btGenRankingActionPerformed
 
     private void spinnerThresholdStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerThresholdStateChanged
-		btnRanking.setEnabled(false);
+		btGenRanking.setEnabled(false);
     }//GEN-LAST:event_spinnerThresholdStateChanged
 
 	private void showRanking(List<Medalist> ranking) {
@@ -481,21 +481,21 @@ public class JFrameDependencies extends javax.swing.JFrame {
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnRanking;
-    private javax.swing.JButton jButtonRun;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JButton btGenRanking;
+    private javax.swing.JButton btRun;
+    private javax.swing.JComboBox comboMergesList;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JFrame jRanking;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableRanking;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JComboBox mergesList;
+    private javax.swing.JLabel labelLoading;
+    private javax.swing.JLabel labelMerge;
+    private javax.swing.JLabel labelRepository;
+    private javax.swing.JLabel labelThreshold;
     private javax.swing.JSpinner spinnerThreshold;
+    private javax.swing.JTextField txRepositoryName;
     private javax.swing.JTextArea txtDependencies;
     // End of variables declaration//GEN-END:variables
 

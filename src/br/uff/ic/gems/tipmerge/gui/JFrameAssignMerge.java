@@ -5,14 +5,29 @@
  */
 package br.uff.ic.gems.tipmerge.gui;
 
+import arch.Cell;
+import arch.IMatrix2D;
+import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
+import br.uff.ic.gems.tipmerge.model.Coverage;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
 import br.uff.ic.gems.tipmerge.model.Medalist;
+import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
 import br.uff.ic.gems.tipmerge.model.RankingGenerator;
 import br.uff.ic.gems.tipmerge.model.Repository;
+import dao.DominoesSQLDao2;
+import domain.Dominoes;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -25,17 +40,22 @@ import javax.swing.table.DefaultTableModel;
  * @author j2cf
  */
 public class JFrameAssignMerge extends javax.swing.JFrame {
-    private JTable jTableRanking = new JTable();
+
+	private JTable jTableRanking = new JTable();
+	private static String databaseName = "data/gitdataminer.sqlite";
+	private static Repository repository;
 	
 	public JFrameAssignMerge(Repository repository) {
 		initComponents();
-		this.textRepoName.setText(repository.getName());	
-		mergesList.setModel(new JComboBox(repository.getListOfMerges().toArray()).getModel());
+		initVariables(repository);
 	}
 		
-	public JFrameAssignMerge(MergeFiles mergeFiles,Map<EditedFile,Set<EditedFile>> dependenciesBranchOne,Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo) {
+	public JFrameAssignMerge(Repository repository, MergeFiles mergeFiles, Map<EditedFile,Set<EditedFile>> dependenciesBranchOne, Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo) {
 		initComponents();
-		paneResult.setContinuousLayout(true);
+		this.repository = repository;
+		initVariables(repository);
+		mergesList.setModel(new JComboBox(new String[]{mergeFiles.getHash()}).getModel());
+
 		System.out.println("Medals for common files");
 		RankingGenerator rGenerator = new RankingGenerator();
 		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
@@ -46,7 +66,6 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 		excepiontFiles.removeAll(excepiontFiles);
 		List<Medalist> ranking = rGenerator.getRanking();
 		showRanking(ranking);
-		//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	/**
@@ -60,15 +79,15 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 
         jPanel4 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        jButtonRun3 = new javax.swing.JButton();
-        textRepoName = new javax.swing.JTextField();
+        btRunCoverage = new javax.swing.JButton();
+        txProjectName = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         mergesList = new javax.swing.JComboBox();
-        jLabel16 = new javax.swing.JLabel();
+        labelLoading = new javax.swing.JLabel();
         paneResult = new javax.swing.JSplitPane();
         panelRanking = new javax.swing.JScrollPane();
         panelCoverage = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtCoverage = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Developer Assignments");
@@ -77,10 +96,10 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 
         jLabel13.setText("Repository Name");
 
-        jButtonRun3.setText("Coverage");
-        jButtonRun3.addActionListener(new java.awt.event.ActionListener() {
+        btRunCoverage.setText("Coverage");
+        btRunCoverage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRun3ActionPerformed(evt);
+                btRunCoverageActionPerformed(evt);
             }
         });
 
@@ -92,8 +111,9 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
             }
         });
 
-        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
-        jLabel16.setText("Loading ...");
+        labelLoading.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
+        labelLoading.setText("Loading ...");
+        labelLoading.setVisible(false);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -103,17 +123,17 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 223, Short.MAX_VALUE)
-                        .addComponent(jButtonRun3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(labelLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btRunCoverage, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13)
                             .addComponent(jLabel14))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(mergesList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(textRepoName))))
+                            .addComponent(mergesList, 0, 306, Short.MAX_VALUE)
+                            .addComponent(txProjectName))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -122,15 +142,15 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(textRepoName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txProjectName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(mergesList, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonRun3)
-                    .addComponent(jLabel16))
+                    .addComponent(btRunCoverage)
+                    .addComponent(labelLoading))
                 .addContainerGap())
         );
 
@@ -147,10 +167,10 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 
         panelCoverage.setBorder(javax.swing.BorderFactory.createTitledBorder("Coverage"));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Coverage datas");
-        panelCoverage.setViewportView(jTextArea1);
+        txtCoverage.setColumns(20);
+        txtCoverage.setRows(5);
+        txtCoverage.setText("Coverage datas");
+        panelCoverage.setViewportView(txtCoverage);
 
         paneResult.setRightComponent(panelCoverage);
 
@@ -166,21 +186,150 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(paneResult, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
+                .addComponent(paneResult, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonRun3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRun3ActionPerformed
-/*
-        Runnable r = () -> {
+    private void btRunCoverageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunCoverageActionPerformed
 
-        };
-        Thread t = new Thread(r);
-        t.start();
-	*/
-    }//GEN-LAST:event_jButtonRun3ActionPerformed
+		Runnable r;
+		r = new Runnable() {
+
+			public void run() {
+				labelLoading.setVisible(true);
+				
+				MergeCommitsDao mCommitsDao = new MergeCommitsDao(repository.getProject());
+				MergeCommits merge = new MergeCommits(mergesList.getSelectedItem().toString().split(" ")[0], repository.getProject());
+				mCommitsDao.update(merge);
+				
+				List<String> hashsList = mCommitsDao.getHashs(merge.getHashBase(), merge.getParents()[0]);
+				hashsList.addAll(mCommitsDao.getHashs(merge.getHashBase(), merge.getParents()[1]));
+				
+				try {
+					
+					List<Dominoes> dominoesList = DominoesSQLDao2.loadAllMatrices(databaseName, txProjectName.getText(), "CPU", hashsList);
+					
+					int cols, rows;
+					Dominoes dominoesDC = null, dominoesCM = null, dominoesFM = null;
+					for(Dominoes dominoe : dominoesList){
+						if(dominoe.getHistoric().toString().equals("DC"))
+							dominoesDC = dominoe;
+						if(dominoe.getHistoric().toString().equals("CM"))
+							dominoesCM = dominoe;
+						if (dominoe.getHistoric().toString().equals("FM"))
+							dominoesFM = dominoe;
+					}
+					
+					List<String[]> files = getFilesList(dominoesFM);
+					
+					//get wich developers edited methods
+					Dominoes dominoesDM = dominoesDC.multiply(dominoesCM);
+					
+					List<Coverage> coverageList = getCoverageList(dominoesDM, files);
+					
+					Map<String, Integer[]> fileNames = countsEditedMethods(files);
+					
+					appendCoverageToGui(files, coverageList, fileNames);
+
+					
+				} catch (SQLException ex) {
+					Logger.getLogger(JFrameAssignMerge.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (Exception ex) {
+					Logger.getLogger(JFrameAssignMerge.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				
+				labelLoading.setVisible(false);
+			}
+
+			private List<String[]> getFilesList(Dominoes dominoesFM) {
+				int cols;
+				IMatrix2D matrixFM = dominoesFM.getMat();
+				cols = matrixFM.getMatrixDescriptor().getNumCols();
+				List<String[]> files = new ArrayList<>();
+				for(int i = 0 ; i < cols ; i++){
+					int j = 0;
+					String[] file = dominoesFM.getMat().getMatrixDescriptor().getColumnAt(i).split("\\$", 2);
+					while((j < files.size()) && (files.get(j)[0].compareTo(file[0]) < 0))
+						j++;
+					files.add(j,dominoesFM.getMat().getMatrixDescriptor().getColumnAt(i).split("\\$", 2));
+				}
+				return files;
+			}
+
+			private List<Coverage> getCoverageList(Dominoes dominoesDM, List<String[]> files) {
+				int rows;
+				int cols;
+				IMatrix2D matrixDM = dominoesDM.getMat();
+				rows = matrixDM.getMatrixDescriptor().getNumRows();
+				cols = matrixDM.getMatrixDescriptor().getNumCols();
+				List<Cell> cells = matrixDM.getNonZeroData();
+				List<Coverage> coverageList = new ArrayList<>();
+				for(int i = 0 ; i < rows ; i++){
+					
+					Coverage coverage = new Coverage();
+					coverage.setDeveloper(matrixDM.getMatrixDescriptor().getRowAt(i));
+					
+					for(int j = 0 ; j < cols ; j++){
+						
+						for(Cell c : cells)
+							if((c.row == i) && (c.col == j)){
+								
+								for(String[] fullName : files)
+									if(fullName[1].equals(matrixDM.getMatrixDescriptor().getColumnAt(j)))
+										coverage.addValue(fullName);
+								
+							}
+						
+					}
+					coverageList.add(coverage);
+					
+				}
+				return coverageList;
+			}
+
+			private void appendCoverageToGui(List<String[]> files, List<Coverage> coverageList, Map<String, Integer[]> fileNames) {
+				txtCoverage.setText("+-------- Files and Methods ---------+");
+				files.stream().forEach((file) -> {
+					txtCoverage.append("\n\t" + Arrays.toString(file));
+				});
+				
+				txtCoverage.append("\n\n+-------- Coverage Sumary ---------+");
+				for(Coverage coverage : coverageList){
+					txtCoverage.append("\n" + coverage.getDeveloper());
+					Map<String, Integer[]> cover = coverage.getCoverage(fileNames);
+					for(String file : cover.keySet())
+						txtCoverage.append("\n\t" + file + "\t" + Arrays.toString(cover.get(file)));
+				}
+				
+				
+				txtCoverage.append("\n\n+-------- Coverage Files ---------+");
+				for(Coverage coverage : coverageList)
+					txtCoverage.append(coverage.toString());
+			}
+
+			private Map<String, Integer[]> countsEditedMethods(List<String[]> files) {
+				Map<String, Integer[]> fileNames = new HashMap<>();
+				int totalMethodsFile = 0;
+				String fileName = "";
+				for(String[] fullFileName : files){
+					if(!fileName.equals(fullFileName[0])){
+						if (!fileName.isEmpty())
+							fileNames.put(fileName, new Integer[]{totalMethodsFile});
+						fileName = fullFileName[0];
+						totalMethodsFile = 1;
+					}else
+						totalMethodsFile++;
+				}
+				fileNames.put(fileName, new Integer[]{totalMethodsFile});
+				return fileNames;
+			}
+		};
+		Thread t = new Thread(r);
+		t.start();
+			
+    }//GEN-LAST:event_btRunCoverageActionPerformed
 
     private void mergesListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergesListActionPerformed
         // TODO add your handling code here:
@@ -188,17 +337,17 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonRun3;
+    private javax.swing.JButton btRunCoverage;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel labelLoading;
     private javax.swing.JComboBox mergesList;
     private javax.swing.JSplitPane paneResult;
     private javax.swing.JScrollPane panelCoverage;
     private javax.swing.JScrollPane panelRanking;
-    private javax.swing.JTextField textRepoName;
+    private javax.swing.JTextField txProjectName;
+    private javax.swing.JTextArea txtCoverage;
     // End of variables declaration//GEN-END:variables
 
 	private void showRanking(List<Medalist> ranking) {
@@ -234,6 +383,11 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 		jTableRanking.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
 		jTableRanking.setDefaultRenderer(Object.class,new JTableRenderer());
 		panelRanking.setViewportView(jTableRanking);
+	}
+
+	private void initVariables(Repository repository) {
+		this.txProjectName.setText(repository.getName());	
+		mergesList.setModel(new JComboBox(repository.getListOfMerges().toArray()).getModel());
 	}
 
 }
