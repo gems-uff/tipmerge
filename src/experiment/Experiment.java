@@ -71,18 +71,18 @@ public class Experiment {
 			
 			if(hasDevelopers){
 				
-				System.out.println("\t1. Enought Commiter:\tYES");
+				System.out.println("\t1. Enough Committer:\tYES");
 
 				int filesInCommon = mergeFiles.getFilesOnBothBranch().size();
 				values[1] = filesInCommon;
 				
 				if (filesInCommon == 0) {
 
-					System.out.println("\t2. Files in comon:\tNO");				
+					System.out.println("\t2. Files in common:\tNO");				
 
 				}else{
 
-					System.out.println("\t2. Files in comon:\tYES\t" + filesInCommon);				
+					System.out.println("\t2. Files in common:\tYES\t" + filesInCommon);				
 
 				}
 
@@ -114,7 +114,7 @@ public class Experiment {
 				}
 			}
 			else
-				System.out.println("\t1. Enought Commiter:\tNO");
+				System.out.println("\t1. Enough Commiter:\tNO");
 
 			datas.put(hashMerge, values);
 			System.gc();
