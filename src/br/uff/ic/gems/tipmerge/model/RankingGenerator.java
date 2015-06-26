@@ -38,7 +38,7 @@ public class RankingGenerator {
 
 	public Set<EditedFile> setMedalFromDependencies(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
 
-		System.out.println("Excep: " + excepiontFiles.toString());
+		//System.out.println("Excep: " + excepiontFiles.toString());
 
 		dependenciesMap.entrySet().stream().forEach((dependency) -> {
 			
@@ -84,7 +84,7 @@ public class RankingGenerator {
 				}
 			}
 			
-			System.out.println(this.toString());
+			//System.out.println(this.toString());
 			
 		});
 
@@ -162,12 +162,13 @@ public class RankingGenerator {
 
 		this.setGoldMedals(gold);
 		this.setBronzeMedals(bronze);
-		System.out.println(this.toString());
+		//System.out.println(this.toString());
 		return  files;
 	}
 	
 	@Override
 	public String toString() {
+		Collections.sort(ranking, new Compara());
 		StringBuilder result = new StringBuilder();
 		for(Medalist medalist : ranking){
 			result.append(medalist).append("\n");

@@ -93,7 +93,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btRun = new javax.swing.JButton();
         jLSelecByExt = new javax.swing.JLabel();
-        jCSelecFileExt = new javax.swing.JComboBox();
+        comboFileExtension = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
@@ -150,7 +150,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         jLSelecByExt.setText("Select by ");
 
-        jCSelecFileExt.setModel(new javax.swing.DefaultComboBoxModel(new String[] { ".java", ".c", ".html", ".py", ".php", ".xml", "All Files" }));
+        comboFileExtension.setModel(new javax.swing.DefaultComboBoxModel(new String[] { ".java", ".c", ".html", ".py", ".php", ".xml", "All Files" }));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
         jLabel1.setText("Loading ...");
@@ -297,7 +297,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLSelecByExt)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCSelecFileExt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(comboFileExtension, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14)
                 .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -312,7 +312,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btRun)
                     .addComponent(jLSelecByExt)
-                    .addComponent(jCSelecFileExt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboFileExtension, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -490,11 +490,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 		mergeSelected.setFilesOnBranchOne(filesDao.getFiles(mergeSelected.getHashBase(), 
                                                                     mergeSelected.getParents()[0], 
                                                                     mergeSelected.getPath(),
-                                                                    jCSelecFileExt.getSelectedItem().toString()));
+                                                                    comboFileExtension.getSelectedItem().toString()));
 		mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), 
                                                                     mergeSelected.getParents()[1], 
                                                                     mergeSelected.getPath(),
-                                                                    jCSelecFileExt.getSelectedItem().toString()));
+                                                                    comboFileExtension.getSelectedItem().toString()));
 		
 		CommitterDao cmterDao = new CommitterDao();
 		List<EditedFile> files = new LinkedList<>();
@@ -638,11 +638,11 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     private javax.swing.JButton btnChart1;
     private javax.swing.JButton btnChart2;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox comboFileExtension;
     private javax.swing.JLabel hash1;
     private javax.swing.JLabel hashBranch1;
     private javax.swing.JLabel hashBranch2;
     private javax.swing.JButton jButtonDependencies;
-    private javax.swing.JComboBox jCSelecFileExt;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLSelecByExt;
     private javax.swing.JLabel jLabel1;

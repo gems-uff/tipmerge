@@ -99,7 +99,7 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="jLSelecByExt" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jCSelecFileExt" min="-2" max="-2" attributes="0"/>
+                  <Component id="comboFileExtension" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                   <Component id="btRun" min="-2" pref="88" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -116,7 +116,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btRun" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLSelecByExt" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jCSelecFileExt" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="comboFileExtension" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -138,7 +138,7 @@
             <Property name="text" type="java.lang.String" value="Select by "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jCSelecFileExt">
+        <Component class="javax.swing.JComboBox" name="comboFileExtension">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="7">

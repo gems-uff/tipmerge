@@ -20,8 +20,8 @@ import java.util.List;
 public class CommitterDao {
 
 	//get the committers name and committers e-mail information	from commits
-	public Committer getCommitter(String hash, Repository repository){
-		String datas = RunGit.getResult("git show --format=\"%an#%ae \" " + hash, repository.getProject());
+	public static Committer getCommitter1(String hash, Repository repository){
+		String datas = RunGit.getResult("git show --format=%an#%ae " + hash, repository.getProject());
 		Committer cmter = new Committer(datas.split("#")[0], datas.split("#")[1]);
 		return cmter;
 	}

@@ -148,4 +148,12 @@ public class MergeCommits extends Merge{
 	public boolean isMergeOfBranches(){
 		return (this.getCommittersBranchOne().size() >= 2) && (this.getCommittersBranchTwo().size() >= 2);
 	}
+	
+	public boolean hasDifferentDevelopers(){
+		if (this.getCommittersBranchOne().isEmpty() || this.getCommittersBranchTwo().isEmpty())
+			return false;
+		if (this.getCommittersBranchOne().size() == 1 && this.getCommittersBranchTwo().size() == 1)
+			return !this.getCommittersBranchOne().get(0).equals(this.getCommittersBranchTwo().get(0));
+		return true;
+	}
 }
