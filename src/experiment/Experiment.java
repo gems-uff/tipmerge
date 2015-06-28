@@ -82,7 +82,12 @@ public class Experiment {
 
 				}else{
 
-					System.out.println("\t2. Files in common:\tYES\t" + filesInCommon);				
+					System.out.println("\t2. Files in common:\tYES\t" + filesInCommon);
+					//testa conflitos
+					if (RevisionAnalyzer.hasConflict(this.getRepo().getProject().toString(), mergeFiles.getParents()[0], mergeFiles.getParents()[1]))
+						System.out.println("\t4. Conflicting files:\tYES\tYES\tYES\tYES\t");
+					else
+						System.out.println("\t4. Conflicting files:\tNO");
 
 				}
 
@@ -112,6 +117,7 @@ public class Experiment {
 					//System.out.println(rGenerator.toString());
 					
 				}
+	
 			}
 			else
 				System.out.println("\t1. Enough Commiter:\tNO");
