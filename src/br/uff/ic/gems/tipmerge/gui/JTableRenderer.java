@@ -5,9 +5,11 @@
  */
 package br.uff.ic.gems.tipmerge.gui;
 
+import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -26,15 +28,15 @@ public class JTableRenderer extends DefaultTableCellRenderer {
             return (JLabel)value;
         }
         if(value instanceof Object){
-        if(column==1)
-            setHorizontalAlignment(JLabel.LEFT);
         if(column==2)
+            setHorizontalAlignment(JLabel.LEFT);
+        if(column==3)
             setBackground(Color.YELLOW);
             setForeground(Color.BLACK);
-        if(column==3)
+        if(column==4)
             setBackground(Color.LIGHT_GRAY);
             setForeground(Color.BLACK);
-        if(column==4)
+        if(column==5)
             setBackground(Color.ORANGE);
             setForeground(Color.BLACK);
             

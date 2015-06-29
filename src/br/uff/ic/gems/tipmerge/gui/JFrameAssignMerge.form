@@ -57,6 +57,8 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="labelLoading" min="-2" pref="110" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
+                          <Component id="btnCoverageChart" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                           <Component id="btRunCoverage" min="-2" pref="86" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -92,6 +94,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btRunCoverage" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="labelLoading" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnCoverageChart" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
@@ -139,6 +142,15 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="labelLoading.setVisible(false);"/>
           </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnCoverageChart">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Coverage-Chart"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCoverageChartActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

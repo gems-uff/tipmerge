@@ -26,14 +26,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.LayeredBarRenderer;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
@@ -45,6 +59,8 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 	private String databaseName = "data/gitdataminer.sqlite";
 	private Repository repository;
 	public Set<EditedFile> filesOfInterest = new HashSet<>();
+        private List<Coverage> coverageList1;
+        private Map<String, Integer[]> fileNames1;
 
 	public JFrameAssignMerge(Repository repository) {
 		initComponents();
@@ -99,6 +115,7 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         mergesList = new javax.swing.JComboBox();
         labelLoading = new javax.swing.JLabel();
+        btnCoverageChart = new javax.swing.JButton();
         paneResult = new javax.swing.JSplitPane();
         panelRanking = new javax.swing.JScrollPane();
         panelCoverage = new javax.swing.JScrollPane();
@@ -130,6 +147,14 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
         labelLoading.setText("Loading ...");
         labelLoading.setVisible(false);
 
+        btnCoverageChart.setText("Coverage-Chart");
+        btnCoverageChart.setEnabled(false);
+        btnCoverageChart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCoverageChartActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -140,6 +165,8 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(labelLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCoverageChart)
+                        .addGap(50, 50, 50)
                         .addComponent(btRunCoverage, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,7 +192,8 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btRunCoverage)
-                    .addComponent(labelLoading))
+                    .addComponent(labelLoading)
+                    .addComponent(btnCoverageChart))
                 .addContainerGap())
         );
 
@@ -242,11 +270,13 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 					Dominoes dominoesDM = dominoesDC.multiply(dominoesCM);
 					
 					List<Coverage> coverageList = getCoverageList(dominoesDM, files);
-					
+					coverageList1 = getCoverageList(dominoesDM, files);
 					Map<String, Integer[]> fileNames = countsEditedMethods(files);
+                                        fileNames1 = countsEditedMethods(files);
 					
 					appendCoverageToGui(files, coverageList, fileNames);
-
+                                        btnCoverageChart.setEnabled(true);
+                                        
 					
 				} catch (SQLException ex) {
 					Logger.getLogger(JFrameAssignMerge.class.getName()).log(Level.SEVERE, null, ex);
@@ -363,9 +393,41 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_mergesListActionPerformed
 
+    private void btnCoverageChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCoverageChartActionPerformed
+        // Code Covergae Chart
+          DefaultCategoryDataset chartData = new DefaultCategoryDataset();
+          Vector selectedCommitters = new Vector();  
+            for(int k = 0 ; k < jTableRanking.getRowCount(); k++){
+                if((boolean)jTableRanking.getValueAt(k,0)== true) {
+//                    System.out.println("\n"+jTableRanking.getValueAt(k,0)+(String)jTableRanking.getValueAt(k,2));
+                    selectedCommitters.add((String)jTableRanking.getValueAt(k,2)); 
+                }else{
+//                    System.out.println("\nNão Selecionado"+(String)jTableRanking.getValueAt(k,2));
+                }
+            }
+            int df =0;                         
+            for(Coverage coverage : this.coverageList1){
+                for(int i=0; i<selectedCommitters.size();i++){
+                    String name1 = (String) selectedCommitters.get(i);
+                    String name2 = coverage.getDeveloper()+" ";
+                        if(name1.equalsIgnoreCase(name2)){
+//                            System.out.print("Sucess");
+                            Map<String, Integer[]> cover = coverage.getCoverage(this.fileNames1);
+                                for(String file : cover.keySet()){
+                                    Integer[] editedMethods = cover.get(file);
+                                        chartData.addValue(editedMethods[0],"Total Files",file);
+                                        chartData.addValue(editedMethods[1], coverage.getDeveloper(),file);
+                                }            
+                        }
+                }
+            }
+          coverageChart(chartData);
+    }//GEN-LAST:event_btnCoverageChartActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btRunCoverage;
+    private javax.swing.JButton btnCoverageChart;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JPanel jPanel4;
@@ -389,27 +451,30 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 		lblGold.setIcon(mGold);
 		lblSilver.setIcon(mSilver);
 		lblBronze.setIcon(mBronze);
-		String[] columnLabels = {"Ranking", "Committer", "Gold", "Silver", "Bronze", "Total"};
+		String[] columnLabels = {"Select","Ranking", "Committer", "Gold", "Silver", "Bronze", "Total"};
 		model.setColumnIdentifiers(columnLabels);
-		
 		int rank = 1;
-		for(Medalist m : ranking){
-			int gold = m.getGoldMedals();
-			int silver = m.getSilverMedals();
-			int bronze = m.getBronzeMedals();
-			int total = gold + silver + bronze;
-			String name = m.getCommitter().getName();
-			model.addRow(new Object[]{rank++ + "º", name, gold, silver, bronze, total});
-		}
+                    for(Medalist m : ranking){
+                            int gold = m.getGoldMedals();
+                            int silver = m.getSilverMedals();
+                            int bronze = m.getBronzeMedals();
+                            int total = gold + silver + bronze;
+                            String name = m.getCommitter().getName();
+                            model.addRow(new Object[]{Boolean.FALSE,rank++ + "º", name, gold, silver, bronze, total});
+                    }
 		jTableRanking.setModel(model);
+                JCheckBox boxer = new JCheckBox();
 		JTableRenderer jTableRender = new JTableRenderer();
-		jTableRanking.getColumnModel().getColumn(2).setHeaderValue(lblGold);
-		jTableRanking.getColumnModel().getColumn(2).setHeaderRenderer(jTableRender);
-		jTableRanking.getColumnModel().getColumn(3).setHeaderValue(lblSilver);
+		jTableRanking.getColumnModel().getColumn(3).setHeaderValue(lblGold);
 		jTableRanking.getColumnModel().getColumn(3).setHeaderRenderer(jTableRender);
-		jTableRanking.getColumnModel().getColumn(4).setHeaderValue(lblBronze);
+		jTableRanking.getColumnModel().getColumn(4).setHeaderValue(lblSilver);
 		jTableRanking.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
-		jTableRanking.setDefaultRenderer(Object.class,new JTableRenderer());
+		jTableRanking.getColumnModel().getColumn(5).setHeaderValue(lblBronze);
+		jTableRanking.getColumnModel().getColumn(5).setHeaderRenderer(jTableRender);
+                jTableRanking.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+                jTableRanking.getColumnModel().getColumn(3).setCellRenderer(jTableRender);
+                jTableRanking.getColumnModel().getColumn(4).setCellRenderer(jTableRender);
+                jTableRanking.getColumnModel().getColumn(5).setCellRenderer(jTableRender);
 		panelRanking.setViewportView(jTableRanking);
 	}
 
@@ -417,5 +482,27 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 		this.txProjectName.setText(repository.getName());	
 		mergesList.setModel(new JComboBox(repository.getListOfMerges().toArray()).getModel());
 	}
-
+        
+        public void coverageChart(CategoryDataset dados){
+            CategoryAxis categoryAxis = new CategoryAxis("Edited Files");
+            ValueAxis valueAxis = new NumberAxis("Methods");
+                CategoryPlot plot = new CategoryPlot(dados,categoryAxis,valueAxis,new LayeredBarRenderer());
+                    plot.setOrientation(PlotOrientation.HORIZONTAL);
+                LayeredBarRenderer renderer = (LayeredBarRenderer) plot.getRenderer();
+                    renderer.setSeriesBarWidth(0,1.5);
+                    renderer.setSeriesBarWidth(1,1.0);
+                    renderer.setSeriesBarWidth(0, 2.0);
+                    renderer.setItemMargin(0.02);
+                CategoryAxis domainAxis = plot.getDomainAxis();
+                    domainAxis.setCategoryMargin(0.25);
+                    domainAxis.setUpperMargin(0.05);
+                    domainAxis.setLowerMargin(0.05);
+                JFreeChart graphic = new JFreeChart("Coverge Chart",JFreeChart.DEFAULT_TITLE_FONT,plot,true);
+                ChartPanel chartPanel = new ChartPanel(graphic);
+                    chartPanel.setPreferredSize(new java.awt.Dimension(590, 350));
+                JFrame chartFrame1 = new JFrame();
+                    chartFrame1.setContentPane(chartPanel);
+                    chartFrame1.setBounds(120, 20, 500, 500);
+                    chartFrame1.setVisible(true);
+        }
 }
