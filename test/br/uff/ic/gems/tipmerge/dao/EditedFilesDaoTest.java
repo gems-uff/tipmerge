@@ -38,23 +38,5 @@ public class EditedFilesDaoTest {
     @After
     public void tearDown() {
     }
-
-    /**
-     * Test of getFilesList method, of class EditedFilesDao.
-     */
-    @Test
-    public void testGetFilesList() {
-        System.out.println("getFilesList");
-        String base = "0d91b8aba8236053b0961f53ec7fad2eb525b993";
-        String parent = "b3182e83cd910c7b1a8266c757afe71e9cbd8065";
-        File path = new File("C:/Workspace-Netbeans/Caminho");
-        EditedFilesDao instance = new EditedFilesDao();
-        List<String> expResult = null;
-        List<String> result = instance.getFilesList(base, parent, path);
-        assertEquals(expResult, result);
-        System.out.println(result.toString());
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
     
 }

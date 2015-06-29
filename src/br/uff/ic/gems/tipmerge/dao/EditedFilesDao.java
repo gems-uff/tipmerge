@@ -18,7 +18,7 @@ import java.util.Set;
  * @author j2cf, Catarina
  */
 public class EditedFilesDao {
-
+/*
 	//get one list of files changed between two commits hash
     public List<String> getFilesList(String base, String parent, File path){
        // String command = "git diff --name-only " + base + ".." + parent;
@@ -27,17 +27,14 @@ public class EditedFilesDao {
         List<String> data = RunGit.getListOfResult(command, path);
         return data;
     }
-	
+*/	
     //We are using this code. This method gets one list of Editedfiles (String fileName) changed between two commits hash
     public List<EditedFile> getFiles(String base, String parent, File path, String extension){
-		//String command = "git diff --name-only " + base + ".." + parent;
         String command = "git show --pretty=format: --name-only --no-merges " + base + ".." + parent;
-        //System.out.println(command);
         List<String> data = RunGit.getListOfResult(command, path);
-        //System.out.println(data.size());
         Set<EditedFile> files = new HashSet<>();
         for (String file : data){
-            if (!file.equals("") && (file.endsWith(extension)) || (extension.equals("All Files"))){
+            if (!file.equals("") && !file.isEmpty() && ((file.endsWith(extension)) || (extension.equals("All Files")))){
                 files.add(new EditedFile(file));
             }
         }

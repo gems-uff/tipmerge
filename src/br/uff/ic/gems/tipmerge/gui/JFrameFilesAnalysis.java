@@ -456,105 +456,106 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
-             Runnable r = () -> {
-                 jLabel1.setVisible(true);
-                 btRun.setEnabled(false);
-//		startProgressBar(this.repoFiles.getRepository().getListOfMerges().size());
-		
-		/**
-		 * At this time a merge will be created or
-		 * - the selection of branches
-		 * - by selecting one merge from the history
-		 */
-		MergeFiles mergeSelected;
-		//MergeCommits mCommits;
-		MergeFilesDao mergeFilesDao = new MergeFilesDao();
+		Runnable r = () -> {
+			jLabel1.setVisible(true);
+			btRun.setEnabled(false);
 
-		if (radioHistorical.isSelected()){
-                        String hash= codHash(jcMerge.getSelectedItem().toString());
-			mergeSelected = mergeFilesDao.getMerge(hash, repoFiles.getRepository().getProject());
-			
-		}else{
-			mergeSelected = new MergeFiles("", repoFiles.getRepository().getProject());
-			mergeSelected.setParents(hashBranch1.getText(), hashBranch2.getText());
-			mergeSelected.setHashBase(mergeFilesDao.getMergeBase(mergeSelected.getParents()[0], mergeSelected.getParents()[1], mergeSelected.getPath()));
+			/**
+			 * At this time a merge will be created or
+			 * - the selection of branches
+			 * - by selecting one merge from the history
+			 */
+			MergeFiles mergeSelected;
+			//MergeCommits mCommits;
+			MergeFilesDao mergeFilesDao = new MergeFilesDao();
 
-		}
-		
-		/** 
-		 * From now the merge already exists with parents and merge base, next steps are:
-		 * Set the files of that merge and committers that changed that files.
-		 */
+			if (radioHistorical.isSelected()){
+				String hash= codHash(jcMerge.getSelectedItem().toString());
+				mergeSelected = mergeFilesDao.getMerge(hash, repoFiles.getRepository().getProject());
 
-		EditedFilesDao filesDao = new EditedFilesDao();
-		mergeSelected.setFilesOnBranchOne(filesDao.getFiles(mergeSelected.getHashBase(), 
-                                                                    mergeSelected.getParents()[0], 
-                                                                    mergeSelected.getPath(),
-                                                                    comboFileExtension.getSelectedItem().toString()));
-		mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), 
-                                                                    mergeSelected.getParents()[1], 
-                                                                    mergeSelected.getPath(),
-                                                                    comboFileExtension.getSelectedItem().toString()));
-		
-		CommitterDao cmterDao = new CommitterDao();
-		List<EditedFile> files = new LinkedList<>();
-		
-		for(EditedFile editedFile : mergeSelected.getFilesOnBranchOne()){
-			List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
-										mergeSelected.getParents()[0], 
-										editedFile.getFileName(), 
-										mergeSelected.getPath());
-			if(whoEdited.size() > 0){
-				editedFile.setWhoEditTheFile(whoEdited);
-				files.add(editedFile);
+			}else{
+				mergeSelected = new MergeFiles("", repoFiles.getRepository().getProject());
+				mergeSelected.setParents(hashBranch1.getText(), hashBranch2.getText());
+				mergeSelected.setHashBase(mergeFilesDao.getMergeBase(mergeSelected.getParents()[0], mergeSelected.getParents()[1], mergeSelected.getPath()));
+
 			}
-		}mergeSelected.setFilesOnBranchOne(files);
 		
-		files = new LinkedList<>();
-		for(EditedFile editedFile : mergeSelected.getFilesOnBranchTwo()){
-			List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
-										mergeSelected.getParents()[1], 
-										editedFile.getFileName(), 
-										mergeSelected.getPath());
-			if(whoEdited.size() > 0){
-				editedFile.setWhoEditTheFile(whoEdited);
-				files.add(editedFile);
-			}
-		}
-		mergeSelected.setFilesOnBranchTwo(files);
+			/** 
+			 * From now the merge already exists with parents and merge base, next steps are:
+			 * Set the files of that merge and committers that changed that files.
+			 */
+			System.out.println(mergeSelected.getHash() + "\n" + mergeSelected.getHashBase() + "\n" + Arrays.toString(mergeSelected.getParents()));
 		
-		files = new LinkedList<>();
-		for(EditedFile editedFile : mergeSelected.getFilesOnPreviousHistory()){
-			List<Committer> whoEdited = cmterDao.getWhoEditedFile(repoFiles.getRepository().getFirstCommit(), 
-										mergeSelected.getHashBase(), 
-										editedFile.getFileName(), 
-										mergeSelected.getPath());
-			if(whoEdited.size() > 0){
-				editedFile.setWhoEditTheFile(whoEdited);
-				files.add(editedFile);
-			}
-		}mergeSelected.setFilesOnPreviousHistory(new HashSet<>(files));
-				
-		//prints on the command line
-		//showCommitters(mergeSelected);
-		repoFiles.getMergeFiles().add(mergeSelected);
-		
-		this.setMergeFiles(mergeSelected);
 
-		showResultsTable(this.getMergeFiles());
-		//showResultsTable(this.getMergeFiles(),true);
-		//showResIntersection(mCommits.getCommittersBothBranches());
+			EditedFilesDao filesDao = new EditedFilesDao();
+			mergeSelected.setFilesOnBranchOne(filesDao.getFiles(mergeSelected.getHashBase(), 
+																		mergeSelected.getParents()[0], 
+																		mergeSelected.getPath(),
+																		comboFileExtension.getSelectedItem().toString()));
+			mergeSelected.setFilesOnBranchTwo(filesDao.getFiles(mergeSelected.getHashBase(), 
+																		mergeSelected.getParents()[1], 
+																		mergeSelected.getPath(),
+																		comboFileExtension.getSelectedItem().toString()));
 
-        btExport.setEnabled(true);
-		btZScore.setEnabled(true);
-		btnChart1.setEnabled(true);
-		btnChart2.setEnabled(true);
-		jButtonDependencies.setEnabled(true);
-                jLabel1.setVisible(false);
-                btRun.setEnabled(true);
-             };
-             Thread t = new Thread(r);
-             t.start();
+			CommitterDao cmterDao = new CommitterDao();
+			List<EditedFile> files = new LinkedList<>();
+
+			for(EditedFile editedFile : mergeSelected.getFilesOnBranchOne()){
+				List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
+											mergeSelected.getParents()[0], 
+											editedFile.getFileName(), 
+											mergeSelected.getPath());
+				if(whoEdited.size() > 0){
+					editedFile.setWhoEditTheFile(whoEdited);
+					files.add(editedFile);
+				}
+			}mergeSelected.setFilesOnBranchOne(files);
+
+			files = new LinkedList<>();
+			for(EditedFile editedFile : mergeSelected.getFilesOnBranchTwo()){
+				List<Committer> whoEdited = cmterDao.getWhoEditedFile(mergeSelected.getHashBase(), 
+											mergeSelected.getParents()[1], 
+											editedFile.getFileName(), 
+											mergeSelected.getPath());
+				if(whoEdited.size() > 0){
+					editedFile.setWhoEditTheFile(whoEdited);
+					files.add(editedFile);
+				}
+			}
+			mergeSelected.setFilesOnBranchTwo(files);
+
+			files = new LinkedList<>();
+			for(EditedFile editedFile : mergeSelected.getFilesOnPreviousHistory()){
+				List<Committer> whoEdited = cmterDao.getWhoEditedFile(repoFiles.getRepository().getFirstCommit(), 
+											mergeSelected.getHashBase(), 
+											editedFile.getFileName(), 
+											mergeSelected.getPath());
+				if(whoEdited.size() > 0){
+					editedFile.setWhoEditTheFile(whoEdited);
+					files.add(editedFile);
+				}
+			}mergeSelected.setFilesOnPreviousHistory(new HashSet<>(files));
+
+			//prints on the command line
+			//showCommitters(mergeSelected);
+			repoFiles.getMergeFiles().add(mergeSelected);
+
+			this.setMergeFiles(mergeSelected);
+
+			showResultsTable(this.getMergeFiles());
+			//showResultsTable(this.getMergeFiles(),true);
+			//showResIntersection(mCommits.getCommittersBothBranches());
+
+			btExport.setEnabled(true);
+			btZScore.setEnabled(true);
+			btnChart1.setEnabled(true);
+			btnChart2.setEnabled(true);
+			jButtonDependencies.setEnabled(true);
+			jLabel1.setVisible(false);
+			btRun.setEnabled(true);
+		};
+		Thread t = new Thread(r);
+		t.start();
     }//GEN-LAST:event_btRunActionPerformed
 
 	public void showResultsTable(MergeFiles merge) {
