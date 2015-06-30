@@ -94,6 +94,7 @@ public class RevisionAnalyzer {
 	public static boolean hasConflict(String repositoryPath, String leftParent, String rightParent){
 
 		//String mergeBase = Git.getMergeBase(repositoryPath, leftParent, rightParent);
+		Git.reset(repositoryPath);
 		
 		Git.checkout(repositoryPath, leftParent);
 

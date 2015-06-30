@@ -25,7 +25,7 @@ public class Git {
 		
 		System.out.println("\tCommand checkout: " + command);
 
-        List<String> output = new ArrayList<String>();
+        List<String> output = new ArrayList<>();
 
         try {
             Process exec = Runtime.getRuntime().exec(command, null, new File(repositoryPath));
@@ -72,7 +72,7 @@ public class Git {
         command = command + revision;
 		System.out.println("\tCommand merge: " + command);
 
-        List<String> output = new ArrayList<String>();
+        List<String> output = new ArrayList<>();
 
         try {
             Process exec = Runtime.getRuntime().exec(command, null, new File(repositoryPath));
@@ -138,6 +138,44 @@ public class Git {
 
         return output;
     }
+
+	static List<String> reset(String repositoryPath) {
+		
+		String command = "git reset --hard ";
+		
+		System.out.println("\tCommand reset: " + command);
+
+        List<String> output = new ArrayList<>();
+
+        try {
+            Process exec = Runtime.getRuntime().exec(command, null, new File(repositoryPath));
+
+            String s;
+
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(exec.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(exec.getErrorStream()));
+
+            // read the output from the command
+            while ((s = stdInput.readLine()) != null) {
+                String[] split = s.split(" ");
+                for (String rev : split) {
+                    output.add(rev);
+                }
+
+            }
+
+            // read any errors from the attempted command
+            while ((s = stdError.readLine()) != null) {
+//                System.out.println(s);
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(Git.class.getName()).log(Level.SEVERE, null, ex);
+        }
+		
+		return output;
+	}
 	
 	
 	
