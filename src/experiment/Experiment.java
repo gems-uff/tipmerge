@@ -14,6 +14,7 @@ import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Dependencies;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
 import br.uff.ic.gems.tipmerge.model.Medalist;
+import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
 import br.uff.ic.gems.tipmerge.model.RankingGenerator;
 import br.uff.ic.gems.tipmerge.model.Repository;
@@ -260,6 +261,31 @@ public class Experiment {
 			return !mergeFiles.getCommittersOnBranchOne().get(0).equals(mergeFiles.getCommittersOnBranchTwo().get(0));
 		return true;
 
+	}
+
+	public Map<String,String> getAuthorsFromMerges() {
+			
+		Map<String,String> names = new HashMap<>();
+		
+		for(String hashMerge : this.getRepo().getListOfMerges()){
+			
+			//DateFormat timeFormat = new SimpleDateFormat("dd/MM/YYYY - HH:mm:ss.SSS");  
+			//String formattedDate = timeFormat.format(new Date());  
+			//System.out.println("Merge under review: " + hashMerge + "\tTime: " + formattedDate);
+			
+			//MergeCommits merge = new MergeCommits(hashMerge,this.getRepo().getProject());
+			//MergeCommitsDao mergeDao = new MergeCommitsDao(this.getRepo().getProject());
+			
+			//mergeDao.update(merge);
+			
+			Committer committer = CommitterDao.getCommitter1(hashMerge.split(" ")[0], this.getRepo());
+
+			names.put(hashMerge, committer.getName());
+			
+			
+		}		
+		
+		return names;
 	}
 	
 }
