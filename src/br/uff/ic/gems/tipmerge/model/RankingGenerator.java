@@ -135,20 +135,6 @@ public class RankingGenerator {
 		List<Committer> bronze = new ArrayList<>();
 		
 		Set<EditedFile> files = new HashSet<>( mergeFiles.getFilesOnBothBranch() );
-		for(EditedFile file : files){
-			int indexb1 = mergeFiles.getFilesOnBranchOne().indexOf(file);
-			if(indexb1 > -1){
-				gold.addAll(mergeFiles.getFilesOnBranchOne().get(indexb1).getWhoEditTheFile());
-				
-			}
-			
-			int indexb2 = mergeFiles.getFilesOnBranchTwo().indexOf(file);
-			if(indexb2 > -1){
-
-				gold.addAll(mergeFiles.getFilesOnBranchTwo().get(indexb2).getWhoEditTheFile());
-				
-			}
-		}
 		List<EditedFile> filesHistory = new ArrayList<>(mergeFiles.getFilesOnPreviousHistory());
 
 		for(EditedFile file : files){
