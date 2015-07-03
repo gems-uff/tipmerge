@@ -84,8 +84,6 @@ public class RankingGenerator {
 				}
 			}
 			
-			//System.out.println(this.toString());
-			
 		});
 
 		return excepiontFiles;
@@ -138,17 +136,17 @@ public class RankingGenerator {
 		
 		Set<EditedFile> files = new HashSet<>( mergeFiles.getFilesOnBothBranch() );
 		for(EditedFile file : files){
-			int index = mergeFiles.getFilesOnBranchOne().indexOf(file);
-			if(index > -1){
-				gold.addAll(mergeFiles.getFilesOnBranchOne().get(index).getWhoEditTheFile());
-				break;
+			int indexb1 = mergeFiles.getFilesOnBranchOne().indexOf(file);
+			if(indexb1 > -1){
+				gold.addAll(mergeFiles.getFilesOnBranchOne().get(indexb1).getWhoEditTheFile());
+				
 			}
-		}
-		for(EditedFile file : files){
-			int index = mergeFiles.getFilesOnBranchTwo().indexOf(file);
-			if(index > -1){
-				gold.addAll(mergeFiles.getFilesOnBranchTwo().get(index).getWhoEditTheFile());
-				break;
+			
+			int indexb2 = mergeFiles.getFilesOnBranchTwo().indexOf(file);
+			if(indexb2 > -1){
+
+				gold.addAll(mergeFiles.getFilesOnBranchTwo().get(indexb2).getWhoEditTheFile());
+				
 			}
 		}
 		List<EditedFile> filesHistory = new ArrayList<>(mergeFiles.getFilesOnPreviousHistory());
