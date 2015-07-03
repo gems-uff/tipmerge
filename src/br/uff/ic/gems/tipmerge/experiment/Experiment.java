@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package experiment;
+package br.uff.ic.gems.tipmerge.experiment;
 
 import br.uff.ic.gems.tipmerge.dao.CommitterDao;
 import br.uff.ic.gems.tipmerge.dao.EditedFilesDao;

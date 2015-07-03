@@ -84,8 +84,6 @@ public class RankingGenerator {
 				}
 			}
 			
-			//System.out.println(this.toString());
-			
 		});
 
 		return excepiontFiles;
@@ -137,27 +135,27 @@ public class RankingGenerator {
 		List<Committer> bronze = new ArrayList<>();
 		
 		Set<EditedFile> files = new HashSet<>( mergeFiles.getFilesOnBothBranch() );
-		for(EditedFile file : files){
-			int index = mergeFiles.getFilesOnBranchOne().indexOf(file);
-			if(index > -1){
-				gold.addAll(mergeFiles.getFilesOnBranchOne().get(index).getWhoEditTheFile());
-				break;
-			}
-		}
-		for(EditedFile file : files){
-			int index = mergeFiles.getFilesOnBranchTwo().indexOf(file);
-			if(index > -1){
-				gold.addAll(mergeFiles.getFilesOnBranchTwo().get(index).getWhoEditTheFile());
-				break;
-			}
-		}
 		List<EditedFile> filesHistory = new ArrayList<>(mergeFiles.getFilesOnPreviousHistory());
+
 		for(EditedFile file : files){
-			int index = filesHistory.indexOf(file);
-			if(index > -1){
-				bronze.addAll(filesHistory.get(index).getWhoEditTheFile());
-				break;
+			int indexb1 = mergeFiles.getFilesOnBranchOne().indexOf(file);
+			if(indexb1 > -1){
+				gold.addAll(mergeFiles.getFilesOnBranchOne().get(indexb1).getWhoEditTheFile());
+				
 			}
+			
+			int indexb2 = mergeFiles.getFilesOnBranchTwo().indexOf(file);
+			if(indexb2 > -1){
+
+				gold.addAll(mergeFiles.getFilesOnBranchTwo().get(indexb2).getWhoEditTheFile());
+				
+			}
+			
+			int indexh = filesHistory.indexOf(file);
+			if(indexh > -1){
+				bronze.addAll(filesHistory.get(indexh).getWhoEditTheFile());
+				//break;
+			}			
 		}
 
 		this.setGoldMedals(gold);
