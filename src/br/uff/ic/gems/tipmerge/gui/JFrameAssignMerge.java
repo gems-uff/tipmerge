@@ -18,6 +18,8 @@ import br.uff.ic.gems.tipmerge.model.RankingGenerator;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import dao.DominoesSQLDao2;
 import domain.Dominoes;
+import java.awt.Color;
+import java.awt.GradientPaint;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +38,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartPanel;
@@ -45,6 +48,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.LayeredBarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -309,7 +313,7 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 		}
 		return files;
 	}
-
+    
 	private List<Coverage> getCoverageList(Dominoes dominoesDM, List<String[]> files) {
 		int rows;
 		int cols;
@@ -396,32 +400,225 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
     private void btnCoverageChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCoverageChartActionPerformed
         // Code Covergae Chart
           DefaultCategoryDataset chartData = new DefaultCategoryDataset();
-          Vector selectedCommitters = new Vector();  
-            for(int k = 0 ; k < jTableRanking.getRowCount(); k++){
-                if((boolean)jTableRanking.getValueAt(k,0)== true) {
+          Vector selectedCommitters = new Vector();
+          Vector selectedIndex = new Vector();   //Start Coverage 
+          Vector noSelected = new Vector();
+            for(int i = 0 ; i < jTableRanking.getRowCount(); i++){
+                if((boolean)jTableRanking.getValueAt(i,0)== true) {
 //                    System.out.println("\n"+jTableRanking.getValueAt(k,0)+(String)jTableRanking.getValueAt(k,2));
-                    selectedCommitters.add((String)jTableRanking.getValueAt(k,2)); 
+                    selectedCommitters.add((String)jTableRanking.getValueAt(i,2)); 
                 }else{
 //                    System.out.println("\nNão Selecionado"+(String)jTableRanking.getValueAt(k,2));
                 }
             }
-            int df =0;                         
-            for(Coverage coverage : this.coverageList1){
-                for(int i=0; i<selectedCommitters.size();i++){
-                    String name1 = (String) selectedCommitters.get(i);
-                    String name2 = coverage.getDeveloper()+" ";
-                        if(name1.equalsIgnoreCase(name2)){
-//                            System.out.print("Sucess");
-                            Map<String, Integer[]> cover = coverage.getCoverage(this.fileNames1);
-                                for(String file : cover.keySet()){
-                                    Integer[] editedMethods = cover.get(file);
-                                        chartData.addValue(editedMethods[0],"Total Files",file);
-                                        chartData.addValue(editedMethods[1], coverage.getDeveloper(),file);
-                                }            
+          System.out.print("\nCoverge Files");
+          boolean selected = false;
+            if(selectedCommitters.size()>0&& selectedCommitters.size()<4){
+                for(int i = 0 ; i<selectedCommitters.size() ; i++){
+                    String nome1 = (String) selectedCommitters.get(i);
+                      for(Coverage coverage : this.coverageList1){
+                         String nome2 = coverage.getDeveloper()+" ";
+                          if(nome1.equalsIgnoreCase(nome2)){
+                             selectedIndex.add( this.coverageList1.indexOf(coverage));
+                             selected = true;
+                           }
                         }
+                      if(selected == false){
+                        noSelected.add(nome1);
+                      }
+                      selected=false;
+                      
                 }
+                if(!noSelected.isEmpty()){
+                    String nameDev = "";
+                    for(int s=0 ; s < noSelected.size();s++){
+                        System.out.println("\nNo following developers not have coveage"+noSelected.get(s));
+                        nameDev = nameDev+ noSelected.get(s)+"  ;";
+                    }
+                    JOptionPane.showMessageDialog(null,"The Developer does not have coverage: "+ "\n"+nameDev);
+                }
+                if(selectedIndex.size()==1){
+                    for(Coverage coverage : this.coverageList1){
+                        for(int i=0; i<selectedCommitters.size();i++){
+                            String name1 = (String) selectedCommitters.get(i);
+                            String name2 = coverage.getDeveloper()+" ";
+                                if(name1.equalsIgnoreCase(name2)){
+    //                              System.out.print("Sucess");
+                                     Map<String, Integer[]> cover = coverage.getCoverage(this.fileNames1);
+                                    for(String file : cover.keySet()){
+                                            Integer[] editedMethods = cover.get(file);
+                                            chartData.addValue(editedMethods[0],"Total Modified Methods",file);
+                                            chartData.addValue(editedMethods[1], coverage.getDeveloper(),file);
+                                    }            
+                                }
+                        }
+                    }
+
+                    coverageChart(chartData);
+                }
+                if(selectedIndex.size()== 2){
+                  Coverage coverDev1 =  this.coverageList1.get((int) selectedIndex.get(0));
+                  List<String []> coverData1 = coverDev1.getValues();
+                  Coverage coverDev2 =  this.coverageList1.get((int) selectedIndex.get(1));    
+                  List<String []> coverData2 = coverDev2.getValues();
+                  String [] fileData1;
+                  String [] fileData2;
+                  Vector listSameFiles = new Vector();  
+                        for(int i=0; i<coverData1.size();i++){
+                            fileData1 = coverData1.get(i);
+                              for(int j=0; j<coverData2.size();j++){
+                                 fileData2 = coverData2.get(j);
+                                     if(fileData1[0].equalsIgnoreCase(fileData2[0])&&fileData1[1].equalsIgnoreCase(fileData2[1])){
+                                         System.out.printf("\n"+coverDev1.getDeveloper()+ coverDev2.getDeveloper()+fileData1[0]+fileData2[0]);
+                                         listSameFiles.add(fileData1[0]); 
+                                      }
+                               }
+                        }
+                Vector listAmountMethods1= new Vector();
+                Vector listSameMethods= new Vector();
+                Vector listFiles = new Vector();
+                int totalSameMethods=0;
+                Map<String, Integer[]> covera1 = coverDev1.getCoverage(this.fileNames1);
+                   for(String file1 : covera1.keySet()){
+                        Integer[] editedMethods1 = covera1.get(file1);
+                        listAmountMethods1.add(editedMethods1[1]);
+                            for(int h = 0 ; h<listSameFiles.size();h++){
+                                 if(file1.equalsIgnoreCase((String)listSameFiles.get(h))){
+                                   totalSameMethods++;
+                                 }
+                            }
+                        listSameMethods.add(totalSameMethods);
+                        listFiles.add(file1);
+                        totalSameMethods =0;
+                    }  
+                Vector listAmountMethods2= new Vector();
+                Vector listTotalMethods= new Vector();
+                Map<String, Integer[]> covera2 = coverDev2.getCoverage(this.fileNames1);
+                    for(String file1 : covera2.keySet()){
+                        Integer[] editedMethods2 = covera2.get(file1);
+                        listAmountMethods2.add(editedMethods2[1]);
+                        listTotalMethods.add(editedMethods2[0]);
+                    }  
+                DefaultCategoryDataset dataCoverage= new DefaultCategoryDataset();
+                    String modifiedFile =" " ;
+                    int sumModifications = 0 ;
+                    int num0 = 0 ;
+                    int num1 = 0 ;
+                    int num2 = 0 ;
+                    System.out.println("\n Tamanho de cada Lista"+listSameMethods.size() + listAmountMethods1.size()+ listAmountMethods2.size());
+                        for(int y=0; y<listAmountMethods1.size();y++){
+                           num1 = (int)listAmountMethods1.get(y);
+                           num2 = (int)listAmountMethods2.get(y);
+                           num0 = (int)listSameMethods.get(y);
+                           modifiedFile =(String)listFiles.get(y); 
+                           sumModifications = num1+num2- num0;
+                           System.out.print("\n"+sumModifications+coverDev1.getDeveloper()+" + "+coverDev2.getDeveloper()+ modifiedFile);
+                           dataCoverage.addValue((int)listTotalMethods.get(y), "Total Modified Methods", modifiedFile);
+                           dataCoverage.addValue(sumModifications,coverDev1.getDeveloper()+" + "+coverDev2.getDeveloper(), modifiedFile);
+                        }
+                 coverageChart(dataCoverage);
+                }
+                if(selectedIndex.size()==3){
+                  Coverage coverDev1 =  coverageList1.get((int) selectedIndex.get(0));
+                  Coverage coverDev2 =  coverageList1.get((int) selectedIndex.get(1));
+                  Coverage coverDev3 =  coverageList1.get((int) selectedIndex.get(2));
+                  List<String []> coverData1 = coverDev1.getValues();
+                  List<String []> coverData2 = coverDev2.getValues();
+                  List<String []> coverData3 = coverDev3.getValues();
+                  String [] fileData1;
+                  String [] fileData2;
+//                  String [] fileData3;
+                  Vector listSameFile = new Vector();
+                    for(int i=0; i<coverData1.size();i++){
+                        fileData1 = coverData1.get(i);
+                          for(int j=0; j<coverData2.size();j++){
+                            fileData2 = coverData2.get(j);
+                              if(fileData1[0].equalsIgnoreCase(fileData2[0])&&fileData1[1].equalsIgnoreCase(fileData2[1])){
+                                System.out.printf("\n"+coverDev1.getDeveloper()+ coverDev2.getDeveloper()+fileData1[0]+fileData2[0]); 
+                                  listSameFile.add(fileData1[0]); 
+                               }
+                            }
+                    }
+                    for(int i=0; i<coverData2.size();i++){
+                        fileData1 = coverData2.get(i);
+                        for(int j=0; j<coverData3.size();j++){
+                           fileData2 = coverData3.get(j);
+                             if(fileData1[0].equalsIgnoreCase(fileData2[0])&&fileData1[1].equalsIgnoreCase(fileData2[1])){
+                                 System.out.printf("\n"+coverDev1.getDeveloper()+ coverDev2.getDeveloper()+fileData1[0]+fileData2[0]);
+                                 listSameFile.add(fileData1[0]); 
+                               }
+                            }
+                    }
+                    for(int i=0; i<coverData1.size();i++){
+                        fileData1 = coverData1.get(i);
+                        for(int j=0; j<coverData3.size();j++){
+                            fileData2 = coverData3.get(j);
+                              if(fileData1[0].equalsIgnoreCase(fileData2[0])&&fileData1[1].equalsIgnoreCase(fileData2[1])){
+                                  System.out.printf("\n"+coverDev1.getDeveloper()+ coverDev2.getDeveloper()+fileData1[0]+fileData2[0]);
+                                  listSameFile.add(fileData1[0]); 
+                                }
+                         }
+                    }      
+                    Vector listAmountMethods1= new Vector();
+                    Vector amountSameMethods1= new Vector();
+                    Vector listModifiedFiles = new Vector();
+                    int totalSameMethods=0;
+                    Map<String, Integer[]> covera1 = coverDev1.getCoverage(this.fileNames1);
+                    for(String file1 : covera1.keySet()){
+                        Integer[] editedMethods1 = covera1.get(file1);
+                        listAmountMethods1.add(editedMethods1[1]);
+                            for(int h = 0 ; h<listSameFile.size();h++){
+                                if(file1.equalsIgnoreCase((String)listSameFile.get(h))){
+                                   totalSameMethods++;
+                                }
+                            }
+                         amountSameMethods1.add(totalSameMethods);
+                         listModifiedFiles.add(file1);
+                         totalSameMethods =0;
+                    }  
+                    Vector listAmountMethods2= new Vector();
+                    Vector listTotalModified= new Vector();
+                    Map<String, Integer[]> covera2 = coverDev2.getCoverage(this.fileNames1);
+                        for(String file1 : covera2.keySet()){
+                            Integer[] editedMethods2 = covera2.get(file1);
+                            listTotalModified.add(editedMethods2[0]);
+                            listAmountMethods2.add(editedMethods2[1]);
+                        }  
+                    Vector listAmountMethods3 = new Vector();    
+                    Map<String, Integer[]> covera3 = coverDev3.getCoverage(this.fileNames1);
+                        for(String file1 : covera3.keySet()){
+                            Integer[] editedMethods3 = covera3.get(file1);
+                            listAmountMethods3.add(editedMethods3[1]);
+                        }
+                    DefaultCategoryDataset dataCoverage= new DefaultCategoryDataset();
+                     String modifiedFile1 =" " ;
+                     int totalMofications = 0 ;
+                     int num0 = 0 ;
+                     int num1 = 0 ;
+                     int num2 = 0 ;
+                     int num3 = 0 ; 
+                     System.out.println("\n Tamanho de cada Lista"+amountSameMethods1.size() + listAmountMethods1.size()+ listAmountMethods2.size());
+                         for(int y=0; y<listAmountMethods1.size();y++){
+                            num0 = (int) amountSameMethods1.get(y);
+                            num1 = (int)listAmountMethods1.get(y);
+                            num2 = (int)listAmountMethods2.get(y); 
+                            num3 = (int)listAmountMethods3.get(y);
+                            modifiedFile1 =(String)listModifiedFiles.get(y); 
+                            totalMofications = num1+num2+num3- num0;
+                            System.out.print("\n"+totalMofications+coverDev1.getDeveloper()+" + "+coverDev2.getDeveloper()+" + "+coverDev3.getDeveloper()+ modifiedFile1);
+                            dataCoverage.addValue((int)listTotalModified.get(y), "Total Modified Methods", modifiedFile1);
+                            dataCoverage.addValue(totalMofications,coverDev1.getDeveloper()+" + "+coverDev2.getDeveloper()+"  + "+ coverDev3.getDeveloper(), modifiedFile1);
+                         }
+                    coverageChart(dataCoverage);
+               }     
+               for(int k = 0 ; k < selectedIndex.size();k++){
+                   Coverage cover =  coverageList1.get((int) selectedIndex.get(k));
+                   System.out.print("\n You select the following developer:"+cover.getDeveloper());
+               }
             }
-          coverageChart(chartData);
+            else{
+                JOptionPane.showMessageDialog(null,"You can select 1-3 developers for Coverage Chart");
+            } //End Coverage  
     }//GEN-LAST:event_btnCoverageChartActionPerformed
 
 
@@ -490,13 +687,18 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
                     plot.setOrientation(PlotOrientation.HORIZONTAL);
                 LayeredBarRenderer renderer = (LayeredBarRenderer) plot.getRenderer();
                     renderer.setSeriesBarWidth(0,1.5);
-                    renderer.setSeriesBarWidth(1,1.0);
-                    renderer.setSeriesBarWidth(0, 2.0);
+                    renderer.setSeriesBarWidth(1,0.6);
                     renderer.setItemMargin(0.02);
                 CategoryAxis domainAxis = plot.getDomainAxis();
                     domainAxis.setCategoryMargin(0.25);
                     domainAxis.setUpperMargin(0.05);
                     domainAxis.setLowerMargin(0.05);
+                BarRenderer rendered1 = (BarRenderer) plot.getRenderer();
+                rendered1.setDrawBarOutline(false);
+                GradientPaint gradientpaint1 = new GradientPaint(0.0F, 0.0F, Color.GRAY, 0.0F, 0.0F, new Color(0, 0, 0));
+                GradientPaint gradientpaint2 = new GradientPaint(0.0F, 0.0F, Color.GREEN, 0.0F, 0.0F, new Color(0, 64, 0));
+                rendered1.setSeriesPaint(0, gradientpaint1);
+                rendered1.setSeriesPaint(1, gradientpaint2);
                 JFreeChart graphic = new JFreeChart("Coverge Chart",JFreeChart.DEFAULT_TITLE_FONT,plot,true);
                 ChartPanel chartPanel = new ChartPanel(graphic);
                     chartPanel.setPreferredSize(new java.awt.Dimension(590, 350));
