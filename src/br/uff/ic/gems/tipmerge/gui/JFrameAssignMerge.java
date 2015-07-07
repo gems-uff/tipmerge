@@ -638,7 +638,13 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 	private void showRanking(List<Medalist> ranking) {
-		DefaultTableModel model = new DefaultTableModel();
+                    DefaultTableModel model = new DefaultTableModel(){
+                        public Class<?> getColumnClass(int column) {  
+                            if (column == 0) //Return the first column as checkbox  
+                                  return Boolean.class;  
+                      return super.getColumnClass(column);  
+                        }  
+                    };
 		Icon mGold = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png"));
 		Icon mSilver = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png"));
 		Icon mBronze = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/bronze1.png"));
@@ -668,7 +674,7 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
 		jTableRanking.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
 		jTableRanking.getColumnModel().getColumn(5).setHeaderValue(lblBronze);
 		jTableRanking.getColumnModel().getColumn(5).setHeaderRenderer(jTableRender);
-                jTableRanking.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+//                jTableRanking.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(new JCheckBox().));
                 jTableRanking.getColumnModel().getColumn(3).setCellRenderer(jTableRender);
                 jTableRanking.getColumnModel().getColumn(4).setCellRenderer(jTableRender);
                 jTableRanking.getColumnModel().getColumn(5).setCellRenderer(jTableRender);
