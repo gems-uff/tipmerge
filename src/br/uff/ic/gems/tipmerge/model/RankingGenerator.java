@@ -53,7 +53,8 @@ public class RankingGenerator {
 				
 				for(EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()){
 					if(fileHistory.equals(ascendentCand)){
-						this.setBronzeMedals(fileHistory.getWhoEditTheFile());
+						this.setSilverMedals(fileHistory.getWhoEditTheFile());
+						//Changed the value - silver medals to changed files in history
 						break;
 					}
 				}
@@ -66,7 +67,8 @@ public class RankingGenerator {
 			Set<EditedFile> consequentList = dependency.getValue();
 			for(EditedFile consequent : consequentList){
 
-				this.setSilverMedals(silverRights);
+				this.setBronzeMedals(silverRights);
+			//	Changed the value - silver medals to changed files with dependencies in branches
 				
 				if(!excepiontFiles.contains(consequent)){
 					
@@ -74,7 +76,8 @@ public class RankingGenerator {
 					
 					for(EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()){
 						if(fileHistory.equals(consequent)){
-							this.setBronzeMedals(fileHistory.getWhoEditTheFile());
+							this.setSilverMedals(fileHistory.getWhoEditTheFile());
+							//Changed the value - silver medals to changed files in history
 							break;
 						}
 					}
@@ -132,7 +135,7 @@ public class RankingGenerator {
 
 	public Set<EditedFile> setMedalsFilesEditedBothBranches(MergeFiles mergeFiles) {
 		List<Committer> gold = new ArrayList<>();
-		List<Committer> bronze = new ArrayList<>();
+		List<Committer> silver = new ArrayList<>();
 		
 		Set<EditedFile> files = new HashSet<>( mergeFiles.getFilesOnBothBranch() );
 		List<EditedFile> filesHistory = new ArrayList<>(mergeFiles.getFilesOnPreviousHistory());
@@ -153,13 +156,13 @@ public class RankingGenerator {
 			
 			int indexh = filesHistory.indexOf(file);
 			if(indexh > -1){
-				bronze.addAll(filesHistory.get(indexh).getWhoEditTheFile());
+				silver.addAll(filesHistory.get(indexh).getWhoEditTheFile());
 				//break;
 			}			
 		}
-
+		//Changed the value - silver medals to changed files in history
 		this.setGoldMedals(gold);
-		this.setBronzeMedals(bronze);
+		this.setSilverMedals(silver);
 		//System.out.println(this.toString());
 		return  files;
 	}
