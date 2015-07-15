@@ -49,12 +49,24 @@ public class Experiment {
 		return this.repository;
 	}
 
-	public Map<String, Integer[]> getDatasFromMerges() {
-		Map<String, Integer[]> datas = new HashMap<>();
+	public Map<String, Integer> getDatasFromMerges() {
+//		Map<String, Integer[]> datas = new HashMap<>();
+                Map<String, Integer> mapValues = new HashMap<>();
+                
+                mapValues.put("Merges:", 0);
+                mapValues.put("Files:", 0);
+                mapValues.put("Dependencies:", 0);
+                mapValues.put("Conflicts:", 0);
+                mapValues.put("1stPosition", 0);
+                mapValues.put("2ndPosition", 0);
+                mapValues.put("3thPosition", 0);
+                mapValues.put("isInRank", 0);
+                mapValues.put("outOfRank", 0);
+                        //quant. merges | arq 2 lados | arq dep | conflitos | ranking (1,2,3,9,0) -> 1a 2a 3a posição, no rank, fora do rank
 		
 		for(String hashMerge : this.getRepo().getListOfMerges()){
 			
-			Integer[] values = new Integer[4];
+			//Integer[] values = new Integer[4];
 			
 			DateFormat timeFormat = new SimpleDateFormat("dd/MM/YYYY - HH:mm:ss.SSS");  
 			String formattedDate = timeFormat.format(new Date());  
@@ -64,17 +76,19 @@ public class Experiment {
 			MergeFiles mergeFiles = getFilesAnalisys(hashMerge.split(" ")[0]);
 			boolean hasDevelopers = hasEnoughtDevelopers(mergeFiles);
 			
-			if (hasDevelopers)
+			/*
+                        if (hasDevelopers)
 				values[0] = 1;
 			else
 				values[0] = 0;
-			
+			*/
 			if(hasDevelopers){
 				
 				System.out.println("\t1. Enough Committer:\tYES");
+                                mapValues.put("Merges:", mapValues.get("Merges:") + 1);
 
 				int filesInCommon = mergeFiles.getFilesOnBothBranch().size();
-				values[1] = filesInCommon;
+			//	values[1] = filesInCommon;
 				
 				if (filesInCommon == 0) {
 
@@ -83,10 +97,13 @@ public class Experiment {
 				}else{
 
 					System.out.println("\t2. Files in common:\tYES\t" + filesInCommon);
+                                        mapValues.put("Files:", mapValues.get("Files:") + 1);
+                                        
 					//testa conflitos
-					if (RevisionAnalyzer.hasConflict(this.getRepo().getProject().toString(), mergeFiles.getParents()[0], mergeFiles.getParents()[1]))
+					if (RevisionAnalyzer.hasConflict(this.getRepo().getProject().toString(), mergeFiles.getParents()[0], mergeFiles.getParents()[1])){
 						System.out.println("\t4. Conflicting files:\tYES\tYES\tYES\tYES\t");
-					else
+                                                mapValues.put("Conflicts:", mapValues.get("Conflicts:") + 1);
+                                        }else
 						System.out.println("\t4. Conflicting files:\tNO");
 
 				}
@@ -95,12 +112,13 @@ public class Experiment {
 				boolean hasNoDependencies = (dependencies.get(0).isEmpty() && dependencies.get(1).isEmpty());
 
 				if (hasNoDependencies) {
-					values[2] = 0;
+			//		values[2] = 0;
 					System.out.println("\t3. Dependencies:\tNO");
 					
 				}else{
-					values[2] = 1;
+			//		values[2] = 1;
 					System.out.println("\t3. Dependencies:\tYES");
+                                        mapValues.put("Dependencies:", mapValues.get("Dependencies:") + 1);
 
 				}
 				if((filesInCommon > 0) || (!hasNoDependencies) ){
@@ -111,22 +129,32 @@ public class Experiment {
 					Committer committer = CommitterDao.getCommitter1(hashMerge.split(" ")[0], this.getRepo());
 					
 					int position = ranking.indexOf(new Medalist(committer)) + 1;
-					values[3] = position;
+			//		values[3] = position;
 					System.out.println("\t4. Rank position:\t" + position + "\t" + committer.getName() );
-					
+
+                                        if(position == 1)
+                                            mapValues.put("1stPosition", mapValues.get("1stPosition") + 1);
+                                        else if (position == 2)
+                                            mapValues.put("2ndPosition", mapValues.get("2ndPosition") + 1);
+                                        else if (position == 3)
+                                            mapValues.put("3thPosition", mapValues.get("3thPosition") + 1);
+                                        else if (position != 0)
+                                            mapValues.put("isInRank", mapValues.get("isInRank") + 1);
+                                        else
+                                            mapValues.put("outOfRank", mapValues.get("outOfRank") + 1);
+                                        
 					//System.out.println(rGenerator.toString());
-					
 				}
 	
 			}
 			else
 				System.out.println("\t1. Enough Commiter:\tNO");
 
-			datas.put(hashMerge, values);
+			//datas.put(hashMerge, values);
 			System.gc();
 		}
 		
-		return datas;
+		return mapValues;
 	}
 
 	private RankingGenerator getRanking(List<Map<EditedFile, Set<EditedFile>>> dependencies, MergeFiles mergeFiles) {

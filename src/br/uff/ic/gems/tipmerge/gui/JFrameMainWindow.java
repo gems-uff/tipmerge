@@ -580,7 +580,8 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 		
 		Experiment experimentMerges = new Experiment(repository);
 		
-		Map<String, Integer[]> result = experimentMerges.getDatasFromMerges();
+		Map<String, Integer> result = experimentMerges.getDatasFromMerges();
+                System.out.println(result.toString());
 		// merges | developers | files | dependencies | position
 		// string | integer
 		
