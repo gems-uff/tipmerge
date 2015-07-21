@@ -581,8 +581,20 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 		Experiment experimentMerges = new Experiment(repository);
 		
 		Map<String, Integer> result = experimentMerges.getDatasFromMerges();
-                System.out.println(result.toString());
-		// merges | developers | files | dependencies | position
+			//  System.out.println(result.toString());
+			//result.put("Merges", 0);	
+			System.out.println("Number of merges with Enough developers " + result.get("Merges"));
+			System.out.println("Number of merges with changed files in both branches " + result.get("Files"));
+            System.out.println("Number of merges with dependencies across branches " + result.get("Dependencies"));
+			System.out.println("Number of merges with conflicts " + result.get("Conflicts"));
+			int rankingTotal = result.get("1stPosition") + result.get("2ndPosition") + result.get("3thPosition") + result.get("isInRank") + result.get("outOfRank");
+			System.out.println("Number of merges with raking " + rankingTotal);
+			System.out.println("Matched with 1st Position " + result.get("1stPosition"));
+			System.out.println("Matched with 2nd Position " + result.get("2ndPosition"));
+			System.out.println("Matched with 3th Position " + result.get("3thPosition"));
+			System.out.println("Matched with other Position " + result.get("isInRank"));
+			System.out.println("Out of the Ranking " + result.get("outOfRank"));
+					// merges | developers | files | dependencies | position
 		// string | integer
 		
     }//GEN-LAST:event_jMenuItem2ActionPerformed

@@ -53,10 +53,10 @@ public class Experiment {
 //		Map<String, Integer[]> datas = new HashMap<>();
                 Map<String, Integer> mapValues = new HashMap<>();
                 
-                mapValues.put("Merges:", 0);
-                mapValues.put("Files:", 0);
-                mapValues.put("Dependencies:", 0);
-                mapValues.put("Conflicts:", 0);
+                mapValues.put("Merges", 0);
+                mapValues.put("Files", 0);
+                mapValues.put("Dependencies", 0);
+                mapValues.put("Conflicts", 0);
                 mapValues.put("1stPosition", 0);
                 mapValues.put("2ndPosition", 0);
                 mapValues.put("3thPosition", 0);
@@ -85,7 +85,7 @@ public class Experiment {
 			if(hasDevelopers){
 				
 				System.out.println("\t1. Enough Committer:\tYES");
-                                mapValues.put("Merges:", mapValues.get("Merges:") + 1);
+                                mapValues.put("Merges", mapValues.get("Merges") + 1);
 
 				int filesInCommon = mergeFiles.getFilesOnBothBranch().size();
 			//	values[1] = filesInCommon;
@@ -97,12 +97,12 @@ public class Experiment {
 				}else{
 
 					System.out.println("\t2. Files in common:\tYES\t" + filesInCommon);
-                                        mapValues.put("Files:", mapValues.get("Files:") + 1);
+                                        mapValues.put("Files", mapValues.get("Files") + 1);
                                         
 					//testa conflitos
 					if (RevisionAnalyzer.hasConflict(this.getRepo().getProject().toString(), mergeFiles.getParents()[0], mergeFiles.getParents()[1])){
 						System.out.println("\t4. Conflicting files:\tYES\tYES\tYES\tYES\t");
-                                                mapValues.put("Conflicts:", mapValues.get("Conflicts:") + 1);
+                                                mapValues.put("Conflicts", mapValues.get("Conflicts") + 1);
                                         }else
 						System.out.println("\t4. Conflicting files:\tNO");
 
@@ -118,7 +118,7 @@ public class Experiment {
 				}else{
 			//		values[2] = 1;
 					System.out.println("\t3. Dependencies:\tYES");
-                                        mapValues.put("Dependencies:", mapValues.get("Dependencies:") + 1);
+                                        mapValues.put("Dependencies", mapValues.get("Dependencies") + 1);
 
 				}
 				if((filesInCommon > 0) || (!hasNoDependencies) ){
