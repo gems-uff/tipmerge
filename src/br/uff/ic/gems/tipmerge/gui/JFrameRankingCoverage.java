@@ -57,7 +57,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
  *
  * @author j2cf
  */
-public class JFrameAssignMerge extends javax.swing.JFrame {
+public class JFrameRankingCoverage extends javax.swing.JFrame {
 
 	private JTable jTableRanking = new JTable();
 	private String databaseName = "data/gitdataminer.sqlite";
@@ -66,12 +66,12 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
         private List<Coverage> coverageList1;
         private Map<String, Integer[]> fileNames1;
 
-	public JFrameAssignMerge(Repository repository) {
+	public JFrameRankingCoverage(Repository repository) {
 		initComponents();
 		initVariables(repository);
 	}
 		
-	public JFrameAssignMerge(Repository repository, MergeFiles mergeFiles, Map<EditedFile,Set<EditedFile>> dependenciesBranchOne, Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo) {
+	public JFrameRankingCoverage(Repository repository, MergeFiles mergeFiles, Map<EditedFile,Set<EditedFile>> dependenciesBranchOne, Map<EditedFile,Set<EditedFile>> dependenciesBranchTwo) {
 		initComponents();
 		this.repository = repository;
 		initVariables(repository);
@@ -283,9 +283,9 @@ public class JFrameAssignMerge extends javax.swing.JFrame {
                                         
 					
 				} catch (SQLException ex) {
-					Logger.getLogger(JFrameAssignMerge.class.getName()).log(Level.SEVERE, null, ex);
+					Logger.getLogger(JFrameRankingCoverage.class.getName()).log(Level.SEVERE, null, ex);
 				} catch (Exception ex) {
-					Logger.getLogger(JFrameAssignMerge.class.getName()).log(Level.SEVERE, null, ex);
+					Logger.getLogger(JFrameRankingCoverage.class.getName()).log(Level.SEVERE, null, ex);
 				}
 				
 				labelLoading.setVisible(false);

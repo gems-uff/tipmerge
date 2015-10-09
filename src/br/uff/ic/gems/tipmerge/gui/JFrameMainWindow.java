@@ -113,6 +113,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
         menuCommit = new javax.swing.JMenuItem();
         menuFile = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
@@ -339,6 +340,10 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         jMenu2.setText("Analyze");
 
+        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItem5.setText("General");
+        jMenu2.add(jMenuItem5);
+
         menuCommit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
         menuCommit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/commits.png"))); // NOI18N
         menuCommit.setText("Commits");
@@ -365,7 +370,8 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         jMenu4.setText("Assign");
 
-        menuAssign.setText("Ranking");
+        menuAssign.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK));
+        menuAssign.setText("Recommendation");
         menuAssign.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuAssignActionPerformed(evt);
@@ -570,7 +576,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_menuFileActionPerformed
 
     private void menuAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAssignActionPerformed
-        JFrameAssignMerge jfAssignMerge = new JFrameAssignMerge(repository);
+        JFrameRankingCoverage jfAssignMerge = new JFrameRankingCoverage(repository);
 		jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
 		jfAssignMerge.setVisible(true);
     }//GEN-LAST:event_menuAssignActionPerformed
@@ -632,6 +638,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
