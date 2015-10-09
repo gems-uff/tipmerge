@@ -280,7 +280,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
             try {
 
-                List<Integer> matrices = new ArrayList<>(Arrays.asList(6));
+                List<Integer> matrices = new ArrayList<>(Arrays.asList(7));
                 System.out.println("\nCreating the dominoes of History");
                 List<Dominoes> dominoesHistory = DominoesSQLDao2.loadAllMatrices(databaseName, txRepositoryName.getText(), "CPU", hashsOnPreviousHistory, matrices);
 

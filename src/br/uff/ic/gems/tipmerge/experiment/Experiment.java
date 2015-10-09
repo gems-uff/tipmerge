@@ -254,11 +254,11 @@ public class Experiment {
 
         try {
 
-            List<Integer> matrices = new ArrayList<>(Arrays.asList(6));
+            List<Integer> matrices = new ArrayList<>(Arrays.asList(7));
             //System.out.println("\nCreating the dominoes of History");
             List<Dominoes> dominoesHistory = DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "CPU", hashsOnPreviousHistory, matrices);
 
-            System.out.println("Hist. Dep:\t" + dominoesHistory.get(0).getHistoric());
+            //System.out.println("->->->Hist. Dep:\t" + dominoesHistory.get(0).getHistoric());
             
             Dominoes domCF = dominoesHistory.get(0);
             Dominoes domCFt = domCF.cloneNoMatrix();
