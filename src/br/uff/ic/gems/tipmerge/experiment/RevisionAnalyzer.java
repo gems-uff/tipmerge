@@ -18,91 +18,97 @@ import java.util.logging.Logger;
 public class RevisionAnalyzer {
 
     public static boolean analyze(String revisionSHA, String repositoryPath) {
-/*
-		Revision revision = new Revision();
+        /*
+         Revision revision = new Revision();
 
-        revision.setSha(revisionSHA);
+         revision.setSha(revisionSHA);
 
-        Git.reset(repositoryPath);
-        List<String> parents = Git.getParents(repositoryPath, revisionSHA);
+         Git.reset(repositoryPath);
+         List<String> parents = Git.getParents(repositoryPath, revisionSHA);
 
-        if (parents.size() == 2) {
+         if (parents.size() == 2) {
 
-            String leftParent = parents.get(0);
-            String rightParent = parents.get(1);
-            //Filling parents
-            revision.setLeftSha(leftParent);
-            revision.setRightSha(rightParent);
+         String leftParent = parents.get(0);
+         String rightParent = parents.get(1);
+         //Filling parents
+         revision.setLeftSha(leftParent);
+         revision.setRightSha(rightParent);
 
-            String mergeBase = Git.getMergeBase(repositoryPath, leftParent, rightParent);
-            //Filling base revision
-            revision.setBaseSha(mergeBase);
+         String mergeBase = Git.getMergeBase(repositoryPath, leftParent, rightParent);
+         //Filling base revision
+         revision.setBaseSha(mergeBase);
 
-            Git.checkout(repositoryPath, leftParent);
+         Git.checkout(repositoryPath, leftParent);
 
-            List<String> mergeOutput = Git.merge(repositoryPath, rightParent, false, true);
+         List<String> mergeOutput = Git.merge(repositoryPath, rightParent, false, true);
 
-            if (MergeStatusAnalizer.isConflict(mergeOutput)) {
+         if (MergeStatusAnalizer.isConflict(mergeOutput)) {
                 
-                revision.setStatus(MergeStatus.CONFLICTING);
+         revision.setStatus(MergeStatus.CONFLICTING);
 
-                List<String> conflictedFiles = Git.conflictedFiles(repositoryPath);
-                revision.setNumberConflictingFiles(conflictedFiles.size());
-                int javaFiles = 0;
+         List<String> conflictedFiles = Git.conflictedFiles(repositoryPath);
+         revision.setNumberConflictingFiles(conflictedFiles.size());
+         int javaFiles = 0;
 
-                List<ConflictingFile> conflictingFiles = new ArrayList<>();
+         List<ConflictingFile> conflictingFiles = new ArrayList<>();
                 
-                for (String conflictedFile : conflictedFiles) {
-                    try {
-                        ConflictingFile conflictingFile = ConflictingFileAnalyzer.analyze(conflictedFile, repositoryPath, leftParent, rightParent, revisionSHA);
-                        conflictingFiles.add(conflictingFile);
-//                        try {
-//                            conflictingFileDAO.save(conflictingFile);
-//                        } catch (Exception ex) {
-//                            Logger.getLogger(RevisionAnalyzer.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
+         for (String conflictedFile : conflictedFiles) {
+         try {
+         ConflictingFile conflictingFile = ConflictingFileAnalyzer.analyze(conflictedFile, repositoryPath, leftParent, rightParent, revisionSHA);
+         conflictingFiles.add(conflictingFile);
+         //                        try {
+         //                            conflictingFileDAO.save(conflictingFile);
+         //                        } catch (Exception ex) {
+         //                            Logger.getLogger(RevisionAnalyzer.class.getName()).log(Level.SEVERE, null, ex);
+         //                        }
                         
-                        revision.getConflictingFiles().add(conflictingFile);
+         revision.getConflictingFiles().add(conflictingFile);
                         
-                        if (conflictingFile.isJava()) {
-                            javaFiles++;
-                        }
-                    } catch (IOException ex) {
-                        Logger.getLogger(RevisionAnalyzer.class.getName()).log(Level.SEVERE, null, ex);
-                        System.out.println("Investigate!!!!!");
-                    }
-                }
+         if (conflictingFile.isJava()) {
+         javaFiles++;
+         }
+         } catch (IOException ex) {
+         Logger.getLogger(RevisionAnalyzer.class.getName()).log(Level.SEVERE, null, ex);
+         System.out.println("Investigate!!!!!");
+         }
+         }
 
-                revision.setConflictingFiles(conflictingFiles);
-                revision.setNumberJavaConflictingFiles(javaFiles);
+         revision.setConflictingFiles(conflictingFiles);
+         revision.setNumberJavaConflictingFiles(javaFiles);
 
-            } else if (MergeStatusAnalizer.isFastForward(mergeOutput)) {
-                revision.setStatus(MergeStatus.FAST_FORWARD);
-            } else {
-                revision.setStatus(MergeStatus.NON_CONFLICTING);
-            }
+         } else if (MergeStatusAnalizer.isFastForward(mergeOutput)) {
+         revision.setStatus(MergeStatus.FAST_FORWARD);
+         } else {
+         revision.setStatus(MergeStatus.NON_CONFLICTING);
+         }
 
-        } else {
-            System.out.println("Implement!!!!!");
-        }
+         } else {
+         System.out.println("Implement!!!!!");
+         }
 
-        return revision;
-	*/
-		return true;
+         return revision;
+         */
+        return true;
     }
-	
-	public static boolean hasConflict(String repositoryPath, String leftParent, String rightParent){
 
-		//String mergeBase = Git.getMergeBase(repositoryPath, leftParent, rightParent);
-		Git.reset(repositoryPath);
-		
-		Git.checkout(repositoryPath, leftParent);
+    public static List<String> gitReset(String path) {
+        //System.out.println("vai realizar reset");
+        return Git.reset(path);
+        
+    }
 
-		List<String> mergeOutput = Git.merge(repositoryPath, rightParent, false, true);
+    public static boolean hasConflict(String repositoryPath, String leftParent, String rightParent) {
 
-		System.out.println("\t" + mergeOutput);
-		
-		return MergeStatusAnalizer.isConflict(mergeOutput);
-	}
+        //String mergeBase = Git.getMergeBase(repositoryPath, leftParent, rightParent);
+        Git.reset(repositoryPath);
+
+        Git.checkout(repositoryPath, leftParent);
+
+        List<String> mergeOutput = Git.merge(repositoryPath, rightParent, false, true);
+
+        System.out.println("\t" + mergeOutput);
+
+        return MergeStatusAnalizer.isConflict(mergeOutput);
+    }
 
 }

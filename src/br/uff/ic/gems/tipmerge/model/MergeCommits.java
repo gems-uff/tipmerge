@@ -23,6 +23,10 @@ public class MergeCommits extends Merge{
 	public MergeCommits(String hashOfMerge, File pathToRepository) {
 		super(hashOfMerge, pathToRepository);
 	}
+        
+        public MergeCommits(String hash1, String hash2, File file){
+            super(hash1, hash2, file);
+        }
 
 	/**
 	 * @return the cmterPreviousHistory

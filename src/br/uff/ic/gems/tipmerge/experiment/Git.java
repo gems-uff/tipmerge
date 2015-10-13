@@ -19,11 +19,12 @@ import java.util.logging.Logger;
  * @author j2cf
  */
 public class Git {
-	public static List<String> checkout(String repositoryPath, String revision) {
+
+    public static List<String> checkout(String repositoryPath, String revision) {
 //        String command = "git rev-list --parents -n 1 " + revision;
         String command = "git checkout " + revision;
-		
-		System.out.println("\tCommand checkout: " + command);
+
+        System.out.println("\tCommand checkout: " + command);
 
         List<String> output = new ArrayList<>();
 
@@ -70,7 +71,7 @@ public class Git {
         }
 
         command = command + revision;
-		System.out.println("\tCommand merge: " + command);
+        System.out.println("\tCommand merge: " + command);
 
         List<String> output = new ArrayList<>();
 
@@ -103,14 +104,13 @@ public class Git {
 
         return output;
     }
-	
-	public static String getMergeBase(String repositoryPath, String commit1, String commit2) {
+
+    public static String getMergeBase(String repositoryPath, String commit1, String commit2) {
 
 //        String command = "git rev-list --parents -n 1 " + revision;
         String command = "git merge-base " + commit1 + " " + commit2;
 
         String output = null;
-
 
         try {
             Process exec = Runtime.getRuntime().exec(command, null, new File(repositoryPath));
@@ -139,11 +139,11 @@ public class Git {
         return output;
     }
 
-	static List<String> reset(String repositoryPath) {
-		
-		String command = "git reset --hard ";
-		
-		System.out.println("\tCommand reset: " + command);
+    static List<String> reset(String repositoryPath) {
+
+        String command = "git reset --hard ";
+
+        System.out.println("\tCommand reset: " + command);
 
         List<String> output = new ArrayList<>();
 
@@ -173,10 +173,8 @@ public class Git {
         } catch (IOException ex) {
             Logger.getLogger(Git.class.getName()).log(Level.SEVERE, null, ex);
         }
-		
-		return output;
-	}
-	
-	
-	
+
+        return output;
+    }
+
 }

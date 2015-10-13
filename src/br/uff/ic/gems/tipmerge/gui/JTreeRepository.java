@@ -34,10 +34,6 @@ public class JTreeRepository extends JTree{
 		repo.getBranches().stream().map((branch) -> new DefaultMutableTreeNode(branch)).forEach((newNode) -> {
 			branchNode.add(newNode);
 		});
-
-		//repo.getMerges().stream().map((merge) -> new DefaultMutableTreeNode(merge.getHash())).forEach((mNode) -> {
-		//	mergeNode.add(mNode);
-		//});
 		
 		int i = 1;
 		for (String merge: repo.getListOfMerges()){

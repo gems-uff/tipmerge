@@ -45,22 +45,9 @@ public class JFrameDependencies extends javax.swing.JFrame {
     private Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo;
     private Map<EditedFile, Set<EditedFile>> dependenciesMap;
 
-    /**
-     * Creates new form JFrameDependencies
-     *
-     * @param repository
-     */
-    public JFrameDependencies(Repository repository) {
-        initComponents();
-        repo = repository;
-        this.txRepositoryName.setText(repo.getName());
-        comboMergesList.setModel(new JComboBox(repo.getListOfMerges().toArray()).getModel());
-
-    }
-
     public JFrameDependencies(Repository repository, MergeFiles mergeFiles) {
         initComponents();
-        this.repo = repository;
+        repo = repository;
         this.mergeFiles = mergeFiles;
         this.txRepositoryName.setText(repo.getName());
 
@@ -272,27 +259,30 @@ public class JFrameDependencies extends javax.swing.JFrame {
             btRun.setEnabled(false);
             labelLoading.setVisible(true);
             MergeCommitsDao mCommitsDao = new MergeCommitsDao(repo.getProject());
-            MergeCommits merge = new MergeCommits(comboMergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
+            //MergeCommits merge = new MergeCommits(comboMergesList.getSelectedItem().toString().split(" ")[0], repo.getProject());
+            MergeCommits merge = new MergeCommits(mergeFiles.getParents()[0], mergeFiles.getParents()[1], repo.getProject());
             mCommitsDao.update(merge);
 
             //Previous History
             List<String> hashsOnPreviousHistory = mCommitsDao.getHashs(repo.getFirstCommit(), merge.getHashBase());
-
+            
             try {
 
                 List<Integer> matrices = new ArrayList<>(Arrays.asList(7));
                 System.out.println("\nCreating the dominoes of History");
-                List<Dominoes> dominoesHistory = DominoesSQLDao2.loadAllMatrices(databaseName, txRepositoryName.getText(), "CPU", hashsOnPreviousHistory, matrices);
+                List<Dominoes> dominoesHistory
+                        = DominoesSQLDao2.loadAllMatrices(databaseName, txRepositoryName.getText(),
+                                "CPU", hashsOnPreviousHistory, matrices);
 
                 Dominoes domCF = null;
                 for (Dominoes dominoe : dominoesHistory) {
                     System.out.println(dominoe.getHistoric());
-                    if (dominoe.getHistoric().equals("CF")) {
+                    if (dominoe.getHistoric().toString().equals("CF")) {
                         domCF = dominoe;
                     }
                 }
 
-				//multiplicando as matrizes e gerando a confidence
+                //multiplicando as matrizes e gerando a confidence
                 //domCF = dominoesHistory.get(6);
                 Dominoes domCFt = domCF.cloneNoMatrix();
                 domCFt.transpose();
@@ -353,11 +343,11 @@ public class JFrameDependencies extends javax.swing.JFrame {
         mergeFiles.setFilesOnBranchOne(filesDao.getFiles(mergeFiles.getHashBase(),
                 mergeFiles.getParents()[0],
                 mergeFiles.getPath(),
-                ".java"));
+                "All Files"));
         mergeFiles.setFilesOnBranchTwo(filesDao.getFiles(mergeFiles.getHashBase(),
                 mergeFiles.getParents()[1],
                 mergeFiles.getPath(),
-                ".java"));
+                "All Files"));
 
         CommitterDao cmterDao = new CommitterDao();
         List<EditedFile> files = new LinkedList<>();
