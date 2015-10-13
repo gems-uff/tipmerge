@@ -137,6 +137,8 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
             }
         });
 
+        txProjectName.setEnabled(false);
+
         jLabel14.setText("Selected Merge");
 
         mergesList.addActionListener(new java.awt.event.ActionListener() {

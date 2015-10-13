@@ -128,6 +128,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
             }
         });
 
+        txRepositoryName.setEnabled(false);
+
         labelMerge.setText("Selected Merge");
 
         comboMergesList.addActionListener(new java.awt.event.ActionListener() {

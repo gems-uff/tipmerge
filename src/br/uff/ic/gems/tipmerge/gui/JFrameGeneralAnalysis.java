@@ -311,6 +311,8 @@ public class JFrameGeneralAnalysis extends javax.swing.JFrame {
 
         jTabbedPane4.addTab("Majority", jPanel4);
 
+        txRepositoryName.setEnabled(false);
+
         labelRepository.setText("Repository Name");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

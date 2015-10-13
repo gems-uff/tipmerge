@@ -448,6 +448,9 @@
       </SubComponents>
     </Container>
     <Component class="javax.swing.JTextField" name="txRepositoryName">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelRepository">
       <Properties>

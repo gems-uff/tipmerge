@@ -173,6 +173,8 @@ public class JFrameAssign extends javax.swing.JFrame {
 
         labelRepository.setText("Repository Name");
 
+        txRepositoryName.setEnabled(false);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
