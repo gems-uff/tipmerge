@@ -130,7 +130,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         txRepositoryName.setEnabled(false);
 
-        labelMerge.setText("Selected Merge");
+        labelMerge.setText("Branches / Merge");
 
         comboMergesList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

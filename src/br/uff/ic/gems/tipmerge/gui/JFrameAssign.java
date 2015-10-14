@@ -136,9 +136,14 @@ public class JFrameAssign extends javax.swing.JFrame {
             }
         });
 
-        jLSelecByExt.setText("Select by ");
+        jLSelecByExt.setText("File Extensions");
 
-        comboFileExtension.setModel(new javax.swing.DefaultComboBoxModel(new String[] { ".java", ".c", ".html", ".py", ".php", ".xml", "All Files" }));
+        comboFileExtension.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Files", ".java", ".c", ".html", ".js", ".py", ".php", ".rb", ".xml", " " }));
+        comboFileExtension.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboFileExtensionActionPerformed(evt);
+            }
+        });
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
         jLabel1.setText("Loading ...");
@@ -485,6 +490,10 @@ public class JFrameAssign extends javax.swing.JFrame {
         Export.toExcel(sheet);
         JOptionPane.showMessageDialog(this, "File was sucessfully saved", null, JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btExportActionPerformed
+
+    private void comboFileExtensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFileExtensionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboFileExtensionActionPerformed
 
     /**
      * @param args the command line arguments

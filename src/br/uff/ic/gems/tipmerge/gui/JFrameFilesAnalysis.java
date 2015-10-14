@@ -138,9 +138,9 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         });
 
-        jLSelecByExt.setText("Files");
+        jLSelecByExt.setText("File Extensions");
 
-        comboFileExtension.setModel(new javax.swing.DefaultComboBoxModel(new String[] { ".java", ".c", ".html", ".py", ".php", ".xml", "All Files" }));
+        comboFileExtension.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Files", ".java", ".c", ".html", ".js", ".py", ".php", ".rb", ".xml" }));
 
         jcMerge1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,7 +148,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("Select Merge");
+        jLabel4.setText("Select a Merge");
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
         jLabel1.setText("Loading ...");

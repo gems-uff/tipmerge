@@ -220,23 +220,29 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLSelecByExt">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Select by "/>
+                <Property name="text" type="java.lang.String" value="File Extensions"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JComboBox" name="comboFileExtension">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="7">
-                    <StringItem index="0" value=".java"/>
-                    <StringItem index="1" value=".c"/>
-                    <StringItem index="2" value=".html"/>
-                    <StringItem index="3" value=".py"/>
-                    <StringItem index="4" value=".php"/>
-                    <StringItem index="5" value=".xml"/>
-                    <StringItem index="6" value="All Files"/>
+                  <StringArray count="10">
+                    <StringItem index="0" value="All Files"/>
+                    <StringItem index="1" value=".java"/>
+                    <StringItem index="2" value=".c"/>
+                    <StringItem index="3" value=".html"/>
+                    <StringItem index="4" value=".js"/>
+                    <StringItem index="5" value=".py"/>
+                    <StringItem index="6" value=".php"/>
+                    <StringItem index="7" value=".rb"/>
+                    <StringItem index="8" value=".xml"/>
+                    <StringItem index="9" value=" "/>
                   </StringArray>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboFileExtensionActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>

@@ -6,6 +6,7 @@
 package br.uff.ic.gems.tipmerge.gui;
 
 import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
+import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.RepoCommits;
@@ -45,8 +46,13 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 	 * @param repository
 	 */
 	public JFrameCommitsAnalysis(Repository repository) {
+		if(repository.getListOfMerges()== null || repository.getListOfMerges().isEmpty()){
+            RepositoryDao rdao = new RepositoryDao(repository.getProject());
+            rdao.setDetails(repository);
+        }
 		this.repoCommitts = new RepoCommits(repository);
 		this.repo = repository;
+		
 		//this.repo = repository;
 		initComponents();
 		setParameters();
@@ -224,7 +230,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Select Merge");
+        jLabel1.setText("Select a Merge");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

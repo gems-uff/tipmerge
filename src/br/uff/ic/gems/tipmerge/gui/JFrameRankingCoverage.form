@@ -68,7 +68,7 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="mergesList" alignment="0" pref="517" max="32767" attributes="0"/>
+                              <Component id="mergesList" alignment="0" pref="515" max="32767" attributes="0"/>
                               <Component id="txProjectName" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -122,7 +122,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel14">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Selected Merge"/>
+            <Property name="text" type="java.lang.String" value="Branches / Merge"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="mergesList">
@@ -148,7 +148,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnCoverageChart">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Coverage-Chart"/>
+            <Property name="text" type="java.lang.String" value="Chart"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
@@ -214,7 +214,7 @@
               <Properties>
                 <Property name="columns" type="int" value="20"/>
                 <Property name="rows" type="int" value="5"/>
-                <Property name="text" type="java.lang.String" value="Coverage datas"/>
+                <Property name="text" type="java.lang.String" value="Coverage information"/>
               </Properties>
             </Component>
           </SubComponents>

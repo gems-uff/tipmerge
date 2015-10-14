@@ -268,7 +268,7 @@ public class JFrameGeneralAnalysis extends javax.swing.JFrame {
 
         jLabel9.setText("Total of Merges");
 
-        jLabel11.setText("Committers who performed merges:");
+        jLabel11.setText("Committers who performed merges");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -393,7 +393,7 @@ public class JFrameGeneralAnalysis extends javax.swing.JFrame {
 
     private void btMajorityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMajorityActionPerformed
         Runnable r = () -> {
-            labelLoading.setVisible(true);
+            labelLoadingMJ.setVisible(true);
 
             Map<Committer, Integer> mjClass = new HashMap<>();
             for (String hashMerge : this.repos.getListOfMerges()) {
@@ -416,7 +416,7 @@ public class JFrameGeneralAnalysis extends javax.swing.JFrame {
             txMajority1.setText(String.valueOf(this.repos.getListOfMerges().size()));
             jcbMajority1.setModel(new DefaultComboBoxModel(mjlist.toArray()));
 
-            labelLoading.setVisible(false);
+            labelLoadingMJ.setVisible(false);
         };
         Thread t = new Thread(r);
         t.start();

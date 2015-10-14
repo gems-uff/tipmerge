@@ -215,7 +215,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="labelMerge">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Selected Merge"/>
+            <Property name="text" type="java.lang.String" value="Branches / Merge"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="comboMergesList">

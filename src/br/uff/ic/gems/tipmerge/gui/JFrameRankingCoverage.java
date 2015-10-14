@@ -142,7 +142,7 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
 
         txProjectName.setEnabled(false);
 
-        jLabel14.setText("Selected Merge");
+        jLabel14.setText("Branches / Merge");
 
         mergesList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,7 +154,7 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
         labelLoading.setText("Loading ...");
         labelLoading.setVisible(false);
 
-        btnCoverageChart.setText("Coverage-Chart");
+        btnCoverageChart.setText("Chart");
         btnCoverageChart.setEnabled(false);
         btnCoverageChart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -181,7 +181,7 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
                             .addComponent(jLabel14))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(mergesList, 0, 517, Short.MAX_VALUE)
+                            .addComponent(mergesList, 0, 515, Short.MAX_VALUE)
                             .addComponent(txProjectName))))
                 .addContainerGap())
         );
@@ -219,7 +219,7 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
 
         txtCoverage.setColumns(20);
         txtCoverage.setRows(5);
-        txtCoverage.setText("Coverage datas");
+        txtCoverage.setText("Coverage information");
         panelCoverage.setViewportView(txtCoverage);
 
         paneResult.setRightComponent(panelCoverage);
@@ -412,7 +412,7 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
     }//GEN-LAST:event_mergesListActionPerformed
 
     private void btnCoverageChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCoverageChartActionPerformed
-        // Code Covergae Chart
+        // Code Coverage Chart
         DefaultCategoryDataset chartData = new DefaultCategoryDataset();
         Vector selectedCommitters = new Vector();
         Vector selectedIndex = new Vector();   //Start Coverage 
@@ -425,7 +425,7 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
 //                    System.out.println("\nNão Selecionado"+(String)jTableRanking.getValueAt(k,2));
             }
         }
-        System.out.print("\nCoverge Files");
+        System.out.print("\nCoverage Files");
         boolean selected = false;
         if (selectedCommitters.size() > 0 && selectedCommitters.size() < 4) {
             for (int i = 0; i < selectedCommitters.size(); i++) {
@@ -446,10 +446,10 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
             if (!noSelected.isEmpty()) {
                 String nameDev = "";
                 for (int s = 0; s < noSelected.size(); s++) {
-                    System.out.println("\nNo following developers not have coveage" + noSelected.get(s));
+                    System.out.println("\nThe developers do not have coverage" + noSelected.get(s));
                     nameDev = nameDev + noSelected.get(s) + "  ;";
                 }
-                JOptionPane.showMessageDialog(null, "The Developer does not have coverage: " + "\n" + nameDev);
+                JOptionPane.showMessageDialog(null, "The developer does not have coverage: " + "\n" + nameDev);
             }
             if (selectedIndex.size() == 1) {
                 for (Coverage coverage : this.coverageList1) {
@@ -702,8 +702,8 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
     }
 
     public void coverageChart(CategoryDataset dados) {
-        CategoryAxis categoryAxis = new CategoryAxis("Edited Files");
-        ValueAxis valueAxis = new NumberAxis("Methods");
+        CategoryAxis categoryAxis = new CategoryAxis("Modified Files");
+        ValueAxis valueAxis = new NumberAxis("Number of Methods");
         CategoryPlot plot = new CategoryPlot(dados, categoryAxis, valueAxis, new LayeredBarRenderer());
         plot.setOrientation(PlotOrientation.HORIZONTAL);
         LayeredBarRenderer renderer = (LayeredBarRenderer) plot.getRenderer();
@@ -720,7 +720,7 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
         GradientPaint gradientpaint2 = new GradientPaint(0.0F, 0.0F, Color.GREEN, 0.0F, 0.0F, new Color(0, 64, 0));
         rendered1.setSeriesPaint(0, gradientpaint1);
         rendered1.setSeriesPaint(1, gradientpaint2);
-        JFreeChart graphic = new JFreeChart("Coverge Chart", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+        JFreeChart graphic = new JFreeChart("Coverage Chart", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
         ChartPanel chartPanel = new ChartPanel(graphic);
         chartPanel.setPreferredSize(new java.awt.Dimension(590, 350));
         JFrame chartFrame1 = new JFrame();
