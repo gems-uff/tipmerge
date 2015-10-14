@@ -258,6 +258,12 @@ public class JFrameGeneralAnalysis extends javax.swing.JFrame {
             }
         });
 
+        jcbMajority1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbMajority1ActionPerformed(evt);
+            }
+        });
+
         txMajority1.setEditable(false);
 
         jLabel9.setText("Total of Merges");
@@ -416,6 +422,10 @@ public class JFrameGeneralAnalysis extends javax.swing.JFrame {
         t.start();
 
     }//GEN-LAST:event_btMajorityActionPerformed
+
+    private void jcbMajority1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbMajority1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcbMajority1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBasic;
