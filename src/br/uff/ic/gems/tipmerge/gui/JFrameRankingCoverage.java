@@ -64,6 +64,7 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
     public Set<EditedFile> filesOfInterest = new HashSet<>();
     private List<Coverage> coverageList1;
     private Map<String, Integer[]> fileNames1;
+    private MergeCommits merge;
 
     public JFrameRankingCoverage(Repository repository) {
         initComponents();
@@ -75,13 +76,15 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
         this.repository = repository;
         initVariables(repository);
         mergesList.setModel(new JComboBox(new String[]{mergeFiles.getHash()}).getModel());
+        
+        merge = new MergeCommits(mergeFiles.getParents()[0], mergeFiles.getParents()[1], repository.getProject());
 
-//		if(dependenciesBranchOne.size() > 0)
+//	if(dependenciesBranchOne.size() > 0)
         for (EditedFile file : dependenciesBranchOne.keySet()) {
             this.filesOfInterest.add(file);
             this.filesOfInterest.addAll(dependenciesBranchOne.get(file));
         }
-//		if(dependenciesBranchTwo.size() > 0)
+//      if(dependenciesBranchTwo.size() > 0)
         for (EditedFile file : dependenciesBranchTwo.keySet()) {
             this.filesOfInterest.add(file);
             this.filesOfInterest.addAll(dependenciesBranchTwo.get(file));
@@ -89,12 +92,12 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
         this.filesOfInterest.addAll(mergeFiles.getFilesOnBothBranch());
 
 		//System.out.println("Files Of Interest\t" + filesOfInterest);
-        System.out.println("Medals for common files");
+        //System.out.println("Medals for common files");
         RankingGenerator rGenerator = new RankingGenerator();
         Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
-        System.out.println("Medals for dependencies in branch 1");
+        //System.out.println("Medals for dependencies in branch 1");
         excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchOne, mergeFiles, excepiontFiles);
-        System.out.println("Medals for dependencies in branch 2");
+        //System.out.println("Medals for dependencies in branch 2");
         excepiontFiles = rGenerator.setMedalFromDependencies(dependenciesBranchTwo, mergeFiles, excepiontFiles);
         excepiontFiles.removeAll(excepiontFiles);
         List<Medalist> ranking = rGenerator.getRanking();
@@ -248,7 +251,7 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
                 labelLoading.setVisible(true);
 
                 MergeCommitsDao mCommitsDao = new MergeCommitsDao(repository.getProject());
-                MergeCommits merge = new MergeCommits(mergesList.getSelectedItem().toString().split(" ")[0], repository.getProject());
+                System.out.println("merge: " + mergesList.getSelectedItem().toString().split(" ")[0]);
                 mCommitsDao.update(merge);
 
                 List<String> hashsList = mCommitsDao.getHashs(merge.getHashBase(), merge.getParents()[0]);
