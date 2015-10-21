@@ -8,6 +8,7 @@ package br.uff.ic.gems.tipmerge.gui;
 import br.uff.ic.gems.tipmerge.dao.CommitterDao;
 import br.uff.ic.gems.tipmerge.dao.MergeFilesDao;
 import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
+import br.uff.ic.gems.tipmerge.experiment.Git;
 import br.uff.ic.gems.tipmerge.experiment.RevisionAnalyzer;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
@@ -378,9 +379,9 @@ public class JFrameGeneralAnalysis extends javax.swing.JFrame {
                     conflictingMerges.add(hashMerge);
                 }
 
-
             }
-
+			//System.out.println(Git.checkoutMaster(this.repos.getProject()));
+			
             txMergesC.setText(String.valueOf(this.repos.getListOfMerges().size()));
             txConflitcts.setText(String.valueOf(countConflicts));
             jcbConflicts.setModel(new DefaultComboBoxModel(conflictingMerges.toArray()));

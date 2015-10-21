@@ -114,6 +114,8 @@ public class Experiment {
                         System.out.println("\t4. Conflicting files:\tNO");
                         bwOutput.write("\t4. Conflicting files:\tNO" + "\n");
                     }
+					
+					
 
                 }
 
@@ -167,7 +169,7 @@ public class Experiment {
             System.gc();
 
         }
-
+		//Git.checkoutMaster(this.getRepo().getProject());
         return mapValues;
     }
 
@@ -227,9 +229,10 @@ public class Experiment {
                     } else {
                         System.out.println("\t4. Conflicting files:\tNO");
                     }
+					
 
                 }
-
+				
                 List<Map<EditedFile, Set<EditedFile>>> dependencies = getFilesDependencies(mergeFiles);
                 boolean hasNoDependencies = (dependencies.get(0).isEmpty() && dependencies.get(1).isEmpty());
 
@@ -276,7 +279,7 @@ public class Experiment {
             //datas.put(hashMerge, values);
             System.gc();
         }
-
+	//	Git.checkoutMaster(this.getRepo().getProject());
         return mapValues;
     }
 
@@ -377,7 +380,7 @@ public class Experiment {
 
             List<Integer> matrices = new ArrayList<>(Arrays.asList(7));
             //System.out.println("\nCreating the dominoes of History");
-            List<Dominoes> dominoesHistory = DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "CPU", hashsOnPreviousHistory, matrices);
+            List<Dominoes> dominoesHistory = DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "GPU", hashsOnPreviousHistory, matrices);
 
             //System.out.println("->->->Hist. Dep:\t" + dominoesHistory.get(0).getHistoric());
             Dominoes domCF = dominoesHistory.get(0);

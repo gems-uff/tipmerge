@@ -5,6 +5,7 @@
  */
 package br.uff.ic.gems.tipmerge.dao;
 
+import br.uff.ic.gems.tipmerge.experiment.Git;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.io.File;
@@ -30,7 +31,9 @@ public class RepositoryDao {
 
         //sets the directory and the project name
         Repository repo = new Repository(path);
-
+		
+		Git.checkoutMaster(path);
+		
         //set the last commit information
         String[] result = RunGit.getResult("git show -s --format=%ci%x09%H", path).split("\t");
         String data = result[0].substring(0, 19);
