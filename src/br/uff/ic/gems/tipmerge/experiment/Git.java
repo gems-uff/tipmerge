@@ -177,41 +177,79 @@ public class Git {
         return output;
     }
 
-	public static List<String> checkoutMaster(File path) {
-		String command = "git checkout master";
+    public static List<String> checkoutMaster(File path) {
+        String command = "git checkout master";
 
-		System.out.println("\tCommand checkout: " + command);
+        System.out.println("\tCommand checkout: " + command);
 
-		List<String> output = new ArrayList<>();
+        List<String> output = new ArrayList<>();
 
-		try {
-			Process exec = Runtime.getRuntime().exec(command, null, path);
+        try {
+            Process exec = Runtime.getRuntime().exec(command, null, path);
 
-			String s;
+            String s;
 
-			BufferedReader stdInput = new BufferedReader(new InputStreamReader(exec.getInputStream()));
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(exec.getInputStream()));
 
-			BufferedReader stdError = new BufferedReader(new InputStreamReader(exec.getErrorStream()));
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(exec.getErrorStream()));
 
-			// read the output from the command
-			while ((s = stdInput.readLine()) != null) {
-				String[] split = s.split(" ");
-				for (String rev : split) {
-					output.add(rev);
-				}
+            // read the output from the command
+            while ((s = stdInput.readLine()) != null) {
+                String[] split = s.split(" ");
+                for (String rev : split) {
+                    output.add(rev);
+                }
 
-			}
+            }
 
-			// read any errors from the attempted command
-			while ((s = stdError.readLine()) != null) {
+            // read any errors from the attempted command
+            while ((s = stdError.readLine()) != null) {
 //                System.out.println(s);
-			}
+            }
 
-		} catch (IOException ex) {
-			Logger.getLogger(Git.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		
-		return output;
+        } catch (IOException ex) {
+            Logger.getLogger(Git.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-	}
+        return output;
+
+    }
+
+    public static String cloneFromURL(String url, String destinationFolder) {
+
+        //StringBuilder result = new StringBuilder();
+        String command = "git clone " + url + " " + destinationFolder;
+
+        System.out.println("Cloning project\t" + url);
+
+        try {
+            Process exec = Runtime.getRuntime().exec(command);
+
+            String s;
+
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(exec.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(exec.getErrorStream()));
+
+            String output = null;
+            // read the output from the command
+            while ((s = stdInput.readLine()) != null) {
+                output = s;
+
+            }
+
+            // read any errors from the attempted command
+            while ((s = stdError.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            return output;
+
+        } catch (IOException ex) {
+            Logger.getLogger(Git.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+
+    }
 }

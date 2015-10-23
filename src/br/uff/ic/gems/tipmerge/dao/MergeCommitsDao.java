@@ -9,6 +9,7 @@ import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ public class MergeCommitsDao {
 
     //get and set the commits on Branch1 (base to parent 1) and on Branch2 (base to parent 2)
     public void update(MergeCommits merge) {
-
+        
         if (merge.getHash() != null) {
             String hashParents = RunGit.getResult("git log --pretty=%P -n 1 " + merge.getHash(), this.path);
             merge.setParents(hashParents.split(" ")[0], hashParents.split(" ")[1]);

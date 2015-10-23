@@ -21,11 +21,19 @@ public class CommitterDao {
 
 	//get the committers name and committers e-mail information	from commits
 	public static Committer getCommitter1(String hash, Repository repository){
-		String datas = RunGit.getResult("git show --format=%an#%ae " + hash, repository.getProject());
+            return getCommitter1(hash, repository.getProject());
+		//String datas = RunGit.getResult("git show --format=%an#%ae " + hash, repository.getProject());
+		//Committer cmter = new Committer(datas.split("#")[0], datas.split("#")[1]);
+		//return cmter;
+	}
+
+        //get the committers name and committers e-mail information	from commits
+	public static Committer getCommitter1(String hash, File file){
+		String datas = RunGit.getResult("git show --format=%an#%ae " + hash, file);
 		Committer cmter = new Committer(datas.split("#")[0], datas.split("#")[1]);
 		return cmter;
 	}
-	
+        
     //get the committers that modified a file between two commitswithoud merged files   
 	public List<Committer> getWhoEditedFile (String base, String parent, String fileName, File path){
 		String command = "git shortlog -sne --no-merges " + base + ".." + parent + " -- " + fileName;
