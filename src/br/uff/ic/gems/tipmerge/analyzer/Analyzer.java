@@ -39,10 +39,11 @@ public class Analyzer {
     public boolean saveToFile(String folderName) {
 
         try {
-            File outputFile = new File(folderName + "out_" + projURL.replace("/","_") + ".txt");
+			String fileName = projURL.split("github.com/")[1].replace("/", "_");
+            File outputFile = new File(folderName + "out_" + fileName + ".txt");
             BufferedWriter bwOutput = new BufferedWriter(new FileWriter(outputFile, true));
 
-            String destination = folderName + projURL.split("/")[4] + "/";
+            String destination = folderName + fileName + "/";
             repoProject = new File(destination);
 
             Git.cloneFromURL(projURL, destination);
@@ -84,7 +85,7 @@ public class Analyzer {
             bwOutput.close();
 
             System.out.println("Delete project " + destination);
-            Process exec = Runtime.getRuntime().exec("rm -rf " + destination);
+			Process exec = Runtime.getRuntime().exec("rm -rf " + destination);
 
             return true;
 
