@@ -82,7 +82,7 @@ public class MergeCommitsDao {
 
     public List<String> getHashs(String hashBegin, String hashEnd) {
         String command = "git log --format='%H' --no-merges " + hashBegin + ".." + hashEnd;
-        System.out.println("git log --format='%H' --no-merges " + hashBegin + ".." + hashEnd);
+       // System.out.println("git log --format='%H' --no-merges " + hashBegin + ".." + hashEnd);
         return RunGit.getListOfResult(command, this.path);
     }
 
