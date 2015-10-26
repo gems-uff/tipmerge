@@ -28,8 +28,8 @@ import java.util.logging.Logger;
  */
 public class Analyzer {
 
-    String projURL;
-    File repoProject;
+    private String projURL;
+    private File repoProject;
 
     public Analyzer(String url) {
 
@@ -39,7 +39,7 @@ public class Analyzer {
     public boolean saveToFile(String folderName) {
 
         try {
-            File outputFile = new File(folderName + "out_" + projURL.split("/")[4] + ".txt");
+            File outputFile = new File(folderName + "out_" + projURL.replace("/","_") + ".txt");
             BufferedWriter bwOutput = new BufferedWriter(new FileWriter(outputFile, true));
 
             String destination = folderName + projURL.split("/")[4] + "/";
