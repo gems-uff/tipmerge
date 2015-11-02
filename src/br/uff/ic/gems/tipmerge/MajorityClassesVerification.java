@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  *
  * @author jjcfigueiredo
  */
-public class MergesVerification {
+public class MajorityClassesVerification {
 
     public static void main(String[] args) {
 
@@ -79,7 +79,7 @@ public class MergesVerification {
                     bufferedWriter.close();
                     
                 } catch (IOException ex) {
-                    Logger.getLogger(MergesVerification.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MajorityClassesVerification.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }

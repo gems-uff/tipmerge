@@ -406,7 +406,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
     }//GEN-LAST:event_comboMergesListActionPerformed
 
     private void btGenRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGenRankingActionPerformed
-        JFrameRankingCoverage jfAssignMerge = new JFrameRankingCoverage(repo, mergeFiles, dependenciesBranchOne, dependenciesBranchTwo);
+        JFrameRankingCoverageFile jfAssignMerge = new JFrameRankingCoverageFile(repo, mergeFiles, dependenciesBranchOne, dependenciesBranchTwo);
         jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
         jfAssignMerge.setVisible(true);
     }//GEN-LAST:event_btGenRankingActionPerformed

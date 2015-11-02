@@ -56,7 +56,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
  *
  * @author j2cf
  */
-public class JFrameRankingCoverage extends javax.swing.JFrame {
+public class JFrameRankingCoverageMethod extends javax.swing.JFrame {
 
 	private JTable jTableRanking = new JTable();
 	private String databaseName = "data/gitdataminer.sqlite";
@@ -68,12 +68,12 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
 	private Map<String, Integer[]> historyfileNames;
 	private MergeCommits merge;
 
-	public JFrameRankingCoverage(Repository repository) {
+	public JFrameRankingCoverageMethod(Repository repository) {
 		initComponents();
 		initVariables(repository);
 	}
 
-	public JFrameRankingCoverage(Repository repository, MergeFiles mergeFiles, Map<EditedFile, Set<EditedFile>> dependenciesBranchOne, Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo) {
+	public JFrameRankingCoverageMethod(Repository repository, MergeFiles mergeFiles, Map<EditedFile, Set<EditedFile>> dependenciesBranchOne, Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo) {
 		initComponents();
 		this.repository = repository;
 		initVariables(repository);
@@ -330,9 +330,9 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
 					btnCoverageChart.setEnabled(true);
 
 				} catch (SQLException ex) {
-					Logger.getLogger(JFrameRankingCoverage.class.getName()).log(Level.SEVERE, null, ex);
+					Logger.getLogger(JFrameRankingCoverageMethod.class.getName()).log(Level.SEVERE, null, ex);
 				} catch (Exception ex) {
-					Logger.getLogger(JFrameRankingCoverage.class.getName()).log(Level.SEVERE, null, ex);
+					Logger.getLogger(JFrameRankingCoverageMethod.class.getName()).log(Level.SEVERE, null, ex);
 				}
 
 				labelLoading.setVisible(false);
@@ -384,9 +384,9 @@ public class JFrameRankingCoverage extends javax.swing.JFrame {
 					//btnCoverageChart.setEnabled(true);
 
 				} catch (SQLException ex) {
-					Logger.getLogger(JFrameRankingCoverage.class.getName()).log(Level.SEVERE, null, ex);
+					Logger.getLogger(JFrameRankingCoverageMethod.class.getName()).log(Level.SEVERE, null, ex);
 				} catch (Exception ex) {
-					Logger.getLogger(JFrameRankingCoverage.class.getName()).log(Level.SEVERE, null, ex);
+					Logger.getLogger(JFrameRankingCoverageMethod.class.getName()).log(Level.SEVERE, null, ex);
 				}
 
 				labelLoading.setVisible(false);
