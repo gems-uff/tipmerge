@@ -283,20 +283,7 @@ public class Experiment {
     private RankingGenerator getRanking(List<Map<EditedFile, Set<EditedFile>>> dependencies, MergeFiles mergeFiles) {
         RankingGenerator rGenerator = new RankingGenerator();
 
-        /*
-        Set<EditedFile> filesOfInterest = new HashSet<>();
-
-        for (EditedFile file : dependencies.get(0).keySet()) {
-            filesOfInterest.add(file);
-            filesOfInterest.addAll(dependencies.get(0).get(file));
-        }
-        for (EditedFile file : dependencies.get(1).keySet()) {
-            filesOfInterest.add(file);
-            filesOfInterest.addAll(dependencies.get(1).get(file));
-        }
-        filesOfInterest.addAll(mergeFiles.getFilesOnBothBranch());
-        */
-        
+               
         Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
         excepiontFiles = rGenerator.setMedalFromDependenciesBranch1(dependencies.get(0), mergeFiles, excepiontFiles);
         excepiontFiles = rGenerator.setMedalFromDependenciesBranch2(dependencies.get(1), mergeFiles, excepiontFiles);

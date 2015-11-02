@@ -121,15 +121,14 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         labelLoading = new javax.swing.JLabel();
         btnCoverageChart = new javax.swing.JButton();
         paneResult = new javax.swing.JSplitPane();
-        panelRanking = new javax.swing.JScrollPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         panelCoverage = new javax.swing.JScrollPane();
         jtaGold = new javax.swing.JTextArea();
-        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtaSilver = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtaBronze = new javax.swing.JTextArea();
+        panelRanking = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Developer Assignments");
@@ -217,41 +216,39 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         paneResult.setMinimumSize(new java.awt.Dimension(115, 143));
         paneResult.setPreferredSize(new java.awt.Dimension(154, 152));
 
-        panelRanking.setBorder(javax.swing.BorderFactory.createTitledBorder("Ranking"));
-        paneResult.setLeftComponent(panelRanking);
+        jTabbedPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        panelCoverage.setBorder(null);
+        panelCoverage.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jtaGold.setColumns(20);
         jtaGold.setRows(5);
+        jtaGold.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panelCoverage.setViewportView(jtaGold);
 
         jTabbedPane1.addTab("Gold Coverage", panelCoverage);
 
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         jtaSilver.setColumns(20);
         jtaSilver.setRows(5);
+        jtaSilver.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jScrollPane1.setViewportView(jtaSilver);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-        );
+        jTabbedPane1.addTab("Silver Coverage", jScrollPane1);
 
-        jTabbedPane1.addTab("Silver Coverage", jPanel1);
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jtaBronze.setColumns(20);
         jtaBronze.setRows(5);
+        jtaBronze.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jScrollPane2.setViewportView(jtaBronze);
 
         jTabbedPane1.addTab("Bronze Coverage", jScrollPane2);
 
         paneResult.setBottomComponent(jTabbedPane1);
+
+        panelRanking.setBorder(javax.swing.BorderFactory.createTitledBorder("Ranking"));
+        paneResult.setLeftComponent(panelRanking);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -265,7 +262,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(paneResult, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE))
+                .addComponent(paneResult, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
         );
 
         pack();
@@ -511,7 +508,6 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
     private javax.swing.JButton btnCoverageChart;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -616,7 +612,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                 for (Medalist medalist : ranking) {
                     if (medalist.getGoldMedals() > 0) {
                         result = new StringBuilder();
-                        result.append("Medalist:\t[").append(medalist.getCommitter().getName()).append("]\n");
+                        result.append("Committer:\t[").append(medalist.getCommitter().getName()).append("]\n");
                         result.append("\t>> Files in Branch 1 <<\n");
                         for (String file : medalist.getGoldListBranch1()) {
                             result.append("\t").append(file).append("\n");
@@ -630,7 +626,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                     }
                     if (medalist.getSilverMedals() > 0) {
                         result = new StringBuilder();
-                        result.append("Medalist:\t[").append(medalist.getCommitter().getName()).append("]\n");
+                        result.append("Committer:\t[").append(medalist.getCommitter().getName()).append("]\n");
                         //result.append("Files for Silver\n").append(medalist.getCommitter().getName()).append("\n");
                         for (String file : medalist.getSilverList()) {
                             result.append("\t").append(file).append("\n");
@@ -640,7 +636,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                     }
                     if (medalist.getBronzeMedals() > 0) {
                         result = new StringBuilder();
-                        result.append("Medalist:\t[").append(medalist.getCommitter().getName()).append("]\n");
+                        result.append("Commiter:\t[").append(medalist.getCommitter().getName()).append("]\n");
                         //result.append("Files for Bronze\n").append(medalist.getCommitter().getName()).append("\n");
                         for (String file : medalist.getBronzeList()) {
                             result.append("\t").append(file).append("\n");
