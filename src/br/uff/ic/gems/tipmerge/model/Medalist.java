@@ -1,17 +1,21 @@
 package br.uff.ic.gems.tipmerge.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
- * This class has information about committers who have medals.
+ * This class has information about Committers who have medals.
+ *
  * @author Eduardo
  */
-public class Medalist
-{
+public class Medalist {
+
     private Committer committer;
-    private int goldMedals = 0;
-    private int silverMedals = 0;
-    private int bronzeMedals = 0;
+    private List<String> goldListBranch1 = new ArrayList();
+    private List<String> goldListBranch2 = new ArrayList();
+    private List<String> silverList = new ArrayList();
+    private List<String> bronzeList = new ArrayList();
 
     public Medalist(Committer committer) {
         this.committer = committer;
@@ -20,76 +24,104 @@ public class Medalist
     public Committer getCommitter() {
         return committer;
     }
-
+    /*
     public void setCommitter(Committer committer) {
         this.committer = committer;
     }
+    */
 
     public int getGoldMedals() {
-        return goldMedals;
+        //TODO como contar as medalhas de ouro
+        return getGoldListBranch1().size() + getGoldListBranch2().size();
+        
     }
 
-    public void setGoldMedals(int goldMedals) {
-        this.goldMedals = goldMedals;
+    public List<String> getGoldListBranch1() {
+        return goldListBranch1;
+    }
+
+    public List<String> getGoldListBranch2() {
+        return goldListBranch2;
+    }
+
+    public void setgoldListBranch1(List<String> files) {
+        this.goldListBranch1 = files;
+    }
+
+    public void setgoldListBranch2(List<String> files) {
+        this.goldListBranch2 = files;
     }
 
     public int getSilverMedals() {
-        return silverMedals;
+        return silverList.size();
     }
 
-    public void setSilverMedals(int silverMedals) {
-        this.silverMedals = silverMedals;
+    public void setsilverList(List<String> files) {
+        this.silverList = files;
     }
+    
+    public List<String> getSilverList() {
+        return this.silverList;
+    }
+
 
     public int getBronzeMedals() {
-        return bronzeMedals;
+        return bronzeList.size();
     }
 
-    public void setBronzeMedals(int bronzeMedals) {
-        this.bronzeMedals = bronzeMedals;
+    public void setBronzeList(List<String> files) {
+        this.bronzeList = files;
     }
-	
-	@Override
-	public String toString(){
-		return this.getCommitter().getName().substring(0, Math.min(20, this.getCommitter().getName().length())) + "\t"
-			+ this.getGoldMedals()  + "\t"
-			+ this.getSilverMedals()  + "\t"
-			+ this.getBronzeMedals();
-		
-	}
+    
+    public List<String> getBronzeList() {
+        return this.bronzeList;
+    }
 
-	@Override
-	public int hashCode() {
-		int hash = 7;
-		hash = 89 * hash + Objects.hashCode(this.committer);
-		return hash;
-	}
+    public void addGoldMedalBranch1(String fileName) {
+        this.getGoldListBranch1().add(fileName);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Medalist other = (Medalist) obj;
-		if (!Objects.equals(this.committer, other.committer)) {
-			return false;
-		}
-		return true;
-	}
+    public void addGoldMedalBranch2(String fileName) {
+        this.getGoldListBranch2().add(fileName);
+    }
 
-	public void addGoldMedal() {
-		this.goldMedals++;
-	}
-	public void addSilverMedal() {
-		this.silverMedals++;
-	}
-	public void addBronzeMedal() {
-		this.bronzeMedals++;
-	}
-	
-	
-	
+    public void addSilverMedal(String fileName) {
+        this.silverList.add(fileName);
+    }
+
+    public void addBronzeMedal(String fileName) {
+        this.bronzeList.add(fileName);
+    }
+
+    @Override
+    public String toString() {
+        return this.getCommitter().getName().substring(0, Math.min(20, this.getCommitter().getName().length())) + "\t"
+                + this.getGoldMedals() + "\t"
+                + this.getSilverMedals() + "\t"
+                + this.getBronzeMedals();
+
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.committer);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Medalist other = (Medalist) obj;
+        if (!Objects.equals(this.committer, other.committer)) {
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -6,7 +6,6 @@
 package br.uff.ic.gems.tipmerge.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -36,23 +35,57 @@ public class RankingGenerator {
         this.ranking = ranking;
     }
 
-    public Set<EditedFile> setMedalFromDependencies(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
+    public Set<EditedFile> setMedalsFilesEditedBothBranches(MergeFiles mergeFiles) {
+        //List<Committer> silver = new ArrayList<>();
 
-		//System.out.println("Excep: " + excepiontFiles.toString());
+        Set<EditedFile> files = new HashSet<>(mergeFiles.getFilesOnBothBranch());
+        List<EditedFile> filesHistory = new ArrayList<>(mergeFiles.getFilesOnPreviousHistory());
+
+        for (EditedFile file : files) {
+            int indexb1 = mergeFiles.getFilesOnBranchOne().indexOf(file);
+            if (indexb1 > -1) {
+                //gold.addAll(mergeFiles.getFilesOnBranchOne().get(indexb1).getWhoEditTheFile());
+                this.setGoldMedalsB1(mergeFiles.getFilesOnBranchOne().get(indexb1));
+            }
+
+            int indexb2 = mergeFiles.getFilesOnBranchTwo().indexOf(file);
+            if (indexb2 > -1) {
+                //gold.addAll(mergeFiles.getFilesOnBranchTwo().get(indexb2).getWhoEditTheFile());
+                this.setGoldMedalsB2(mergeFiles.getFilesOnBranchTwo().get(indexb2));
+
+            }
+
+            int indexh = filesHistory.indexOf(file);
+            if (indexh > -1) {
+                //silver.addAll(filesHistory.get(indexh).getWhoEditTheFile());
+                this.setSilverMedals(filesHistory.get(indexh));
+                System.out.println("prata por His (bb)\t" + filesHistory.get(indexh) 
+                        + "\t para \t" + filesHistory.get(indexh).getWhoEditTheFile());
+                //break;
+            }
+        }
+        //Changed the value - silver medals to changed files in history
+        //this.setGoldMedals(gold);
+        //this.setSilverMedals(silver);
+        //System.out.println(this.toString());
+        return files;
+    }
+
+    public Set<EditedFile> setMedalFromDependenciesBranch1(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
+
         dependenciesMap.entrySet().stream().forEach((dependency) -> {
 
             EditedFile ascendentCand = dependency.getKey();
 
-            List<Committer> silverRights = new ArrayList<>();
+            EditedFile bronzeRights = ascendentCand;
 
             if (!excepiontFiles.contains(ascendentCand)) {
 
-                this.setGoldMedals(ascendentCand.getWhoEditTheFile());
-                silverRights = ascendentCand.getWhoEditTheFile();
+                this.setGoldMedalsB1(ascendentCand);
 
                 for (EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()) {
                     if (fileHistory.equals(ascendentCand)) {
-                        this.setSilverMedals(fileHistory.getWhoEditTheFile());
+                        this.setSilverMedals(fileHistory);
                         //Changed the value - silver medals to changed files in history
                         break;
                     }
@@ -60,30 +93,26 @@ public class RankingGenerator {
 
                 excepiontFiles.add(ascendentCand);
 
-            } else {
-                silverRights = ascendentCand.getWhoEditTheFile();
             }
 
             Set<EditedFile> consequentList = dependency.getValue();
             for (EditedFile consequent : consequentList) {
 
-                this.setBronzeMedals(silverRights);
-			//	Changed the value - silver medals to changed files with dependencies in branches
+                this.setBronzeMedals(bronzeRights, consequent.getFileName());
+                //	Changed the value - silver medals to changed files with dependencies in branches
 
                 if (!excepiontFiles.contains(consequent)) {
 
-                    this.setGoldMedals(consequent.getWhoEditTheFile());
+                    this.setGoldMedalsB2(consequent);
 
                     for (EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()) {
                         if (fileHistory.equals(consequent)) {
-                            this.setSilverMedals(fileHistory.getWhoEditTheFile());
+                            this.setSilverMedals(fileHistory);
                             //Changed the value - silver medals to changed files in history
                             break;
                         }
                     }
-
                     excepiontFiles.add(consequent);
-
                 }
             }
 
@@ -93,78 +122,107 @@ public class RankingGenerator {
 
     }
 
-    private void setBronzeMedals(Collection<Committer> cmterBronze) {
-        for (Committer cmter : cmterBronze) {
+    public Set<EditedFile> setMedalFromDependenciesBranch2(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
+
+        dependenciesMap.entrySet().stream().forEach((dependency) -> {
+
+            EditedFile ascendentCand = dependency.getKey();
+
+            EditedFile bronzeRights = ascendentCand;
+
+            if (!excepiontFiles.contains(ascendentCand)) {
+
+                this.setGoldMedalsB2(ascendentCand);
+
+                for (EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()) {
+                    if (fileHistory.equals(ascendentCand)) {
+                        this.setSilverMedals(fileHistory);
+                        //Changed the value - silver medals to changed files in history
+                        break;
+                    }
+                }
+
+                excepiontFiles.add(ascendentCand);
+
+            }
+
+            Set<EditedFile> consequentList = dependency.getValue();
+            for (EditedFile consequent : consequentList) {
+
+                this.setBronzeMedals(bronzeRights, consequent.getFileName());
+                //Changed the value - silver medals to changed files with dependencies in branches
+
+                if (!excepiontFiles.contains(consequent)) {
+
+                    this.setGoldMedalsB1(consequent);
+
+                    for (EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()) {
+                        if (fileHistory.equals(consequent)) {
+                            this.setSilverMedals(fileHistory);
+                            //Changed the value - silver medals to changed files in history
+                            break;
+                        }
+                    }
+                    excepiontFiles.add(consequent);
+                }
+            }
+
+        });
+        
+        return excepiontFiles;
+
+    }
+
+    private void setBronzeMedals(EditedFile ascend, String conseq) {
+        for (Committer cmter : ascend.getWhoEditTheFile()) {
             Medalist medalist = new Medalist(cmter);
-            medalist.setBronzeMedals(1);
+            medalist.addBronzeMedal(conseq);
             int index = ranking.indexOf(medalist);
             if (index == -1) {
                 ranking.add(medalist);
             } else {
-                ranking.get(index).addBronzeMedal();
+                ranking.get(index).addBronzeMedal(conseq);
             }
         }
     }
 
-    private void setSilverMedals(Collection<Committer> cmterSilver) {
-        for (Committer cmter : cmterSilver) {
+    private void setSilverMedals(EditedFile file) {
+        for (Committer cmter : file.getWhoEditTheFile()) {
             Medalist medalist = new Medalist(cmter);
-            medalist.setSilverMedals(1);
+            medalist.addSilverMedal(file.getFileName());
             int index = ranking.indexOf(medalist);
             if (index == -1) {
                 ranking.add(medalist);
             } else {
-                ranking.get(index).addSilverMedal();
+                ranking.get(index).addSilverMedal(file.getFileName());
             }
         }
     }
 
-    private void setGoldMedals(Collection<Committer> cmterGold) {
-        //		for(Medalist m : this.ranking){
-        for (Committer cmter : cmterGold) {
+    private void setGoldMedalsB1(EditedFile file) {
+        for (Committer cmter : file.getWhoEditTheFile()) {
             Medalist medalist = new Medalist(cmter);
-            medalist.setGoldMedals(1);
+            medalist.addGoldMedalBranch1(file.getFileName());
             int index = ranking.indexOf(medalist);
             if (index == -1) {
                 ranking.add(medalist);
             } else {
-                ranking.get(index).addGoldMedal();
+                ranking.get(index).addGoldMedalBranch1(file.getFileName());
             }
         }
     }
 
-    public Set<EditedFile> setMedalsFilesEditedBothBranches(MergeFiles mergeFiles) {
-        List<Committer> gold = new ArrayList<>();
-        List<Committer> silver = new ArrayList<>();
-
-        Set<EditedFile> files = new HashSet<>(mergeFiles.getFilesOnBothBranch());
-        List<EditedFile> filesHistory = new ArrayList<>(mergeFiles.getFilesOnPreviousHistory());
-
-        for (EditedFile file : files) {
-            int indexb1 = mergeFiles.getFilesOnBranchOne().indexOf(file);
-            if (indexb1 > -1) {
-                gold.addAll(mergeFiles.getFilesOnBranchOne().get(indexb1).getWhoEditTheFile());
-
-            }
-
-            int indexb2 = mergeFiles.getFilesOnBranchTwo().indexOf(file);
-            if (indexb2 > -1) {
-
-                gold.addAll(mergeFiles.getFilesOnBranchTwo().get(indexb2).getWhoEditTheFile());
-
-            }
-
-            int indexh = filesHistory.indexOf(file);
-            if (indexh > -1) {
-                silver.addAll(filesHistory.get(indexh).getWhoEditTheFile());
-                //break;
+    private void setGoldMedalsB2(EditedFile file) {
+        for (Committer cmter : file.getWhoEditTheFile()) {
+            Medalist medalist = new Medalist(cmter);
+            medalist.addGoldMedalBranch2(file.getFileName());
+            int index = ranking.indexOf(medalist);
+            if (index == -1) {
+                ranking.add(medalist);
+            } else {
+                ranking.get(index).addGoldMedalBranch2(file.getFileName());
             }
         }
-        //Changed the value - silver medals to changed files in history
-        this.setGoldMedals(gold);
-        this.setSilverMedals(silver);
-        //System.out.println(this.toString());
-        return files;
     }
 
     public List<String> getList() {

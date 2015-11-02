@@ -101,21 +101,19 @@ public class Experiment {
 
                     System.out.println("\t2. Files in common:\tYES\t" + filesInCommon);
                     bwOutput.write("\t2. Files in common:\tYES\t" + filesInCommon + "\n");
-                    
+
                     mapValues.put("Files", mapValues.get("Files") + 1);
 
                     //testa conflitos
                     if (RevisionAnalyzer.hasConflict(this.getRepo().getProject().toString(), mergeFiles.getParents()[0], mergeFiles.getParents()[1])) {
                         System.out.println("\t4. Conflicting files:\tYES");
                         bwOutput.write("\t4. Conflicting files:\tYES" + "\n");
-                        
+
                         mapValues.put("Conflicts", mapValues.get("Conflicts") + 1);
                     } else {
                         System.out.println("\t4. Conflicting files:\tNO");
                         bwOutput.write("\t4. Conflicting files:\tNO" + "\n");
                     }
-					
-					
 
                 }
 
@@ -129,7 +127,7 @@ public class Experiment {
                 } else {
                     System.out.println("\t3. Dependencies:\tYES");
                     bwOutput.write("\t3. Dependencies:\tYES" + "\n");
-                    
+
                     mapValues.put("Dependencies", mapValues.get("Dependencies") + 1);
 
                 }
@@ -169,7 +167,7 @@ public class Experiment {
             System.gc();
 
         }
-		//Git.checkoutMaster(this.getRepo().getProject());
+        //Git.checkoutMaster(this.getRepo().getProject());
         return mapValues;
     }
 
@@ -229,10 +227,9 @@ public class Experiment {
                     } else {
                         System.out.println("\t4. Conflicting files:\tNO");
                     }
-					
 
                 }
-				
+
                 List<Map<EditedFile, Set<EditedFile>>> dependencies = getFilesDependencies(mergeFiles);
                 boolean hasNoDependencies = (dependencies.get(0).isEmpty() && dependencies.get(1).isEmpty());
 
@@ -279,13 +276,14 @@ public class Experiment {
             //datas.put(hashMerge, values);
             System.gc();
         }
-	//	Git.checkoutMaster(this.getRepo().getProject());
+        //	Git.checkoutMaster(this.getRepo().getProject());
         return mapValues;
     }
 
     private RankingGenerator getRanking(List<Map<EditedFile, Set<EditedFile>>> dependencies, MergeFiles mergeFiles) {
         RankingGenerator rGenerator = new RankingGenerator();
 
+        /*
         Set<EditedFile> filesOfInterest = new HashSet<>();
 
         for (EditedFile file : dependencies.get(0).keySet()) {
@@ -297,10 +295,11 @@ public class Experiment {
             filesOfInterest.addAll(dependencies.get(1).get(file));
         }
         filesOfInterest.addAll(mergeFiles.getFilesOnBothBranch());
-
+        */
+        
         Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
-        excepiontFiles = rGenerator.setMedalFromDependencies(dependencies.get(0), mergeFiles, excepiontFiles);
-        excepiontFiles = rGenerator.setMedalFromDependencies(dependencies.get(1), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranch1(dependencies.get(0), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranch2(dependencies.get(1), mergeFiles, excepiontFiles);
         excepiontFiles.removeAll(excepiontFiles);
 
         return rGenerator;
