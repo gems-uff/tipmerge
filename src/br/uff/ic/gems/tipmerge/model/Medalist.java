@@ -1,8 +1,10 @@
 package br.uff.ic.gems.tipmerge.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * This class has information about Committers who have medals.
@@ -15,7 +17,7 @@ public class Medalist {
     private List<String> goldListBranch1 = new ArrayList();
     private List<String> goldListBranch2 = new ArrayList();
     private List<String> silverList = new ArrayList();
-    private List<String> bronzeList = new ArrayList();
+    private Set<String> bronzeList = new HashSet<>();
 
     public Medalist(Committer committer) {
         this.committer = committer;
@@ -69,11 +71,11 @@ public class Medalist {
         return bronzeList.size();
     }
 
-    public void setBronzeList(List<String> files) {
+    public void setBronzeList(Set<String> files) {
         this.bronzeList = files;
     }
     
-    public List<String> getBronzeList() {
+    public Set<String> getBronzeList() {
         return this.bronzeList;
     }
 
