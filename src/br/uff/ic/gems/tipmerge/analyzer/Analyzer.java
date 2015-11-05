@@ -91,7 +91,7 @@ public class Analyzer {
 
         } catch (IOException ex) {
             System.out.println("Fail to create output file");
-            Logger.getLogger(MergesGitAnalyzer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MajorityClassVerification.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
 

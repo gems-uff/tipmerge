@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
  *
  * @author jjcfigueiredo
  */
-public class MergesGitAnalyzer {
+public class MajorityClassVerification {
 
     /**
      * @param args the command line arguments
