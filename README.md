@@ -6,7 +6,7 @@
 
 <h3>How to use</h3>
 To use <strong>TIPMerge</strong>, you need to have git properly installed on your computer, with the configured environment variable and JRE.<br />
-First of all, you must select some git project on your computer. After that, you can show basic information about the project and perform commit and file analyzes.
+First of all, you must select some git project on your computer. After that, you can show basic information about the project, perform commit and file analyzes and generate a ranking of suitable developers.
 
 <h3>Team</h3>
 -  Catarina Costa (joined in Apr 2014)
@@ -14,7 +14,7 @@ First of all, you must select some git project on your computer. After that, you
 -  Leonardo Murta (joined in Apr 2014)
 -  Anita Sarma (joined in Feb 2015)
 -  Jhunior López Celis (joined in Mar 2015)
--  Eduardo Silva (joined in Mar 2015)
+-  João Felipe (joined in Nov 2015)
 	
 <h3>Technologies</h3>
 -  Java
