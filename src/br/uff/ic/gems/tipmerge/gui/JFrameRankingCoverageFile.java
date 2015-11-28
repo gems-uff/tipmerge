@@ -612,12 +612,12 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                 for (Medalist medalist : ranking) {
                     if (medalist.getGoldMedals() > 0) {
                         result = new StringBuilder();
-                        result.append("Committer:\t[").append(medalist.getCommitter().getName()).append("]\n");
-                        result.append("\t>> Files in Branch 1 <<\n");
+                        result.append("Committer:\t[").append(medalist.getCommitter().getName()).append("] Total Gold Medal count = \n");
+                        result.append("\t>> Files in Branch 1 leading to Gold Medal <<\n");
                         for (String file : medalist.getGoldListBranch1()) {
                             result.append("\t").append(file).append("\n");
                         }
-                        result.append("\t>> Files in Branch 2 <<\n");
+                        result.append("\t>> Files in Branch 2 leading to Gold Medal<<\n");
                         for (String file : medalist.getGoldListBranch2()) {
                             result.append("\t").append(file).append("\n");
                         }
@@ -626,7 +626,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                     }
                     if (medalist.getSilverMedals() > 0) {
                         result = new StringBuilder();
-                        result.append("Committer:\t[").append(medalist.getCommitter().getName()).append("]\n");
+                        result.append("Committer:\t[").append(medalist.getCommitter().getName()).append("] Total Silver Medal count = \n");
                         //result.append("Files for Silver\n").append(medalist.getCommitter().getName()).append("\n");
                         for (String file : medalist.getSilverList()) {
                             result.append("\t").append(file).append("\n");
@@ -636,7 +636,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                     }
                     if (medalist.getBronzeMedals() > 0) {
                         result = new StringBuilder();
-                        result.append("Commiter:\t[").append(medalist.getCommitter().getName()).append("]\n");
+                        result.append("Commiter:\t[").append(medalist.getCommitter().getName()).append("] Total Bronze Medal count = \n");
                         //result.append("Files for Bronze\n").append(medalist.getCommitter().getName()).append("\n");
                         for (String file : medalist.getBronzeList()) {
                             result.append("\t").append(file).append("\n");
