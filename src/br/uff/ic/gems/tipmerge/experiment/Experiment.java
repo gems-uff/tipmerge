@@ -5,6 +5,7 @@
  */
 package br.uff.ic.gems.tipmerge.experiment;
 
+import arch.Session;
 import br.uff.ic.gems.tipmerge.dao.CommitterDao;
 import br.uff.ic.gems.tipmerge.dao.EditedFilesDao;
 import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
@@ -164,6 +165,9 @@ public class Experiment {
             }
 
             bwOutput.close();
+            
+            Session.debugInfo();
+            
             System.gc();
 
         }
@@ -367,10 +371,13 @@ public class Experiment {
             List<Integer> matrices = new ArrayList<>(Arrays.asList(7));
             //System.out.println("\nCreating the dominoes of History");
             List<Dominoes> dominoesHistory = DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "GPU", hashsOnPreviousHistory, matrices);
-
+            dominoesHistory.addAll(DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "GPU", hashsOnPreviousHistory, matrices));
+            
             //System.out.println("->->->Hist. Dep:\t" + dominoesHistory.get(0).getHistoric());
             Dominoes domCF = dominoesHistory.get(0);
-            Dominoes domCFt = domCF.cloneNoMatrix();
+            Dominoes domCFt = dominoesHistory.get(1);
+            System.out.println("Matrix 1 and 2 non-zeros\t" + domCF.getMat().getNonZeroData().size() +  "\t" + domCFt.getMat().getNonZeroData().size());
+            //Dominoes domCFt = domCF.cloneNoMatrix();
             domCFt.transpose();
             Dominoes domFF = domCFt.multiply(domCF);
             domFF.confidence();
@@ -431,7 +438,7 @@ public class Experiment {
             } else {
                 mjClass.put(committer, mjClass.get(committer) + 1);
             }
-
+            
         }
 
         List<String> mjlist = new ArrayList<>();

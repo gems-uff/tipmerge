@@ -1,8 +1,10 @@
 package br.uff.ic.gems.tipmerge.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -26,16 +28,17 @@ public class Medalist {
     public Committer getCommitter() {
         return committer;
     }
+
     /*
     public void setCommitter(Committer committer) {
         this.committer = committer;
     }
-    */
+     */
 
     public int getGoldMedals() {
         //TODO como contar as medalhas de ouro
         return getGoldListBranch1().size() + getGoldListBranch2().size();
-        
+
     }
 
     public List<String> getGoldListBranch1() {
@@ -61,11 +64,10 @@ public class Medalist {
     public void setsilverList(List<String> files) {
         this.silverList = files;
     }
-    
+
     public List<String> getSilverList() {
         return this.silverList;
     }
-
 
     public int getBronzeMedals() {
         return bronzeList.size();
@@ -74,7 +76,7 @@ public class Medalist {
     public void setBronzeList(Set<String> files) {
         this.bronzeList = files;
     }
-    
+
     public Set<String> getBronzeList() {
         return this.bronzeList;
     }
@@ -124,6 +126,49 @@ public class Medalist {
             return false;
         }
         return true;
+    }
+
+    public Map<String, Integer[]> getFilesList() {
+        //Integer[] medals = new Integer[3];
+
+        Map<String, Integer[]> res = new HashMap<>();
+        for (String file : this.bronzeList) {
+            if (res.containsKey(file)) {
+                res.put(file, new Integer[]{res.get(file)[0], res.get(file)[1], res.get(file)[2] + 1});
+            } else {
+                res.put(file, new Integer[]{0, 0, 1});
+            }
+        }
+        for (String file : this.silverList) {
+            if (res.containsKey(file)) {
+                res.put(file, new Integer[]{res.get(file)[0], res.get(file)[1] + 1, res.get(file)[2]});
+            } else {
+                res.put(file, new Integer[]{0, 1, 0});
+            }
+        }
+        for (String file : this.goldListBranch1) {
+            if (res.containsKey(file)) {
+                res.put(file, new Integer[]{res.get(file)[0] + 1, res.get(file)[1], res.get(file)[2]});
+            } else {
+                res.put(file, new Integer[]{1, 0, 0});
+            }
+        }
+        for (String file : this.goldListBranch2) {
+            if (res.containsKey(file)) {
+                res.put(file, new Integer[]{res.get(file)[0] + 1, res.get(file)[1], res.get(file)[2]});
+            } else {
+                res.put(file, new Integer[]{1, 0, 0});
+            }
+        }
+
+        /*        
+        Set<String> result = new HashSet<>();
+        result.addAll(this.bronzeList);
+        result.addAll(this.silverList);
+        result.addAll(this.goldListBranch1);
+        result.addAll(this.goldListBranch2);
+         */
+        return res;
     }
 
 }

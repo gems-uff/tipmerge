@@ -5,8 +5,10 @@
  */
 package br.uff.ic.gems.tipmerge;
 
+import arch.Session;
 import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
 import br.uff.ic.gems.tipmerge.experiment.Experiment;
+import br.uff.ic.gems.tipmerge.experiment.Parameter;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,11 +31,18 @@ public class MergeVerification {
 
     public static void main(String[] args) {
 
+        Session.startSession(0);
+        
         //String dir = "c:/testes/imagem2";
         File inputFolder = new File("projects");
 
         File fList[] = inputFolder.listFiles();
-
+        
+        System.out.println("Parameters Defined");
+        System.out.println("THRESHOLD\t" + Parameter.THRESHOLD);
+        System.out.println("EXTENSION\t" + Parameter.EXTENSION);
+        System.out.println("DATABASE\t" + Parameter.DATABASE);
+        
         System.out.println("Available projetcs: " + Arrays.toString(fList));
 
         for (File file : fList) {
@@ -84,6 +93,7 @@ public class MergeVerification {
 
             }
         }
+        Session.closeSection();
 
     }
 
