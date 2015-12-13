@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  * This class has information about Committers who have medals.
@@ -128,36 +131,43 @@ public class Medalist {
         return true;
     }
 
-    public Map<String, Integer[]> getFilesList() {
+    public Map<String, Object[]> getFilesList() {
         //Integer[] medals = new Integer[3];
 
-        Map<String, Integer[]> res = new HashMap<>();
+        Map<String, Object[]> res = new HashMap<>();
         for (String file : this.bronzeList) {
+            ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/HISTORI.png"));
             if (res.containsKey(file)) {
-                res.put(file, new Integer[]{res.get(file)[0], res.get(file)[1], res.get(file)[2] + 1});
+                res.put(file, new Object[]{res.get(file)[0], res.get(file)[1], medalIcon});
             } else {
-                res.put(file, new Integer[]{0, 0, 1});
+                res.put(file, new Object[]{"", "", medalIcon});
             }
         }
         for (String file : this.silverList) {
+            ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/DEPENDE.png"));
             if (res.containsKey(file)) {
-                res.put(file, new Integer[]{res.get(file)[0], res.get(file)[1] + 1, res.get(file)[2]});
+                res.put(file, new Object[]{res.get(file)[0], medalIcon, res.get(file)[2]});
             } else {
-                res.put(file, new Integer[]{0, 1, 0});
+                res.put(file, new Object[]{"", medalIcon, ""});
             }
         }
         for (String file : this.goldListBranch1) {
+            ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/B1.png"));
             if (res.containsKey(file)) {
-                res.put(file, new Integer[]{res.get(file)[0] + 1, res.get(file)[1], res.get(file)[2]});
+                res.put(file, new Object[]{medalIcon, res.get(file)[1], res.get(file)[2]});
             } else {
-                res.put(file, new Integer[]{1, 0, 0});
+                res.put(file, new Object[]{medalIcon, "", ""});
             }
         }
         for (String file : this.goldListBranch2) {
+            ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/B2.png"));
             if (res.containsKey(file)) {
-                res.put(file, new Integer[]{res.get(file)[0] + 1, res.get(file)[1], res.get(file)[2]});
+                if(!res.get(file)[0].equals("")){
+                    medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/B1B2.png"));
+                }
+                res.put(file, new Object[]{medalIcon, res.get(file)[1], res.get(file)[2]});
             } else {
-                res.put(file, new Integer[]{1, 0, 0});
+                res.put(file, new Object[]{medalIcon, "", ""});
             }
         }
 

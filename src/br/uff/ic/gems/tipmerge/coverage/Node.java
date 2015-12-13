@@ -5,7 +5,9 @@
  */
 package br.uff.ic.gems.tipmerge.coverage;
 
+import java.util.List;
 import org.jdesktop.swingx.treetable.AbstractMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 
 /**
  *
@@ -29,6 +31,10 @@ public class Node extends AbstractMutableTreeTableNode {
     
     public Object[] getData(){
         return (Object[]) getUserObject();
+    }
+    
+    public List<MutableTreeTableNode> getChildren(){
+        return this.children;
     }
 
 }
