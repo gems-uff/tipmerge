@@ -136,7 +136,7 @@ public class Medalist {
 
         Map<String, Object[]> res = new HashMap<>();
         for (String file : this.bronzeList) {
-            ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/HISTORI.png"));
+            ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/DEP.png"));
             if (res.containsKey(file)) {
                 res.put(file, new Object[]{res.get(file)[0], res.get(file)[1], medalIcon});
             } else {
@@ -144,7 +144,7 @@ public class Medalist {
             }
         }
         for (String file : this.silverList) {
-            ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/DEPENDE.png"));
+            ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/HIS.png"));
             if (res.containsKey(file)) {
                 res.put(file, new Object[]{res.get(file)[0], medalIcon, res.get(file)[2]});
             } else {

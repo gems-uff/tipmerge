@@ -96,6 +96,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         excepiontFiles.removeAll(excepiontFiles);
         List<Medalist> ranking = rGenerator.getRanking();
         //showRanking(ranking);
+        showCoverage(ranking);
     }
 
     /**
@@ -650,17 +651,6 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
                 }
                 TreeTable treeTable = new TreeTable(treeTableContent);
-                //TreeTable treeTable = getTreeTableExample();
-                
-                
-                //JTableRenderer jTableRender = new JTableRenderer();
-                //treeTable.getTreeTable().getColumnModel();
-                //treeTable.getTreeTable().getModel().
-
-                //jTableRanking.getColumnModel().getColumn(3).setCellRenderer(jTableRender);
-                        
-
-
 
                 JScrollPane jpanel = new JScrollPane(treeTable.getTreeTable());
 
@@ -679,28 +669,4 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
     }
 
-    private TreeTable getTreeTableExample() {
-        List<Object[]> content = new ArrayList<>();
-
-        content.add(new String[]{"1st", "Catarina", "3", "2", "5"});
-        content.add(new String[]{"file1", "1", "0", "0"});
-        content.add(new String[]{"file2", "1", "0", "1"});
-        content.add(new String[]{"file3", "1", "0", "0"});
-        content.add(new String[]{"file4", "1", "0", "1"});
-        content.add(new String[]{"file5", "1", "0", "1"});
-        content.add(new String[]{"file6", "0", "0", "1"});
-        content.add(new String[]{"file7", "0", "0", "1"});
-
-        content.add(new String[]{"2nd", "Cicrano", "2", "1", "0"});
-        content.add(new String[]{"file1", "1", "0", "0"});
-        content.add(new String[]{"file2", "1", "0", "0"});
-        content.add(new String[]{"file3", "0", "0", "1"});
-
-        content.add(new String[]{"3th", "Beltrano", "1", "0", "3"});
-        content.add(new String[]{"file1", "1", "0", "1"});
-        content.add(new String[]{"file2", "0", "0", "1"});
-        content.add(new String[]{"file3", "0", "0", "1"});
-
-        return new TreeTable(content);
-    }
 }
