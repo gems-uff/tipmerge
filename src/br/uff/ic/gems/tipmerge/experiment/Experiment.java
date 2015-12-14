@@ -71,7 +71,10 @@ public class Experiment {
         mapValues.put("outOfRank", 0);
         //quant. merges | arq 2 lados | arq dep | conflitos | ranking (1,2,3,9,0) -> 1a 2a 3a posição, no rank, fora do rank
 
-        for (String hashMerge : this.getRepo().getListOfMerges()) {
+        List<String> mergesList = this.getRepo().getListOfMerges();
+        for(int i = mergesList.size() - 1 ; i >= 0 ; i-- ){
+            String hashMerge = mergesList.get(i);
+        //for (String hashMerge : this.getRepo().getListOfMerges()) {
 
             BufferedWriter bwOutput = new BufferedWriter(new FileWriter(file, true));
 
@@ -190,7 +193,10 @@ public class Experiment {
         mapValues.put("outOfRank", 0);
         //quant. merges | arq 2 lados | arq dep | conflitos | ranking (1,2,3,9,0) -> 1a 2a 3a posição, no rank, fora do rank
 
-        for (String hashMerge : this.getRepo().getListOfMerges()) {
+        List<String> mergesList = this.getRepo().getListOfMerges();
+        for(int i = mergesList.size() - 1 ; i >= 0 ; i-- ){
+            String hashMerge = mergesList.get(i);
+        //for (String hashMerge : this.getRepo().getListOfMerges()) {
 
             //Integer[] values = new Integer[4];
             DateFormat timeFormat = new SimpleDateFormat("dd/MM/YYYY - HH:mm:ss.SSS");
