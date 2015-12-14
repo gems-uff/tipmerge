@@ -18,7 +18,7 @@ public class Node extends AbstractMutableTreeTableNode {
     public Node(Object[] data) {
         super(data);
     }
-
+//
     @Override
     public Object getValueAt(int columnIndex) {
         return getData()[columnIndex];
