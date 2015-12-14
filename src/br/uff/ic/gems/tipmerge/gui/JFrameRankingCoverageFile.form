@@ -67,10 +67,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="labelLoading" min="-2" pref="110" max="-2" attributes="0"/>
-                          <EmptySpace pref="399" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="btnCoverageChart" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btRunBranchesCoverage" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -103,7 +101,6 @@
                   </Group>
                   <EmptySpace pref="26" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btRunBranchesCoverage" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="labelLoading" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnCoverageChart" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -117,14 +114,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Repository Name"/>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="btRunBranchesCoverage">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Coverage"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btRunBranchesCoverageActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="txProjectName">
           <Properties>
@@ -235,7 +224,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="349" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">

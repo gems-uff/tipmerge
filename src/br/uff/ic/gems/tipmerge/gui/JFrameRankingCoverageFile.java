@@ -110,7 +110,6 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
         jPanel4 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        btRunBranchesCoverage = new javax.swing.JButton();
         txProjectName = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         mergesList = new javax.swing.JComboBox();
@@ -127,13 +126,6 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel13.setText("Repository Name");
-
-        btRunBranchesCoverage.setText("Coverage");
-        btRunBranchesCoverage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btRunBranchesCoverageActionPerformed(evt);
-            }
-        });
 
         txProjectName.setEnabled(false);
 
@@ -166,10 +158,8 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(labelLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 399, Short.MAX_VALUE)
-                        .addComponent(btnCoverageChart)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btRunBranchesCoverage))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCoverageChart))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13)
@@ -193,7 +183,6 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                     .addComponent(mergesList, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btRunBranchesCoverage)
                     .addComponent(labelLoading)
                     .addComponent(btnCoverageChart))
                 .addContainerGap())
@@ -219,7 +208,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         jPanelCover.setLayout(jPanelCoverLayout);
         jPanelCoverLayout.setHorizontalGroup(
             jPanelCoverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 349, Short.MAX_VALUE)
         );
         jPanelCoverLayout.setVerticalGroup(
             jPanelCoverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,12 +240,6 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btRunBranchesCoverageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunBranchesCoverageActionPerformed
-
-        showCoverage(rGenerator.getRanking());
-
-    }//GEN-LAST:event_btRunBranchesCoverageActionPerformed
 
 
     private void mergesListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergesListActionPerformed
@@ -488,7 +471,6 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btRunBranchesCoverage;
     private javax.swing.JButton btnCoverageChart;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
