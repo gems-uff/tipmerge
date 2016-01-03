@@ -22,7 +22,8 @@ public class Medalist {
     private List<String> goldListBranch1 = new ArrayList();
     private List<String> goldListBranch2 = new ArrayList();
     private List<String> silverList = new ArrayList();
-    private Set<String> bronzeList = new HashSet<>();
+    //private Set<String> bronzeList = new HashSet<>();
+    private Map<String,Boolean> bronzeList = new HashMap<String, Boolean>();
 
     public Medalist(Committer committer) {
         this.committer = committer;
@@ -76,11 +77,11 @@ public class Medalist {
         return bronzeList.size();
     }
 
-    public void setBronzeList(Set<String> files) {
+    public void setBronzeList(Map<String,Boolean> files) {
         this.bronzeList = files;
     }
 
-    public Set<String> getBronzeList() {
+    public Map<String,Boolean> getBronzeList() {
         return this.bronzeList;
     }
 
@@ -96,8 +97,9 @@ public class Medalist {
         this.silverList.add(fileName);
     }
 
-    public void addBronzeMedal(String fileName) {
-        this.bronzeList.add(fileName);
+    public void addBronzeMedal(String fileName, Boolean direction) {
+        //this.bronzeList.add(fileName);
+        this.bronzeList.put(fileName, direction);
     }
 
     @Override
@@ -134,40 +136,44 @@ public class Medalist {
     public Map<String, Object[]> getFilesList() {
         //Integer[] medals = new Integer[3];
 
-        Map<String, Object[]> res = new HashMap<>();
-        for (String file : this.bronzeList) {
-            ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/DEP.png"));
-            if (res.containsKey(file)) {
-                res.put(file, new Object[]{res.get(file)[0], res.get(file)[1], medalIcon});
+        Map<String, Object[]> fileMedal = new HashMap<>();
+        for (String file : this.bronzeList.keySet()) {
+            ImageIcon medalIcon = null;
+            if(this.bronzeList.get(file))
+                medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/DEP1.png"));
+            else
+                medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/DEP2.png"));
+            if (fileMedal.containsKey(file)) {
+                fileMedal.put(file, new Object[]{fileMedal.get(file)[0], fileMedal.get(file)[1], medalIcon});
             } else {
-                res.put(file, new Object[]{"", "", medalIcon});
+                fileMedal.put(file, new Object[]{"", "", medalIcon});
             }
         }
         for (String file : this.silverList) {
             ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/HIS.png"));
-            if (res.containsKey(file)) {
-                res.put(file, new Object[]{res.get(file)[0], medalIcon, res.get(file)[2]});
+            if (fileMedal.containsKey(file)) {
+                fileMedal.put(file, new Object[]{fileMedal.get(file)[0], medalIcon, fileMedal.get(file)[2]});
             } else {
-                res.put(file, new Object[]{"", medalIcon, ""});
+                fileMedal.put(file, new Object[]{"", medalIcon, ""});
             }
         }
         for (String file : this.goldListBranch1) {
             ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/B1.png"));
-            if (res.containsKey(file)) {
-                res.put(file, new Object[]{medalIcon, res.get(file)[1], res.get(file)[2]});
+            if (fileMedal.containsKey(file)) {
+                fileMedal.put(file, new Object[]{medalIcon, fileMedal.get(file)[1], fileMedal.get(file)[2]});
             } else {
-                res.put(file, new Object[]{medalIcon, "", ""});
+                fileMedal.put(file, new Object[]{medalIcon, "", ""});
             }
         }
         for (String file : this.goldListBranch2) {
             ImageIcon medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/B2.png"));
-            if (res.containsKey(file)) {
-                if(!res.get(file)[0].equals("")){
+            if (fileMedal.containsKey(file)) {
+                if(!fileMedal.get(file)[0].equals("")){
                     medalIcon = new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/B1B2.png"));
                 }
-                res.put(file, new Object[]{medalIcon, res.get(file)[1], res.get(file)[2]});
+                fileMedal.put(file, new Object[]{medalIcon, fileMedal.get(file)[1], fileMedal.get(file)[2]});
             } else {
-                res.put(file, new Object[]{medalIcon, "", ""});
+                fileMedal.put(file, new Object[]{medalIcon, "", ""});
             }
         }
 
@@ -178,7 +184,7 @@ public class Medalist {
         result.addAll(this.goldListBranch1);
         result.addAll(this.goldListBranch2);
          */
-        return res;
+        return fileMedal;
     }
 
 }

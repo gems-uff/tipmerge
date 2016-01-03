@@ -98,7 +98,7 @@ public class RankingGenerator {
             Set<EditedFile> consequentList = dependency.getValue();
             for (EditedFile consequent : consequentList) {
 
-                this.setBronzeMedals(bronzeRights, consequent.getFileName());
+                this.setBronzeMedals(bronzeRights, consequent.getFileName(), true);
                 //	Changed the value - silver medals to changed files with dependencies in branches
 
                 if (!excepiontFiles.contains(consequent)) {
@@ -149,7 +149,7 @@ public class RankingGenerator {
             Set<EditedFile> consequentList = dependency.getValue();
             for (EditedFile consequent : consequentList) {
 
-                this.setBronzeMedals(bronzeRights, consequent.getFileName());
+                this.setBronzeMedals(bronzeRights, consequent.getFileName(), false);
                 //Changed the value - silver medals to changed files with dependencies in branches
 
                 if (!excepiontFiles.contains(consequent)) {
@@ -173,15 +173,15 @@ public class RankingGenerator {
 
     }
 
-    private void setBronzeMedals(EditedFile ascend, String conseq) {
+    private void setBronzeMedals(EditedFile ascend, String conseq, Boolean diretction) {
         for (Committer cmter : ascend.getWhoEditTheFile()) {
             Medalist medalist = new Medalist(cmter);
-            medalist.addBronzeMedal(conseq);
+            medalist.addBronzeMedal(conseq, diretction);
             int index = ranking.indexOf(medalist);
             if (index == -1) {
                 ranking.add(medalist);
             } else {
-                ranking.get(index).addBronzeMedal(conseq);
+                ranking.get(index).addBronzeMedal(conseq, diretction);
             }
         }
     }
