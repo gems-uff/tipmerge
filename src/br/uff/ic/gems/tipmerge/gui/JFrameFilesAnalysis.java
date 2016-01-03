@@ -142,6 +142,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         comboFileExtension.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Files", ".java", ".c", ".html", ".js", ".py", ".php", ".rb", ".xml" }));
 
+        jcMerge1.setToolTipText("Select a previous merge");
         jcMerge1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcMerge1ActionPerformed(evt);

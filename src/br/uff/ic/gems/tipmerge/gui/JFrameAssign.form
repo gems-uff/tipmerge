@@ -146,6 +146,7 @@
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new DefaultComboBoxModel(this.repoFiles.getRepository().getBranches().toArray())" type="code"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Select the first branch"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcBranch1ActionPerformed"/>
@@ -166,6 +167,7 @@
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new DefaultComboBoxModel(this.repoFiles.getRepository().getBranches().toArray())" type="code"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Select the second branch"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcBranch2ActionPerformed"/>

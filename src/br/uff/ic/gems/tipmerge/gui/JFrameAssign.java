@@ -110,6 +110,7 @@ public class JFrameAssign extends javax.swing.JFrame {
         hashBranch1.setText("<hash>");
 
         jcBranch1.setModel(new DefaultComboBoxModel(this.repoFiles.getRepository().getBranches().toArray()));
+        jcBranch1.setToolTipText("Select the first branch");
         jcBranch1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcBranch1ActionPerformed(evt);
@@ -121,6 +122,7 @@ public class JFrameAssign extends javax.swing.JFrame {
         jLabel8.setText("Branch two's hash: ");
 
         jcBranch2.setModel(new DefaultComboBoxModel(this.repoFiles.getRepository().getBranches().toArray()));
+        jcBranch2.setToolTipText("Select the second branch");
         jcBranch2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcBranch2ActionPerformed(evt);
