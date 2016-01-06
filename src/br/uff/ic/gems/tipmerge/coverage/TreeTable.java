@@ -43,7 +43,7 @@ public class TreeTable {
 
             switch (data.length) {
                 case 5:
-                    Object[] values = new Object[]{data[0] + "- " + data[1], data[2], data[3], data[4]};
+                    Object[] values = new Object[]{data[0] + ". " + data[1], data[2], data[3], data[4]};
                     actualNode = new ChildNode(values);
                     devNode.add(actualNode);
                     childNode = actualNode;
@@ -83,6 +83,7 @@ public class TreeTable {
         };
 
         //treeTable.getTreeTableModel().getColumnClass(0);
+		treeTable.setRowHeight(30);
         treeTable.setShowGrid(true, true);
         treeTable.setColumnControlVisible(true);
         treeTable.packAll();

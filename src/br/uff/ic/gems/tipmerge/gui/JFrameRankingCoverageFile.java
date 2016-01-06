@@ -633,6 +633,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
                 }
                 TreeTable treeTable = new TreeTable(treeTableContent);
+				treeTable.getTreeTable().setRowHeight(100);
 
                 JScrollPane jpanel = new JScrollPane(treeTable.getTreeTable());
 
