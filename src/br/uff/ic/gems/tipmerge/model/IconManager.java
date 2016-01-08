@@ -63,6 +63,7 @@ public class IconManager {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+		//System.out.println(fileLocation);
         ImageIcon icon = new ImageIcon(getClass().getResource(fileLocation));
                 //new ImageIcon(getClass().getResource(""));
         return icon;
