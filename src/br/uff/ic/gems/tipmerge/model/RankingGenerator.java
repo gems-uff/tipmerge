@@ -59,7 +59,7 @@ public class RankingGenerator {
             if (indexh > -1) {
                 //silver.addAll(filesHistory.get(indexh).getWhoEditTheFile());
                 this.setSilverMedals(filesHistory.get(indexh));
-                System.out.println("prata por His (bb)\t" + filesHistory.get(indexh) 
+                System.out.println("prata por His (bb)\t" + filesHistory.get(indexh)
                         + "\t para \t" + filesHistory.get(indexh).getWhoEditTheFile());
                 //break;
             }
@@ -98,7 +98,7 @@ public class RankingGenerator {
             Set<EditedFile> consequentList = dependency.getValue();
             for (EditedFile consequent : consequentList) {
 
-                this.setBronzeMedals(bronzeRights, consequent.getFileName(), true);
+                this.setBronzeMedals(bronzeRights, consequent.getFileName(), 0);
                 //	Changed the value - silver medals to changed files with dependencies in branches
 
                 if (!excepiontFiles.contains(consequent)) {
@@ -149,7 +149,7 @@ public class RankingGenerator {
             Set<EditedFile> consequentList = dependency.getValue();
             for (EditedFile consequent : consequentList) {
 
-                this.setBronzeMedals(bronzeRights, consequent.getFileName(), false);
+                this.setBronzeMedals(bronzeRights, consequent.getFileName(), 1);
                 //Changed the value - silver medals to changed files with dependencies in branches
 
                 if (!excepiontFiles.contains(consequent)) {
@@ -168,12 +168,12 @@ public class RankingGenerator {
             }
 
         });
-        
+
         return excepiontFiles;
 
     }
 
-    private void setBronzeMedals(EditedFile ascend, String conseq, Boolean diretction) {
+    private void setBronzeMedals(EditedFile ascend, String conseq, Integer diretction) {
         for (Committer cmter : ascend.getWhoEditTheFile()) {
             Medalist medalist = new Medalist(cmter);
             medalist.addBronzeMedal(conseq, diretction);
@@ -181,7 +181,7 @@ public class RankingGenerator {
             if (index == -1) {
                 ranking.add(medalist);
             } else {
-                ranking.get(index).addBronzeMedal(conseq, diretction);
+                ranking.get(index).addBronzeMedal(conseq, diretction + 1);
             }
         }
     }

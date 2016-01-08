@@ -8,6 +8,7 @@ package br.uff.ic.gems.tipmerge.gui;
 import br.uff.ic.gems.tipmerge.coverage.TreeTable;
 import br.uff.ic.gems.tipmerge.model.Coverage;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
+import br.uff.ic.gems.tipmerge.model.IconManager;
 import br.uff.ic.gems.tipmerge.model.Medalist;
 import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
@@ -52,16 +53,16 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
     final private JTable jTableRanking = new JTable();
-    final private String databaseName = "data/gitdataminer.sqlite";
-    private Repository repository;
+//    final private String databaseName = "data/gitdataminer.sqlite";
+//    private Repository repository;
     private RankingGenerator rGenerator;
 
     public Set<EditedFile> filesOfInterest = new HashSet<>();
     private List<Coverage> coverageList1;
-    private List<Coverage> historycoverageList;
+//    private List<Coverage> historycoverageList;
     private Map<String, Integer[]> fileNames1;
-    private Map<String, Integer[]> historyfileNames;
-    private MergeCommits merge;
+//    private Map<String, Integer[]> historyfileNames;
+//    private MergeCommits merge;
 
     public JFrameRankingCoverageFile(Repository repository) {
         initComponents();
@@ -70,12 +71,11 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
     public JFrameRankingCoverageFile(Repository repository, MergeFiles mergeFiles, Map<EditedFile, Set<EditedFile>> dependenciesBranchOne, Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo) {
         initComponents();
-        this.repository = repository;
+        //this.repository = repository;
         initVariables(repository);
-        paneResult.setVisible(false);
         mergesList.setModel(new JComboBox(new String[]{mergeFiles.getHash()}).getModel());
 
-        merge = new MergeCommits(mergeFiles.getParents()[0], mergeFiles.getParents()[1], repository.getProject());
+        //merge = new MergeCommits(mergeFiles.getParents()[0], mergeFiles.getParents()[1], repository.getProject());
 
 //	if(dependenciesBranchOne.size() > 0)
         for (EditedFile file : dependenciesBranchOne.keySet()) {
@@ -115,9 +115,6 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         mergesList = new javax.swing.JComboBox();
         labelLoading = new javax.swing.JLabel();
         btnCoverageChart = new javax.swing.JButton();
-        paneResult = new javax.swing.JSplitPane();
-        jTabbedPaneCover = new javax.swing.JTabbedPane();
-        panelRanking = new javax.swing.JScrollPane();
         jPanelCover = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -158,7 +155,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(labelLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 469, Short.MAX_VALUE)
                         .addComponent(btnCoverageChart))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,31 +185,17 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        paneResult.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        paneResult.setDividerSize(10);
-        paneResult.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        paneResult.setResizeWeight(0.2);
-        paneResult.setToolTipText("");
-        paneResult.setMinimumSize(new java.awt.Dimension(115, 143));
-        paneResult.setPreferredSize(new java.awt.Dimension(154, 152));
-
-        jTabbedPaneCover.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        paneResult.setBottomComponent(jTabbedPaneCover);
-
-        panelRanking.setBorder(javax.swing.BorderFactory.createTitledBorder("Ranking"));
-        paneResult.setLeftComponent(panelRanking);
-
         jPanelCover.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout jPanelCoverLayout = new javax.swing.GroupLayout(jPanelCover);
         jPanelCover.setLayout(jPanelCoverLayout);
         jPanelCoverLayout.setHorizontalGroup(
             jPanelCoverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 349, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanelCoverLayout.setVerticalGroup(
             jPanelCoverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 313, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -220,9 +203,8 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(paneResult, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanelCover, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -231,11 +213,8 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(paneResult, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelCover, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                .addComponent(jPanelCover, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -476,11 +455,8 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanelCover;
-    private javax.swing.JTabbedPane jTabbedPaneCover;
     private javax.swing.JLabel labelLoading;
     private javax.swing.JComboBox mergesList;
-    private javax.swing.JSplitPane paneResult;
-    private javax.swing.JScrollPane panelRanking;
     private javax.swing.JTextField txProjectName;
     // End of variables declaration//GEN-END:variables
 
@@ -527,7 +503,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         jTableRanking.getColumnModel().getColumn(3).setCellRenderer(jTableRender);
         jTableRanking.getColumnModel().getColumn(4).setCellRenderer(jTableRender);
         jTableRanking.getColumnModel().getColumn(5).setCellRenderer(jTableRender);
-        panelRanking.setViewportView(jTableRanking);
+        //panelRanking.setViewportView(jTableRanking);
     }
 
     private void initVariables(Repository repository) {
@@ -575,13 +551,15 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
                 StringBuilder result;
                 int position = 1;
+                IconManager iconManager = new IconManager();
                 for (Medalist medalist : ranking) {
-
+                    
                     treeTableContent.add(new Object[]{position++,
                         medalist.getCommitter().getName(),
-                        medalist.getGoldMedals(),
-                        medalist.getSilverMedals(),
-                        medalist.getBronzeMedals()});
+                        iconManager.createImageIcon(medalist.getGoldMedals()),
+                        iconManager.createImageIcon(medalist.getSilverMedals()),
+                        iconManager.createImageIcon(medalist.getBronzeMedals())
+                    });
 
                     Map<String, Object[]> filesList = medalist.getFilesList();
 
@@ -590,50 +568,9 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                         treeTableContent.add(new Object[]{file, filesList.get(file)[0], filesList.get(file)[1], filesList.get(file)[2]});
                     }
 
-                    /*
-                    if (medalist.getGoldMedals() > 0) {
-                        result = new StringBuilder();
-                        result.append("Committer:\t[").append(medalist.getCommitter().getName()).append("] Total Gold Medal count = ").append(medalist.getGoldMedals()).append("\n");
-                        if (medalist.getGoldListBranch1().size() > 0) {
-                            result.append("\t>> Files in Branch 1 leading to Gold Medal <<\n");
-                            for (String file : medalist.getGoldListBranch1()) {
-                                result.append("\t").append(file).append("\n");
-                            }
-                        }
-                        if (medalist.getGoldListBranch2().size() > 0) {
-                            result.append("\t>> Files in Branch 2 leading to Gold Medal <<\n");
-                            for (String file : medalist.getGoldListBranch2()) {
-                                result.append("\t").append(file).append("\n");
-                            }
-                        }
-                        jtaGold.append(result.toString());
-                        jtaGold.append("\n");
-                    }
-                    if (medalist.getSilverMedals() > 0) {
-                        result = new StringBuilder();
-                        result.append("Committer:\t[").append(medalist.getCommitter().getName()).append("] Total Silver Medal count = ").append(medalist.getSilverMedals()).append("\n");
-                        //result.append("Files for Silver\n").append(medalist.getCommitter().getName()).append("\n");
-                        for (String file : medalist.getSilverList()) {
-                            result.append("\t").append(file).append("\n");
-                        }
-                        jtaSilver.append(result.toString());
-                        jtaSilver.append("\n");
-                    }
-                    if (medalist.getBronzeMedals() > 0) {
-                        result = new StringBuilder();
-                        result.append("Commiter:\t[").append(medalist.getCommitter().getName()).append("] Total Bronze Medal count = ").append(medalist.getBronzeMedals()).append("\n");
-                        //result.append("Files for Bronze\n").append(medalist.getCommitter().getName()).append("\n");
-                        for (String file : medalist.getBronzeList()) {
-                            result.append("\t").append(file).append("\n");
-                        }
-                        jtaBronze.append(result.toString());
-                        jtaBronze.append("\n");
-                    }
-                    */
-
                 }
                 TreeTable treeTable = new TreeTable(treeTableContent);
-				treeTable.getTreeTable().setRowHeight(100);
+                //treeTable.getTreeTable().setRowHeight(100);
 
                 JScrollPane jpanel = new JScrollPane(treeTable.getTreeTable());
 

@@ -65,16 +65,8 @@ public class TreeTable {
 
                 if(column == 1 || column == 2 || column == 3){
                     
-                    /*
-                    for(int i = 0 ; i < getRowCount() ; i++){
-                        if((getValueAt(i, 1) instanceof Integer) && (getValueAt(i, 2) instanceof Integer) && (getValueAt(i, 3) instanceof Integer)){
-                            getColumnModel().getColumn(column).setCellRenderer(new TreeTableRenderer());
-                            //return Integer.class;
-                        }
-                    }
-                    */
-                    if(getRowCount() == devNode.getChildCount())
-                        return Integer.class;
+                    //if(getRowCount() == devNode.getChildCount())
+                    //    return Integer.class;
                     
                     return ImageIcon.class;
                 }
@@ -83,7 +75,7 @@ public class TreeTable {
         };
 
         //treeTable.getTreeTableModel().getColumnClass(0);
-		treeTable.setRowHeight(30);
+        treeTable.setRowHeight(30);
         treeTable.setShowGrid(true, true);
         treeTable.setColumnControlVisible(true);
         treeTable.packAll();
