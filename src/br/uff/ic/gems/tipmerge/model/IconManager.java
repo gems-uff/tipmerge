@@ -35,7 +35,7 @@ public class IconManager {
          */
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
-        Font font = new Font("Arial", Font.PLAIN, 20);
+        Font font = new Font("Arial", Font.PLAIN, 12);
         g2d.setFont(font);
         FontMetrics fm = g2d.getFontMetrics();
         int width = fm.stringWidth(text);
@@ -63,7 +63,7 @@ public class IconManager {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-		//System.out.println(fileLocation);
+		System.out.println(fileLocation);
         ImageIcon icon = new ImageIcon(getClass().getResource(fileLocation));
                 //new ImageIcon(getClass().getResource(""));
         return icon;
