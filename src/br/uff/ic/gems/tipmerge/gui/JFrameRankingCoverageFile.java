@@ -94,9 +94,9 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         excepiontFiles = rGenerator.setMedalFromDependenciesBranch1(dependenciesBranchOne, mergeFiles, excepiontFiles);
         excepiontFiles = rGenerator.setMedalFromDependenciesBranch2(dependenciesBranchTwo, mergeFiles, excepiontFiles);
         excepiontFiles.removeAll(excepiontFiles);
-        List<Medalist> ranking = rGenerator.getRanking();
+        //List<Medalist> ranking = rGenerator.getRanking();
         //showRanking(ranking);
-        showCoverage(ranking);
+        showCoverage(rGenerator);
     }
 
     /**
@@ -333,7 +333,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                 int num0 = 0;
                 int num1 = 0;
                 int num2 = 0;
-                System.out.println("\n Tamanho de cada Lista" + listSameMethods.size() + listAmountMethods1.size() + listAmountMethods2.size());
+                System.out.println("\n List Size: " + listSameMethods.size() + listAmountMethods1.size() + listAmountMethods2.size());
                 for (int y = 0; y < listAmountMethods1.size(); y++) {
                     num1 = (int) listAmountMethods1.get(y);
                     num2 = (int) listAmountMethods2.get(y);
@@ -539,7 +539,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         chartFrame1.setVisible(true);
     }
 
-    private void showCoverage(List<Medalist> ranking) {
+    private void showCoverage(RankingGenerator ranking) {
 
         Runnable r;
         r = new Runnable() {
@@ -547,30 +547,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
             public void run() {
                 labelLoading.setVisible(true);
 
-                List<Object[]> treeTableContent = new ArrayList<>();
-
-                StringBuilder result;
-                int position = 1;
-                IconManager iconManager = new IconManager();
-                for (Medalist medalist : ranking) {
-                    
-                    treeTableContent.add(new Object[]{position++,
-                        medalist.getCommitter().getName(),
-                        iconManager.createImageIcon(medalist.getGoldMedals()),
-                        iconManager.createImageIcon(medalist.getSilverMedals()),
-                        iconManager.createImageIcon(medalist.getBronzeMedals())
-                    });
-
-                    Map<String, Object[]> filesList = medalist.getFilesList();
-
-                    for (String file : filesList.keySet()) {
-                        //int gold = filesList.get(file)[0] , silver = filesList.get(file)[1] , bronze = filesList.get(file)[2];
-                        treeTableContent.add(new Object[]{file, filesList.get(file)[0], filesList.get(file)[1], filesList.get(file)[2]});
-                    }
-
-                }
-                TreeTable treeTable = new TreeTable(treeTableContent);
-                //treeTable.getTreeTable().setRowHeight(100);
+                TreeTable treeTable = new TreeTable(ranking);
 
                 JScrollPane jpanel = new JScrollPane(treeTable.getTreeTable());
 

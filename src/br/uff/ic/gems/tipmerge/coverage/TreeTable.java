@@ -6,8 +6,15 @@
 package br.uff.ic.gems.tipmerge.coverage;
 
 import br.uff.ic.gems.tipmerge.gui.JTableRenderer;
+import br.uff.ic.gems.tipmerge.model.Committer;
+import br.uff.ic.gems.tipmerge.model.IconManager;
+import br.uff.ic.gems.tipmerge.model.Medalist;
+import br.uff.ic.gems.tipmerge.model.RankingGenerator;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import org.jdesktop.swingx.JXTreeTable;
@@ -19,16 +26,39 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
  */
 public class TreeTable {
 
+    private final String[] headings = {"Position/Committer", "Gold", "Silver", "Bronze"};
+    private final List<Object[]> content;
+    private final RankingGenerator rankGen;
+
+    private Node devNode;
+    private JXTreeTable treeTable;
     private DefaultTreeTableModel model = new DefaultTreeTableModel();
 
-    private String[] headings = {"Position/Committer", "Gold", "Silver", "Bronze"};
-    private Node devNode;
-    //private DefaultTreeTableModel model;
-    private JXTreeTable treeTable;
-    private List<Object[]> content;
+    public TreeTable(RankingGenerator rankingGen) {
 
-    public TreeTable(List<Object[]> content) {
-        this.content = content;
+        this.rankGen = rankingGen;
+        List<Medalist> ranking = rankingGen.getRanking();
+        this.content = new ArrayList<>();
+
+        int position = 1;
+        IconManager iconManager = new IconManager();
+        for (Medalist medalist : ranking) {
+
+            this.content.add(new Object[]{position++ + " - "
+                + medalist.getCommitter().getName(),
+                iconManager.createImageIcon(medalist.getGoldMedals()),
+                iconManager.createImageIcon(medalist.getSilverMedals()),
+                iconManager.createImageIcon(medalist.getBronzeMedals())
+            });
+
+            Map<String, Object[]> filesList = medalist.getFilesList();
+
+            for (String file : filesList.keySet()) {
+                //int gold = filesList.get(file)[0] , silver = filesList.get(file)[1] , bronze = filesList.get(file)[2];
+                this.content.add(new Object[]{file, filesList.get(file)[0], filesList.get(file)[1], filesList.get(file)[2], medalist.getCommitter().getName()});
+            }
+
+        }
     }
 
     public JXTreeTable getTreeTable() {
@@ -42,9 +72,9 @@ public class TreeTable {
             ChildNode actualNode = new ChildNode(data);
 
             switch (data.length) {
-                case 5:
-                    Object[] values = new Object[]{data[0] + ". " + data[1], data[2], data[3], data[4]};
-                    actualNode = new ChildNode(values);
+                case 4:
+                    //Object[] values = new Object[]{data[0] + " - " + data[1], data[2], data[3], data[4]};
+                    //actualNode = new ChildNode(values);
                     devNode.add(actualNode);
                     childNode = actualNode;
                     break;
@@ -56,22 +86,50 @@ public class TreeTable {
 
         model = new DefaultTreeTableModel(devNode, Arrays.asList(headings));
 
-        treeTable = new JXTreeTable(model)
-        {
+        treeTable = new JXTreeTable(model) {
             //  Returning the Class of each column will allow different
             //  renderers to be used based on Class
             @Override
-            public Class getColumnClass(int column){
+            public Class getColumnClass(int column) {
 
-                if(column == 1 || column == 2 || column == 3){
-                    
+                if (column == 1 || column == 2 || column == 3) {
+
                     //if(getRowCount() == devNode.getChildCount())
                     //    return Integer.class;
-                    
                     return ImageIcon.class;
                 }
                 return super.getColumnClass(column);
             }
+
+            @Override
+            public String getToolTipText(MouseEvent e) {
+                String tip = null;
+                java.awt.Point p = e.getPoint();
+                int row = rowAtPoint(p);
+                int col = columnAtPoint(p);
+
+                if (col == 3 && getValueAt(row, col) instanceof ImageIcon) {
+                    try {
+                        int rowTemp = row;
+                        String aut;
+                        do {
+                            aut = getValueAt(rowTemp--, 0).toString();
+                        } while (!aut.contains(" - "));
+                        
+                        String file = getValueAt(row, 0).toString();
+                        Medalist medalist = rankGen.getMedalist(aut.split(" - ")[1]);
+
+                        tip = (new ToolTipMessage()).getMessage(medalist, file);
+
+                    } catch (RuntimeException e1) {
+                        System.err.println(e1);
+                        //catch null pointer exception if mouse is over an empty line
+                    }
+                }
+
+                return tip;
+            }
+
         };
 
         //treeTable.getTreeTableModel().getColumnClass(0);
