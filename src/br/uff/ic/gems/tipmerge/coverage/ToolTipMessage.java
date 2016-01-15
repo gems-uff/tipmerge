@@ -33,10 +33,10 @@ public class ToolTipMessage {
 	
 	private String getBranch(Integer branch){
 		switch (branch) {
-			case 0 : return "B1";
-			case 1 : return "B2";
-			case 2 : return "B1 and B2";
+			//case 0 : return "B1";
+			//case 1 : return "B2";
+			case 2 : return "both branches";
+			default: return "the other branch";
 		}
-		return null;
 	}    
 }
