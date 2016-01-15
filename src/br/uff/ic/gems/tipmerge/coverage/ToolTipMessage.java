@@ -15,28 +15,32 @@ import java.util.List;
  */
 public class ToolTipMessage {
     
-    public String getMessage(Medalist medalist, String file){
+    public String getMessage(Medalist medalist, String file) {
         String tip = "";
-        for(MedalBronze medal : medalist.getBronzeList())
-            if(medal.getFile().equals(file)){
+        //System.out.println(medalist.getCommitter().getName() + "\n" + medalist.getBronzeList().toString());
+        for (MedalBronze medal : medalist.getBronzeList()) {
+            if (medal.getFile().equals(file)) {
                 //System.out.println(medal);
-				tip = "<html>";
-				for (String fileDep : medal.getFileDepend()){
-					tip += "File " + fileDep + " changed in " + getBranch(medal.getDirection()) + " uses File " + file + "<br>";
-				}
-				tip += "</html>";
-				return tip;
+                tip = "<html>";
+                for (String fileDep : medal.getFileDepend().keySet()) {
+                    tip += "File " + fileDep + " changed in " + getBranch(medal.getFileDepend().get(fileDep)) + " uses File " + file + "<br>";
+                }
+                tip += "</html>";
+                return tip;
             }
+        }
         
         return null;
     }
-	
-	private String getBranch(Integer branch){
-		switch (branch) {
-			//case 0 : return "B1";
-			//case 1 : return "B2";
-			case 2 : return "both branches";
-			default: return "the other branch";
-		}
-	}    
+    
+    private String getBranch(Integer branch) {
+        switch (branch) {
+            //case 0 : return "B1";
+            //case 1 : return "B2";
+            case 2:
+                return "both branches";
+            default:
+                return "the other branch";
+        }
+    }    
 }

@@ -5,11 +5,9 @@
  */
 package br.uff.ic.gems.tipmerge.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  *
@@ -17,23 +15,23 @@ import java.util.Set;
  */
 public class MedalBronze {
 
-    private Integer direction;
+    private Integer directionIcon;
     private String file;
-    private Set<String> fileDepend = new HashSet<>();
+    private Map<String, Integer> fileDepend = new HashMap<>();
 
     public MedalBronze(String file, String fileDependent, Integer direction) {
-        this.direction = direction;
+        this.directionIcon = direction;
         this.file = file;
-        this.fileDepend.add(fileDependent);
+        this.fileDepend.put(fileDependent,direction);
     }
     
 
     public Integer getDirection() {
-        return direction;
+        return directionIcon;
     }
 
     public void setDirection(Integer direction) {
-        this.direction = direction;
+        this.directionIcon = direction;
     }
 
     public String getFile() {
@@ -44,16 +42,16 @@ public class MedalBronze {
         this.file = file;
     }
 
-    public Set<String> getFileDepend() {
+    public Map<String, Integer> getFileDepend() {
         return fileDepend;
     }
 
-    public void setFileDepend(Set<String> fileDepend) {
+    public void setFileDepend(Map<String, Integer> fileDepend) {
         this.fileDepend = fileDepend;
     }
     
-    public void addFileDepend(String file){
-        this.fileDepend.add(file);
+    public void addFileDepend(String file, Integer direction){
+        this.fileDepend.put(file,direction);
     }
 
     @Override
@@ -83,13 +81,9 @@ public class MedalBronze {
 
     @Override
     public String toString() {
-        return this.file + "\t" +
-                this.fileDepend.toString() + "\t" +
-                this.direction;
+        return this.file + "\t" + this.directionIcon + 
+                this.fileDepend.toString()
+                ;
     }
-    
-    
-    
-    
     
 }

@@ -109,13 +109,12 @@ public class Medalist {
 
     public void addBronzeMedal(String fileName, String fileDep, Integer direction) {
         if(direction == 2){
-            //System.out.println(bronzeList.toString());
-            //System.out.println(fileName + "\tindex\t" + this.getBronzeFilesName().indexOf(fileName));
             MedalBronze medalBronze = this.bronzeList.get(this.getBronzeFilesName().indexOf(fileName));
             medalBronze.setDirection(direction);
-            medalBronze.addFileDepend(fileDep);
+            medalBronze.addFileDepend(fileName, direction);
         }else
             this.bronzeList.add(new MedalBronze(fileName, fileDep, direction));
+        
     }
 
     @Override
@@ -124,7 +123,6 @@ public class Medalist {
                 + this.getGoldMedals() + "\t"
                 + this.getSilverMedals() + "\t"
                 + this.getBronzeMedals();
-
     }
 
     @Override

@@ -60,8 +60,8 @@ public class RankingGenerator {
             if (indexh > -1) {
                 //silver.addAll(filesHistory.get(indexh).getWhoEditTheFile());
                 this.setSilverMedals(filesHistory.get(indexh));
-                System.out.println("prata por His (bb)\t" + filesHistory.get(indexh)
-                        + "\t para \t" + filesHistory.get(indexh).getWhoEditTheFile());
+                //System.out.println("prata por His (bb)\t" + filesHistory.get(indexh)
+                //        + "\t para \t" + filesHistory.get(indexh).getWhoEditTheFile());
                 //break;
             }
         }
@@ -175,24 +175,21 @@ public class RankingGenerator {
     }
 
     private void setBronzeMedals(EditedFile ascend, String conseq, Integer direction) {
+        //System.out.println("ascend: " + ascend + "\tconseq: " + conseq + "\tDir: " + direction);
+        //System.out.println("Quem?" + ascend.getWhoEditTheFile());
         for (Committer cmter : ascend.getWhoEditTheFile()) {
             Medalist medalist = new Medalist(cmter);
             medalist.addBronzeMedal(conseq, ascend.getFileName(), direction);
             int index = ranking.indexOf(medalist);
-            if (index == -1) {
+            if (index == -1) 
                 ranking.add(medalist);
-                //System.out.println("add\t" + medalist.getCommitter().getName() + "\t" + conseq + "\t" + direction);
-            } else {
-                //System.out.println("add+\t" + medalist.getCommitter().getName() + "\t" + conseq + "\t" + direction);
-                //Integer depA = ranking.get(index).getBronzeFilesName().get(conseq);
+            else {
                 Integer direcDepA = ranking.get(index).directionFromFileDepend(conseq);
-
-                System.out.println(direcDepA + "\t" + direction);
-                if (direcDepA != -1 && !Objects.equals(direcDepA, direction)) {
+                if (direcDepA != -1 && !Objects.equals(direcDepA, direction))
                     ranking.get(index).addBronzeMedal(conseq, ascend.getFileName(), 2);
-                } else {
+                 else 
                     ranking.get(index).addBronzeMedal(conseq, ascend.getFileName(), direction);
-                }
+               
             }
         }
     }
