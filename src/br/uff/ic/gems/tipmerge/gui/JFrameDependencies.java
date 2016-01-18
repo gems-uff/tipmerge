@@ -11,6 +11,7 @@ import br.uff.ic.gems.tipmerge.dao.CommitterDao;
 import br.uff.ic.gems.tipmerge.dao.EditedFilesDao;
 import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
 import br.uff.ic.gems.tipmerge.dao.MergeFilesDao;
+import br.uff.ic.gems.tipmerge.dominoes.DominoesFiles;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Dependencies;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
@@ -268,17 +269,44 @@ public class JFrameDependencies extends javax.swing.JFrame {
             //Previous History
             List<String> hashsOnPreviousHistory = mCommitsDao.getHashs(repo.getFirstCommit(), merge.getHashBase());
             
+            //System.out.println("\n" +hashsOnPreviousHistory+ "\n");
+            
+            Set<String> editedFiles = new HashSet<>();
+            mergeFiles.getFilesOnBranchOne().stream().forEach((editedFile) -> {
+                editedFiles.add("'" + editedFile.getFileName() + "'");
+            });
+            mergeFiles.getFilesOnBranchTwo().stream().forEach((editedFile) -> {
+                editedFiles.add("'"+editedFile.getFileName()+"'");
+            });
+
+            //System.out.println("\n"+editedFiles+"\n");
+
             try {
 
                 List<Integer> matrices = new ArrayList<>(Arrays.asList(7));
                 System.out.println("\nCreating the dominoes of History");
+                
                 List<Dominoes> dominoesHistory
+                        = DominoesFiles.loadMatrices(databaseName, txRepositoryName.getText(),
+                                "CPU", hashsOnPreviousHistory, editedFiles, matrices);
+
+                System.out.println("atual");
+                for (Dominoes dominoe : dominoesHistory) {
+                    System.out.println(dominoe.getHistoric() + ": " + dominoe.getMat().getMemUsed());
+                }
+                
+                List<Dominoes> dominoesTrad
                         = DominoesSQLDao2.loadAllMatrices(databaseName, txRepositoryName.getText(),
                                 "CPU", hashsOnPreviousHistory, matrices);
 
+                System.out.println("antigo");
+                for (Dominoes dominoe : dominoesTrad) {
+                    System.out.println(dominoe.getHistoric() + ": " + dominoe.getMat().getMemUsed());
+                }
+                        
                 Dominoes domCF = null;
                 for (Dominoes dominoe : dominoesHistory) {
-                    System.out.println(dominoe.getHistoric());
+                    //System.out.println(dominoe.getHistoric());
                     if (dominoe.getHistoric().toString().equals("CF")) {
                         domCF = dominoe;
                     }

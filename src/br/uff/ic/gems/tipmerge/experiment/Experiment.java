@@ -11,6 +11,7 @@ import br.uff.ic.gems.tipmerge.dao.EditedFilesDao;
 import br.uff.ic.gems.tipmerge.dao.MergeCommitsDao;
 import br.uff.ic.gems.tipmerge.dao.MergeFilesDao;
 import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
+import br.uff.ic.gems.tipmerge.dominoes.DominoesFiles;
 import br.uff.ic.gems.tipmerge.gui.JFrameDependencies;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Dependencies;
@@ -373,18 +374,30 @@ public class Experiment {
         List<String> hashsOnPreviousHistory = mCommitsDao.getHashs(this.getRepo().getFirstCommit(), mergeFiles.getHashBase());
 
         try {
+            
+            Set<String> editedFiles = new HashSet<>();
+            mergeFiles.getFilesOnBranchOne().stream().forEach((editedFile) -> {
+                editedFiles.add("'" + editedFile.getFileName() + "'");
+            });
+            mergeFiles.getFilesOnBranchTwo().stream().forEach((editedFile) -> {
+                editedFiles.add("'"+editedFile.getFileName()+"'");
+            });
+
 
             List<Integer> matrices = new ArrayList<>(Arrays.asList(7));
             //System.out.println("\nCreating the dominoes of History");
-            List<Dominoes> dominoesHistory = DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "GPU", hashsOnPreviousHistory, matrices);
-            dominoesHistory.addAll(DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "GPU", hashsOnPreviousHistory, matrices));
+            List<Dominoes> dominoesHistory = //DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "GPU", hashsOnPreviousHistory, matrices);
+                    DominoesFiles.loadMatrices(Parameter.DATABASE, this.getRepo().getName(), "CPU", hashsOnPreviousHistory, editedFiles, matrices);
+            //dominoesHistory.addAll(DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "GPU", hashsOnPreviousHistory, matrices));
             
             //System.out.println("->->->Hist. Dep:\t" + dominoesHistory.get(0).getHistoric());
             Dominoes domCF = dominoesHistory.get(0);
-            Dominoes domCFt = dominoesHistory.get(1);
-            System.out.println("Matrix 1 and 2 non-zeros\t" + domCF.getMat().getNonZeroData().size() +  "\t" + domCFt.getMat().getNonZeroData().size());
-            //Dominoes domCFt = domCF.cloneNoMatrix();
+            //Dominoes domCFt = dominoesHistory.get(1);
+            Dominoes domCFt = domCF.cloneNoMatrix();
             domCFt.transpose();
+
+            System.out.println("Matrix 1 and 2 non-zeros\t" + domCF.getMat().getNonZeroData().size() +  "\t" + domCFt.getMat().getNonZeroData().size());
+
             Dominoes domFF = domCFt.multiply(domCF);
             domFF.confidence();
 
