@@ -23,7 +23,9 @@ public class ToolTipMessage {
                 //System.out.println(medal);
                 tip = "<html>";
                 for (String fileDep : medal.getFileDepend().keySet()) {
-                    tip += "File " + fileDep + " changed in " + getBranch(medal.getFileDepend().get(fileDep)) + " uses File " + file + "<br>";
+                    //tip += "File " + "<br>" + fileDep + "<br>" + " changed in " + getBranch(medal.getFileDepend().get(fileDep)) + "<br>" + " uses File " + "<br>" + file + "<br>";
+					tip += fileDep + "<br>" + " changed in " + getBranch(medal.getFileDepend().get(fileDep)) + "<br>" + " uses File " + file + "<br>";
+
                 }
                 tip += "</html>";
                 return tip;
