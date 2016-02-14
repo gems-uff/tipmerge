@@ -73,6 +73,7 @@ public class JFrameAssign extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrame1 = new javax.swing.JFrame();
         jPanel2 = new javax.swing.JPanel();
         hashBranch1 = new javax.swing.JLabel();
         jcBranch1 = new javax.swing.JComboBox();
@@ -100,6 +101,17 @@ public class JFrameAssign extends javax.swing.JFrame {
         btnChart2 = new javax.swing.JButton();
         jButtonDependencies = new javax.swing.JButton();
         btExport = new javax.swing.JButton();
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Merge of Branches");
@@ -541,6 +553,7 @@ public class JFrameAssign extends javax.swing.JFrame {
     private javax.swing.JLabel hashBranch1;
     private javax.swing.JLabel hashBranch2;
     private javax.swing.JButton jButtonDependencies;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLSelecByExt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
@@ -741,7 +754,7 @@ private void invertEnabledGroup() {
         JTable table12 = new JTable();
         table12 = jTable1;
         if (jTable1.isShowing() || jTable2.isShowing()) {
-            String fileName = " ";
+            String fileName = "";
             if (jTable1.isShowing()) {
                 table12 = jTable1;
             } else {
@@ -750,7 +763,7 @@ private void invertEnabledGroup() {
                 }
             }
             if (botao == 1) {
-                double num;
+                double num =0;
                 for (int i = 1; i < table12.getColumnCount(); i++) {
                     for (int j = 0; j < table12.getRowCount(); j++) {
                         num = Integer.parseInt((String) table12.getValueAt(j, i));
@@ -825,7 +838,7 @@ private void invertEnabledGroup() {
     }
 
     public void newGraphic(MergeFiles merge, int botao) {
-        //jFrame1.setVisible(true);
+        jFrame1.setVisible(true);
         CategoryDataset cdsBranch1 = createBranch(merge, botao);
         String title = "";
         if (jTable1.isShowing()) {
@@ -852,10 +865,10 @@ private void invertEnabledGroup() {
         itemRerender.setItemLabelsVisible(true);
         ChartPanel chartPanel = new ChartPanel(graphic);
         chartPanel.setPreferredSize(new java.awt.Dimension(590, 350));
-//        jFrame1.setContentPane(chartPanel);
-//        jFrame1.pack();
-//        RefineryUtilities.centerFrameOnScreen(jFrame1);
-//        jFrame1.setVisible(true);
+        jFrame1.setContentPane(chartPanel);
+        jFrame1.pack();
+        RefineryUtilities.centerFrameOnScreen(jFrame1);
+        jFrame1.setVisible(true);
 
     }
 
