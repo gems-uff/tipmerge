@@ -117,7 +117,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         jPanelCover = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Developer Assignments");
+        setTitle("Developers Recommendation");
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
