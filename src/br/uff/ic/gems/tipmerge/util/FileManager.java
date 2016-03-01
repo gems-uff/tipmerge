@@ -1,11 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.uff.ic.gems.tipmerge.analyzer;
+
+package br.uff.ic.gems.tipmerge.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -13,37 +14,37 @@ import java.util.List;
 
 /**
  *
- * @author jjcfigueiredo
+ * @author j2cf, Catarina
+ *
  */
-public class MajorityClassVerification {
+public class FileManager {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-
-        String folderName = "tmp/";
-
-        List<String> inputProjects = readFile(folderName);
-
-        //System.out.println("inputProjects\t" + inputProjects.toString());
-        //List<String> projects = new ArrayList<>(
-        //        Arrays.asList("https://github.com/mhagger/git-imerge", "https://github.com/clojure/clojure", "https://github.com/angular/angular")
-        //);
-        for (String projetctUrl : inputProjects) {
-
-            System.out.println("Analyzing:\t" + projetctUrl);
-
-            Analyzer analyzer = new Analyzer(projetctUrl);
-
-            analyzer.saveToFile(folderName);
-
-            System.out.println("Finalizado");
-
+    public static void writeToFile(String path, String text) {
+        try {
+            File file = new File(path);
+            BufferedWriter bw = new BufferedWriter(new java.io.FileWriter(file, true));
+            bw.write(text);
+            bw.newLine();
+            bw.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-
     }
-
+    
+    public static void writeToFile(String dir, String path, String text) {
+        try {
+            File dire = new File(dir);
+            dire.mkdirs();
+            File file = new File(dir, path);
+            BufferedWriter bw = new BufferedWriter(new java.io.FileWriter(file, true));
+            bw.write(text);
+            bw.newLine();
+            bw.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
     private static List<String> readFile(String folderName) {
         String fileName = folderName + "input_projects.txt";
         List<String> result = new ArrayList<>();

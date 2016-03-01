@@ -31,9 +31,9 @@ public class RepositoryDao {
 
         //sets the directory and the project name
         Repository repo = new Repository(path);
-		
-		Git.checkoutMaster(path);
-		
+
+        Git.checkoutMaster(path);
+
         //set the last commit information
         String[] result = RunGit.getResult("git show -s --format=%ci%x09%H", path).split("\t");
         String data = result[0].substring(0, 19);
@@ -70,7 +70,7 @@ public class RepositoryDao {
             }
         });
         //set the total number of branches information
-        */
+         */
         repo.setBranches(branches);
 
     }
@@ -80,15 +80,11 @@ public class RepositoryDao {
         repo.setListOfMerges(RunGit.getListOfResult("git log --all --merges --pretty=%H", path));
 
         repo.setBranches(RunGit.getListOfResult("git branch -a", path));
-        
+
         //set the total number of commits information
         repo.setCommits(Long.valueOf(RunGit.getResult("git rev-list HEAD --count", path)));
-        
 
         //committers commits branches merges
-        
     }
 
-    
-    
 }

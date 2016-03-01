@@ -39,7 +39,7 @@ public class Analyzer {
     public boolean saveToFile(String folderName) {
 
         try {
-			String fileName = projURL.split("github.com/")[1].replace("/", "_");
+            String fileName = projURL.split("github.com/")[1].replace("/", "_");
             File outputFile = new File(folderName + "out_" + fileName + ".txt");
             BufferedWriter bwOutput = new BufferedWriter(new FileWriter(outputFile, true));
 
@@ -70,8 +70,8 @@ public class Analyzer {
 
             List<String> mjlist = new ArrayList<>();
             mjClass.keySet().stream().forEach((cmter) -> {
-                double number = (double)mjClass.get(cmter);
-                Double percent =  (double)mjClass.get(cmter) / totalofMerges;
+                double number = (double) mjClass.get(cmter);
+                Double percent = (double) mjClass.get(cmter) / totalofMerges;
                 //System.out.println(percent + " = " + mjClass.get(cmter) + " / " + totalofMerges);
                 mjlist.add(mjClass.get(cmter) + "\t" + percent + "\t\t" + cmter.getName());
             });
@@ -85,7 +85,7 @@ public class Analyzer {
             bwOutput.close();
 
             System.out.println("Delete project " + destination);
-			Process exec = Runtime.getRuntime().exec("rm -rf " + destination);
+            Process exec = Runtime.getRuntime().exec("rm -rf " + destination);
 
             return true;
 

@@ -31,25 +31,24 @@ public class MergeVerification {
 
     public static void main(String[] args) {
 
-       //Session.startSession(0);
-        
+        //Session.startSession(0);
         //String dir = "c:/testes/imagem2";
         File inputFolder = new File("projects");
 
         File fList[] = inputFolder.listFiles();
-        
+
         System.out.println("Parameters Defined");
         System.out.println("THRESHOLD\t" + Parameter.THRESHOLD);
         System.out.println("EXTENSION\t" + Parameter.EXTENSION);
         System.out.println("DATABASE\t" + Parameter.DATABASE);
-        
+
         System.out.println("Available projetcs: " + Arrays.toString(fList));
 
         for (File file : fList) {
             if (!file.getName().startsWith(".")) {
 
                 try {
-                    
+
                     System.out.println("Analyzing: " + file.getName() + " " + new Date(file.lastModified()));
 
                     File outputLocation = new File("results/" + file.getName() + ".txt");
@@ -73,7 +72,7 @@ public class MergeVerification {
                     System.out.println("Matched with 3th Position " + result.get("3thPosition"));
                     System.out.println("Matched with other Position " + result.get("isInRank"));
                     System.out.println("Out of the Ranking " + result.get("outOfRank"));
-                    
+
                     bufferedWriter = new BufferedWriter(new FileWriter(outputLocation, true));
                     bufferedWriter.write("Number of merges with Enough developers " + result.get("Merges") + "\n");
                     bufferedWriter.write("Number of merges with changed files in both branches " + result.get("Files") + "\n");
@@ -86,14 +85,14 @@ public class MergeVerification {
                     bufferedWriter.write("Matched with other Position " + result.get("isInRank") + "\n");
                     bufferedWriter.write("Out of the Ranking " + result.get("outOfRank"));
                     bufferedWriter.close();
-                    
+
                 } catch (IOException ex) {
                     Logger.getLogger(MergeVerification.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
         }
-       //Session.closeSection();
+        //Session.closeSection();
 
     }
 
