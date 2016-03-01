@@ -5,11 +5,11 @@
  */
 package br.uff.ic.gems.tipmerge.analyzer;
 
+import br.uff.ic.gems.tipmerge.dao.CommitterDao;
+import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.util.RunGit;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -71,26 +71,30 @@ public class MergesCounter {
                         //identifica o hash base do merge
                         String hashBase = RunGit.getResult("git merge-base " + parent[0] + " " + parent[1], project);
                         
+                        CommitterDao committerDao = new CommitterDao();
                         //pega a lista de pessoas que fizeram commit no ramo 1
-                        List<String> cmtBranch1 = RunGit.getListOfResult("git shortlog -sne --no-merges " + hashBase + ".." + parent[0], project);
+                        //List<String> cmtBranch1 = RunGit.getListOfResult("git shortlog -sne --no-merges " + hashBase + ".." + parent[0], project);
+                        List<Committer> committersb1 = committerDao.getCommittersList(hashBase, parent[0], project);
                         //pega a lista de pessoas que fizeram commit no ramo 2
-                        List<String> cmtBranch2 = RunGit.getListOfResult("git shortlog -sne --no-merges " + hashBase + ".." + parent[1], project);
+                        //List<String> cmtBranch2 = RunGit.getListOfResult("git shortlog -sne --no-merges " + hashBase + ".." + parent[1], project);
+                        List<Committer> committersb2 = committerDao.getCommittersList(hashBase, parent[1], project);
                         //conta quantas pessoas tem em cada ramo
-                        int tam1 = cmtBranch1.size(), tam2 = cmtBranch2.size();
+                        int tam1 = committersb1.size(), tam2 = committersb2.size();
                         System.out.print("\t" + tam1 + "\t" + tam2);
                         
                         //verifica se algum dos ramos está com zero
-                        if(tam1 != 0 && tam2 !=0)
-                            //verifica se tem ao menos 3 pessoas somando-se os dois ramos
-                            if(tam1 + tam2 > 2){
+                        if(tam1 != 0 && tam2 !=0){
+                            //verifica se tem ao menos 3 pessoas DIFERENTES somando-se os dois ramos
+                            if((tam1 + tam2 >= 3) && (countUnique(committersb1, committersb2, 3))){
                                 mergesIn = mergesIn + 1;
                                 System.out.print("\t*");
                             }
-                        
+                        }
                         System.out.println("");
                     }
 
                     //envia o resultado para o arquivo
+                    System.out.println("mergesIn / mergesAll\t" + mergesIn + " " + mergesAll);
                     System.out.println(project.getName() + "\t" + mergesIn / mergesAll);
                     try {
                         //cria um arquivo chamado results.txt e grava as informações lá
@@ -108,6 +112,20 @@ public class MergesCounter {
         } else {
             System.out.println("You cancel the operation: " + fileChooser.getSelectedFile().getName());
         }
+    }
+
+    private static boolean countUnique(List<Committer> committersb1, List<Committer> committersb2, int min) {
+        int count = 0;
+        //System.out.println(committersb1.toString());
+        //System.out.println(committersb2.toString());
+        count = committersb1.size();
+        for(Committer cmt : committersb2){
+            if(!committersb1.contains(cmt)){
+                if(count++ >= min-1) return true;
+            }
+            System.out.println("count\t" + count);
+        }
+        return false;
     }
 
 }
