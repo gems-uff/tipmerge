@@ -82,8 +82,8 @@ public class MergesCounter {
                         int tam1 = committersb1.size(), tam2 = committersb2.size();
                         System.out.print("\t" + tam1 + "\t" + tam2);
                         
-                        //verifica se algum dos ramos está com zero
-                        if(tam1 != 0 && tam2 !=0){
+                        //define a quantidade mínima de desenvolvedores em cada ramo
+                        if(tam1 > 1 && tam2 > 1){
                             //verifica se tem ao menos 3 pessoas DIFERENTES somando-se os dois ramos
                             if((tam1 + tam2 >= 3) && (countUnique(committersb1, committersb2, 3))){
                                 mergesIn = mergesIn + 1;
@@ -123,7 +123,7 @@ public class MergesCounter {
             if(!committersb1.contains(cmt)){
                 if(count++ >= min-1) return true;
             }
-            System.out.println("count\t" + count);
+            //System.out.println("count\t" + count);
         }
         return false;
     }
