@@ -51,7 +51,7 @@ public class MergesCounter {
                 if (project.isDirectory()) {
                     System.out.println("\nAnalyzing the project\t" + project.getName());
 
-                    List<String> merges = RunGit.getListOfResult("git log --merges --all --pretty=%H ", project);
+                    List<String> merges = RunGit.getListOfResult("git log --merges --all --pretty=%H%x09%ad --date=short", project);
                     System.out.println("Total of Merges\t" + merges.size());
                     double mergesIn = 0.0;
                     double mergesAll = merges.size();
@@ -64,7 +64,8 @@ public class MergesCounter {
                     System.out.println("Total of Committers\t" + allCommitters.size());
 
                     for(String merge : merges){
-                        System.out.print("Merge\t" + merge);
+                        String data = merge.split("\t")[1];
+                        merge = merge.split("\t")[0];
                         String hashParents = RunGit.getResult("git log --pretty=%P -n 1 " + merge, project);
                         //identifica os parents de cada ramo nas posições 0 e 1
                         String[] parent = new String[]{hashParents.split(" ")[0], hashParents.split(" ")[1]};
@@ -73,24 +74,24 @@ public class MergesCounter {
                         
                         CommitterDao committerDao = new CommitterDao();
                         //pega a lista de pessoas que fizeram commit no ramo 1
-                        //List<String> cmtBranch1 = RunGit.getListOfResult("git shortlog -sne --no-merges " + hashBase + ".." + parent[0], project);
                         List<Committer> committersb1 = committerDao.getCommittersList(hashBase, parent[0], project);
                         //pega a lista de pessoas que fizeram commit no ramo 2
-                        //List<String> cmtBranch2 = RunGit.getListOfResult("git shortlog -sne --no-merges " + hashBase + ".." + parent[1], project);
                         List<Committer> committersb2 = committerDao.getCommittersList(hashBase, parent[1], project);
                         //conta quantas pessoas tem em cada ramo
                         int tam1 = committersb1.size(), tam2 = committersb2.size();
-                        System.out.print("\t" + tam1 + "\t" + tam2);
+                        
+                        //mostra todos os merges com a data....
+                        //System.out.println("Merge\t" + merge + "\t" + tam1 + "\t" + tam2 + "\t" + data);
                         
                         //define a quantidade mínima de desenvolvedores em cada ramo
                         if(tam1 > 1 && tam2 > 1){
                             //verifica se tem ao menos 3 pessoas DIFERENTES somando-se os dois ramos
                             if((tam1 + tam2 >= 3) && (countUnique(committersb1, committersb2, 3))){
+                                //mostra somente os merges complexos com as datas
+                                System.out.println("Merge\t" + merge + "\t" + tam1 + "\t" + tam2 + "\t" + data);
                                 mergesIn = mergesIn + 1;
-                                System.out.print("\t*");
                             }
                         }
-                        System.out.println("");
                     }
 
                     //envia o resultado para o arquivo
@@ -115,10 +116,9 @@ public class MergesCounter {
     }
 
     private static boolean countUnique(List<Committer> committersb1, List<Committer> committersb2, int min) {
-        int count = 0;
         //System.out.println(committersb1.toString());
         //System.out.println(committersb2.toString());
-        count = committersb1.size();
+        int count = committersb1.size();
         for(Committer cmt : committersb2){
             if(!committersb1.contains(cmt)){
                 if(count++ >= min-1) return true;
