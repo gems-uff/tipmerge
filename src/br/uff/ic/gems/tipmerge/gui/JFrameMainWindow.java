@@ -128,7 +128,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TIPMerge - Tool to assIgn develoPers to Merge on Git");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMinimumSize(new java.awt.Dimension(500, 500));
+        setMinimumSize(new java.awt.Dimension(200, 200));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setToolTipText("");
@@ -188,7 +188,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
                                     .addComponent(txTotalAuthors)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                                 .addComponent(btShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jtProjectName)
@@ -231,9 +231,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
         );
 
         jPanel1.setAutoscrolls(true);
@@ -246,7 +244,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         InternalFrame.getContentPane().setLayout(InternalFrameLayout);
         InternalFrameLayout.setHorizontalGroup(
             InternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 556, Short.MAX_VALUE)
+            .addGap(0, 273, Short.MAX_VALUE)
         );
         InternalFrameLayout.setVerticalGroup(
             InternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,11 +255,14 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(InternalFrame)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(InternalFrame)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(InternalFrame, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(InternalFrame)
         );
 
         try {
@@ -362,14 +363,14 @@ public class JFrameMainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -458,19 +459,19 @@ public class JFrameMainWindow extends javax.swing.JFrame {
             super(new BorderLayout());
             CategoryDataset categoryData = dateRepository;
             int sizeTab = categoryData.getColumnCount();
-            dataset = new SlidingCategoryDataset(categoryData, 0, 30);
+            dataset = new SlidingCategoryDataset(categoryData, 0, 15);
             JFreeChart jfreechart = createChart(dataset);
             addChart(jfreechart);
             ChartPanel chartpanel = new ChartPanel(jfreechart);
-            if (sizeTab < 30) {
-                sizeTab = 30;
+            if (sizeTab < 15) {
+                sizeTab = 15;
             }
-            scroller = new JScrollBar(1, 0, 30, 0, sizeTab);
+            scroller = new JScrollBar(1, 0, 15, 0, sizeTab);
             add(chartpanel);
             scroller.getModel().addChangeListener(this);
             JPanel jpanel = new JPanel(new BorderLayout());
             jpanel.add(scroller);
-            jpanel.setBorder(BorderFactory.createEmptyBorder(66, 2, 2, 2));
+            jpanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
             jpanel.setBackground(Color.white);
             add(jpanel, "East");
         }
