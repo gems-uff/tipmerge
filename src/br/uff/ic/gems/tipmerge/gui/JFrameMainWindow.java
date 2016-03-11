@@ -36,9 +36,11 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.LayeredBarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.category.SlidingCategoryDataset;
@@ -430,20 +432,48 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         SlidingCategoryDataset dataset;
 
         private static JFreeChart createChart(CategoryDataset dataset) {
-            JFreeChart chart = ChartFactory.createBarChart("", "", "", dataset, PlotOrientation.HORIZONTAL, false, true, false);
-            CategoryPlot plot = (CategoryPlot) chart.getPlot();
-            CategoryAxis domainAxis = plot.getDomainAxis();
+            JFreeChart chart;
+            CategoryPlot plot;
+            CategoryAxis categoryAxis;
+            CategoryAxis domainAxis;
+            BarRenderer renderer;
+            if (dataset.getColumnCount() < 15){
+                chart = ChartFactory.createBarChart("", "", "", dataset, PlotOrientation.HORIZONTAL, false, true, false);
+                categoryAxis = new CategoryAxis("");
+                ValueAxis valueAxis = new NumberAxis("");
+                plot = new CategoryPlot(dataset,categoryAxis,valueAxis, new LayeredBarRenderer());
+                    plot.setOrientation(PlotOrientation.HORIZONTAL);
+                LayeredBarRenderer render= (LayeredBarRenderer) plot.getRenderer();
+                //SeriesBarWidth define o tamanho da barra
+                    render.setSeriesBarWidth(0,0.3);
+                    render.setItemMargin(0.02);  
+                    domainAxis = plot.getDomainAxis();     
+                    domainAxis.setMaximumCategoryLabelWidthRatio(0.8F);
+                    domainAxis.setLowerMargin(0.02D);
+                    domainAxis.setUpperMargin(0.02D);
+            renderer = (BarRenderer) plot.getRenderer();
+            renderer.setDrawBarOutline(false);
+            GradientPaint gradientpaint = new GradientPaint(0.0F, 0.0F, Color.blue, 0.0F, 0.0F, new Color(0, 0, 64));
+            renderer.setSeriesPaint(0, gradientpaint);
+            renderer.setPlot(plot);
+            chart.getCategoryPlot().setRenderer(renderer);
+             return chart;
+            }
+            else{
+            chart = ChartFactory.createBarChart("", "", "", dataset, PlotOrientation.HORIZONTAL, false, true, false);
+            plot = (CategoryPlot) chart.getPlot();
+            domainAxis = plot.getDomainAxis();
             domainAxis.setMaximumCategoryLabelWidthRatio(0.8F);
             domainAxis.setLowerMargin(0.02D);
             domainAxis.setUpperMargin(0.02D);
             NumberAxis valueAxis = (NumberAxis) plot.getRangeAxis();
             valueAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-//            valueAxis.setRange(0.0D, 100D);
-            BarRenderer renderer = (BarRenderer) plot.getRenderer();
+            renderer = (BarRenderer) plot.getRenderer();
             renderer.setDrawBarOutline(false);
             GradientPaint gradientpaint = new GradientPaint(0.0F, 0.0F, Color.blue, 0.0F, 0.0F, new Color(0, 0, 64));
             renderer.setSeriesPaint(0, gradientpaint);
-            return chart;
+             return chart;
+            }
         }
 
         public void stateChanged(ChangeEvent changeevent) {
