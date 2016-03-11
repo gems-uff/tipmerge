@@ -20,7 +20,7 @@ First of all, you must select some git project on your computer. After that, you
 -  Java
 
 <h3>Acknowledgements</h3>
-We would like to thank CAPES (10614-14-1) for partially supporting this work.
+We would like to thank CAPES (10614-14-1), CNPq, and FAPERJ for partially supporting this work.
 
 <h3>License</h3>
 The MIT License (MIT)
