@@ -14,10 +14,13 @@ First of all, you must select some git project on your computer. After that, you
 -  Leonardo Murta (joined in Apr 2014)
 -  Anita Sarma (joined in Feb 2015)
 -  Jhunior López Celis (joined in Mar 2015)
--  João Felipe (joined in Nov 2015)
+-  João Felipe (joined in Apr 2016)
 	
 <h3>Technologies</h3>
 -  Java
+
+<h3>Documentation</h3>
+-  [TIPMerge Wiki] (https://github.com/gems-uff/tipmerge/wiki)
 
 <h3>Acknowledgements</h3>
 We would like to thank CAPES (10614-14-1), CNPq, and FAPERJ for partially supporting this work.
