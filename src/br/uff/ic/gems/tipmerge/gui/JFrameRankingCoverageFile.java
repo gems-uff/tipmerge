@@ -125,7 +125,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
         txProjectName.setEnabled(false);
 
-        jLabel14.setText("Branches / Merge");
+        jLabel14.setText("Branches/Merge");
 
         mergesList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,7 +153,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                             .addComponent(jLabel14))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(mergesList, 0, 550, Short.MAX_VALUE)
+                            .addComponent(mergesList, 0, 552, Short.MAX_VALUE)
                             .addComponent(txProjectName))))
                 .addContainerGap())
         );
