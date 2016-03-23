@@ -71,6 +71,77 @@ public class RankingGenerator {
         //System.out.println(this.toString());
         return files;
     }
+    
+    public Set<EditedFile> setMedalsFilesEditedBothBranchesA(MergeFiles mergeFiles) {
+        Set<EditedFile> files = new HashSet<>(mergeFiles.getFilesOnBothBranch());
+        List<EditedFile> filesHistory = new ArrayList<>(mergeFiles.getFilesOnPreviousHistory());
+
+        //testA - Gold to direct key files in the branches
+        for (EditedFile file : files) {
+            int indexb1 = mergeFiles.getFilesOnBranchOne().indexOf(file);
+            if (indexb1 > -1) {
+                this.setGoldMedalsB1(mergeFiles.getFilesOnBranchOne().get(indexb1));
+            }
+
+            int indexb2 = mergeFiles.getFilesOnBranchTwo().indexOf(file);
+            if (indexb2 > -1) {
+                this.setGoldMedalsB2(mergeFiles.getFilesOnBranchTwo().get(indexb2));
+
+            }
+            //testA - Silver to direct key files in the history
+            int indexh = filesHistory.indexOf(file);
+            if (indexh > -1) {
+                this.setSilverMedals(filesHistory.get(indexh));
+            }
+        }
+        return files;
+    }
+    public Set<EditedFile> setMedalsFilesEditedBothBranchesB(MergeFiles mergeFiles) {
+        Set<EditedFile> files = new HashSet<>(mergeFiles.getFilesOnBothBranch());
+        List<EditedFile> filesHistory = new ArrayList<>(mergeFiles.getFilesOnPreviousHistory());
+
+        for (EditedFile file : files) {
+            int indexb1 = mergeFiles.getFilesOnBranchOne().indexOf(file);
+            if (indexb1 > -1) {
+                this.setGoldMedalsB1(mergeFiles.getFilesOnBranchOne().get(indexb1));
+            }
+
+            int indexb2 = mergeFiles.getFilesOnBranchTwo().indexOf(file);
+            if (indexb2 > -1) {
+                this.setGoldMedalsB2(mergeFiles.getFilesOnBranchTwo().get(indexb2));
+
+            }
+
+            int indexh = filesHistory.indexOf(file);
+            if (indexh > -1) {
+                this.setBronzeMedals(filesHistory.get(indexh), file.getFileName(), 9);
+            }
+        }
+        return files;
+    }
+    public Set<EditedFile> setMedalsFilesEditedBothBranchesC(MergeFiles mergeFiles) {
+        Set<EditedFile> files = new HashSet<>(mergeFiles.getFilesOnBothBranch());
+        List<EditedFile> filesHistory = new ArrayList<>(mergeFiles.getFilesOnPreviousHistory());
+
+        for (EditedFile file : files) {
+            int indexb1 = mergeFiles.getFilesOnBranchOne().indexOf(file);
+            if (indexb1 > -1) {
+                this.setGoldMedalsB1(mergeFiles.getFilesOnBranchOne().get(indexb1));
+            }
+
+            int indexb2 = mergeFiles.getFilesOnBranchTwo().indexOf(file);
+            if (indexb2 > -1) {
+                this.setGoldMedalsB2(mergeFiles.getFilesOnBranchTwo().get(indexb2));
+
+            }
+
+            int indexh = filesHistory.indexOf(file);
+            if (indexh > -1) {
+                this.setSilverMedals(filesHistory.get(indexh));
+            }
+        }
+        return files;
+    }
 
     public Set<EditedFile> setMedalFromDependenciesBranch1(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
 
@@ -122,6 +193,85 @@ public class RankingGenerator {
         return excepiontFiles;
 
     }
+    
+    public Set<EditedFile> setMedalFromDependenciesBranch1A(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
+
+        dependenciesMap.entrySet().stream().forEach((dependency) -> {
+
+            EditedFile ascendentCand = dependency.getKey();
+            EditedFile bronzeRights = ascendentCand;
+
+            if (!excepiontFiles.contains(ascendentCand)) {
+
+                excepiontFiles.add(ascendentCand);
+            }
+
+            Set<EditedFile> consequentList = dependency.getValue();
+            for (EditedFile consequent : consequentList) {
+
+                //testA - Bronze to indirect key files in the branches 
+                this.setBronzeMedals(bronzeRights, consequent.getFileName(), 0);
+                if (!excepiontFiles.contains(consequent)) {
+                    excepiontFiles.add(consequent);
+                }
+            }
+
+        });
+        return excepiontFiles;
+    }
+    public Set<EditedFile> setMedalFromDependenciesBranch1B(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
+
+        dependenciesMap.entrySet().stream().forEach((dependency) -> {
+
+            EditedFile ascendentCand = dependency.getKey();
+            if (!excepiontFiles.contains(ascendentCand)) {
+
+                for (EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()) {
+                    if (fileHistory.equals(ascendentCand)) {
+                        this.setBronzeMedals(fileHistory,ascendentCand.getFileName(),9);
+                        //Changed the value - silver medals to changed files in history
+                        break;
+                    }
+                }
+                excepiontFiles.add(ascendentCand);
+            }
+
+            Set<EditedFile> consequentList = dependency.getValue();
+            for (EditedFile consequent : consequentList) {
+
+                this.setSilverMedals(ascendentCand);
+
+            }
+
+        });
+        return excepiontFiles;
+    }    
+    public Set<EditedFile> setMedalFromDependenciesBranch1C(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
+
+        dependenciesMap.entrySet().stream().forEach((dependency) -> {
+
+            EditedFile ascendentCand = dependency.getKey();
+
+            if (!excepiontFiles.contains(ascendentCand)) {
+
+                for (EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()) {
+                    if (fileHistory.equals(ascendentCand)) {
+                        this.setBronzeMedals(fileHistory, ascendentCand.getFileName(), 9);
+                        //Changed the value - silver medals to changed files in history
+                        break;
+                    }
+                }
+                excepiontFiles.add(ascendentCand);
+            }
+
+            Set<EditedFile> consequentList = dependency.getValue();
+            for (EditedFile consequent : consequentList) {
+                this.setSilverMedals(ascendentCand);
+            }
+
+        });
+        return excepiontFiles;
+    }
 
     public Set<EditedFile> setMedalFromDependenciesBranch2(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
 
@@ -171,7 +321,89 @@ public class RankingGenerator {
         });
 
         return excepiontFiles;
+    }
+    
+    public Set<EditedFile> setMedalFromDependenciesBranch2A(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
 
+        dependenciesMap.entrySet().stream().forEach((dependency) -> {
+
+            EditedFile ascendentCand = dependency.getKey();
+
+            EditedFile bronzeRights = ascendentCand;
+
+            if (!excepiontFiles.contains(ascendentCand)) {
+
+                excepiontFiles.add(ascendentCand);
+
+            }
+
+            Set<EditedFile> consequentList = dependency.getValue();
+            for (EditedFile consequent : consequentList) {
+
+                //testA - Bronze to indirect key files in the branches 
+                this.setBronzeMedals(bronzeRights, consequent.getFileName(), 1);
+
+                if (!excepiontFiles.contains(consequent)) {
+
+                    excepiontFiles.add(consequent);
+                }
+            }
+
+        });
+
+        return excepiontFiles;
+    }
+    public Set<EditedFile> setMedalFromDependenciesBranch2B(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
+
+        dependenciesMap.entrySet().stream().forEach((dependency) -> {
+
+            EditedFile ascendentCand = dependency.getKey();
+            if (!excepiontFiles.contains(ascendentCand)) {
+
+                for (EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()) {
+                    if (fileHistory.equals(ascendentCand)) {
+                        this.setBronzeMedals(fileHistory,ascendentCand.getFileName(),9);
+                        //Changed the value - silver medals to changed files in history
+                        break;
+                    }
+                }
+                excepiontFiles.add(ascendentCand);
+            }
+
+            Set<EditedFile> consequentList = dependency.getValue();
+            for (EditedFile consequent : consequentList) {
+
+                this.setSilverMedals(ascendentCand);
+            }
+
+        });
+
+        return excepiontFiles;
+    }        
+    public Set<EditedFile> setMedalFromDependenciesBranch2C(Map<EditedFile, Set<EditedFile>> dependenciesMap, MergeFiles mergeFiles, Set<EditedFile> excepiontFiles) {
+
+        dependenciesMap.entrySet().stream().forEach((dependency) -> {
+
+            EditedFile ascendentCand = dependency.getKey();
+            if (!excepiontFiles.contains(ascendentCand)) {
+
+                for (EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()) {
+                    if (fileHistory.equals(ascendentCand)) {
+                        this.setBronzeMedals(fileHistory, ascendentCand.getFileName(), 9);
+                        //Changed the value - silver medals to changed files in history
+                        break;
+                    }
+                }
+                excepiontFiles.add(ascendentCand);
+            }
+            Set<EditedFile> consequentList = dependency.getValue();
+            for (EditedFile consequent : consequentList) {
+                this.setSilverMedals(ascendentCand);
+            }
+
+        });
+
+        return excepiontFiles;
     }
 
     private void setBronzeMedals(EditedFile ascend, String conseq, Integer direction) {

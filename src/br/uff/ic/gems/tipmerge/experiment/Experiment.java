@@ -73,105 +73,98 @@ public class Experiment {
         //quant. merges | arq 2 lados | arq dep | conflitos | ranking (1,2,3,9,0) -> 1a 2a 3a posição, no rank, fora do rank
 
         List<String> mergesList = this.getRepo().getListOfMerges();
-        for(int i = mergesList.size() - 1 ; i >= 0 ; i-- ){
+        for (int i = mergesList.size() - 1; i >= 0; i--) {
             String hashMerge = mergesList.get(i);
-        //for (String hashMerge : this.getRepo().getListOfMerges()) {
+            try (BufferedWriter bwOutput = new BufferedWriter(new FileWriter(file, true))) {
+                //Integer[] values = new Integer[4];
+                DateFormat timeFormat = new SimpleDateFormat("dd/MM/YYYY - HH:mm:ss.SSS");
+                String formattedDate = timeFormat.format(new Date());
 
-            BufferedWriter bwOutput = new BufferedWriter(new FileWriter(file, true));
+                System.out.println("Merge under review: " + hashMerge + "\tTime: " + formattedDate);
+                bwOutput.write("Merge under review: " + hashMerge + "\tTime: " + formattedDate + "\n");
 
-            //Integer[] values = new Integer[4];
-            DateFormat timeFormat = new SimpleDateFormat("dd/MM/YYYY - HH:mm:ss.SSS");
-            String formattedDate = timeFormat.format(new Date());
+                MergeFiles mergeFiles = getFilesAnalisys(hashMerge.split(" ")[0]);
 
-            System.out.println("Merge under review: " + hashMerge + "\tTime: " + formattedDate);
-            bwOutput.write("Merge under review: " + hashMerge + "\tTime: " + formattedDate + "\n");
+                if (hasEnoughtDevelopers(mergeFiles)) {
 
-            MergeFiles mergeFiles = getFilesAnalisys(hashMerge.split(" ")[0]);
-            boolean hasDevelopers = hasEnoughtDevelopers(mergeFiles);
+                    System.out.println("\t1. Enough Committer:\tYES");
+                    bwOutput.write("\t1. Enough Committer:\tYES" + "\n");
+                    mapValues.put("Merges", mapValues.get("Merges") + 1);
 
-            if (hasDevelopers) {
+                    int filesInCommon = mergeFiles.getFilesOnBothBranch().size();
 
-                System.out.println("\t1. Enough Committer:\tYES");
-                bwOutput.write("\t1. Enough Committer:\tYES" + "\n");
-                mapValues.put("Merges", mapValues.get("Merges") + 1);
+                    if (filesInCommon == 0) {
 
-                int filesInCommon = mergeFiles.getFilesOnBothBranch().size();
+                        System.out.println("\t2. Files in common:\tNO");
+                        bwOutput.write("\t2. Files in common:\tNO" + "\n");
 
-                if (filesInCommon == 0) {
-
-                    System.out.println("\t2. Files in common:\tNO");
-                    bwOutput.write("\t2. Files in common:\tNO" + "\n");
-
-                } else {
-
-                    System.out.println("\t2. Files in common:\tYES\t" + filesInCommon);
-                    bwOutput.write("\t2. Files in common:\tYES\t" + filesInCommon + "\n");
-
-                    mapValues.put("Files", mapValues.get("Files") + 1);
-
-                    //testa conflitos
-                    if (RevisionAnalyzer.hasConflict(this.getRepo().getProject().toString(), mergeFiles.getParents()[0], mergeFiles.getParents()[1])) {
-                        System.out.println("\t4. Conflicting files:\tYES");
-                        bwOutput.write("\t4. Conflicting files:\tYES" + "\n");
-
-                        mapValues.put("Conflicts", mapValues.get("Conflicts") + 1);
                     } else {
-                        System.out.println("\t4. Conflicting files:\tNO");
-                        bwOutput.write("\t4. Conflicting files:\tNO" + "\n");
+
+                        System.out.println("\t2. Files in common:\tYES\t" + filesInCommon);
+                        bwOutput.write("\t2. Files in common:\tYES\t" + filesInCommon + "\n");
+
+                        mapValues.put("Files", mapValues.get("Files") + 1);
+
+                        //testa conflitos
+                        if (RevisionAnalyzer.hasConflict(this.getRepo().getProject().toString(), mergeFiles.getParents()[0], mergeFiles.getParents()[1])) {
+                            System.out.println("\t4. Conflicting files:\tYES");
+                            bwOutput.write("\t4. Conflicting files:\tYES" + "\n");
+
+                            mapValues.put("Conflicts", mapValues.get("Conflicts") + 1);
+                        } else {
+                            System.out.println("\t4. Conflicting files:\tNO");
+                            bwOutput.write("\t4. Conflicting files:\tNO" + "\n");
+                        }
+
                     }
 
-                }
+                    List<Map<EditedFile, Set<EditedFile>>> dependencies = getFilesDependencies(mergeFiles);
+                    boolean hasFilesDependencies = !(dependencies.get(0).isEmpty() && dependencies.get(1).isEmpty());
 
-                List<Map<EditedFile, Set<EditedFile>>> dependencies = getFilesDependencies(mergeFiles);
-                boolean hasNoDependencies = (dependencies.get(0).isEmpty() && dependencies.get(1).isEmpty());
+                    if (!hasFilesDependencies) {
+                        System.out.println("\t3. Dependencies:\tNO");
+                        bwOutput.write("\t3. Dependencies:\tNO" + "\n");
 
-                if (hasNoDependencies) {
-                    System.out.println("\t3. Dependencies:\tNO");
-                    bwOutput.write("\t3. Dependencies:\tNO" + "\n");
-
-                } else {
-                    System.out.println("\t3. Dependencies:\tYES");
-                    bwOutput.write("\t3. Dependencies:\tYES" + "\n");
-
-                    mapValues.put("Dependencies", mapValues.get("Dependencies") + 1);
-
-                }
-                if ((filesInCommon > 0) || (!hasNoDependencies)) {
-
-                    RankingGenerator rGenerator = getRanking(dependencies, mergeFiles);
-                    List<Medalist> ranking = rGenerator.getRanking();
-
-                    Committer committer = CommitterDao.getCommitter1(hashMerge.split(" ")[0], this.getRepo());
-
-                    int position = ranking.indexOf(new Medalist(committer)) + 1;
-                    System.out.println("\t4. Rank position:\t" + position + "\t" + committer.getName());
-                    bwOutput.write("\t4. Rank position:\t" + position + "\t" + committer.getName() + "\n");
-
-                    if (position == 1) {
-                        mapValues.put("1stPosition", mapValues.get("1stPosition") + 1);
-                    } else if (position == 2) {
-                        mapValues.put("2ndPosition", mapValues.get("2ndPosition") + 1);
-                    } else if (position == 3) {
-                        mapValues.put("3thPosition", mapValues.get("3thPosition") + 1);
-                    } else if (position != 0) {
-                        mapValues.put("isInRank", mapValues.get("isInRank") + 1);
                     } else {
-                        mapValues.put("outOfRank", mapValues.get("outOfRank") + 1);
+                        System.out.println("\t3. Dependencies:\tYES");
+                        bwOutput.write("\t3. Dependencies:\tYES" + "\n");
+
+                        mapValues.put("Dependencies", mapValues.get("Dependencies") + 1);
+
+                    }
+                    if ((filesInCommon > 0) || (hasFilesDependencies)) {
+                        
+                        //RankingGenerator rGenerator = getRanking(dependencies, mergeFiles);
+                        //showRanking(rGenerator, hashMerge, bwOutput, mapValues);
+                        System.out.println("DEPENDENCIES MAP");
+                        System.out.println(Arrays.toString(dependencies.toArray()));
+                        bwOutput.write("DEPENDENCIES MAP\n" + Arrays.toString(dependencies.toArray()) + "\n");
+
+                        System.out.println("TEST A");
+                        bwOutput.write("TEST A");
+                        RankingGenerator rGeneratorA = getRankingA(dependencies, mergeFiles);
+                        showRanking(rGeneratorA, hashMerge, bwOutput, mapValues);
+
+                        System.out.println("TEST B");
+                        bwOutput.write("TEST B");
+                        RankingGenerator rGeneratorB = getRankingB(dependencies, mergeFiles);
+                        showRanking(rGeneratorB, hashMerge, bwOutput, mapValues);
+
+                        System.out.println("TEST C");
+                        bwOutput.write("TEST C");
+                        RankingGenerator rGeneratorC = getRankingC(dependencies, mergeFiles);
+                        showRanking(rGeneratorC, hashMerge, bwOutput, mapValues);
+                        
                     }
 
-                    System.out.println(rGenerator.toString());
-                    bwOutput.write(Arrays.toString(rGenerator.getList().toArray()) + "\n");
+                } else {
+                    System.out.println("\t1. Enough Commiter:\tNO");
+                    bwOutput.write("\t1. Enough Commiter:\tNO" + "\n");
                 }
-
-            } else {
-                System.out.println("\t1. Enough Commiter:\tNO");
-                bwOutput.write("\t1. Enough Commiter:\tNO" + "\n");
             }
 
-            bwOutput.close();
-            
             Session.debugInfo();
-            
+
             System.gc();
 
         }
@@ -179,122 +172,126 @@ public class Experiment {
         return mapValues;
     }
 
-    public Map<String, Integer> getDatasFromMerges() {
-//		Map<String, Integer[]> datas = new HashMap<>();
-        Map<String, Integer> mapValues = new HashMap<>();
-
-        mapValues.put("Merges", 0);
-        mapValues.put("Files", 0);
-        mapValues.put("Dependencies", 0);
-        mapValues.put("Conflicts", 0);
-        mapValues.put("1stPosition", 0);
-        mapValues.put("2ndPosition", 0);
-        mapValues.put("3thPosition", 0);
-        mapValues.put("isInRank", 0);
-        mapValues.put("outOfRank", 0);
-        //quant. merges | arq 2 lados | arq dep | conflitos | ranking (1,2,3,9,0) -> 1a 2a 3a posição, no rank, fora do rank
-
-        List<String> mergesList = this.getRepo().getListOfMerges();
-        for(int i = mergesList.size() - 1 ; i >= 0 ; i-- ){
-            String hashMerge = mergesList.get(i);
-        //for (String hashMerge : this.getRepo().getListOfMerges()) {
-
-            //Integer[] values = new Integer[4];
-            DateFormat timeFormat = new SimpleDateFormat("dd/MM/YYYY - HH:mm:ss.SSS");
-            String formattedDate = timeFormat.format(new Date());
-
-            System.out.println("Merge under review: " + hashMerge + "\tTime: " + formattedDate);
-
-            MergeFiles mergeFiles = getFilesAnalisys(hashMerge.split(" ")[0]);
-            boolean hasDevelopers = hasEnoughtDevelopers(mergeFiles);
-
-            /*
-             if (hasDevelopers)
-             values[0] = 1;
-             else
-             values[0] = 0;
-             */
-            if (hasDevelopers) {
-
-                System.out.println("\t1. Enough Committer:\tYES");
-                mapValues.put("Merges", mapValues.get("Merges") + 1);
-
-                int filesInCommon = mergeFiles.getFilesOnBothBranch().size();
-                //	values[1] = filesInCommon;
-
-                if (filesInCommon == 0) {
-
-                    System.out.println("\t2. Files in common:\tNO");
-
-                } else {
-
-                    System.out.println("\t2. Files in common:\tYES\t" + filesInCommon);
-                    mapValues.put("Files", mapValues.get("Files") + 1);
-
-                    //testa conflitos
-                    if (RevisionAnalyzer.hasConflict(this.getRepo().getProject().toString(), mergeFiles.getParents()[0], mergeFiles.getParents()[1])) {
-                        System.out.println("\t4. Conflicting files:\tYES\tYES\tYES\tYES\t");
-                        mapValues.put("Conflicts", mapValues.get("Conflicts") + 1);
-                    } else {
-                        System.out.println("\t4. Conflicting files:\tNO");
-                    }
-
-                }
-
-                List<Map<EditedFile, Set<EditedFile>>> dependencies = getFilesDependencies(mergeFiles);
-                boolean hasNoDependencies = (dependencies.get(0).isEmpty() && dependencies.get(1).isEmpty());
-
-                if (hasNoDependencies) {
-                    //		values[2] = 0;
-                    System.out.println("\t3. Dependencies:\tNO");
-
-                } else {
-                    //		values[2] = 1;
-                    System.out.println("\t3. Dependencies:\tYES");
-                    mapValues.put("Dependencies", mapValues.get("Dependencies") + 1);
-
-                }
-                if ((filesInCommon > 0) || (!hasNoDependencies)) {
-
-                    RankingGenerator rGenerator = getRanking(dependencies, mergeFiles);
-                    List<Medalist> ranking = rGenerator.getRanking();
-
-                    Committer committer = CommitterDao.getCommitter1(hashMerge.split(" ")[0], this.getRepo());
-
-                    int position = ranking.indexOf(new Medalist(committer)) + 1;
-                    //		values[3] = position;
-                    System.out.println("\t4. Rank position:\t" + position + "\t" + committer.getName());
-
-                    if (position == 1) {
-                        mapValues.put("1stPosition", mapValues.get("1stPosition") + 1);
-                    } else if (position == 2) {
-                        mapValues.put("2ndPosition", mapValues.get("2ndPosition") + 1);
-                    } else if (position == 3) {
-                        mapValues.put("3thPosition", mapValues.get("3thPosition") + 1);
-                    } else if (position != 0) {
-                        mapValues.put("isInRank", mapValues.get("isInRank") + 1);
-                    } else {
-                        mapValues.put("outOfRank", mapValues.get("outOfRank") + 1);
-                    }
-
-                    //System.out.println(rGenerator.toString());
-                }
-
-            } else {
-                System.out.println("\t1. Enough Commiter:\tNO");
-            }
-
-            //datas.put(hashMerge, values);
-            System.gc();
+    private void showRanking(RankingGenerator rGenerator, String hashMerge, final BufferedWriter bwOutput, Map<String, Integer> mapValues) throws IOException {
+        List<Medalist> ranking = rGenerator.getRanking();
+        
+        Committer committer = CommitterDao.getCommitter1(hashMerge.split(" ")[0], this.getRepo());
+        
+        int position = ranking.indexOf(new Medalist(committer)) + 1;
+        System.out.println("\t4. Rank position:\t" + position + "\t" + committer.getName());
+        bwOutput.write("\t4. Rank position:\t" + position + "\t" + committer.getName() + "\n");
+        
+        if (position == 1) {
+            mapValues.put("1stPosition", mapValues.get("1stPosition") + 1);
+        } else if (position == 2) {
+            mapValues.put("2ndPosition", mapValues.get("2ndPosition") + 1);
+        } else if (position == 3) {
+            mapValues.put("3thPosition", mapValues.get("3thPosition") + 1);
+        } else if (position != 0) {
+            mapValues.put("isInRank", mapValues.get("isInRank") + 1);
+        } else {
+            mapValues.put("outOfRank", mapValues.get("outOfRank") + 1);
         }
-        //	Git.checkoutMaster(this.getRepo().getProject());
-        return mapValues;
+        
+        System.out.println(rGenerator.toString());
+        bwOutput.write(Arrays.toString(rGenerator.getList().toArray()) + "\n");
     }
 
+    /**
+     * public Map<String, Integer> getDatasFromMerges() { //
+     * Map<String, Integer[]> datas = new HashMap<>(); Map<String, Integer>
+     * mapValues = new HashMap<>();
+     *
+     * mapValues.put("Merges", 0); mapValues.put("Files", 0);
+     * mapValues.put("Dependencies", 0); mapValues.put("Conflicts", 0);
+     * mapValues.put("1stPosition", 0); mapValues.put("2ndPosition", 0);
+     * mapValues.put("3thPosition", 0); mapValues.put("isInRank", 0);
+     * mapValues.put("outOfRank", 0); //quant. merges | arq 2 lados | arq dep |
+     * conflitos | ranking (1,2,3,9,0) -> 1a 2a 3a posição, no rank, fora do
+     * rank
+     *
+     * List<String> mergesList = this.getRepo().getListOfMerges(); for(int i =
+     * mergesList.size() - 1 ; i >= 0 ; i-- ){ String hashMerge =
+     * mergesList.get(i); //for (String hashMerge :
+     * this.getRepo().getListOfMerges()) {
+     *
+     * //Integer[] values = new Integer[4]; DateFormat timeFormat = new
+     * SimpleDateFormat("dd/MM/YYYY - HH:mm:ss.SSS"); String formattedDate =
+     * timeFormat.format(new Date());
+     *
+     * System.out.println("Merge under review: " + hashMerge + "\tTime: " +
+     * formattedDate);
+     *
+     * MergeFiles mergeFiles = getFilesAnalisys(hashMerge.split(" ")[0]);
+     * boolean hasDevelopers = hasEnoughtDevelopers(mergeFiles);
+     *
+     * if (hasDevelopers) {
+     *
+     * System.out.println("\t1. Enough Committer:\tYES");
+     * mapValues.put("Merges", mapValues.get("Merges") + 1);
+     *
+     * int filesInCommon = mergeFiles.getFilesOnBothBranch().size(); //
+     * values[1] = filesInCommon;
+     *
+     * if (filesInCommon == 0) {
+     *
+     * System.out.println("\t2. Files in common:\tNO");
+     *
+     * } else {
+     *
+     * System.out.println("\t2. Files in common:\tYES\t" + filesInCommon);
+     * mapValues.put("Files", mapValues.get("Files") + 1);
+     *
+     * //testa conflitos if
+     * (RevisionAnalyzer.hasConflict(this.getRepo().getProject().toString(),
+     * mergeFiles.getParents()[0], mergeFiles.getParents()[1])) {
+     * System.out.println("\t4. Conflicting files:\tYES\tYES\tYES\tYES\t");
+     * mapValues.put("Conflicts", mapValues.get("Conflicts") + 1); } else {
+     * System.out.println("\t4. Conflicting files:\tNO"); }
+     *
+     * }
+     *
+     * List<Map<EditedFile, Set<EditedFile>>> dependencies =
+     * getFilesDependencies(mergeFiles); boolean hasNoDependencies =
+     * (dependencies.get(0).isEmpty() && dependencies.get(1).isEmpty());
+     *
+     * if (hasNoDependencies) { //	values[2] = 0; System.out.println("\t3.
+     * Dependencies:\tNO");
+     *
+     * } else { //	values[2] = 1; System.out.println("\t3. Dependencies:\tYES");
+     * mapValues.put("Dependencies", mapValues.get("Dependencies") + 1);
+     *
+     * }
+     * if ((filesInCommon > 0) || (!hasNoDependencies)) {
+     *
+     * RankingGenerator rGenerator = getRanking(dependencies, mergeFiles);
+     * List<Medalist> ranking = rGenerator.getRanking();
+     *
+     * Committer committer = CommitterDao.getCommitter1(hashMerge.split(" ")[0],
+     * this.getRepo());
+     *
+     * int position = ranking.indexOf(new Medalist(committer)) + 1; //	values[3]
+     * = position; System.out.println("\t4. Rank position:\t" + position + "\t"
+     * + committer.getName());
+     *
+     * if (position == 1) { mapValues.put("1stPosition",
+     * mapValues.get("1stPosition") + 1); } else if (position == 2) {
+     * mapValues.put("2ndPosition", mapValues.get("2ndPosition") + 1); } else if
+     * (position == 3) { mapValues.put("3thPosition",
+     * mapValues.get("3thPosition") + 1); } else if (position != 0) {
+     * mapValues.put("isInRank", mapValues.get("isInRank") + 1); } else {
+     * mapValues.put("outOfRank", mapValues.get("outOfRank") + 1); }
+     *
+     * //System.out.println(rGenerator.toString()); }
+     *
+     * } else { System.out.println("\t1. Enough Commiter:\tNO"); }
+     *
+     * //datas.put(hashMerge, values); System.gc(); } //
+     * Git.checkoutMaster(this.getRepo().getProject()); return mapValues; }
+     */
     private RankingGenerator getRanking(List<Map<EditedFile, Set<EditedFile>>> dependencies, MergeFiles mergeFiles) {
         RankingGenerator rGenerator = new RankingGenerator();
 
-               
         Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
         excepiontFiles = rGenerator.setMedalFromDependenciesBranch1(dependencies.get(0), mergeFiles, excepiontFiles);
         excepiontFiles = rGenerator.setMedalFromDependenciesBranch2(dependencies.get(1), mergeFiles, excepiontFiles);
@@ -303,6 +300,40 @@ public class Experiment {
         return rGenerator;
     }
 
+    private RankingGenerator getRankingA(List<Map<EditedFile, Set<EditedFile>>> dependencies, MergeFiles mergeFiles) {
+        RankingGenerator rGenerator = new RankingGenerator();
+
+        Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranchesA(mergeFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranch1A(dependencies.get(0), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranch2A(dependencies.get(1), mergeFiles, excepiontFiles);
+        excepiontFiles.removeAll(excepiontFiles);
+
+        return rGenerator;
+    }
+
+    private RankingGenerator getRankingB(List<Map<EditedFile, Set<EditedFile>>> dependencies, MergeFiles mergeFiles) {
+        RankingGenerator rGenerator = new RankingGenerator();
+
+        Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranchesB(mergeFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranch1B(dependencies.get(0), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranch2B(dependencies.get(1), mergeFiles, excepiontFiles);
+        excepiontFiles.removeAll(excepiontFiles);
+
+        return rGenerator;
+    }
+
+    private RankingGenerator getRankingC(List<Map<EditedFile, Set<EditedFile>>> dependencies, MergeFiles mergeFiles) {
+        RankingGenerator rGenerator = new RankingGenerator();
+
+        Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranchesC(mergeFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranch1C(dependencies.get(0), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranch2C(dependencies.get(1), mergeFiles, excepiontFiles);
+        excepiontFiles.removeAll(excepiontFiles);
+
+        return rGenerator;
+    }
+    
+    
     private MergeFiles getFilesAnalisys(String merge) {
 
         MergeFilesDao mergeFilesDao = new MergeFilesDao();
@@ -367,36 +398,34 @@ public class Experiment {
     private List<Map<EditedFile, Set<EditedFile>>> getFilesDependencies(MergeFiles mergeFiles) {
 
         List<Map<EditedFile, Set<EditedFile>>> depList = new ArrayList<>();
-        depList.add(new HashMap<>());
-        depList.add(new HashMap<>());
 
         MergeCommitsDao mCommitsDao = new MergeCommitsDao(this.getRepo().getProject());
         List<String> hashsOnPreviousHistory = mCommitsDao.getHashs(this.getRepo().getFirstCommit(), mergeFiles.getHashBase());
 
         try {
-            
+
             Set<String> editedFiles = new HashSet<>();
             mergeFiles.getFilesOnBranchOne().stream().forEach((editedFile) -> {
                 editedFiles.add("'" + editedFile.getFileName() + "'");
             });
             mergeFiles.getFilesOnBranchTwo().stream().forEach((editedFile) -> {
-                editedFiles.add("'"+editedFile.getFileName()+"'");
+                editedFiles.add("'" + editedFile.getFileName() + "'");
             });
-
 
             List<Integer> matrices = new ArrayList<>(Arrays.asList(7));
             //System.out.println("\nCreating the dominoes of History");
-            List<Dominoes> dominoesHistory = //DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "GPU", hashsOnPreviousHistory, matrices);
+            List<Dominoes> dominoesHistory
+                    = //DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "GPU", hashsOnPreviousHistory, matrices);
                     DominoesFiles.loadMatrices(Parameter.DATABASE, this.getRepo().getName(), "CPU", hashsOnPreviousHistory, editedFiles, matrices);
             //dominoesHistory.addAll(DominoesSQLDao2.loadAllMatrices(Parameter.DATABASE, this.getRepo().getName(), "GPU", hashsOnPreviousHistory, matrices));
-            
+
             //System.out.println("->->->Hist. Dep:\t" + dominoesHistory.get(0).getHistoric());
             Dominoes domCF = dominoesHistory.get(0);
             //Dominoes domCFt = dominoesHistory.get(1);
             Dominoes domCFt = domCF.cloneNoMatrix();
             domCFt.transpose();
 
-            System.out.println("Matrix 1 and 2 non-zeros\t" + domCF.getMat().getNonZeroData().size() +  "\t" + domCFt.getMat().getNonZeroData().size());
+            System.out.println("Matrix 1 and 2 non-zeros\t" + domCF.getMat().getNonZeroData().size() + "\t" + domCFt.getMat().getNonZeroData().size());
 
             Dominoes domFF = domCFt.multiply(domCF);
             domFF.confidence();
@@ -457,7 +486,7 @@ public class Experiment {
             } else {
                 mjClass.put(committer, mjClass.get(committer) + 1);
             }
-            
+
         }
 
         List<String> mjlist = new ArrayList<>();

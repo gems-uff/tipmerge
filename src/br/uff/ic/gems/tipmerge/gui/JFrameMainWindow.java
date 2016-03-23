@@ -16,6 +16,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.io.File;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -559,26 +562,30 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_menuAssignActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-
-        Experiment experimentMerges = new Experiment(repository);
-
-        Map<String, Integer> result = experimentMerges.getDatasFromMerges();
-        //  System.out.println(result.toString());
-        //result.put("Merges", 0);	
-        System.out.println("Number of merges with Enough developers " + result.get("Merges"));
-        System.out.println("Number of merges with changed files in both branches " + result.get("Files"));
-        System.out.println("Number of merges with dependencies across branches " + result.get("Dependencies"));
-        System.out.println("Number of merges with conflicts " + result.get("Conflicts"));
-        int rankingTotal = result.get("1stPosition") + result.get("2ndPosition") + result.get("3thPosition") + result.get("isInRank") + result.get("outOfRank");
-        System.out.println("Number of merges with raking " + rankingTotal);
-        System.out.println("Matched with 1st Position " + result.get("1stPosition"));
-        System.out.println("Matched with 2nd Position " + result.get("2ndPosition"));
-        System.out.println("Matched with 3th Position " + result.get("3thPosition"));
-        System.out.println("Matched with other Position " + result.get("isInRank"));
-        System.out.println("Out of the Ranking " + result.get("outOfRank"));
-        // merges | developers | files | dependencies | position
-        // string | integer
+        try {
+            // TODO add your handling code here:
+            
+            Experiment experimentMerges = new Experiment(repository);
+            
+            Map<String, Integer> result = experimentMerges.getDatasFromMerges(repository.getProject());
+            //  System.out.println(result.toString());
+            //result.put("Merges", 0);
+            System.out.println("Number of merges with Enough developers " + result.get("Merges"));
+            System.out.println("Number of merges with changed files in both branches " + result.get("Files"));
+            System.out.println("Number of merges with dependencies across branches " + result.get("Dependencies"));
+            System.out.println("Number of merges with conflicts " + result.get("Conflicts"));
+            int rankingTotal = result.get("1stPosition") + result.get("2ndPosition") + result.get("3thPosition") + result.get("isInRank") + result.get("outOfRank");
+            System.out.println("Number of merges with raking " + rankingTotal);
+            System.out.println("Matched with 1st Position " + result.get("1stPosition"));
+            System.out.println("Matched with 2nd Position " + result.get("2ndPosition"));
+            System.out.println("Matched with 3th Position " + result.get("3thPosition"));
+            System.out.println("Matched with other Position " + result.get("isInRank"));
+            System.out.println("Out of the Ranking " + result.get("outOfRank"));
+            // merges | developers | files | dependencies | position
+            // string | integer
+        } catch (IOException ex) {
+            Logger.getLogger(JFrameMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
