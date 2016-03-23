@@ -57,35 +57,9 @@ public class MergeVerification {
                     bufferedWriter.close();
 
                     Experiment experimentMerges = new Experiment(getRepositoryInfo(file));
+                    
                     Map<String, Integer> result = experimentMerges.getDatasFromMerges(outputLocation);
-                    //Map<String, Integer> result = experimentMerges.getDatasFromMerges();
-                    int rankingTotal = result.get("1stPosition") + result.get("2ndPosition") + result.get("3thPosition") + result.get("isInRank") + result.get("outOfRank");
-                    //System.out.println(result.toString());
-                    //result.put("Merges", 0);
-                    System.out.println("Number of merges with Enough developers " + result.get("Merges"));
-                    System.out.println("Number of merges with changed files in both branches " + result.get("Files"));
-                    System.out.println("Number of merges with dependencies across branches " + result.get("Dependencies"));
-                    System.out.println("Number of merges with conflicts " + result.get("Conflicts"));
-                    System.out.println("Number of merges with raking " + rankingTotal);
-                    System.out.println("Matched with 1st Position " + result.get("1stPosition"));
-                    System.out.println("Matched with 2nd Position " + result.get("2ndPosition"));
-                    System.out.println("Matched with 3th Position " + result.get("3thPosition"));
-                    System.out.println("Matched with other Position " + result.get("isInRank"));
-                    System.out.println("Out of the Ranking " + result.get("outOfRank"));
-
-                    bufferedWriter = new BufferedWriter(new FileWriter(outputLocation, true));
-                    bufferedWriter.write("Number of merges with Enough developers " + result.get("Merges") + "\n");
-                    bufferedWriter.write("Number of merges with changed files in both branches " + result.get("Files") + "\n");
-                    bufferedWriter.write("Number of merges with dependencies across branches " + result.get("Dependencies") + "\n");
-                    bufferedWriter.write("Number of merges with conflicts " + result.get("Conflicts") + "\n");
-                    bufferedWriter.write("Number of merges with raking " + rankingTotal + "\n");
-                    bufferedWriter.write("Matched with 1st Position " + result.get("1stPosition") + "\n");
-                    bufferedWriter.write("Matched with 2nd Position " + result.get("2ndPosition") + "\n");
-                    bufferedWriter.write("Matched with 3th Position " + result.get("3thPosition") + "\n");
-                    bufferedWriter.write("Matched with other Position " + result.get("isInRank") + "\n");
-                    bufferedWriter.write("Out of the Ranking " + result.get("outOfRank"));
-                    bufferedWriter.close();
-
+                    
                 } catch (IOException ex) {
                     Logger.getLogger(MergeVerification.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -95,6 +69,7 @@ public class MergeVerification {
         //Session.closeSection();
 
     }
+
 
     private static Repository getRepositoryInfo(File file) {
         System.out.println("\n+----- Analyzing the project -----+" + file.getName());

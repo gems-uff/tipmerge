@@ -65,13 +65,29 @@ public class Experiment {
         mapValues.put("Files", 0);
         mapValues.put("Dependencies", 0);
         mapValues.put("Conflicts", 0);
-        mapValues.put("1stPosition", 0);
-        mapValues.put("2ndPosition", 0);
-        mapValues.put("3thPosition", 0);
-        mapValues.put("isInRank", 0);
-        mapValues.put("outOfRank", 0);
-        //quant. merges | arq 2 lados | arq dep | conflitos | ranking (1,2,3,9,0) -> 1a 2a 3a posição, no rank, fora do rank
 
+        Map<String, Integer> rankMapA = new HashMap<>();
+        rankMapA.put("1stPosition", 0);
+        rankMapA.put("2ndPosition", 0);
+        rankMapA.put("3thPosition", 0);
+        rankMapA.put("isInRank", 0);
+        rankMapA.put("outOfRank", 0);
+
+        Map<String, Integer> rankMapB = new HashMap<>();
+        rankMapB.put("1stPosition", 0);
+        rankMapB.put("2ndPosition", 0);
+        rankMapB.put("3thPosition", 0);
+        rankMapB.put("isInRank", 0);
+        rankMapB.put("outOfRank", 0);
+
+        Map<String, Integer> rankMapC = new HashMap<>();
+        rankMapC.put("1stPosition", 0);
+        rankMapC.put("2ndPosition", 0);
+        rankMapC.put("3thPosition", 0);
+        rankMapC.put("isInRank", 0);
+        rankMapC.put("outOfRank", 0);
+
+        //quant. merges | arq 2 lados | arq dep | conflitos | ranking (1,2,3,9,0) -> 1a 2a 3a posição, no rank, fora do rank
         List<String> mergesList = this.getRepo().getListOfMerges();
         for (int i = mergesList.size() - 1; i >= 0; i--) {
             String hashMerge = mergesList.get(i);
@@ -133,28 +149,32 @@ public class Experiment {
 
                     }
                     if ((filesInCommon > 0) || (hasFilesDependencies)) {
-                        
+
                         //RankingGenerator rGenerator = getRanking(dependencies, mergeFiles);
                         //showRanking(rGenerator, hashMerge, bwOutput, mapValues);
+                        Committer committer = CommitterDao.getCommitter1(hashMerge.split(" ")[0], this.getRepo());
+                        System.out.println("\tMerge Integrator:\t" + " " + "\t" + committer.getName());
+                        bwOutput.write("\tMerge Integrator:\t" + " " + "\t" + committer.getName() + "\n");
+
                         System.out.println("DEPENDENCIES MAP");
                         System.out.println(Arrays.toString(dependencies.toArray()));
                         bwOutput.write("DEPENDENCIES MAP\n" + Arrays.toString(dependencies.toArray()) + "\n");
 
                         System.out.println("TEST A");
-                        bwOutput.write("TEST A");
+                        bwOutput.write("TEST A" + "\n");
                         RankingGenerator rGeneratorA = getRankingA(dependencies, mergeFiles);
-                        showRanking(rGeneratorA, hashMerge, bwOutput, mapValues);
+                        showRanking(rGeneratorA, hashMerge, bwOutput, rankMapA);
 
                         System.out.println("TEST B");
-                        bwOutput.write("TEST B");
+                        bwOutput.write("TEST B" + "\n");
                         RankingGenerator rGeneratorB = getRankingB(dependencies, mergeFiles);
-                        showRanking(rGeneratorB, hashMerge, bwOutput, mapValues);
+                        showRanking(rGeneratorB, hashMerge, bwOutput, rankMapB);
 
                         System.out.println("TEST C");
-                        bwOutput.write("TEST C");
+                        bwOutput.write("TEST C" + "\n");
                         RankingGenerator rGeneratorC = getRankingC(dependencies, mergeFiles);
-                        showRanking(rGeneratorC, hashMerge, bwOutput, mapValues);
-                        
+                        showRanking(rGeneratorC, hashMerge, bwOutput, rankMapC);
+
                     }
 
                 } else {
@@ -168,19 +188,22 @@ public class Experiment {
             System.gc();
 
         }
+        showFinalResults(mapValues, rankMapB, file);
+        showFinalResults(mapValues, rankMapA, file);
+        showFinalResults(mapValues, rankMapC, file);
+
         //Git.checkoutMaster(this.getRepo().getProject());
         return mapValues;
     }
 
     private void showRanking(RankingGenerator rGenerator, String hashMerge, final BufferedWriter bwOutput, Map<String, Integer> mapValues) throws IOException {
         List<Medalist> ranking = rGenerator.getRanking();
-        
+
         Committer committer = CommitterDao.getCommitter1(hashMerge.split(" ")[0], this.getRepo());
-        
         int position = ranking.indexOf(new Medalist(committer)) + 1;
-        System.out.println("\t4. Rank position:\t" + position + "\t" + committer.getName());
-        bwOutput.write("\t4. Rank position:\t" + position + "\t" + committer.getName() + "\n");
-        
+        System.out.println("\t4. Rank position:\t" + position);
+        bwOutput.write("\t4. Rank position:\t" + position + "\n");
+
         if (position == 1) {
             mapValues.put("1stPosition", mapValues.get("1stPosition") + 1);
         } else if (position == 2) {
@@ -192,7 +215,7 @@ public class Experiment {
         } else {
             mapValues.put("outOfRank", mapValues.get("outOfRank") + 1);
         }
-        
+
         System.out.println(rGenerator.toString());
         bwOutput.write(Arrays.toString(rGenerator.getList().toArray()) + "\n");
     }
@@ -332,8 +355,7 @@ public class Experiment {
 
         return rGenerator;
     }
-    
-    
+
     private MergeFiles getFilesAnalisys(String merge) {
 
         MergeFilesDao mergeFilesDao = new MergeFilesDao();
@@ -496,6 +518,38 @@ public class Experiment {
         Collections.sort(mjlist);
 
         return mjlist;
+    }
+
+    private static void showFinalResults(Map<String, Integer> result, Map<String, Integer> rankMap, File outputLocation) throws IOException {
+        BufferedWriter bufferedWriter;
+        //Map<String, Integer> result = experimentMerges.getDatasFromMerges();
+        int rankingTotal = rankMap.get("1stPosition") + rankMap.get("2ndPosition") + rankMap.get("3thPosition") + rankMap.get("isInRank") + rankMap.get("outOfRank");
+        //System.out.println(result.toString());
+        //result.put("Merges", 0);
+        System.out.println("Number of merges with Enough developers " + result.get("Merges"));
+        System.out.println("Number of merges with changed files in both branches " + result.get("Files"));
+        System.out.println("Number of merges with dependencies across branches " + result.get("Dependencies"));
+        System.out.println("Number of merges with conflicts " + result.get("Conflicts"));
+        System.out.println("Number of merges with raking " + rankingTotal);
+        System.out.println("Matched with 1st Position " + rankMap.get("1stPosition"));
+        System.out.println("Matched with 2nd Position " + rankMap.get("2ndPosition"));
+        System.out.println("Matched with 3th Position " + rankMap.get("3thPosition"));
+        System.out.println("Matched with other Position " + rankMap.get("isInRank"));
+        System.out.println("Out of the Ranking " + rankMap.get("outOfRank"));
+
+        bufferedWriter = new BufferedWriter(new FileWriter(outputLocation, true));
+        bufferedWriter.write("\nNumber of merges with Enough developers " + result.get("Merges") + "\n");
+        bufferedWriter.write("Number of merges with changed files in both branches " + result.get("Files") + "\n");
+        bufferedWriter.write("Number of merges with dependencies across branches " + result.get("Dependencies") + "\n");
+        bufferedWriter.write("Number of merges with conflicts " + result.get("Conflicts") + "\n");
+        bufferedWriter.write("Number of merges with raking " + rankingTotal + "\n");
+        bufferedWriter.write("Matched with 1st Position " + rankMap.get("1stPosition") + "\n");
+        bufferedWriter.write("Matched with 2nd Position " + rankMap.get("2ndPosition") + "\n");
+        bufferedWriter.write("Matched with 3th Position " + rankMap.get("3thPosition") + "\n");
+        bufferedWriter.write("Matched with other Position " + rankMap.get("isInRank") + "\n");
+        bufferedWriter.write("Out of the Ranking " + rankMap.get("outOfRank"));
+
+        bufferedWriter.close();
     }
 
 }
