@@ -84,9 +84,9 @@ public class MergesCounter {
                         //System.out.println("Merge\t" + merge + "\t" + tam1 + "\t" + tam2 + "\t" + data);
                         
                         //define a quantidade mínima de desenvolvedores em cada ramo
-                        if(tam1 > 1 && tam2 > 1){
+                        if(tam1 > 0 && tam2 > 0){
                             //verifica se tem ao menos 3 pessoas DIFERENTES somando-se os dois ramos
-                            if((tam1 + tam2 >= 3) && (countUnique(committersb1, committersb2, 3))){
+                            if((tam1 + tam2 >= 2) && (countUnique(committersb1, committersb2, 3))){
                                 //mostra somente os merges complexos com as datas
                                 System.out.println("Merge\t" + merge + "\t" + tam1 + "\t" + tam2 + "\t" + data);
                                 mergesIn = mergesIn + 1;

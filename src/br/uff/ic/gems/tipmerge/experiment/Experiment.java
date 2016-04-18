@@ -156,8 +156,8 @@ public class Experiment {
                         System.out.println("\tMerge Integrator:\t" + " " + "\t" + committer.getName());
                         bwOutput.write("\tMerge Integrator:\t" + " " + "\t" + committer.getName() + "\n");
 
-                        System.out.println("DEPENDENCIES MAP");
-                        System.out.println(Arrays.toString(dependencies.toArray()));
+						System.out.println("DEPENDENCIES MAP");
+						System.out.println(Arrays.toString(dependencies.toArray()));
                         bwOutput.write("DEPENDENCIES MAP\n" + Arrays.toString(dependencies.toArray()) + "\n");
 
                         System.out.println("TEST A");

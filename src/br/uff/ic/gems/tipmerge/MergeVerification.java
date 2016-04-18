@@ -31,7 +31,7 @@ public class MergeVerification {
 
     public static void main(String[] args) {
 
-        //Session.startSession(0);
+       // Session.startSession(0); //When using gpu
         //String dir = "c:/testes/imagem2";
         File inputFolder = new File("projects");
 
@@ -66,7 +66,7 @@ public class MergeVerification {
 
             }
         }
-        //Session.closeSection();
+      //  Session.closeSection(); //When using gpu
 
     }
 
