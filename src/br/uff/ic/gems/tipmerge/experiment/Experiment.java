@@ -20,7 +20,6 @@ import br.uff.ic.gems.tipmerge.model.Medalist;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
 import br.uff.ic.gems.tipmerge.model.RankingGenerator;
 import br.uff.ic.gems.tipmerge.model.Repository;
-import dao.DominoesSQLDao2;
 import domain.Dominoes;
 import java.io.BufferedWriter;
 import java.io.File;

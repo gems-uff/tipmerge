@@ -241,6 +241,18 @@ public class RankingGenerator {
 
                 this.setSilverMedals(ascendentCand);
 
+                if (!excepiontFiles.contains(consequent)) {
+                    for (EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()) {
+                        if (fileHistory.equals(consequent)) {
+                            this.setBronzeMedals(fileHistory,ascendentCand.getFileName(),9);
+                            break;
+                        }
+                    }
+
+                    this.setSilverMedals(consequent);
+
+                }excepiontFiles.add(consequent);
+                
             }
 
         });
@@ -374,6 +386,19 @@ public class RankingGenerator {
             for (EditedFile consequent : consequentList) {
 
                 this.setSilverMedals(ascendentCand);
+
+                if (!excepiontFiles.contains(consequent)) {
+
+                    for (EditedFile fileHistory : mergeFiles.getFilesOnPreviousHistory()) {
+                        if (fileHistory.equals(consequent)) {
+                            this.setBronzeMedals(fileHistory,ascendentCand.getFileName(),9);
+                            break;
+                        }
+                    }
+
+                    this.setSilverMedals(consequent);
+                }excepiontFiles.add(consequent);
+                
             }
 
         });
