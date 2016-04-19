@@ -159,20 +159,20 @@ public class Experiment {
 						System.out.println(Arrays.toString(dependencies.toArray()));
                         bwOutput.write("DEPENDENCIES MAP\n" + Arrays.toString(dependencies.toArray()) + "\n");
 
-                        System.out.println("TEST A");
-                        bwOutput.write("TEST A" + "\n");
-                        RankingGenerator rGeneratorA = getRankingA(dependencies, mergeFiles);
-                        showRanking(rGeneratorA, hashMerge, bwOutput, rankMapA);
+                        //System.out.println("TEST A");
+                        //bwOutput.write("TEST A" + "\n");
+                        //RankingGenerator rGeneratorA = getRankingA(dependencies, mergeFiles);
+                        //showRanking(rGeneratorA, hashMerge, bwOutput, rankMapA);
 
                         System.out.println("TEST B");
                         bwOutput.write("TEST B" + "\n");
                         RankingGenerator rGeneratorB = getRankingB(dependencies, mergeFiles);
                         showRanking(rGeneratorB, hashMerge, bwOutput, rankMapB);
 
-                        System.out.println("TEST C");
-                        bwOutput.write("TEST C" + "\n");
-                        RankingGenerator rGeneratorC = getRankingC(dependencies, mergeFiles);
-                        showRanking(rGeneratorC, hashMerge, bwOutput, rankMapC);
+                        //System.out.println("TEST C");
+                        //bwOutput.write("TEST C" + "\n");
+                        //RankingGenerator rGeneratorC = getRankingC(dependencies, mergeFiles);
+                        //showRanking(rGeneratorC, hashMerge, bwOutput, rankMapC);
 
                     }
 
@@ -188,8 +188,8 @@ public class Experiment {
 
         }
         showFinalResults(mapValues, rankMapB, file);
-        showFinalResults(mapValues, rankMapA, file);
-        showFinalResults(mapValues, rankMapC, file);
+        //showFinalResults(mapValues, rankMapA, file);
+        //showFinalResults(mapValues, rankMapC, file);
 
         //Git.checkoutMaster(this.getRepo().getProject());
         return mapValues;
