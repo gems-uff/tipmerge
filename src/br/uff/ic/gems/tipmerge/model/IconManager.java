@@ -13,6 +13,8 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
@@ -66,10 +68,19 @@ public class IconManager {
                 ex.printStackTrace();
             }
         }
-        //System.out.println(fileLocation);
-        //ImageIcon icon = 
-        //new ImageIcon(getClass().getResource(""));
-        return new ImageIcon(getClass().getResource(fileLocation));
+
+        // getClass().getResource cannot load new files
+        // Use their actual url instead
+        URL url = getClass().getResource(fileLocation);
+        if (url == null) {
+            try {
+                url = new File("src" + fileLocation).toURI().toURL();
+            } catch (MalformedURLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        return new ImageIcon(url);
     }
 
 }
