@@ -56,6 +56,10 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 //    final private String databaseName = "data/gitdataminer.sqlite";
 //    private Repository repository;
     private RankingGenerator rGenerator;
+    private MergeFiles mergeFiles;
+    private Map<EditedFile, Set<EditedFile>> dependenciesBranchOne;
+    private Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo;
+    
 
     public Set<EditedFile> filesOfInterest = new HashSet<>();
     private List<Coverage> coverageList1;
@@ -73,6 +77,10 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         initComponents();
         //this.repository = repository;
         initVariables(repository);
+        this.mergeFiles = mergeFiles;
+        this.dependenciesBranchOne = dependenciesBranchOne;
+        this.dependenciesBranchTwo = dependenciesBranchTwo;
+
         mergesList.setModel(new JComboBox(new String[]{mergeFiles.getHash()}).getModel());
 
         //merge = new MergeCommits(mergeFiles.getParents()[0], mergeFiles.getParents()[1], repository.getProject());
@@ -89,7 +97,13 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         }
         this.filesOfInterest.addAll(mergeFiles.getFilesOnBothBranch());
 
+        this.createAndShowCoverage();
+        
+    }
+    
+    private void createAndShowCoverage() {
         rGenerator = new RankingGenerator();
+        rGenerator.setDevelopersQuantity((Integer) devNumberSpinner.getValue());
         Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
         excepiontFiles = rGenerator.setMedalFromDependenciesBranch1(dependenciesBranchOne, mergeFiles, excepiontFiles);
         excepiontFiles = rGenerator.setMedalFromDependenciesBranch2(dependenciesBranchTwo, mergeFiles, excepiontFiles);
@@ -114,6 +128,9 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         mergesList = new javax.swing.JComboBox();
         labelLoading = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        devNumberSpinner = new javax.swing.JSpinner();
+        jLabel1 = new javax.swing.JLabel();
         jPanelCover = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -137,6 +154,17 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         labelLoading.setText("Loading ...");
         labelLoading.setVisible(false);
 
+        jButton1.setText("Recalculate");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        devNumberSpinner.setValue(1);
+
+        jLabel1.setText("Number of Developers");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -144,9 +172,14 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(labelLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(devNumberSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13)
@@ -169,7 +202,11 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                     .addComponent(jLabel14)
                     .addComponent(mergesList, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelLoading)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelLoading)
+                    .addComponent(jButton1)
+                    .addComponent(devNumberSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addContainerGap())
         );
 
@@ -183,7 +220,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         );
         jPanelCoverLayout.setVerticalGroup(
             jPanelCoverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 358, Short.MAX_VALUE)
+            .addGap(0, 324, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -199,7 +236,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelCover, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -213,8 +250,15 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_mergesListActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.createAndShowCoverage();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSpinner devNumberSpinner;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JPanel jPanel4;

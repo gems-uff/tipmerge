@@ -20,6 +20,15 @@ import java.util.Set;
 public class RankingGenerator {
 
     private List<Medalist> ranking = new ArrayList<>();
+    private int developersQuantity = 1;
+
+    public int getDevelopersQuantity() {
+        return developersQuantity;
+    }
+
+    public void setDevelopersQuantity(int developersQuantity) {
+        this.developersQuantity = developersQuantity;
+    }
 
     /**
      * @return the ranking
@@ -516,5 +525,5 @@ public class RankingGenerator {
         }
         return null;
     }
-
+    
 }
