@@ -553,12 +553,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         JFrameAssign assign = new JFrameAssign(repository);
         assign.setLocationRelativeTo(this.getFocusOwner());
         assign.setVisible(true);
-
-        /*
-		 JFrameRankingCoverage jfAssignMerge = new JFrameRankingCoverage(repository);
-		 jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
-		 jfAssignMerge.setVisible(true);
-         */
     }//GEN-LAST:event_menuAssignActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed

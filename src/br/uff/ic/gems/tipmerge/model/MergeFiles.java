@@ -135,6 +135,19 @@ public class MergeFiles extends Merge {
         return filesOnBothBranch;
     }
 
+    public List<EditedFile> getFilesOnBothBranch2() {
+        List<EditedFile> files = new ArrayList<>();
+        for (EditedFile efile1 : this.getFilesOnBranchOne()) {
+            for (EditedFile efile2 : this.getFilesOnBranchTwo()) {
+                if (efile1.equals(efile2)) {
+                    files.add(efile1);
+                    files.add(efile2);
+                }
+            }
+        }
+        return files;
+    }
+    
     /**
      * @param filesOnBothBranch the filesOnBothBranch to set
      */
