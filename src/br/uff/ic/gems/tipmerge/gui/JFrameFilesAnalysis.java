@@ -273,7 +273,7 @@ public class JFrameFilesAnalysis extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Previous History", jScrollPane8);
 
-        jButtonDependencies.setText("See Logical Dependencies");
+        jButtonDependencies.setText("Get Dependencies");
         jButtonDependencies.setEnabled(false);
         jButtonDependencies.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

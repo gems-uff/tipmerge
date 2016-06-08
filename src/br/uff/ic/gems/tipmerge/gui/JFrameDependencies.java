@@ -122,7 +122,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         labelRepository.setText("Repository Name");
 
-        btRun.setText("Run Dependencies");
+        btRun.setText("Get Dependencies");
         btRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btRunActionPerformed(evt);
@@ -131,7 +131,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         txRepositoryName.setEnabled(false);
 
-        labelMerge.setText("Branches/Merge");
+        labelMerge.setText("Branches");
 
         comboMergesList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,7 +148,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         labelThreshold.setText("Threshold:");
 
-        btGenRanking.setText("Generate Ranking");
+        btGenRanking.setText("Get Ranking");
         btGenRanking.setEnabled(false);
         btGenRanking.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,7 +167,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
                         .addComponent(labelThreshold)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spinnerThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 163, Short.MAX_VALUE)
                         .addComponent(btRun)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btGenRanking))

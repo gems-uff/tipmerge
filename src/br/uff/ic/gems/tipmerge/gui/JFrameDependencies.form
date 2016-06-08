@@ -148,7 +148,7 @@
                           <Component id="labelThreshold" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="spinnerThreshold" min="-2" pref="59" max="-2" attributes="0"/>
-                          <EmptySpace pref="133" max="32767" attributes="0"/>
+                          <EmptySpace pref="163" max="32767" attributes="0"/>
                           <Component id="btRun" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btGenRanking" min="-2" max="-2" attributes="0"/>
@@ -202,7 +202,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btRun">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Run Dependencies"/>
+            <Property name="text" type="java.lang.String" value="Get Dependencies"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btRunActionPerformed"/>
@@ -215,7 +215,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="labelMerge">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Branches/Merge"/>
+            <Property name="text" type="java.lang.String" value="Branches"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="comboMergesList">
@@ -245,7 +245,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btGenRanking">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Generate Ranking"/>
+            <Property name="text" type="java.lang.String" value="Get Ranking"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>

@@ -125,7 +125,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
         txProjectName.setEnabled(false);
 
-        jLabel14.setText("Branches/Merge");
+        jLabel14.setText("Branches");
 
         mergesList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
