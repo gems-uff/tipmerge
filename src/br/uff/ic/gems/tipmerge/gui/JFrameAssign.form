@@ -86,18 +86,10 @@
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="hashBranch2" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="hashBranch1" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="392" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -125,20 +117,14 @@
                       <Component id="txRepositoryName" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="hashBranch1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jcBranch1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jcHashB1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="hashBranch2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jcBranch2" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -151,11 +137,6 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="hashBranch1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;hash&gt;"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JComboBox" name="jcBranch1">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -188,11 +169,6 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcBranch2ActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="hashBranch2">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;hash&gt;"/>
-          </Properties>
-        </Component>
         <Container class="javax.swing.JPanel" name="jPanel1">
 
           <Layout>
@@ -201,7 +177,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="106" max="32767" attributes="0"/>
+                      <EmptySpace pref="208" max="32767" attributes="0"/>
                       <Component id="jLSelecByExt" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="comboFileExtension" min="-2" max="-2" attributes="0"/>
