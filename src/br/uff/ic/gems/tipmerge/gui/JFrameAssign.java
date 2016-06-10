@@ -50,7 +50,7 @@ public class JFrameAssign extends javax.swing.JFrame {
 
     private final RepoFiles repoFiles;
     private MergeFiles mergeFiles;
-    private JFrame jFrameChart;
+    private JFrame jFrameChart = new JFrame();
 
     /**
      * Creates new form JFrameAssign
