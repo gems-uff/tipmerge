@@ -29,9 +29,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jTabbedPane1" alignment="0" pref="510" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="btnChart1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnChart2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnChart1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="jButtonDependencies" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -177,7 +177,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="208" max="32767" attributes="0"/>
+                      <EmptySpace pref="213" max="32767" attributes="0"/>
                       <Component id="jLSelecByExt" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="comboFileExtension" min="-2" max="-2" attributes="0"/>
@@ -213,7 +213,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLSelecByExt">
               <Properties>
-                <Property name="text" type="java.lang.String" value="File Extensions"/>
+                <Property name="text" type="java.lang.String" value="File Extension"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JComboBox" name="comboFileExtension">
@@ -396,7 +396,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnChart2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Chart2"/>
+        <Property name="text" type="java.lang.String" value="Plot Contributions"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>

@@ -62,6 +62,7 @@ public class JFrameAssign extends javax.swing.JFrame {
         this.repoFiles = new RepoFiles(repository);
 
         initComponents();
+		btnChart1.setVisible(false);
         txRepositoryName.setText(repository.getName());
 
     }
@@ -136,7 +137,7 @@ public class JFrameAssign extends javax.swing.JFrame {
             }
         });
 
-        jLSelecByExt.setText("File Extensions");
+        jLSelecByExt.setText("File Extension");
 
         comboFileExtension.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Files", ".java", ".c", ".html", ".js", ".py", ".php", ".rb", ".xml", " " }));
         comboFileExtension.addActionListener(new java.awt.event.ActionListener() {
@@ -156,7 +157,7 @@ public class JFrameAssign extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 208, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
                 .addComponent(jLSelecByExt)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comboFileExtension, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -312,7 +313,7 @@ public class JFrameAssign extends javax.swing.JFrame {
             }
         });
 
-        btnChart2.setText("Chart2");
+        btnChart2.setText("Plot Contributions");
         btnChart2.setEnabled(false);
         btnChart2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -345,9 +346,9 @@ public class JFrameAssign extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnChart1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnChart2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnChart1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonDependencies)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
