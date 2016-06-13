@@ -157,26 +157,26 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="labelThreshold" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="spinnerThreshold" min="-2" pref="59" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btRun" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="labelRepository" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="labelMerge" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="comboMergesList" max="32767" attributes="0"/>
+                              <Component id="comboMergesList" pref="470" max="32767" attributes="0"/>
                               <Component id="txRepositoryName" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace pref="266" max="32767" attributes="0"/>
-                          <Component id="labelThreshold" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="spinnerThreshold" min="-2" pref="59" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btRun" min="-2" pref="180" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -212,7 +212,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btRun">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Run Dependencies"/>
+            <Property name="text" type="java.lang.String" value="Run"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btRunActionPerformed"/>
@@ -225,7 +225,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="labelMerge">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Hashes"/>
+            <Property name="text" type="java.lang.String" value="Branches"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="comboMergesList">

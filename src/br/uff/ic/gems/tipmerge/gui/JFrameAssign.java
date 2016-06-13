@@ -120,9 +120,9 @@ public class JFrameAssign extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setText("Branch one: ");
+        jLabel7.setText("Branch one name: ");
 
-        jLabel8.setText("Branch two: ");
+        jLabel8.setText("Branch two name: ");
 
         jcBranch2.setModel(new DefaultComboBoxModel(this.repoFiles.getRepository().getBranches().toArray()));
         jcBranch2.setToolTipText("Select the second branch");
@@ -197,9 +197,9 @@ public class JFrameAssign extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Hash");
+        jLabel2.setText("Hash:");
 
-        jLabel3.setText("Hash");
+        jLabel3.setText("Hash:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

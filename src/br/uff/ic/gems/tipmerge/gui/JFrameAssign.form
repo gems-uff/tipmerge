@@ -160,12 +160,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Branch one: "/>
+            <Property name="text" type="java.lang.String" value="Branch one name: "/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Branch two: "/>
+            <Property name="text" type="java.lang.String" value="Branch two name: "/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="jcBranch2">
@@ -291,12 +291,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Hash"/>
+            <Property name="text" type="java.lang.String" value="Hash:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Hash"/>
+            <Property name="text" type="java.lang.String" value="Hash:"/>
           </Properties>
         </Component>
       </SubComponents>
