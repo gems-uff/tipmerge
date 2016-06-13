@@ -5,6 +5,7 @@
  */
 package br.uff.ic.gems.tipmerge.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ import java.util.Objects;
 public class EditedFile {
 
     private String fileName;
-    private List<Committer> whoEditFile;
+    private List<Committer> whoEditFile = new ArrayList<>();
 
     public EditedFile(String fileName) {
         this.fileName = fileName;

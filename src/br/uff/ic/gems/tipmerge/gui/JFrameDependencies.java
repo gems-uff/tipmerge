@@ -20,6 +20,7 @@ import br.uff.ic.gems.tipmerge.model.MergeFiles;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import dao.DominoesSQLDao2;
 import domain.Dominoes;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,11 +76,12 @@ public class JFrameDependencies extends javax.swing.JFrame {
         comboMergesList = new javax.swing.JComboBox();
         spinnerThreshold = new javax.swing.JSpinner();
         labelThreshold = new javax.swing.JLabel();
-        btGenRanking = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDependencies = new javax.swing.JTextArea();
         labelLoading = new javax.swing.JLabel();
+        btGenRanking = new javax.swing.JButton();
+        btKeyFiles = new javax.swing.JButton();
 
         jRanking.setTitle("Ranking");
         jRanking.setBounds(50,50,500, 500);
@@ -122,7 +124,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         labelRepository.setText("Repository Name");
 
-        btRun.setText("Get Dependencies");
+        btRun.setText("Run Dependencies");
         btRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btRunActionPerformed(evt);
@@ -131,7 +133,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         txRepositoryName.setEnabled(false);
 
-        labelMerge.setText("Branches");
+        labelMerge.setText("Hashes");
 
         comboMergesList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,14 +150,6 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         labelThreshold.setText("Threshold:");
 
-        btGenRanking.setText("Get Ranking");
-        btGenRanking.setEnabled(false);
-        btGenRanking.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btGenRankingActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -163,14 +157,6 @@ public class JFrameDependencies extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(labelThreshold)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spinnerThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 163, Short.MAX_VALUE)
-                        .addComponent(btRun)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btGenRanking))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelRepository)
@@ -178,8 +164,15 @@ public class JFrameDependencies extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(comboMergesList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txRepositoryName))))
-                .addContainerGap())
+                            .addComponent(txRepositoryName))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 266, Short.MAX_VALUE)
+                        .addComponent(labelThreshold)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spinnerThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btRun, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,8 +189,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelThreshold)
                     .addComponent(spinnerThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btRun)
-                    .addComponent(btGenRanking))
+                    .addComponent(btRun))
                 .addContainerGap())
         );
 
@@ -220,13 +212,29 @@ public class JFrameDependencies extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         labelLoading.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
         labelLoading.setText("Loading ...");
         labelLoading.setVisible(false);
+
+        btGenRanking.setText("Get Ranking");
+        btGenRanking.setEnabled(false);
+        btGenRanking.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btGenRankingActionPerformed(evt);
+            }
+        });
+
+        btKeyFiles.setText("Get Key Files");
+        btKeyFiles.setEnabled(false);
+        btKeyFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btKeyFilesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -240,6 +248,12 @@ public class JFrameDependencies extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(labelLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btKeyFiles)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btGenRanking)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,6 +263,10 @@ public class JFrameDependencies extends javax.swing.JFrame {
                 .addComponent(labelLoading)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btGenRanking)
+                    .addComponent(btKeyFiles))
                 .addContainerGap())
         );
 
@@ -360,6 +378,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
             labelLoading.setVisible(false);
             btGenRanking.setEnabled(true);
             btRun.setEnabled(true);
+            btKeyFiles.setEnabled(true);
         };
         Thread t = new Thread(r);
         t.start();
@@ -434,17 +453,37 @@ public class JFrameDependencies extends javax.swing.JFrame {
     }//GEN-LAST:event_comboMergesListActionPerformed
 
     private void btGenRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGenRankingActionPerformed
+        File dir = new File("lib/icons/");
+        if (!dir.exists()) {
+            try {
+                dir.mkdir();
+                System.out.println("Diretorio criado com sucesso!");                  
+            } catch (Exception e) {
+                System.out.println("Erro ao criar diretório!");
+            }
+
+        }  
         JFrameRankingCoverageFile jfAssignMerge = new JFrameRankingCoverageFile(repo, mergeFiles, dependenciesBranchOne, dependenciesBranchTwo);
         jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
         jfAssignMerge.setVisible(true);
+            
     }//GEN-LAST:event_btGenRankingActionPerformed
 
     private void spinnerThresholdStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerThresholdStateChanged
         btGenRanking.setEnabled(false);
     }//GEN-LAST:event_spinnerThresholdStateChanged
 
+    private void btKeyFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btKeyFilesActionPerformed
+        
+        JFrameKeyFiles files = new JFrameKeyFiles(mergeFiles, dependenciesBranchOne, dependenciesBranchTwo);
+        files.setLocationRelativeTo(this.getFocusOwner());
+        files.setVisible(true);
+        
+    }//GEN-LAST:event_btKeyFilesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGenRanking;
+    private javax.swing.JButton btKeyFiles;
     private javax.swing.JButton btRun;
     private javax.swing.JComboBox comboMergesList;
     private javax.swing.JPanel jPanel1;

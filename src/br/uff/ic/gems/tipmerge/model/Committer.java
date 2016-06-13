@@ -79,8 +79,8 @@ public class Committer implements Comparable<Committer> {
     public int hashCode() {
         int hash = 3;
         //hash = Math.max(67 * hash + Objects.hashCode(this.name), 67 * hash + Objects.hashCode(this.email));
-        //hash = 67 * hash + Objects.hashCode(this.name);
-        hash = 67 * hash + Objects.hashCode(this.email);
+        hash = 67 * hash + Objects.hashCode(this.name);
+        //hash = 67 * hash + Objects.hashCode(this.email);
         return hash;
     }
     //this method compare committers name and email to avoid repetition

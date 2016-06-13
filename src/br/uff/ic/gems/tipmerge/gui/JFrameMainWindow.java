@@ -69,17 +69,14 @@ public class JFrameMainWindow extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFrameMainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFrameMainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFrameMainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(JFrameMainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         initComponents();
-        this.setLocationRelativeTo(null);
+        super.setLocationRelativeTo(null);
+        jMenu2.setVisible(false);
+        jMenuItem2.setVisible(false);
+        jMenuItem3.setVisible(false);
     }
 
     /**
@@ -144,8 +141,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
                 btSelectProjectActionPerformed(evt);
             }
         });
-
-        jtProjectName.setEditable(false);
 
         jLabel2.setText("Select a project:");
 
@@ -241,7 +236,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         jPanel1.setAutoscrolls(true);
 
-        InternalFrame.setTitle("Committers Names");
+        InternalFrame.setTitle("Commits by developer");
         InternalFrame.setAutoscrolls(true);
         InternalFrame.setVisible(true);
 

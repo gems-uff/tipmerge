@@ -113,6 +113,13 @@
                   </Group>
               </Group>
           </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="btKeyFiles" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="btGenRanking" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -123,6 +130,11 @@
               <Component id="labelLoading" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btGenRanking" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btKeyFiles" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -144,16 +156,7 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="labelThreshold" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="spinnerThreshold" min="-2" pref="59" max="-2" attributes="0"/>
-                          <EmptySpace pref="163" max="32767" attributes="0"/>
-                          <Component id="btRun" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btGenRanking" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="labelRepository" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="labelMerge" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -163,9 +166,17 @@
                               <Component id="comboMergesList" max="32767" attributes="0"/>
                               <Component id="txRepositoryName" max="32767" attributes="0"/>
                           </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace pref="266" max="32767" attributes="0"/>
+                          <Component id="labelThreshold" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="spinnerThreshold" min="-2" pref="59" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btRun" min="-2" pref="180" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -187,7 +198,6 @@
                       <Component id="labelThreshold" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="spinnerThreshold" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btRun" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btGenRanking" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
@@ -202,7 +212,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btRun">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Get Dependencies"/>
+            <Property name="text" type="java.lang.String" value="Run Dependencies"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btRunActionPerformed"/>
@@ -215,7 +225,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="labelMerge">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Branches"/>
+            <Property name="text" type="java.lang.String" value="Hashes"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="comboMergesList">
@@ -243,15 +253,6 @@
             <Property name="text" type="java.lang.String" value="Threshold:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btGenRanking">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Get Ranking"/>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btGenRankingActionPerformed"/>
-          </Events>
-        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel2">
@@ -277,7 +278,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="229" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="214" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -311,6 +312,24 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="labelLoading.setVisible(false);"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="btGenRanking">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Get Ranking"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btGenRankingActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btKeyFiles">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Get Key Files"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btKeyFilesActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

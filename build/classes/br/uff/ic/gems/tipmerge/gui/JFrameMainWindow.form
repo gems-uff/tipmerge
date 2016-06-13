@@ -278,9 +278,6 @@
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jtProjectName">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
@@ -392,7 +389,7 @@
       <SubComponents>
         <Container class="javax.swing.JInternalFrame" name="InternalFrame">
           <Properties>
-            <Property name="title" type="java.lang.String" value="Committers Names"/>
+            <Property name="title" type="java.lang.String" value="Commits by developer"/>
             <Property name="autoscrolls" type="boolean" value="true"/>
             <Property name="maximum" type="boolean" value="true"/>
             <Property name="visible" type="boolean" value="true"/>
