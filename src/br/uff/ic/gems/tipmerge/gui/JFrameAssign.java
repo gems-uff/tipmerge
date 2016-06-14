@@ -518,7 +518,7 @@ public class JFrameAssign extends javax.swing.JFrame {
 
         this.getMergeFiles().setHash(jcHashB1.getSelectedItem().toString() + " + " + jcHashB2.getSelectedItem().toString());
         JFrameDependencies filesDependence = new JFrameDependencies(this.repoFiles.getRepository(), this.getMergeFiles());
-        filesDependence.setLocationRelativeTo(this.getFocusOwner());
+        filesDependence.setLocationRelativeTo(this);
         filesDependence.setVisible(true);
 
     }//GEN-LAST:event_jButtonDependenciesActionPerformed
