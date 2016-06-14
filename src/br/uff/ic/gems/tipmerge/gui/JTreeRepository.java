@@ -15,35 +15,34 @@ import javax.swing.tree.DefaultTreeModel;
  *
  * @author j2cf, Catarina
  */
-public class JTreeRepository extends JTree{
-	
-	Repository repo;
+public class JTreeRepository extends JTree {
 
-	public JTreeRepository(Repository repository) {
-		this.repo = repository;
-		update();
-	}
-	
-	//shows merges and branches in a tree in the main screen
-	public void update(){
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode(repo.getName());
-		
-		DefaultMutableTreeNode mergeNode = new DefaultMutableTreeNode("Merges");
-		DefaultMutableTreeNode branchNode = new DefaultMutableTreeNode("Branches");
-		
-		repo.getBranches().stream().map((branch) -> new DefaultMutableTreeNode(branch)).forEach((newNode) -> {
-			branchNode.add(newNode);
-		});
-		
-		int i = 1;
-		for (String merge: repo.getListOfMerges()){
-			mergeNode.add(new DefaultMutableTreeNode("(" + i++ + ") " + merge));
-		}
-		
-		root.add(mergeNode);
-		root.add(branchNode);
-		this.setModel(new DefaultTreeModel(root));
-	}
-	
-	
+    Repository repo;
+
+    public JTreeRepository(Repository repository) {
+        this.repo = repository;
+        update();
+    }
+
+    //shows merges and branches in a tree in the main screen
+    public void update() {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(repo.getName());
+
+        DefaultMutableTreeNode mergeNode = new DefaultMutableTreeNode("Merges");
+        DefaultMutableTreeNode branchNode = new DefaultMutableTreeNode("Branches");
+
+        repo.getBranches().stream().map((branch) -> new DefaultMutableTreeNode(branch)).forEach((newNode) -> {
+            branchNode.add(newNode);
+        });
+
+        int i = 1;
+        for (String merge : repo.getListOfMerges()) {
+            mergeNode.add(new DefaultMutableTreeNode("(" + i++ + ") " + merge));
+        }
+
+        root.add(mergeNode);
+        root.add(branchNode);
+        this.setModel(new DefaultTreeModel(root));
+    }
+
 }

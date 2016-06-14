@@ -33,6 +33,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -77,8 +79,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
         spinnerThreshold = new javax.swing.JSpinner();
         labelThreshold = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtDependencies = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTreeDependencies = new javax.swing.JTree();
         labelLoading = new javax.swing.JLabel();
         btGenRanking = new javax.swing.JButton();
         btKeyFiles = new javax.swing.JButton();
@@ -195,9 +197,9 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        txtDependencies.setColumns(20);
-        txtDependencies.setRows(5);
-        jScrollPane1.setViewportView(txtDependencies);
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
+        jTreeDependencies.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jScrollPane3.setViewportView(jTreeDependencies);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -205,14 +207,14 @@ public class JFrameDependencies extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane3)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -312,7 +314,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
                 for (Dominoes dominoe : dominoesHistory) {
                     System.out.println(dominoe.getHistoric() + ": " + dominoe.getMat().getMemUsed());
                 }
-                
+                /*
                 List<Dominoes> dominoesTrad
                         = DominoesSQLDao2.loadAllMatrices(databaseName, txRepositoryName.getText(),
                                 "CPU", hashsOnPreviousHistory, matrices);
@@ -321,6 +323,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
                 for (Dominoes dominoe : dominoesTrad) {
                     System.out.println(dominoe.getHistoric() + ": " + dominoe.getMat().getMemUsed());
                 }
+                */
                         
                 Dominoes domCF = null;
                 for (Dominoes dominoe : dominoesHistory) {
@@ -363,12 +366,15 @@ public class JFrameDependencies extends javax.swing.JFrame {
                 this.dependenciesMap = dependencies.getFilesDependencies(allFiles, threshold);
 
                 //gera o texto para mostrar na tela
-                txtDependencies.setText("Dependencies Branch One\n");
-                addListDependences(this.dependenciesBranchOne);
-                txtDependencies.append("\nDependencies Branch Two\n");
-                addListDependences(this.dependenciesBranchTwo);
-                txtDependencies.append("\n\nAll Files Dependencies\n");
-                addListDependences(this.dependenciesMap);
+                //txtDependencies.setText("Dependencies Branch One\n");
+                //addListDependences(this.dependenciesBranchOne);
+                
+                setJTreeDependencies(this.dependenciesBranchOne, this.dependenciesBranchTwo);
+                
+                //txtDependencies.append("\nDependencies Branch Two\n");
+                //addListDependences(this.dependenciesBranchTwo);
+                //txtDependencies.append("\n\nAll Files Dependencies\n");
+                //addListDependences(this.dependenciesMap);
 
             } catch (SQLException ex) {
                 Logger.getLogger(JFrameDependencies.class.getName()).log(Level.SEVERE, null, ex);
@@ -438,7 +444,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
         }
         mergeFiles.setFilesOnPreviousHistory(new HashSet<>(files));
     }
-
+/*
     private void addListDependences(Map<EditedFile, Set<EditedFile>> dependencies) {
 
         dependencies.entrySet().stream().forEach((dependency) -> {
@@ -447,7 +453,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
             txtDependencies.append(key.toString() + "\n" + "\t" + value.toString() + "\n");
         });
     }
-
+*/
     private void comboMergesListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboMergesListActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboMergesListActionPerformed
@@ -457,7 +463,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
         if (!dir.exists()) {
             try {
                 dir.mkdir();
-                System.out.println("Diretorio criado com sucesso!");                  
+                //System.out.println("Diretorio criado com sucesso!");                  
             } catch (Exception e) {
                 System.out.println("Erro ao criar diretório!");
             }
@@ -489,16 +495,16 @@ public class JFrameDependencies extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JFrame jRanking;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableRanking;
+    private javax.swing.JTree jTreeDependencies;
     private javax.swing.JLabel labelLoading;
     private javax.swing.JLabel labelMerge;
     private javax.swing.JLabel labelRepository;
     private javax.swing.JLabel labelThreshold;
     private javax.swing.JSpinner spinnerThreshold;
     private javax.swing.JTextField txRepositoryName;
-    private javax.swing.JTextArea txtDependencies;
     // End of variables declaration//GEN-END:variables
 
     private StringBuilder printDominoes(Dominoes dominoes, double threshold, Collection<EditedFile> filesEdited) {
@@ -554,6 +560,31 @@ public class JFrameDependencies extends javax.swing.JFrame {
             }
         }
         return strBuilder;
+    }
+
+    private void setJTreeDependencies(Map<EditedFile, Set<EditedFile>> depb1, Map<EditedFile, Set<EditedFile>> depb2) {
+
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(repo.getName());
+
+        DefaultMutableTreeNode b1Node = new DefaultMutableTreeNode("Dependencies Branch One");
+        for (Map.Entry<EditedFile, Set<EditedFile>> entry : depb1.entrySet()){
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(entry.getKey().getFileName());
+            b1Node.add(node);
+            for(EditedFile file : entry.getValue())
+                node.add(new DefaultMutableTreeNode(file.getFileName()));
+        }
+
+        DefaultMutableTreeNode b2Node = new DefaultMutableTreeNode("Dependencies Branch Two");
+        for (Map.Entry<EditedFile, Set<EditedFile>> entry : depb2.entrySet()){
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(entry.getKey().getFileName());
+            b2Node.add(node);
+            for(EditedFile file : entry.getValue())
+                node.add(new DefaultMutableTreeNode(file.getFileName()));
+        }
+        
+        root.add(b1Node);
+        root.add(b2Node);
+        jTreeDependencies.setModel(new DefaultTreeModel(root));
     }
 
 }
