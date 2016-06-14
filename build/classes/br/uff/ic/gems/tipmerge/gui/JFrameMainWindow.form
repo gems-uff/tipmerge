@@ -84,7 +84,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/br/uff/ic/gems/tipmerge/icons/assign.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Get a Ranking"/>
+                <Property name="text" type="java.lang.String" value="Get Ranking"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>

@@ -312,7 +312,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         menuAssign.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK));
         menuAssign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/assign.png"))); // NOI18N
-        menuAssign.setText("Get a Ranking");
+        menuAssign.setText("Get Ranking");
         menuAssign.setEnabled(false);
         menuAssign.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

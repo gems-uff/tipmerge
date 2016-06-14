@@ -92,9 +92,9 @@ public class JFrameKeyFiles extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Files Analysis");
+        setTitle("Key Files");
 
-        jLabel4.setText("Hashes");
+        jLabel4.setText("Branches");
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/loading1.gif"))); // NOI18N
         jLabel1.setText("Loading ...");
