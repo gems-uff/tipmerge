@@ -2,11 +2,11 @@
 
 <h3>About</h3>
 <strong>TIPMerge</strong> (Tool to assIgn  develoPers to Merge) main goal is to support the merge branch task, helping in the decision to choose the most appropriate developers to perform the merge.<br />
-<strong>TIPMerge</strong> is a project part of the PhD of Catarina Costa, student at Fluminense Federal University. This work is supervised by professors Leonardo Murta (UFF) and Anita Sarma (UNL).
+<strong>TIPMerge</strong> is a project part of the PhD of Catarina Costa, student at Fluminense Federal University. This work is supervised by professors Leonardo Murta (UFF) and Anita Sarma (OSU).
 
 <h3>How to use</h3>
 To use <strong>TIPMerge</strong>, you need to have git properly installed on your computer, with the configured environment variable and JRE.<br />
-First of all, you must select some git project on your computer. After that, you can show basic information about the project, perform commit and file analyzes and generate a ranking of suitable developers.
+First of all, the user must select some git project on her computer. After that, the user can show basic information about the project, she can identify “key” files and the developers who have made changes to them in each branch. TIPMerge then identifies the overall experience of developers with the key files based on the project and branch history. After analyzing this information, TIPMerge recommends a ranked list of developers who are best suited to integrate a pair of branch.
 
 <h3>Team</h3>
 -  Catarina Costa (joined in Apr 2014)
