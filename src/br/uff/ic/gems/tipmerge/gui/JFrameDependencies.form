@@ -115,6 +115,8 @@
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
+              <Component id="btCoverage" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="btKeyFiles" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btGenRanking" min="-2" max="-2" attributes="0"/>
@@ -134,6 +136,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btGenRanking" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btKeyFiles" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btCoverage" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -330,6 +333,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btKeyFilesActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btCoverage">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Get Coverage Method"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCoverageActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

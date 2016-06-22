@@ -85,6 +85,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
         labelLoading = new javax.swing.JLabel();
         btGenRanking = new javax.swing.JButton();
         btKeyFiles = new javax.swing.JButton();
+        btCoverage = new javax.swing.JButton();
 
         jRanking.setTitle("Ranking");
         jRanking.setBounds(50,50,500, 500);
@@ -239,6 +240,13 @@ public class JFrameDependencies extends javax.swing.JFrame {
             }
         });
 
+        btCoverage.setText("Get Coverage Method");
+        btCoverage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCoverageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -253,6 +261,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btCoverage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btKeyFiles)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btGenRanking)
@@ -269,7 +279,8 @@ public class JFrameDependencies extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btGenRanking)
-                    .addComponent(btKeyFiles))
+                    .addComponent(btKeyFiles)
+                    .addComponent(btCoverage))
                 .addContainerGap())
         );
 
@@ -448,7 +459,15 @@ public class JFrameDependencies extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btKeyFilesActionPerformed
 
+    private void btCoverageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCoverageActionPerformed
+        JFrameRankingCoverageMethod frameCoverage = new JFrameRankingCoverageMethod(repo, mergeFiles, dependenciesBranchOne, dependenciesBranchTwo);
+        frameCoverage.setLocationRelativeTo(this.getFocusOwner());
+        frameCoverage.setVisible(true);
+
+    }//GEN-LAST:event_btCoverageActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btCoverage;
     private javax.swing.JButton btGenRanking;
     private javax.swing.JButton btKeyFiles;
     private javax.swing.JButton btRun;
