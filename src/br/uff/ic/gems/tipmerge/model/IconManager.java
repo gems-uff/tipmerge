@@ -28,7 +28,7 @@ public class IconManager {
 
         String number = String.valueOf(value);
         String text = number;
-        String fileLocation = "/br/uff/ic/gems/tipmerge/icons/" + number + ".png";
+        String fileLocation = "lib/icons/" + number + ".png";
 
         File iconTest = new File(fileLocation);
         if (!iconTest.exists()) {
@@ -63,7 +63,7 @@ public class IconManager {
             g2d.drawString(text, 0, fm.getAscent());
             g2d.dispose();
             try {
-                ImageIO.write(img, "png", new File("src" + fileLocation));
+                ImageIO.write(img, "png", new File(fileLocation));
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -74,7 +74,7 @@ public class IconManager {
         URL url = getClass().getResource(fileLocation);
         if (url == null) {
             try {
-                url = new File("src" + fileLocation).toURI().toURL();
+                url = new File(fileLocation).toURI().toURL();
             } catch (MalformedURLException ex) {
                 ex.printStackTrace();
             }

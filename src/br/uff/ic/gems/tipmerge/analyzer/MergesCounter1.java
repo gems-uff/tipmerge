@@ -50,7 +50,7 @@ public class MergesCounter1 {
                 if (project.isDirectory()) {
                     System.out.println("\nAnalyzing the project\t" + project.getName());
 
-                    List<String> merges = RunGit.getListOfResult("git log --merges --all --pretty=%H%x09%ad --date=short", project);
+                    List<String> merges = RunGit.getListOfResult("git log --all --merges --pretty=%H", project);
                     System.out.println("Total of Merges\t" + merges.size());
                     //double mergesIn = 0.0;
                     //double mergesAll = merges.size();
@@ -70,9 +70,9 @@ public class MergesCounter1 {
                     }
 
                     for (String merge : merges) {
-                        String data = merge.split("\t")[1];
+                        //String data = merge.split("\t")[1];
                         merge = merge.split("\t")[0];
-                        System.out.println("merge: " + merge + "\tdata: " + data);
+                        System.out.println("merge: " + merge + "\tdata: ");
                         String hashParents = RunGit.getResult("git log --pretty=%P -n 1 " + merge, project);
                         //identifica os parents de cada ramo nas posições 0 e 1
                         String[] parent = new String[]{hashParents.split(" ")[0], hashParents.split(" ")[1]};
@@ -92,6 +92,7 @@ public class MergesCounter1 {
                         //define a quantidade mínima de desenvolvedores em cada ramo
                         if (tam1 > 0 && tam2 > 0) {
                             //verifica se tem ao menos 3 pessoas DIFERENTES somando-se os dois ramos
+                            System.out.println("tamanhos\t" + tam1 + "\t" + tam2);
                             if ((tam1 + tam2 >= 2) && (countUnique(committersb1, committersb2, 2))) {
                                 //numero de commits em cada ramo
                                 List<String> cmts1 = RunGit.getListOfResult("git log --format='%H' --no-merges " + hashBase + ".." + parent[0], project);
@@ -133,6 +134,7 @@ public class MergesCounter1 {
         //System.out.println(committersb1.toString());
         //System.out.println(committersb2.toString());
         int count = committersb1.size();
+        if (count >= min) return true;
         for (Committer cmt : committersb2) {
             if (!committersb1.contains(cmt)) {
                 if (count++ >= min - 1) {

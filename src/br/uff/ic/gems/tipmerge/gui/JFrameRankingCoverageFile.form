@@ -122,7 +122,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel14">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Branches/Merge"/>
+            <Property name="text" type="java.lang.String" value="Branches"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="mergesList">

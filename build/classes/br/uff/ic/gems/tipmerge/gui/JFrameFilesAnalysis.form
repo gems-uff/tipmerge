@@ -377,7 +377,7 @@
     </Container>
     <Component class="javax.swing.JButton" name="jButtonDependencies">
       <Properties>
-        <Property name="text" type="java.lang.String" value="See Logical Dependencies"/>
+        <Property name="text" type="java.lang.String" value="Get Dependencies"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>

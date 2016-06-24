@@ -84,7 +84,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/br/uff/ic/gems/tipmerge/icons/assign.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Get a Ranking"/>
+                <Property name="text" type="java.lang.String" value="Get Ranking"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
@@ -132,7 +132,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="TIPMerge - Tool to assIgn develoPers to Merge on Git"/>
+    <Property name="title" type="java.lang.String" value="TIPMerge - Tool for Assigning Developers to Merge Branches"/>
     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
       <Color id="Default Cursor"/>
     </Property>
@@ -278,9 +278,6 @@
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jtProjectName">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
@@ -392,7 +389,7 @@
       <SubComponents>
         <Container class="javax.swing.JInternalFrame" name="InternalFrame">
           <Properties>
-            <Property name="title" type="java.lang.String" value="Committers Names"/>
+            <Property name="title" type="java.lang.String" value="Commits by developer"/>
             <Property name="autoscrolls" type="boolean" value="true"/>
             <Property name="maximum" type="boolean" value="true"/>
             <Property name="visible" type="boolean" value="true"/>

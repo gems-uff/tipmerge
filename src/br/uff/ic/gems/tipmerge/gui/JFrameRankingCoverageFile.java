@@ -6,31 +6,24 @@
 package br.uff.ic.gems.tipmerge.gui;
 
 import br.uff.ic.gems.tipmerge.coverage.TreeTable;
-import br.uff.ic.gems.tipmerge.model.Coverage;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
-import br.uff.ic.gems.tipmerge.model.IconManager;
 import br.uff.ic.gems.tipmerge.model.Medalist;
-import br.uff.ic.gems.tipmerge.model.MergeCommits;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
 import br.uff.ic.gems.tipmerge.model.RankingGenerator;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GradientPaint;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -44,7 +37,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.LayeredBarRenderer;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
@@ -60,22 +52,10 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
     private Map<EditedFile, Set<EditedFile>> dependenciesBranchOne;
     private Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo;
     
-
     public Set<EditedFile> filesOfInterest = new HashSet<>();
-    private List<Coverage> coverageList1;
-//    private List<Coverage> historycoverageList;
-    private Map<String, Integer[]> fileNames1;
-//    private Map<String, Integer[]> historyfileNames;
-//    private MergeCommits merge;
-
-    public JFrameRankingCoverageFile(Repository repository) {
-        initComponents();
-        initVariables(repository);
-    }
 
     public JFrameRankingCoverageFile(Repository repository, MergeFiles mergeFiles, Map<EditedFile, Set<EditedFile>> dependenciesBranchOne, Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo) {
         initComponents();
-        //this.repository = repository;
         initVariables(repository);
         this.mergeFiles = mergeFiles;
         this.dependenciesBranchOne = dependenciesBranchOne;
@@ -83,14 +63,10 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
         mergesList.setModel(new JComboBox(new String[]{mergeFiles.getHash()}).getModel());
 
-        //merge = new MergeCommits(mergeFiles.getParents()[0], mergeFiles.getParents()[1], repository.getProject());
-
-//	if(dependenciesBranchOne.size() > 0)
         for (EditedFile file : dependenciesBranchOne.keySet()) {
             this.filesOfInterest.add(file);
             this.filesOfInterest.addAll(dependenciesBranchOne.get(file));
         }
-//      if(dependenciesBranchTwo.size() > 0)
         for (EditedFile file : dependenciesBranchTwo.keySet()) {
             this.filesOfInterest.add(file);
             this.filesOfInterest.addAll(dependenciesBranchTwo.get(file));
@@ -108,8 +84,6 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         excepiontFiles = rGenerator.setMedalFromDependenciesBranch1(dependenciesBranchOne, mergeFiles, excepiontFiles);
         excepiontFiles = rGenerator.setMedalFromDependenciesBranch2(dependenciesBranchTwo, mergeFiles, excepiontFiles);
         excepiontFiles.removeAll(excepiontFiles);
-        //List<Medalist> ranking = rGenerator.getRanking();
-        //showRanking(ranking);
         showCoverage(rGenerator);
     }
 
@@ -142,7 +116,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
         txProjectName.setEnabled(false);
 
-        jLabel14.setText("Branches/Merge");
+        jLabel14.setText("Branches");
 
         mergesList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -49,10 +50,11 @@ public class JFrameAssign extends javax.swing.JFrame {
 
     private final RepoFiles repoFiles;
     private MergeFiles mergeFiles;
-    private String branchName;
+    private JFrame jFrameChart = new JFrame();
 
     /**
      * Creates new form JFrameAssign
+     * @param repository
      */
     public JFrameAssign(Repository repository) {
         RepositoryDao rdao = new RepositoryDao(repository.getProject());
@@ -60,6 +62,7 @@ public class JFrameAssign extends javax.swing.JFrame {
         this.repoFiles = new RepoFiles(repository);
 
         initComponents();
+		btnChart1.setVisible(false);
         txRepositoryName.setText(repository.getName());
 
     }
@@ -73,14 +76,11 @@ public class JFrameAssign extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFrame1 = new javax.swing.JFrame();
         jPanel2 = new javax.swing.JPanel();
-        hashBranch1 = new javax.swing.JLabel();
         jcBranch1 = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jcBranch2 = new javax.swing.JComboBox();
-        hashBranch2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         btRun = new javax.swing.JButton();
         jLSelecByExt = new javax.swing.JLabel();
@@ -88,6 +88,10 @@ public class JFrameAssign extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         labelRepository = new javax.swing.JLabel();
         txRepositoryName = new javax.swing.JTextField();
+        jcHashB1 = new javax.swing.JComboBox();
+        jcHashB2 = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -102,24 +106,11 @@ public class JFrameAssign extends javax.swing.JFrame {
         jButtonDependencies = new javax.swing.JButton();
         btExport = new javax.swing.JButton();
 
-        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
-        jFrame1.getContentPane().setLayout(jFrame1Layout);
-        jFrame1Layout.setHorizontalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jFrame1Layout.setVerticalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Merge of Branches");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setEnabled(false);
-
-        hashBranch1.setText("<hash>");
 
         jcBranch1.setModel(new DefaultComboBoxModel(this.repoFiles.getRepository().getBranches().toArray()));
         jcBranch1.setToolTipText("Select the first branch");
@@ -129,9 +120,9 @@ public class JFrameAssign extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setText("Branch one's hash: ");
+        jLabel7.setText("Branch one name: ");
 
-        jLabel8.setText("Branch two's hash: ");
+        jLabel8.setText("Branch two name: ");
 
         jcBranch2.setModel(new DefaultComboBoxModel(this.repoFiles.getRepository().getBranches().toArray()));
         jcBranch2.setToolTipText("Select the second branch");
@@ -141,8 +132,6 @@ public class JFrameAssign extends javax.swing.JFrame {
             }
         });
 
-        hashBranch2.setText("<hash>");
-
         btRun.setText("Run");
         btRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,7 +139,7 @@ public class JFrameAssign extends javax.swing.JFrame {
             }
         });
 
-        jLSelecByExt.setText("File Extensions");
+        jLSelecByExt.setText("File Extension");
 
         comboFileExtension.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Files", ".java", ".c", ".html", ".js", ".py", ".php", ".rb", ".xml", " " }));
         comboFileExtension.addActionListener(new java.awt.event.ActionListener() {
@@ -170,7 +159,7 @@ public class JFrameAssign extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
                 .addComponent(jLSelecByExt)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comboFileExtension, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -194,6 +183,24 @@ public class JFrameAssign extends javax.swing.JFrame {
 
         txRepositoryName.setEnabled(false);
 
+        jcHashB1.setToolTipText("Select the first branch");
+        jcHashB1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcHashB1ActionPerformed(evt);
+            }
+        });
+
+        jcHashB2.setToolTipText("Select the second branch");
+        jcHashB2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcHashB2ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Hash:");
+
+        jLabel3.setText("Hash:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -201,23 +208,26 @@ public class JFrameAssign extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jcBranch2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jcBranch1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(hashBranch2))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(hashBranch1)))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(labelRepository)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txRepositoryName)))
+                        .addComponent(txRepositoryName))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jcBranch1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jcBranch2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel7))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jcHashB1, 0, 227, Short.MAX_VALUE)
+                                .addComponent(jcHashB2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel3))))
                 .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -231,15 +241,19 @@ public class JFrameAssign extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(hashBranch1))
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jcBranch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcBranch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcHashB1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(hashBranch2))
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jcBranch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcBranch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcHashB2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -312,7 +326,7 @@ public class JFrameAssign extends javax.swing.JFrame {
             }
         });
 
-        btnChart2.setText("Chart2");
+        btnChart2.setText("Plot Contributions");
         btnChart2.setEnabled(false);
         btnChart2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -320,7 +334,7 @@ public class JFrameAssign extends javax.swing.JFrame {
             }
         });
 
-        jButtonDependencies.setText("See Logical Dependencies");
+        jButtonDependencies.setText("Get Dependencies");
         jButtonDependencies.setEnabled(false);
         jButtonDependencies.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -345,9 +359,9 @@ public class JFrameAssign extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnChart1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnChart2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnChart1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonDependencies)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -375,11 +389,25 @@ public class JFrameAssign extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jcBranch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch1ActionPerformed
-        hashBranch1.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + jcBranch1.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
+        try {
+          // List<String> hashes = RunGit.getListOfResult("git log --pretty=format:%H --no-merges " + jcBranch1.getSelectedItem().toString(), repoFiles.getRepository().getProject());
+			List<String> hashes = RunGit.getListOfResult("git log --pretty=format:%H " + jcBranch1.getSelectedItem().toString(), repoFiles.getRepository().getProject());
+            //hashBranch1.setText(hashes.get(0));
+            jcHashB1.setModel(new DefaultComboBoxModel(hashes.toArray()));
+        } catch (Exception e) {
+            jcHashB1.setModel(new DefaultComboBoxModel());
+        }
     }//GEN-LAST:event_jcBranch1ActionPerformed
 
     private void jcBranch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcBranch2ActionPerformed
-        hashBranch2.setText(RunGit.getResult("git log -n 1 --pretty=format:%H " + jcBranch2.getSelectedItem().toString(), repoFiles.getRepository().getProject()));
+        try {
+         //   List<String> hashes = RunGit.getListOfResult("git log --pretty=format:%H --no-merges " + jcBranch2.getSelectedItem().toString(), repoFiles.getRepository().getProject());
+			List<String> hashes = RunGit.getListOfResult("git log --pretty=format:%H " + jcBranch2.getSelectedItem().toString(), repoFiles.getRepository().getProject());
+            //hashBranch2.setText(hashes.get(0));
+            jcHashB2.setModel(new DefaultComboBoxModel(hashes.toArray()));
+        } catch (Exception e) {
+            jcHashB2.setModel(new DefaultComboBoxModel());
+        }
     }//GEN-LAST:event_jcBranch2ActionPerformed
 
     private void btRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRunActionPerformed
@@ -394,8 +422,9 @@ public class JFrameAssign extends javax.swing.JFrame {
             MergeFilesDao mergeFilesDao = new MergeFilesDao();
 
             MergeFiles mergeSelected = new MergeFiles("", repoFiles.getRepository().getProject());
-            mergeSelected.setParents(hashBranch1.getText(), hashBranch2.getText());
+            mergeSelected.setParents(jcHashB1.getSelectedItem().toString(), jcHashB2.getSelectedItem().toString());
             mergeSelected.setHashBase(mergeFilesDao.getMergeBase(mergeSelected.getParents()[0], mergeSelected.getParents()[1], mergeSelected.getPath()));
+			System.out.println("parent: \t" + mergeSelected.getHashBase());
 
             /**
              * From now the merge already exists with parents and merge base,
@@ -487,9 +516,9 @@ public class JFrameAssign extends javax.swing.JFrame {
 
     private void jButtonDependenciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDependenciesActionPerformed
 
-        this.getMergeFiles().setHash(jcBranch1.getSelectedItem().toString() + " + " + jcBranch2.getSelectedItem().toString());
+        this.getMergeFiles().setHash(jcHashB1.getSelectedItem().toString() + " + " + jcHashB2.getSelectedItem().toString());
         JFrameDependencies filesDependence = new JFrameDependencies(this.repoFiles.getRepository(), this.getMergeFiles());
-        filesDependence.setLocationRelativeTo(this.getFocusOwner());
+        filesDependence.setLocationRelativeTo(this);
         filesDependence.setVisible(true);
 
     }//GEN-LAST:event_jButtonDependenciesActionPerformed
@@ -508,6 +537,14 @@ public class JFrameAssign extends javax.swing.JFrame {
     private void comboFileExtensionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFileExtensionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboFileExtensionActionPerformed
+
+    private void jcHashB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcHashB1ActionPerformed
+//		hashBranch1.setText(jcHashB1.getSelectedItem().toString());        // TODO add your handling code here:
+    }//GEN-LAST:event_jcHashB1ActionPerformed
+
+    private void jcHashB2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcHashB2ActionPerformed
+//        hashBranch2.setText(jcHashB2.getSelectedItem().toString());
+    }//GEN-LAST:event_jcHashB2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -550,12 +587,11 @@ public class JFrameAssign extends javax.swing.JFrame {
     private javax.swing.JButton btnChart1;
     private javax.swing.JButton btnChart2;
     private javax.swing.JComboBox comboFileExtension;
-    private javax.swing.JLabel hashBranch1;
-    private javax.swing.JLabel hashBranch2;
     private javax.swing.JButton jButtonDependencies;
-    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLSelecByExt;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
@@ -571,6 +607,8 @@ public class JFrameAssign extends javax.swing.JFrame {
     private javax.swing.JTable jTable4;
     private javax.swing.JComboBox jcBranch1;
     private javax.swing.JComboBox jcBranch2;
+    private javax.swing.JComboBox jcHashB1;
+    private javax.swing.JComboBox jcHashB2;
     private javax.swing.JLabel labelRepository;
     private javax.swing.JTextField txRepositoryName;
     // End of variables declaration//GEN-END:variables
@@ -623,12 +661,16 @@ private void invertEnabledGroup() {
         //tbResultsBranch1.update(tbResultsBranch1.getGraphics());	
     }
 
-    private void showResIntersection(Set<EditedFile> filesOnBothBranch) {
-        DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name"}, 0);
+    private void showResIntersection(List<EditedFile> filesOnBothBranch) {
+        DefaultTableModel dftModel = new DefaultTableModel(new Object[]{"File name","Devs on Branch 1","Devs on Branch 2"}, 0);
 
-        filesOnBothBranch.stream().forEach((file) -> {
-            dftModel.addRow(new String[]{file.getFileName(), ""});
-        });
+        for(int i = 0 ; i < filesOnBothBranch.size() ; i++){
+            EditedFile file1 = filesOnBothBranch.get(i++);
+            EditedFile file2 = filesOnBothBranch.get(i);
+        //filesOnBothBranch.stream().forEach((file) -> {
+            dftModel.addRow(new String[]{file1.getFileName(), file1.getWhoEditTheFile().toString(), file2.getWhoEditTheFile().toString()});
+        //});
+        }
 
         jTable3.setModel(dftModel);
     }
@@ -838,7 +880,7 @@ private void invertEnabledGroup() {
     }
 
     public void newGraphic(MergeFiles merge, int botao) {
-        jFrame1.setVisible(true);
+        jFrameChart.setVisible(true);
         CategoryDataset cdsBranch1 = createBranch(merge, botao);
         String title = "";
         if (jTable1.isShowing()) {
@@ -865,10 +907,10 @@ private void invertEnabledGroup() {
         itemRerender.setItemLabelsVisible(true);
         ChartPanel chartPanel = new ChartPanel(graphic);
         chartPanel.setPreferredSize(new java.awt.Dimension(590, 350));
-        jFrame1.setContentPane(chartPanel);
-        jFrame1.pack();
-        RefineryUtilities.centerFrameOnScreen(jFrame1);
-        jFrame1.setVisible(true);
+        jFrameChart.setContentPane(chartPanel);
+        jFrameChart.pack();
+        RefineryUtilities.centerFrameOnScreen(jFrameChart);
+        jFrameChart.setVisible(true);
 
     }
 
@@ -876,7 +918,7 @@ private void invertEnabledGroup() {
         //organizes the data in the table
         showResBranch1(merge, false);
         showResBranch2(merge, false);
-        showResIntersection(merge.getFilesOnBothBranch());
+        showResIntersection(merge.getFilesOnBothBranch2());
         showResPreviousHistory(merge, false);
     }
 

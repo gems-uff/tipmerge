@@ -69,17 +69,14 @@ public class JFrameMainWindow extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFrameMainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFrameMainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFrameMainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(JFrameMainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         initComponents();
-        this.setLocationRelativeTo(null);
+        super.setLocationRelativeTo(null);
+        jMenu2.setVisible(false);
+        jMenuItem2.setVisible(false);
+        jMenuItem3.setVisible(false);
     }
 
     /**
@@ -131,7 +128,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("TIPMerge - Tool to assIgn develoPers to Merge on Git");
+        setTitle("TIPMerge - Tool for Assigning Developers to Merge Branches");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(200, 200));
 
@@ -144,8 +141,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
                 btSelectProjectActionPerformed(evt);
             }
         });
-
-        jtProjectName.setEditable(false);
 
         jLabel2.setText("Select a project:");
 
@@ -241,7 +236,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         jPanel1.setAutoscrolls(true);
 
-        InternalFrame.setTitle("Committers Names");
+        InternalFrame.setTitle("Commits by developer");
         InternalFrame.setAutoscrolls(true);
         InternalFrame.setVisible(true);
 
@@ -317,7 +312,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
 
         menuAssign.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK));
         menuAssign.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/assign.png"))); // NOI18N
-        menuAssign.setText("Get a Ranking");
+        menuAssign.setText("Get Ranking");
         menuAssign.setEnabled(false);
         menuAssign.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -553,12 +548,6 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         JFrameAssign assign = new JFrameAssign(repository);
         assign.setLocationRelativeTo(this.getFocusOwner());
         assign.setVisible(true);
-
-        /*
-		 JFrameRankingCoverage jfAssignMerge = new JFrameRankingCoverage(repository);
-		 jfAssignMerge.setLocationRelativeTo(this.getFocusOwner());
-		 jfAssignMerge.setVisible(true);
-         */
     }//GEN-LAST:event_menuAssignActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -608,7 +597,9 @@ public class JFrameMainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_menuGeneralActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
+        JFrameAbout about = new JFrameAbout();
+        about.setLocationRelativeTo(this);
+        about.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
