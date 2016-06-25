@@ -64,7 +64,8 @@ public class JFrameAssign extends javax.swing.JFrame {
         initComponents();
 		btnChart1.setVisible(false);
         txRepositoryName.setText(repository.getName());
-
+        this.jcBranch1ActionPerformed(null);
+        this.jcBranch2ActionPerformed(null);
     }
 
     /**

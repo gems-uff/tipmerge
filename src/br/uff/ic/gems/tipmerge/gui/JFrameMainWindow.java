@@ -78,6 +78,33 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         jMenuItem2.setVisible(false);
         jMenuItem3.setVisible(false);
     }
+    
+    private void selectProject(File filePath) {
+        jtProjectName.setText(filePath.toString());
+        RevisionAnalyzer.gitReset(filePath.toString());
+
+        try {
+
+            repository = new RepositoryDao(filePath).getRepository();
+            txLast.setText(repository.getLastCommit().format(
+                    DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.US)));
+
+            txTotalAuthors.setText(String.valueOf(repository.getCommitters().size()));
+
+            btShow.setEnabled(true);
+            menuCommit.setEnabled(true);
+            menuFile.setEnabled(true);
+            menuAssign.setEnabled(true);
+            menuGeneral.setEnabled(true);
+
+            clearAllFields();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Please, select a git project folder.",
+                    "Inane error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -391,31 +418,7 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         Runnable r = () -> {
             jLabel8.setVisible(true);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                jtProjectName.setText(projetctFile.getSelectedFile().toString());
-                RevisionAnalyzer.gitReset(projetctFile.getSelectedFile().toString());
-
-                try {
-
-                    repository = new RepositoryDao(projetctFile.getSelectedFile()).getRepository();
-                    txLast.setText(repository.getLastCommit().format(
-                            DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.US)));
-
-                    txTotalAuthors.setText(String.valueOf(repository.getCommitters().size()));
-
-                    btShow.setEnabled(true);
-                    menuCommit.setEnabled(true);
-                    menuFile.setEnabled(true);
-                    menuAssign.setEnabled(true);
-                    menuGeneral.setEnabled(true);
-
-                    clearAllFields();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this,
-                            "Please, select a git project folder.",
-                            "Inane error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-
+                this.selectProject(projetctFile.getSelectedFile());
             }
             jLabel8.setVisible(false);
         };
