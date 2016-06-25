@@ -315,8 +315,8 @@ public class Experiment {
         RankingGenerator rGenerator = new RankingGenerator();
 
         Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch1(dependencies.get(0), mergeFiles, excepiontFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch2(dependencies.get(1), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranch(1, dependencies.get(0), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranch(2, dependencies.get(1), mergeFiles, excepiontFiles);
         excepiontFiles.removeAll(excepiontFiles);
 
         return rGenerator;
@@ -326,8 +326,8 @@ public class Experiment {
         RankingGenerator rGenerator = new RankingGenerator();
 
         Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranchesA(mergeFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch1A(dependencies.get(0), mergeFiles, excepiontFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch2A(dependencies.get(1), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranchA(1, dependencies.get(0), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranchA(2, dependencies.get(1), mergeFiles, excepiontFiles);
         excepiontFiles.removeAll(excepiontFiles);
 
         return rGenerator;
@@ -337,8 +337,8 @@ public class Experiment {
         RankingGenerator rGenerator = new RankingGenerator();
 
         Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranchesB(mergeFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch1B(dependencies.get(0), mergeFiles, excepiontFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch2B(dependencies.get(1), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranchB(1, dependencies.get(0), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranchB(2, dependencies.get(1), mergeFiles, excepiontFiles);
         excepiontFiles.removeAll(excepiontFiles);
 
         return rGenerator;
@@ -348,8 +348,8 @@ public class Experiment {
         RankingGenerator rGenerator = new RankingGenerator();
 
         Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranchesC(mergeFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch1C(dependencies.get(0), mergeFiles, excepiontFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch2C(dependencies.get(1), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranchC(1, dependencies.get(0), mergeFiles, excepiontFiles);
+        excepiontFiles = rGenerator.setMedalFromDependenciesBranchC(2, dependencies.get(1), mergeFiles, excepiontFiles);
         excepiontFiles.removeAll(excepiontFiles);
 
         return rGenerator;

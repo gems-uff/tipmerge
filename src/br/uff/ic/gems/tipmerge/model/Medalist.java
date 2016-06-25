@@ -102,6 +102,14 @@ public class Medalist {
     public void addGoldMedalBranch2(String fileName) {
         this.getGoldListBranch2().add(fileName);
     }
+    
+    public void addGoldMedal(String fileName, int branch) {
+        if (branch == 1) {
+            this.addGoldMedalBranch1(fileName);
+        } else {
+            this.addGoldMedalBranch2(fileName);
+        }
+    }
 
     public void addSilverMedal(String fileName) {
         this.silverList.add(fileName);
