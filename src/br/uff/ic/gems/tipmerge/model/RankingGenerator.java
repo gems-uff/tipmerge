@@ -6,12 +6,16 @@
 package br.uff.ic.gems.tipmerge.model;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -20,6 +24,8 @@ import java.util.Set;
 public class RankingGenerator {
 
     private List<Medalist> ranking = new ArrayList<>();
+    private List<Medalist> developers;
+    private Set<BitSet> solutions;
     private int developersQuantity = 1;
 
     public int getDevelopersQuantity() {
@@ -44,7 +50,103 @@ public class RankingGenerator {
     public void setRanking(List<Medalist> ranking) {
         this.ranking = ranking;
     }
-    
+
+    public void createMedals(MergeFiles mergeFiles, Map<EditedFile, Set<EditedFile>> dependenciesBranchOne, Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo) {
+        Set<EditedFile> excepiontFiles = this.setMedalsFilesEditedBothBranches(mergeFiles);
+        excepiontFiles = this.setMedalFromDependenciesBranch(1, dependenciesBranchOne, mergeFiles, excepiontFiles);
+        excepiontFiles = this.setMedalFromDependenciesBranch(2, dependenciesBranchTwo, mergeFiles, excepiontFiles);
+        excepiontFiles.removeAll(excepiontFiles);
+
+        developers = new ArrayList<>(this.getRanking());
+        int size = developers.size();
+        solutions = new HashSet<>();
+        for (int i = 0; i < size; i++) {
+            BitSet solution = new BitSet(size);
+            solution.set(i);
+            solutions.add(solution);
+        }
+    }
+
+    public void combineDevelopers(int quantity) {
+        quantity = Math.min(quantity, this.developers.size());
+        this.setDevelopersQuantity(quantity);
+
+        BitSet configuration = new BitSet(this.developers.size());
+        for (int i = 0; i < quantity; i++) {
+            configuration.set(i);
+        }
+
+        this.createSolution(configuration);
+    }
+
+    public Medalist createSolution(BitSet configuration) {
+        if (solutions.contains(configuration)) {
+            return null;
+        }
+
+        List<Medalist> selected = new ArrayList<>();
+        for (int i = configuration.nextSetBit(0); i != -1; i = configuration.nextSetBit(i + 1)) {
+            selected.add(this.developers.get(i));
+        }
+
+        List<Committer> committers = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        List<String> emails = new ArrayList<>();
+        Set<String> goldListBranch1 = new TreeSet<>();
+        Set<String> goldListBranch2 = new TreeSet<>();
+        Set<String> silverList = new TreeSet<>();
+        Map<String, MedalBronze> bronzeList = new HashMap<>();
+
+        for (Medalist medalist : selected) {
+            Committer committer = medalist.getCommitter();
+            committers.add(committer);
+            goldListBranch1.addAll(medalist.getGoldListBranch1());
+            goldListBranch2.addAll(medalist.getGoldListBranch2());
+            silverList.addAll(medalist.getSilverList());
+
+            for (Map.Entry<String, MedalBronze> entry : medalist.getBronzeList().entrySet()) {
+                MedalBronze oldBronze = bronzeList.get(entry.getKey());
+                MedalBronze newBronze = entry.getValue();
+                if (oldBronze == null) {
+                    bronzeList.put(entry.getKey(), newBronze);
+                } else {
+                    if (!oldBronze.getDirection().equals(newBronze.getDirection())) {
+                        oldBronze.setDirection(9);
+                    }
+                    Map<String, Integer> oldFileDepend = oldBronze.getFileDepend();
+                    for (Map.Entry<String, Integer> fileDependEntry : newBronze.getFileDepend().entrySet()) {
+                        Integer oldBranch = oldFileDepend.get(fileDependEntry.getKey());
+                        Integer newBranch = fileDependEntry.getValue();
+                        if (oldBranch == null) {
+                            oldFileDepend.put(fileDependEntry.getKey(), newBranch);
+                        } else {
+                            if (!oldBranch.equals(newBranch)) {
+                                oldFileDepend.put(fileDependEntry.getKey(), 2);
+                            }
+                        }
+                    }
+                }
+            }
+            names.add(committer.getName().trim());
+            emails.add(committer.getEmail().trim());
+        }
+
+        String combinedName = names.stream().collect(Collectors.joining(", "));
+        String combinedEmail = emails.stream().collect(Collectors.joining(", "));
+
+        Committer combinedCommitter = new CombinedCommitter(committers, combinedName, combinedEmail);
+        Medalist combinedMedalist = new Medalist(combinedCommitter);
+        combinedMedalist.setGoldListBranch1(goldListBranch1);
+        combinedMedalist.setGoldListBranch2(goldListBranch2);
+        combinedMedalist.setSilverList(silverList);
+        combinedMedalist.setBronzeList(bronzeList);
+
+        this.ranking.add(combinedMedalist);
+        solutions.add(configuration);
+
+        return combinedMedalist;
+    }
+
     public Set<EditedFile> setMedalsFilesEditedBothBranches(MergeFiles mergeFiles, int mode) {
         // Modes:
         // 1 -> setSilverMedals [default, A, C]
@@ -98,7 +200,6 @@ public class RankingGenerator {
         dependenciesMap.entrySet().stream().forEach((dependency) -> {
 
             EditedFile ascendentCand = dependency.getKey();
-
             EditedFile bronzeRights = ascendentCand;
 
             if (!excepiontFiles.contains(ascendentCand)) {

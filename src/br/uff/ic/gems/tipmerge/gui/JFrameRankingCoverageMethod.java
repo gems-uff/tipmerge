@@ -96,12 +96,7 @@ public class JFrameRankingCoverageMethod extends javax.swing.JFrame {
 		//System.out.println("Files Of Interest\t" + filesOfInterest);
 		//System.out.println("Medals for common files");
 		RankingGenerator rGenerator = new RankingGenerator();
-		Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
-		//System.out.println("Medals for dependencies in branch 1");
-		excepiontFiles = rGenerator.setMedalFromDependenciesBranch(1, dependenciesBranchOne, mergeFiles, excepiontFiles);
-		//System.out.println("Medals for dependencies in branch 2");
-		excepiontFiles = rGenerator.setMedalFromDependenciesBranch(2, dependenciesBranchTwo, mergeFiles, excepiontFiles);
-		excepiontFiles.removeAll(excepiontFiles);
+		rGenerator.createMedals(mergeFiles, dependenciesBranchOne, dependenciesBranchTwo);
 		List<Medalist> ranking = rGenerator.getRanking();
 		showRanking(ranking);
 	}

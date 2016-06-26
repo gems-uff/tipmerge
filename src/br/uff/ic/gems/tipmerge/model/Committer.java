@@ -5,7 +5,9 @@
  */
 package br.uff.ic.gems.tipmerge.model;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * This class has information about committers, as: name, e-mai and number of
@@ -32,6 +34,14 @@ public class Committer implements Comparable<Committer> {
         return name;
     }
 
+    public String getInitial() {
+        return Arrays.asList(name.split(" ")).stream().map((str) -> ""+str.charAt(0)).collect(Collectors.joining());
+    }
+
+    public String getNameEmail() {
+        return name + " <" + email + ">";
+    }
+
     /**
      * @return the email
      */
@@ -44,6 +54,13 @@ public class Committer implements Comparable<Committer> {
      */
     public Integer getCommits() {
         return commits;
+    }
+
+    /**
+     * @return the number of committer
+     */
+    public Integer getQuantity() {
+        return 1;
     }
 
     /**

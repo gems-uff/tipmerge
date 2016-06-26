@@ -79,11 +79,12 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
     
     private void createAndShowCoverage() {
         rGenerator = new RankingGenerator();
-        rGenerator.setDevelopersQuantity((Integer) devNumberSpinner.getValue());
-        Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch(1, dependenciesBranchOne, mergeFiles, excepiontFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch(2, dependenciesBranchTwo, mergeFiles, excepiontFiles);
-        excepiontFiles.removeAll(excepiontFiles);
+        rGenerator.createMedals(mergeFiles, dependenciesBranchOne, dependenciesBranchTwo);
+        showCoverage(rGenerator);
+    }
+    
+    private void extendAndShowCoverage() {
+        rGenerator.combineDevelopers((Integer) devNumberSpinner.getValue());
         showCoverage(rGenerator);
     }
 
@@ -225,7 +226,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
     }//GEN-LAST:event_mergesListActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.createAndShowCoverage();
+        this.extendAndShowCoverage();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

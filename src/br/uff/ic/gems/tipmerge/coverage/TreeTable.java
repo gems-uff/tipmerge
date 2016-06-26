@@ -43,9 +43,12 @@ public class TreeTable {
         int position = 1;
         IconManager iconManager = new IconManager();
         for (Medalist medalist : ranking) {
-
+            String name = medalist.getCommitter().getName();
+            if (name.length() > 50) {
+                name = medalist.getCommitter().getInitial();
+            }
             this.content.add(new Object[]{position++ + " - "
-                + medalist.getCommitter().getName(),
+                + name,
                 iconManager.createImageIcon(medalist.getGoldMedals()),
                 iconManager.createImageIcon(medalist.getSilverMedals()),
                 iconManager.createImageIcon(medalist.getBronzeMedals())
@@ -101,6 +104,23 @@ public class TreeTable {
                 return super.getColumnClass(column);
             }
 
+            private Medalist findMedalist(int row) {
+                try {
+                    int rowTemp = row;
+                    String aut;
+                    do {
+                        aut = getValueAt(rowTemp--, 0).toString();
+                    } while (!aut.contains(" - "));
+
+                    return rankGen.getRanking().get(Integer.parseInt(aut.split(" - ")[0]) - 1);
+                } catch (RuntimeException e1) {
+                    System.err.println(e1);
+                    //catch null pointer exception if mouse is over an empty line
+                }
+                return null;
+            }
+
+
             @Override
             public String getToolTipText(MouseEvent e) {
                 String tip = null;
@@ -108,22 +128,22 @@ public class TreeTable {
                 int row = rowAtPoint(p);
                 int col = columnAtPoint(p);
 
+                if (col == 0) {
+                    Medalist medalist = this.findMedalist(row);
+                    if (medalist != null) {
+                        tip = "<html>" +
+                            medalist.getCommitter().getNameEmail()
+                                .replace("<", "&lt;")
+                                .replace(">", "&gt;")
+                                .replace("\n", "<br>") +
+                            "</html>";
+                    }
+                }
                 if (col == 3 && getValueAt(row, col) instanceof ImageIcon) {
-                    try {
-                        int rowTemp = row;
-                        String aut;
-                        do {
-                            aut = getValueAt(rowTemp--, 0).toString();
-                        } while (!aut.contains(" - "));
-                        
+                    Medalist medalist = this.findMedalist(row);
+                    if (medalist != null) {
                         String file = getValueAt(row, 0).toString();
-                        Medalist medalist = rankGen.getMedalist(aut.split(" - ")[1]);
-
                         tip = (new ToolTipMessage()).getMessage(medalist, file);
-
-                    } catch (RuntimeException e1) {
-                        System.err.println(e1);
-                        //catch null pointer exception if mouse is over an empty line
                     }
                 }
 

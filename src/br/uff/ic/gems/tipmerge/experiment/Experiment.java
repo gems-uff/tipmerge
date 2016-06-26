@@ -313,12 +313,7 @@ public class Experiment {
      */
     private RankingGenerator getRanking(List<Map<EditedFile, Set<EditedFile>>> dependencies, MergeFiles mergeFiles) {
         RankingGenerator rGenerator = new RankingGenerator();
-
-        Set<EditedFile> excepiontFiles = rGenerator.setMedalsFilesEditedBothBranches(mergeFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch(1, dependencies.get(0), mergeFiles, excepiontFiles);
-        excepiontFiles = rGenerator.setMedalFromDependenciesBranch(2, dependencies.get(1), mergeFiles, excepiontFiles);
-        excepiontFiles.removeAll(excepiontFiles);
-
+        rGenerator.createMedals(mergeFiles, dependencies.get(0), dependencies.get(1));
         return rGenerator;
     }
 

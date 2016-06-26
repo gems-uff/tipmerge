@@ -1,10 +1,13 @@
 package br.uff.ic.gems.tipmerge.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.swing.ImageIcon;
 
 /**
@@ -15,10 +18,10 @@ import javax.swing.ImageIcon;
 public class Medalist {
 
     private final Committer committer;
-    private List<String> goldListBranch1 = new ArrayList();
-    private List<String> goldListBranch2 = new ArrayList();
-    private List<String> silverList = new ArrayList();
-    private List<MedalBronze> bronzeList = new ArrayList<>();
+    private Set<String> goldListBranch1 = new TreeSet();
+    private Set<String> goldListBranch2 = new TreeSet();
+    private Set<String> silverList = new TreeSet();
+    private Map<String, MedalBronze> bronzeList = new HashMap<>();
     //private Map<String,Integer> bronzeList = new HashMap<>();
 
     public Medalist(Committer committer) {
@@ -37,23 +40,23 @@ public class Medalist {
 
     public int getGoldMedals() {
         //TODO como contar as medalhas de ouro
-        return getGoldListBranch1().size() + getGoldListBranch2().size();
+        return goldListBranch1.size() + goldListBranch2.size();
 
     }
 
-    public List<String> getGoldListBranch1() {
+    public Set<String> getGoldListBranch1() {
         return goldListBranch1;
     }
 
-    public List<String> getGoldListBranch2() {
+    public Set<String> getGoldListBranch2() {
         return goldListBranch2;
     }
 
-    public void setgoldListBranch1(List<String> files) {
+    public void setGoldListBranch1(Set<String> files) {
         this.goldListBranch1 = files;
     }
 
-    public void setgoldListBranch2(List<String> files) {
+    public void setGoldListBranch2(Set<String> files) {
         this.goldListBranch2 = files;
     }
 
@@ -61,11 +64,11 @@ public class Medalist {
         return silverList.size();
     }
 
-    public void setsilverList(List<String> files) {
+    public void setSilverList(Set<String> files) {
         this.silverList = files;
     }
 
-    public List<String> getSilverList() {
+    public Set<String> getSilverList() {
         return this.silverList;
     }
 
@@ -73,34 +76,34 @@ public class Medalist {
         return bronzeList.size();
     }
 
-    public void setBronzeList(List<MedalBronze> files) {
+    public void setBronzeList(Map<String, MedalBronze> files) {
         this.bronzeList = files;
     }
 
-    public List<MedalBronze> getBronzeList() {
+    public Map<String, MedalBronze> getBronzeList() {
         return this.bronzeList;
     }
     
     public List<String> getBronzeFilesName(){
         List<String> list = new ArrayList<>();
-        for(MedalBronze mb : this.bronzeList)
+        for(MedalBronze mb : this.bronzeList.values())
             list.add(mb.getFile());
         return list;       
     }
     
     public int directionFromFileDepend(String file){
-        for(MedalBronze mb : this.bronzeList)
+        for(MedalBronze mb : this.bronzeList.values())
             if(mb.getFile().equals(file))
                 return mb.getDirection();
         return -1;
     }
 
     public void addGoldMedalBranch1(String fileName) {
-        this.getGoldListBranch1().add(fileName);
+        this.goldListBranch1.add(fileName);
     }
 
     public void addGoldMedalBranch2(String fileName) {
-        this.getGoldListBranch2().add(fileName);
+        this.goldListBranch2.add(fileName);
     }
     
     public void addGoldMedal(String fileName, int branch) {
@@ -117,11 +120,11 @@ public class Medalist {
 
     public void addBronzeMedal(String fileName, String fileDep, Integer direction) {
         if(direction == 2){
-            MedalBronze medalBronze = this.bronzeList.get(this.getBronzeFilesName().indexOf(fileName));
+            MedalBronze medalBronze = this.bronzeList.get(fileName);
             medalBronze.setDirection(direction);
             medalBronze.addFileDepend(fileName, direction);
         }else
-            this.bronzeList.add(new MedalBronze(fileName, fileDep, direction));
+            this.bronzeList.put(fileName, new MedalBronze(fileName, fileDep, direction));
         
     }
 
@@ -159,7 +162,7 @@ public class Medalist {
         //Integer[] medals = new Integer[3];
 
         Map<String, Object[]> fileMedal = new HashMap<>();
-        for (MedalBronze medalBronze : this.bronzeList) {
+        for (MedalBronze medalBronze : this.bronzeList.values()) {
             ImageIcon medalIcon = null;
             //if(null != this.bronzeList.get(medalBronze))
                 

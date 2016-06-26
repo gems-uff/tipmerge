@@ -18,7 +18,7 @@ public class ToolTipMessage {
     public String getMessage(Medalist medalist, String file) {
         String tip = "";
         //System.out.println(medalist.getCommitter().getName() + "\n" + medalist.getBronzeList().toString());
-        for (MedalBronze medal : medalist.getBronzeList()) {
+        for (MedalBronze medal : medalist.getBronzeList().values()) {
             if (medal.getFile().equals(file)) {
                 //System.out.println(medal);
                 tip = "<html>";
