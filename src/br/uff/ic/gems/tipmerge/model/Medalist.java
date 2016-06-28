@@ -1,6 +1,7 @@
 package br.uff.ic.gems.tipmerge.model;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +23,15 @@ public class Medalist {
     private Set<String> goldListBranch2 = new TreeSet();
     private Set<String> silverList = new TreeSet();
     private Map<String, MedalBronze> bronzeList = new HashMap<>();
-    //private Map<String,Integer> bronzeList = new HashMap<>();
+    private BitSet configuration;
+
+    public BitSet getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(BitSet configuration) {
+        this.configuration = configuration;
+    }
 
     public Medalist(Committer committer) {
         this.committer = committer;
@@ -31,12 +40,6 @@ public class Medalist {
     public Committer getCommitter() {
         return committer;
     }
-
-    /*
-    public void setCommitter(Committer committer) {
-        this.committer = committer;
-    }
-     */
 
     public int getGoldMedals() {
         //TODO como contar as medalhas de ouro
@@ -130,7 +133,11 @@ public class Medalist {
 
     @Override
     public String toString() {
-        return this.getCommitter().getName().substring(0, Math.min(20, this.getCommitter().getName().length())) + "\t"
+        String name = this.getCommitter().getName();
+        if (name.length() > 20) {
+            name = this.getCommitter().getInitial().substring(0, Math.min(20, this.getCommitter().getInitial().length()));
+        }
+        return name + "\t"
                 + this.getGoldMedals() + "\t"
                 + this.getSilverMedals() + "\t"
                 + this.getBronzeMedals();

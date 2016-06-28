@@ -11,7 +11,7 @@ import java.util.Comparator;
  *
  * @author Jhunior
  */
-public class Compara implements Comparator<Medalist> {
+public class MedalistComparator implements Comparator<Medalist> {
 
     @Override
     public int compare(Medalist o1, Medalist o2) {
@@ -38,8 +38,9 @@ public class Compara implements Comparator<Medalist> {
         } else if (o1.getCommitter().getQuantity() < o2.getCommitter().getQuantity()) {
             return -1;
         }
+        
+        return o1.getCommitter().compareTo(o2.getCommitter());
 
-        return 0;
     }
 
 }

@@ -5,12 +5,17 @@
  */
 package br.uff.ic.gems.tipmerge.model;
 
+import br.uff.ic.gems.tipmerge.util.Statistics;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -23,70 +28,192 @@ import java.util.stream.Collectors;
  */
 public class RankingGenerator {
 
-    private List<Medalist> ranking = new ArrayList<>();
+    private LinkedList<Medalist> ranking;
+    
     private List<Medalist> developers;
+    private Medalist fullCoverage;
+
+    private int developersQuantity;
+    
     private Set<BitSet> solutions;
-    private int developersQuantity = 1;
+    private Map<Integer, BigInteger> totalSolutionsPerQuantity;
+    private Map<Integer, BigInteger> numberOfSolutionsPerQuantity;
+    
+    private int maxDevelopersQuantity = 1;
+    private double minCoverage = 0.0;
+    private int maxIterations = 100;
+    private int maxDuration = 300;
+    private int fitness = 0;
+    private long firstTime;
+    
+    private Comparator<Medalist> medalistComparator = new MedalistComparator();
+    private Comparator<Medalist> coverageComparator;
+    private Medalist bestMedalist = null;
 
-    public int getDevelopersQuantity() {
-        return developersQuantity;
+    public RankingGenerator() {
+        this.ranking = new LinkedList<>();
     }
-
-    public void setDevelopersQuantity(int developersQuantity) {
-        this.developersQuantity = developersQuantity;
-    }
-
+   
     /**
-     * @return the ranking
+     * Create Medalists with medals
+     * Initialize solutions (tabu set)
+     * @param mergeFiles
+     * @param dependenciesBranchOne
+     * @param dependenciesBranchTwo
      */
-    public List<Medalist> getRanking() {
-        Collections.sort(ranking, new Compara());
-        return ranking;
-    }
-
-    /**
-     * @param ranking the ranking to set
-     */
-    public void setRanking(List<Medalist> ranking) {
-        this.ranking = ranking;
-    }
-
     public void createMedals(MergeFiles mergeFiles, Map<EditedFile, Set<EditedFile>> dependenciesBranchOne, Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo) {
         Set<EditedFile> excepiontFiles = this.setMedalsFilesEditedBothBranches(mergeFiles);
         excepiontFiles = this.setMedalFromDependenciesBranch(1, dependenciesBranchOne, mergeFiles, excepiontFiles);
         excepiontFiles = this.setMedalFromDependenciesBranch(2, dependenciesBranchTwo, mergeFiles, excepiontFiles);
         excepiontFiles.removeAll(excepiontFiles);
-
-        developers = new ArrayList<>(this.getRanking());
-        int size = developers.size();
-        solutions = new HashSet<>();
+        
+        this.initializeData();
+    }
+    
+    public void reset() {
+        this.ranking = new LinkedList<>(this.getDevelopers());
+        this.initializeData();
+    }
+    
+    /**
+     * Initialize solutions (tabu set)
+     * Create maps with maximum/current number of combinations
+     */
+    private void initializeData() {
+        this.sortRanking();
+        List<Medalist> developersRanking = this.getRanking();
+        this.setDevelopers(developersRanking);
+        
+        this.totalSolutionsPerQuantity = new HashMap<>();
+        this.numberOfSolutionsPerQuantity = new HashMap<>();
+        this.solutions = new HashSet<>();
+        
+        int size = this.getDevelopersQuantity();
+        
+        BitSet full = new BitSet(size);
         for (int i = 0; i < size; i++) {
+            full.set(i);
             BitSet solution = new BitSet(size);
             solution.set(i);
-            solutions.add(solution);
+            developersRanking.get(i).setConfiguration(solution);
+            this.addSolution(solution);
+            
+            this.numberOfSolutionsPerQuantity.put(i + 1, BigInteger.ZERO);
+        
+            if (i <= size / 2) {
+                BigInteger combinations = Statistics.combination(size, i + 1);
+                this.totalSolutionsPerQuantity.put(i + 1, combinations);
+                this.totalSolutionsPerQuantity.put(size - i - 1, combinations);
+            }
         }
+        this.totalSolutionsPerQuantity.put(0, BigInteger.ONE);
+        this.totalSolutionsPerQuantity.put(size, BigInteger.ONE);
+        this.numberOfSolutionsPerQuantity.put(0, BigInteger.ZERO);
+        this.numberOfSolutionsPerQuantity.put(1, BigInteger.valueOf(size));
+        this.numberOfSolutionsPerQuantity.put(size, BigInteger.ZERO);
+        
+        this.setMinCoverage(0.0);
+        this.setFullCoverage(this.createSolution(full, false));
     }
-
-    public void combineDevelopers(int quantity) {
-        quantity = Math.min(quantity, this.developers.size());
-        this.setDevelopersQuantity(quantity);
-
+    
+    /**
+     * @param maxDevelopers: maximum number of developers
+     * @param minCoverage: minimum coverage
+     * @return boolean indicating if initial solution were found
+     */
+    private boolean initialSolution(int maxDevelopers, double minCoverage) {
+        boolean created = false;
+        this.setMaxDevelopersQuantity(maxDevelopers);
+        this.setMinCoverage(minCoverage);
+        
+        // It should use i < this.getMaxDevelopersQuantity()
+        // because createSolution changes maxDevelopersQuantity if minCoverage > 0
         BitSet configuration = new BitSet(this.developers.size());
-        for (int i = 0; i < quantity; i++) {
+        for (int i = 0; i < this.getMaxDevelopersQuantity(); i++) {
             configuration.set(i);
+            if (this.createSolution(configuration) != null) {
+                created = true;
+            }
         }
-
-        this.createSolution(configuration);
+        
+        return created;
     }
+    
+    /**
+     * Combine developers to generate new solutions
+     * @param maxDevelopers
+     * @param minCoverage
+     * @param maxIterations
+     * @param maxDuration
+     * @param fitness 
+     */
+    public void combineDevelopers(int maxDevelopers, double minCoverage, int maxIterations, int maxDuration, int fitness) {
+        this.setFirstTime(System.currentTimeMillis());
+        this.setMaxDuration(maxDuration);
+        this.setMaxIterations(maxIterations);
+        this.setFitness(fitness);
+        this.sortRanking();
+        if (this.initialSolution(maxDevelopers, minCoverage)) {
+            this.metaheuristic();
+        } else {
+            System.out.println("No initial solution found");
+        }
+    }
+    
+    /**
+     * Run metaheuristic
+     */
+    private void metaheuristic() {
+        int changed = 0;
+        int iter = 0;
+        long start = this.getFirstTime();
+        long delta = start - System.currentTimeMillis();
+        long maxTime = this.getMaxDuration() * 1000;
+        maxTime = (maxTime == 0) ? delta + 1 : maxTime;
 
-    public Medalist createSolution(BitSet configuration) {
-        if (solutions.contains(configuration)) {
+        while (delta < maxTime && (iter - changed < this.getMaxIterations())) {
+            iter++;
+            while (this.increaseDevelopers(this.getBestConfiguration())) {
+                changed = iter;
+            }
+            while (this.decreaseDevelopers(this.getBestConfiguration())) {
+                changed = iter;
+            }
+            if (this.mutateN(this.getBestConfiguration())) {
+                changed = iter;
+            }
+            delta = start - System.currentTimeMillis();
+            maxTime = (maxTime == 0) ? delta + 1 : maxTime;
+        }
+    }
+    
+    /**
+     * Create solution and include in the solutions
+     * @param configuration
+     * @return Medalist solution
+     */
+    private Medalist createSolution(BitSet configuration) {
+        return this.createSolution(configuration, true);
+    }
+    
+    /**
+     * Create solution
+     * @param configuration
+     * @param include
+     * @return Medalist solution
+     */
+    private Medalist createSolution(BitSet configuration, boolean include) {
+        configuration = (BitSet) configuration.clone();
+        if (this.inSolutions(configuration)) {
             return null;
         }
 
+        int quantity = 0;
+        List<Medalist> devs = this.getDevelopers();
         List<Medalist> selected = new ArrayList<>();
         for (int i = configuration.nextSetBit(0); i != -1; i = configuration.nextSetBit(i + 1)) {
-            selected.add(this.developers.get(i));
+            selected.add(devs.get(i));
+            quantity += 1;
         }
 
         List<Committer> committers = new ArrayList<>();
@@ -141,12 +268,181 @@ public class RankingGenerator {
         combinedMedalist.setSilverList(silverList);
         combinedMedalist.setBronzeList(bronzeList);
 
-        this.ranking.add(combinedMedalist);
-        solutions.add(configuration);
-
+        combinedMedalist.setConfiguration(configuration);
+        if (include) {
+            this.addSolution(configuration);
+            this.incrementQuantity(quantity);
+            
+            double minCoverage = this.getMinCoverage();
+            if (minCoverage > 0.0) {
+                double coverage = this.getCoverageComparator().coverage(combinedMedalist);
+                if (coverage < minCoverage) {
+                    return null;
+                } else {
+                    this.setMaxDevelopersQuantity(quantity);
+                }
+            }
+            
+            if (this.getComparator().compare(combinedMedalist, this.getBestMedalist()) < 0) {
+                this.setBestMedalist(combinedMedalist);
+            }
+            this.addToRanking(combinedMedalist);
+        }
         return combinedMedalist;
     }
-
+    
+    /**
+     * Decrease number of developers
+     * @param configuration
+     * @return true if it was possible
+     */
+    private boolean decreaseDevelopers(BitSet configuration) {
+        int size = this.getDevelopersQuantity();
+        ArrayList<Integer> bits1 = new ArrayList<>();
+        BitSet newConfiguration = new BitSet(size);
+        int bits1Quantity = 0;
+        boolean result = false;
+        
+        for (int i = 0; i < size; i++) {
+            if (configuration.get(i)) {
+                bits1.add(i);
+                bits1Quantity += 1;
+                newConfiguration.set(i);
+            }
+        }
+        
+        if (bits1Quantity == 1) {
+            return result;
+        }
+        
+        for (Integer bit1 : bits1) {
+            if (this.hasTriedAll(bits1Quantity - 1)) {
+                break;
+            }
+            newConfiguration.set(bit1, false);
+            Medalist newSolution = this.createSolution(newConfiguration);
+            result |= (newSolution != null);
+            newConfiguration.set(bit1, true);
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Increase number of developers
+     * @param configuration
+     * @return true if it was possible
+     */
+    private boolean increaseDevelopers(BitSet configuration) {
+        int size = this.getDevelopersQuantity();
+        ArrayList<Integer> bits0 = new ArrayList<>();
+        BitSet newConfiguration = new BitSet(size);
+        int bits1Quantity = 0;
+        boolean result = false;
+        
+        for (int i = 0; i < size; i++) {
+            if (configuration.get(i)) {
+                bits1Quantity++;
+                newConfiguration.set(i);
+            } else {
+                bits0.add(i);
+            }
+        }
+        
+        if (bits1Quantity == this.getMaxDevelopersQuantity() || bits1Quantity == size) {
+            return result;
+        }
+        
+        for (Integer bit0 : bits0) {
+            if (this.hasTriedAll(bits1Quantity + 1)) {
+                break;
+            }
+            newConfiguration.set(bit0, true);
+            Medalist newSolution = this.createSolution(newConfiguration);
+            result |= (newSolution != null);                    
+            newConfiguration.set(bit0, false);
+        }
+        return result;
+    }
+    
+    /**
+     * Mutate solution
+     * @param configuration
+     * @param quantity
+     * @return all mutations
+     */
+    private ArrayList<Medalist> mutate(BitSet configuration, int quantity) {
+        int size = this.getDevelopersQuantity();
+        ArrayList<Medalist> result = new ArrayList<>();
+        ArrayList<Integer> bits0 = new ArrayList<>();
+        ArrayList<Integer> bits1 = new ArrayList<>();
+        BitSet newConfiguration = new BitSet(size);
+        int bits1Quantity = 0;
+        int bits0Quantity = 0;
+        
+        for (int i = 0; i < size; i++) {
+            if (configuration.get(i)) {
+                bits1.add(i);
+                bits1Quantity++;
+                newConfiguration.set(i);
+            } else {
+                bits0Quantity++;
+                bits0.add(i);
+            }
+        }
+        
+        Collections.shuffle(bits0);
+        Collections.shuffle(bits1);
+        
+        if (quantity == 0) {
+            quantity = bits0Quantity;
+        }
+        quantity = Math.min(quantity, bits1Quantity*bits0Quantity);
+        
+        // Swap persons on the solution
+        for (Integer bit1 : bits1) {
+            newConfiguration.set(bit1, false);
+            for (Integer bit0 : bits0) {
+                if (this.hasTriedAll(bits1Quantity)) {
+                    return result;
+                }
+                newConfiguration.set(bit0, true);
+                Medalist newSolution = this.createSolution(newConfiguration);
+                if (newSolution != null) {
+                    result.add(newSolution);
+                    quantity--;
+                    if (quantity == 0) {
+                        return result;
+                    }
+                }
+                newConfiguration.set(bit0, false);
+            }
+            newConfiguration.set(bit1, true);
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Mutate solution once
+     * @param configuration
+     * @return 
+     */
+    private boolean mutate1(BitSet configuration) {
+        List<Medalist> result = this.mutate(configuration, 1);
+        return (result.size() > 0);
+    }
+    
+    /**
+     * Mutate solution for each bit 0
+     * @param configuration
+     * @return 
+     */
+    private boolean mutateN(BitSet configuration) {
+        List<Medalist> result = this.mutate(configuration, 0);
+        return (result.size() > 0);
+    }
+    
     public Set<EditedFile> setMedalsFilesEditedBothBranches(MergeFiles mergeFiles, int mode) {
         // Modes:
         // 1 -> setSilverMedals [default, A, C]
@@ -345,7 +641,7 @@ public class RankingGenerator {
             medalist.addBronzeMedal(conseq, ascend.getFileName(), direction);
             int index = ranking.indexOf(medalist);
             if (index == -1) 
-                ranking.add(medalist);
+                this.addToRanking(medalist);
             else {
                 Integer direcDepA = ranking.get(index).directionFromFileDepend(conseq);
                 if (direcDepA != -1 && !Objects.equals(direcDepA, direction))
@@ -363,7 +659,7 @@ public class RankingGenerator {
             medalist.addSilverMedal(file.getFileName());
             int index = ranking.indexOf(medalist);
             if (index == -1) {
-                ranking.add(medalist);
+                this.addToRanking(medalist);
             } else {
                 ranking.get(index).addSilverMedal(file.getFileName());
             }
@@ -376,7 +672,7 @@ public class RankingGenerator {
             medalist.addGoldMedal(file.getFileName(), branch);
             int index = ranking.indexOf(medalist);
             if (index == -1) {
-                ranking.add(medalist);
+                this.addToRanking(medalist);
             } else {
                 ranking.get(index).addGoldMedal(file.getFileName(), branch);
             }
@@ -384,7 +680,7 @@ public class RankingGenerator {
     }
 
     public List<String> getList() {
-        Collections.sort(ranking, new Compara());
+        Collections.sort(ranking, this.getComparator());
         List<String> rankList = new ArrayList<>();
         for (Medalist medalist : ranking) {
             rankList.add(medalist.getCommitter().getName());
@@ -394,7 +690,7 @@ public class RankingGenerator {
 
     @Override
     public String toString() {
-        Collections.sort(ranking, new Compara());
+        Collections.sort(ranking, this.getComparator());
         StringBuilder result = new StringBuilder();
         for (Medalist medalist : ranking) {
             result.append(medalist).append("\n");
@@ -408,6 +704,239 @@ public class RankingGenerator {
                 return m;
         }
         return null;
+    }
+
+    /**
+     * Insert solution to ranking
+     * @param medalist
+     * @return 
+     */
+    public boolean addToRanking(Medalist medalist) {
+        ListIterator<Medalist> itr = this.getRanking().listIterator();
+        while(true) {
+            if (itr.hasNext() == false) {
+                itr.add(medalist);
+                return true;
+            }
+            Medalist elementInList = itr.next();
+            if (this.getComparator().compare(elementInList, medalist) > 0) {
+                itr.previous();
+                itr.add(medalist);
+                return true;
+            } else if (this.getMedalistComparator().compare(elementInList, medalist) == 0) {
+                System.out.println("repeated " + medalist);
+                return false;
+            }
+        }
+    }
+
+    /**
+     * @return metaheuristic start time
+     */
+    public long getFirstTime() {
+        return firstTime;
+    }
+
+    /**
+     * Set metaheuristic start time
+     * @param firstTime 
+     */
+    public void setFirstTime(long firstTime) {
+        this.firstTime = firstTime;
+    }
+    
+    /**
+     * Set comparator:
+     * 0: medalistComparator
+     * 1: coverageComparator
+     * @param fitness 
+     */
+    public void setFitness(int fitness) {
+        this.fitness = fitness;
+    }
+    
+    /**
+     * @return maximum duration (seconds)
+     */
+    public int getMaxDuration() {
+        return maxDuration;
+    }
+    
+    /**
+     * @param maxDuration (seconds)
+     */
+    public void setMaxDuration(int maxDuration) {
+        this.maxDuration = maxDuration;
+    }
+    
+    /**
+     * @return number of developers limit for a solution
+     */
+    public int getMaxDevelopersQuantity() {
+        return maxDevelopersQuantity;
+    }
+
+    /**
+     * @param maxDevelopersQuantity: number of developers limit for a solution
+     */
+    public void setMaxDevelopersQuantity(int maxDevelopersQuantity) {
+        int devs = this.getDevelopersQuantity();
+        
+        this.maxDevelopersQuantity = 
+                (maxDevelopersQuantity <= 0) ? 
+                devs : Math.min(devs, maxDevelopersQuantity);
+    }
+    
+    /**
+     * @return total number of developers
+     */
+    public int getDevelopersQuantity() {
+        return developersQuantity;
+    }
+    
+    /**
+     * @return developers list
+     */
+    public List<Medalist> getDevelopers() {
+        return developers;
+    }
+
+    /**
+     * @param developers
+     */
+    public void setDevelopers(List<Medalist> developers) {
+        this.developers = new ArrayList<>(developers);
+        this.developersQuantity = developers.size();
+    }
+
+    /**
+     * @return the ranking
+     */
+    public List<Medalist> getRanking() {
+        return ranking;
+    }
+
+    /**
+     * @param configuration
+     * @return true if solutions (tabu list) contains configuration 
+     */
+    public boolean inSolutions(BitSet configuration) {
+        return solutions.contains(configuration);
+    }
+    
+    /**
+     * @param configuration
+     * Add configuration to solutions (tabu list)
+     */
+    public void addSolution(BitSet configuration) {
+        this.solutions.add(configuration);
+    }
+    
+    /**
+     * Increment number of solutions for quantity
+     * @param quantity 
+     */
+    public void incrementQuantity(int quantity) {
+        this.numberOfSolutionsPerQuantity.merge(quantity, BigInteger.ONE, BigInteger::add);
+    }
+
+    /**
+     * @return best medalist
+     */
+    public Medalist getBestMedalist() {
+        return bestMedalist;
+    }
+
+    /**
+     * @param bestMedalist 
+     */
+    public void setBestMedalist(Medalist bestMedalist) {
+        this.bestMedalist = bestMedalist;
+    }
+    
+    /**
+     * Sort ranking according to comparator
+     */
+    public void sortRanking() {
+        Collections.sort(this.ranking, this.getComparator());
+        this.setBestMedalist(this.ranking.get(0));
+    }
+
+    /**
+     * @param fullCoverage medalist 
+     */
+    public void setFullCoverage(Medalist fullCoverage) {
+        this.coverageComparator = new CoverageComparator(fullCoverage);
+        this.fullCoverage = fullCoverage;
+    }
+
+    /**
+     * @return minimum coverage
+     */
+    public double getMinCoverage() {
+        return minCoverage;
+    }
+
+    /**
+     * @param minCoverage
+     */
+    public void setMinCoverage(double minCoverage) {
+        this.minCoverage = minCoverage;
+    }
+
+    /**
+     * @return maximum number of iterations without changes
+     */
+    public int getMaxIterations() {
+        return maxIterations;
+    }
+
+    /**
+     * @param maxIterations 
+     */
+    public void setMaxIterations(int maxIterations) {
+        this.maxIterations = maxIterations;
+    }
+    
+    /**
+     * @return defined comparator
+     */
+    public Comparator<Medalist> getComparator() {
+        if (this.fitness == 0) {
+            return this.medalistComparator;
+        } else {
+            return this.coverageComparator;
+        }
+    }
+
+    /**
+     * @return comparator that compares number of medals
+     */
+    public Comparator<Medalist> getMedalistComparator() {
+        return this.medalistComparator;
+    }
+    
+    /**
+     * @return comparator that computes coverage
+     */
+    public CoverageComparator getCoverageComparator() {
+        return (CoverageComparator) this.coverageComparator;
+    }
+    
+    /**
+     * @return best configuration
+     */
+    public BitSet getBestConfiguration() {
+        return this.bestMedalist.getConfiguration();
+    }
+    
+    /**
+     * @param quantity
+     * @return check if it has exhausted quantity
+     */
+    public boolean hasTriedAll(int quantity) {
+        return (numberOfSolutionsPerQuantity.get(quantity)
+            .equals(totalSolutionsPerQuantity.get(quantity)));
     }
     
 }

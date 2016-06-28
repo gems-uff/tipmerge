@@ -6,6 +6,7 @@
 package br.uff.ic.gems.tipmerge.util;
 
 import br.uff.ic.gems.tipmerge.model.Committer;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -108,6 +109,15 @@ public class Statistics {
 		return committer;
 		
 	}
+        
+        public static BigInteger combination(long n, long k) {
+            BigInteger ret = BigInteger.ONE;
+            for (long x = 0; x < k; x++) {
+                ret = ret.multiply(BigInteger.valueOf(n-x))
+                         .divide(BigInteger.valueOf(x+1));
+            }
+            return ret;
+        }
 	
 	
 }
