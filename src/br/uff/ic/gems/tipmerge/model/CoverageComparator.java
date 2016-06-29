@@ -17,11 +17,16 @@ import java.util.TreeSet;
  */
 public class CoverageComparator implements Comparator<Medalist> {
 
+    private static double GOLD = 1.0;
+    private static double SILVER = 0.5;
+    private static double BRONZE = 0.1;
+    
     private final Medalist fullCoverage;
     private final double totalGoldBranch1;
     private final double totalGoldBranch2;
     private final double totalSilver;
     private final double totalBronze;
+    private final double totalCoverage;
     
     public CoverageComparator(Medalist fullCoverage) {
         this.fullCoverage = fullCoverage;
@@ -30,6 +35,10 @@ public class CoverageComparator implements Comparator<Medalist> {
         this.totalSilver = fullCoverage.getSilverList().size();
         this.totalBronze = fullCoverage.getBronzeList().values().stream()
             .map((bronze) -> (bronze.getDirection() == 9) ? 2 : 1).mapToInt(Integer::intValue).sum();
+        this.totalCoverage = GOLD * totalGoldBranch1 +
+            GOLD * totalGoldBranch2 +
+            SILVER * totalSilver +
+            BRONZE * totalBronze;
         
     }
     
@@ -40,12 +49,11 @@ public class CoverageComparator implements Comparator<Medalist> {
         double partialBronze = medalist.getBronzeList().values().stream()
             .map((bronze) -> (bronze.getDirection() == 9) ? 2 : 1).mapToInt(Integer::intValue).sum();
         
-        return ((
-            (partialGoldBranch1 / totalGoldBranch1) +
-            (partialGoldBranch2 / totalGoldBranch2) +
-            (partialSilver / totalSilver) +
-            (partialBronze / totalBronze)
-        ) / 4.0);
+        double partialCoverage = GOLD * partialGoldBranch1 +
+            GOLD * partialGoldBranch2 +
+            SILVER * partialSilver +
+            BRONZE * partialBronze;
+        return partialCoverage / this.totalCoverage;
     }
     
     @Override
