@@ -36,13 +36,12 @@ public class RankingGenerator {
     private int developersQuantity;
     
     private Set<BitSet> solutions;
-    private Map<Integer, BigInteger> totalSolutionsPerQuantity;
-    private Map<Integer, BigInteger> numberOfSolutionsPerQuantity;
     
     private int maxDevelopersQuantity = 1;
     private double minCoverage = 0.0;
     private int maxIterations = 100;
     private int maxDuration = 300;
+    private int maxRankingSize = 0;
     private int fitness = 0;
     private long firstTime;
     
@@ -84,8 +83,6 @@ public class RankingGenerator {
         List<Medalist> developersRanking = this.getRanking();
         this.setDevelopers(developersRanking);
         
-        this.totalSolutionsPerQuantity = new HashMap<>();
-        this.numberOfSolutionsPerQuantity = new HashMap<>();
         this.solutions = new HashSet<>();
         
         int size = this.getDevelopersQuantity();
@@ -97,21 +94,7 @@ public class RankingGenerator {
             solution.set(i);
             developersRanking.get(i).setConfiguration(solution);
             this.addSolution(solution);
-            
-            this.numberOfSolutionsPerQuantity.put(i + 1, BigInteger.ZERO);
-        
-            if (i <= size / 2) {
-                BigInteger combinations = Statistics.combination(size, i + 1);
-                this.totalSolutionsPerQuantity.put(i + 1, combinations);
-                this.totalSolutionsPerQuantity.put(size - i - 1, combinations);
-            }
         }
-        this.totalSolutionsPerQuantity.put(0, BigInteger.ONE);
-        this.totalSolutionsPerQuantity.put(size, BigInteger.ONE);
-        this.numberOfSolutionsPerQuantity.put(0, BigInteger.ZERO);
-        this.numberOfSolutionsPerQuantity.put(1, BigInteger.valueOf(size));
-        this.numberOfSolutionsPerQuantity.put(size, BigInteger.ZERO);
-        
         this.setMinCoverage(0.0);
         this.setFullCoverage(this.createSolution(full, false));
     }
@@ -145,14 +128,16 @@ public class RankingGenerator {
      * @param minCoverage
      * @param maxIterations
      * @param maxDuration
+     * @param maxRankingSize
      * @param fitness 
      */
-    public void combineDevelopers(int maxDevelopers, double minCoverage, int maxIterations, int maxDuration, int fitness) {
+    public void combineDevelopers(int maxDevelopers, double minCoverage, int maxIterations, int maxDuration, int maxRankingSize, int fitness) {
         this.setFirstTime(System.currentTimeMillis());
         this.setMaxDuration(maxDuration);
         this.setMaxIterations(maxIterations);
         this.setFitness(fitness);
         this.sortRanking();
+        this.setMaxRankingSize(maxRankingSize);
         if (this.initialSolution(maxDevelopers, minCoverage)) {
             this.metaheuristic();
         } else {
@@ -173,13 +158,11 @@ public class RankingGenerator {
 
         while (delta < maxTime && (iter - changed < this.getMaxIterations())) {
             iter++;
-            while (this.increaseDevelopers(this.getBestConfiguration())) {
+            if (this.increaseDevelopers(this.getBestConfiguration())) {
                 changed = iter;
-            }
-            while (this.decreaseDevelopers(this.getBestConfiguration())) {
+            } else if (this.decreaseDevelopers(this.getBestConfiguration())) {
                 changed = iter;
-            }
-            if (this.mutateN(this.getBestConfiguration())) {
+            } else if (this.mutateN(this.getBestConfiguration())) {
                 changed = iter;
             }
             delta = start - System.currentTimeMillis();
@@ -271,7 +254,6 @@ public class RankingGenerator {
         combinedMedalist.setConfiguration(configuration);
         if (include) {
             this.addSolution(configuration);
-            this.incrementQuantity(quantity);
             
             double minCoverage = this.getMinCoverage();
             if (minCoverage > 0.0) {
@@ -287,6 +269,7 @@ public class RankingGenerator {
                 this.setBestMedalist(combinedMedalist);
             }
             this.addToRanking(combinedMedalist);
+            this.adjustRankingSize();
         }
         return combinedMedalist;
     }
@@ -316,9 +299,6 @@ public class RankingGenerator {
         }
         
         for (Integer bit1 : bits1) {
-            if (this.hasTriedAll(bits1Quantity - 1)) {
-                break;
-            }
             newConfiguration.set(bit1, false);
             Medalist newSolution = this.createSolution(newConfiguration);
             result |= (newSolution != null);
@@ -354,9 +334,6 @@ public class RankingGenerator {
         }
         
         for (Integer bit0 : bits0) {
-            if (this.hasTriedAll(bits1Quantity + 1)) {
-                break;
-            }
             newConfiguration.set(bit0, true);
             Medalist newSolution = this.createSolution(newConfiguration);
             result |= (newSolution != null);                    
@@ -403,9 +380,6 @@ public class RankingGenerator {
         for (Integer bit1 : bits1) {
             newConfiguration.set(bit1, false);
             for (Integer bit0 : bits0) {
-                if (this.hasTriedAll(bits1Quantity)) {
-                    return result;
-                }
                 newConfiguration.set(bit0, true);
                 Medalist newSolution = this.createSolution(newConfiguration);
                 if (newSolution != null) {
@@ -825,21 +799,21 @@ public class RankingGenerator {
     }
     
     /**
-     * @param configuration
      * Add configuration to solutions (tabu list)
+     * @param configuration
      */
     public void addSolution(BitSet configuration) {
         this.solutions.add(configuration);
     }
     
     /**
-     * Increment number of solutions for quantity
-     * @param quantity 
+     * Remove configuration from solutions (tabu list)
+     * @param configuration
      */
-    public void incrementQuantity(int quantity) {
-        this.numberOfSolutionsPerQuantity.merge(quantity, BigInteger.ONE, BigInteger::add);
+    public void removeSolution(BitSet configuration) {
+        this.solutions.remove(configuration);
     }
-
+    
     /**
      * @return best medalist
      */
@@ -929,14 +903,26 @@ public class RankingGenerator {
     public BitSet getBestConfiguration() {
         return this.bestMedalist.getConfiguration();
     }
-    
-    /**
-     * @param quantity
-     * @return check if it has exhausted quantity
-     */
-    public boolean hasTriedAll(int quantity) {
-        return (numberOfSolutionsPerQuantity.get(quantity)
-            .equals(totalSolutionsPerQuantity.get(quantity)));
+
+    public int getMaxRankingSize() {
+        return maxRankingSize;
     }
+
+    public void setMaxRankingSize(int maxRankingSize) {
+        this.maxRankingSize = maxRankingSize;
+        this.adjustRankingSize();
+        
+    }
+    
+    public void adjustRankingSize() {
+        if (this.maxRankingSize != 0) {
+            while (this.ranking.size() > this.maxRankingSize) {
+                this.removeSolution(this.ranking.getLast().getConfiguration());
+                this.ranking.removeLast();
+            }
+        }
+    }
+    
+    
     
 }
