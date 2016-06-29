@@ -42,6 +42,9 @@ public class RankingGenerator {
     private int maxIterations = 100;
     private int maxDuration = 300;
     private int maxRankingSize = 0;
+    private double goldWeight = 1.0;
+    private double silverWeight = 0.5;
+    private double bronzeWeight = 0.1;
     private int fitness = 0;
     private long firstTime;
     
@@ -131,8 +134,13 @@ public class RankingGenerator {
      * @param maxRankingSize
      * @param fitness 
      */
-    public void combineDevelopers(int maxDevelopers, double minCoverage, int maxIterations, int maxDuration, int maxRankingSize, int fitness) {
+    public void combineDevelopers(int maxDevelopers, double minCoverage, int maxIterations, int maxDuration, int maxRankingSize, 
+                                  double goldWeight, double silverWeight, double bronzeWeight, int fitness) {
         this.setFirstTime(System.currentTimeMillis());
+        this.setBronzeWeight(bronzeWeight);
+        this.setSilverWeight(silverWeight);
+        this.setGoldWeight(goldWeight);
+        this.setFullCoverage(this.getCoverageComparator().getFullCoverage());
         this.setMaxDuration(maxDuration);
         this.setMaxIterations(maxIterations);
         this.setFitness(fitness);
@@ -152,7 +160,7 @@ public class RankingGenerator {
         int changed = 0;
         int iter = 0;
         long start = this.getFirstTime();
-        long delta = start - System.currentTimeMillis();
+        long delta = System.currentTimeMillis() - start;
         long maxTime = this.getMaxDuration() * 1000;
         maxTime = (maxTime == 0) ? delta + 1 : maxTime;
 
@@ -165,7 +173,7 @@ public class RankingGenerator {
             } else if (this.mutateN(this.getBestConfiguration())) {
                 changed = iter;
             }
-            delta = start - System.currentTimeMillis();
+            delta = System.currentTimeMillis() - start;
             maxTime = (maxTime == 0) ? delta + 1 : maxTime;
         }
     }
@@ -840,7 +848,7 @@ public class RankingGenerator {
      * @param fullCoverage medalist 
      */
     public void setFullCoverage(Medalist fullCoverage) {
-        this.coverageComparator = new CoverageComparator(fullCoverage);
+        this.coverageComparator = new CoverageComparator(fullCoverage, this.getGoldWeight(), this.getSilverWeight(), this.getBronzeWeight());
         this.fullCoverage = fullCoverage;
     }
 
@@ -921,6 +929,30 @@ public class RankingGenerator {
                 this.ranking.removeLast();
             }
         }
+    }
+
+    public double getGoldWeight() {
+        return goldWeight;
+    }
+
+    public void setGoldWeight(double goldWeight) {
+        this.goldWeight = goldWeight;
+    }
+
+    public double getSilverWeight() {
+        return silverWeight;
+    }
+
+    public void setSilverWeight(double silverWeight) {
+        this.silverWeight = silverWeight;
+    }
+
+    public double getBronzeWeight() {
+        return bronzeWeight;
+    }
+
+    public void setBronzeWeight(double bronzeWeight) {
+        this.bronzeWeight = bronzeWeight;
     }
     
     

@@ -52,6 +52,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
     private MergeFiles mergeFiles;
     private Map<EditedFile, Set<EditedFile>> dependenciesBranchOne;
     private Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo;
+    private JFrameCombineMergeConfig jFrameCombineMergeConfig;
     
     public Set<EditedFile> filesOfInterest = new HashSet<>();
 
@@ -75,43 +76,15 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         this.filesOfInterest.addAll(mergeFiles.getFilesOnBothBranch());
 
         this.createAndShowCoverage();
-        ((SpinnerNumberModel) this.rankingSpinner.getModel()).setMinimum(rGenerator.getDevelopersQuantity() * 5);
-        this.rankingSpinner.setValue(rGenerator.getDevelopersQuantity() * rGenerator.getDevelopersQuantity() + rGenerator.getDevelopersQuantity());
-        
     }
     
     private void createAndShowCoverage() {
         rGenerator = new RankingGenerator();
         rGenerator.createMedals(mergeFiles, dependenciesBranchOne, dependenciesBranchTwo);
+        jFrameCombineMergeConfig = new JFrameCombineMergeConfig(rGenerator, this);
         showCoverage(rGenerator);
     }
-    
-    private void extendAndShowCoverage() {
-        Runnable r;
-        r = new Runnable() {
-
-            @Override
-            public void run() {
-                labelLoading.setVisible(true);
-                combineButton.setEnabled(false);
-                rGenerator.combineDevelopers(
-                    (Integer) devNumberSpinner.getValue(),
-                    ((double) ((Integer) coverageSpinner.getValue())) / 100.0,
-                    (Integer) iterationsSpinner.getValue(),
-                    (Integer) timeSpinner.getValue(),
-                    (Integer) rankingSpinner.getValue(),
-                    fitnessComboBox.getSelectedIndex());
-                showCoverage(rGenerator);
-                combineButton.setEnabled(true);
-                labelLoading.setVisible(false);
-            }
-
-        };
-        Thread t = new Thread(r);
-        t.start();
-       
-    }
-
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -128,23 +101,15 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         mergesList = new javax.swing.JComboBox();
         labelLoading = new javax.swing.JLabel();
         combineButton = new javax.swing.JButton();
-        devNumberSpinner = new javax.swing.JSpinner();
-        jLabel1 = new javax.swing.JLabel();
-        coverageSpinner = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        iterationsSpinner = new javax.swing.JSpinner();
-        timeSpinner = new javax.swing.JSpinner();
-        jLabel4 = new javax.swing.JLabel();
-        fitnessComboBox = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
-        resetButton = new javax.swing.JButton();
-        rankingSpinner = new javax.swing.JSpinner();
-        jLabel6 = new javax.swing.JLabel();
         jPanelCover = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Developers Recommendation");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -164,48 +129,12 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         labelLoading.setText("Loading ...");
         labelLoading.setVisible(false);
 
-        combineButton.setText("Recalculate");
+        combineButton.setText("Combined Merge");
         combineButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 combineButtonActionPerformed(evt);
             }
         });
-
-        devNumberSpinner.setValue(1);
-
-        jLabel1.setText("Developers (#)");
-
-        coverageSpinner.setValue(0);
-
-        jLabel2.setText("Coverage (%)");
-
-        jLabel3.setText("Iterations (#)");
-
-        iterationsSpinner.setValue(300);
-
-        timeSpinner.setValue(300);
-
-        jLabel4.setText("Time (seconds)");
-
-        fitnessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medals", "Coverage" }));
-        fitnessComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fitnessComboBoxActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setText("Fitness");
-
-        resetButton.setText("Reset");
-        resetButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetButtonActionPerformed(evt);
-            }
-        });
-
-        rankingSpinner.setValue(0);
-
-        jLabel6.setText("Ranking (#)");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -217,45 +146,13 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                     .addComponent(jLabel13)
                     .addComponent(jLabel14)
                     .addComponent(labelLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rankingSpinner)
-                                .addGap(24, 24, 24)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(coverageSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(fitnessComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(timeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(devNumberSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(iterationsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(combineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(mergesList, 0, 661, Short.MAX_VALUE)
+                    .addComponent(txProjectName)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(mergesList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txProjectName))))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(combineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -271,24 +168,9 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                     .addComponent(mergesList, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(labelLoading)
-                        .addComponent(devNumberSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1)
-                        .addComponent(coverageSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel6)
-                        .addComponent(rankingSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelLoading, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(combineButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(iterationsSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(timeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(fitnessComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)))
+                .addContainerGap())
         );
 
         jPanelCover.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -301,7 +183,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         );
         jPanelCoverLayout.setVerticalGroup(
             jPanelCoverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 301, Short.MAX_VALUE)
+            .addGap(0, 313, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -332,54 +214,27 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
     }//GEN-LAST:event_mergesListActionPerformed
 
     private void combineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combineButtonActionPerformed
-        this.extendAndShowCoverage();
+        this.combineButton.setEnabled(false);
+        jFrameCombineMergeConfig.setLocationRelativeTo(this);
+        jFrameCombineMergeConfig.setVisible(true);
     }//GEN-LAST:event_combineButtonActionPerformed
 
-    private void fitnessComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fitnessComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fitnessComboBoxActionPerformed
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        jFrameCombineMergeConfig.setVisible(false);
+    }//GEN-LAST:event_formWindowClosed
 
-    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
-        Runnable r;
-        r = new Runnable() {
-
-            @Override
-            public void run() {
-                labelLoading.setVisible(true);
-                resetButton.setEnabled(false);
-                rGenerator.reset();
-                showCoverage(rGenerator);
-                resetButton.setEnabled(true);
-                labelLoading.setVisible(false);
-            }
-
-        };
-        Thread t = new Thread(r);
-        t.start();
-    }//GEN-LAST:event_resetButtonActionPerformed
-
+    public void enableCombinedMergeButton() {
+        this.combineButton.setEnabled(true);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton combineButton;
-    private javax.swing.JSpinner coverageSpinner;
-    private javax.swing.JSpinner devNumberSpinner;
-    private javax.swing.JComboBox<String> fitnessComboBox;
-    private javax.swing.JSpinner iterationsSpinner;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanelCover;
     private javax.swing.JLabel labelLoading;
     private javax.swing.JComboBox mergesList;
-    private javax.swing.JSpinner rankingSpinner;
-    private javax.swing.JButton resetButton;
-    private javax.swing.JSpinner timeSpinner;
     private javax.swing.JTextField txProjectName;
     // End of variables declaration//GEN-END:variables
 
@@ -462,7 +317,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         chartFrame1.setVisible(true);
     }
 
-    private void showCoverage(RankingGenerator ranking) {
+    public void showCoverage(RankingGenerator ranking) {
 
         Runnable r;
         r = new Runnable() {
