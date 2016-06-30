@@ -21,8 +21,8 @@ public class Committer implements Comparable<Committer> {
     private double zScoreM;
 
     public Committer(String name, String email) {
-        this.name = name;
-        this.email = email;
+        this.name = name.toLowerCase();
+        this.email = email.toLowerCase();
     }
 
     /**
