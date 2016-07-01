@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.uff.ic.gems.tipmerge;
+package br.uff.ic.gems.tipmerge.analyzer;
 
 import arch.Session;
 import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
@@ -47,22 +47,26 @@ public class MergeVerification {
         for (File file : fList) {
             if (!file.getName().startsWith(".")) {
 
+
+                BufferedWriter bufferedWriter = null;
                 try {
-
                     System.out.println("Analyzing: " + file.getName() + " " + new Date(file.lastModified()));
-
                     File outputLocation = new File("results/" + file.getName() + ".txt");
-                    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outputLocation, true));
+                    bufferedWriter = new BufferedWriter(new FileWriter(outputLocation, true));
                     bufferedWriter.write("Project: " + file.getName() + "\t" + new Date(file.lastModified()) + "\n");
                     bufferedWriter.close();
-
                     Experiment experimentMerges = new Experiment(getRepositoryInfo(file));
-                    
                     Map<String, Integer> result = experimentMerges.getDatasFromMerges(outputLocation);
-                    
                 } catch (IOException ex) {
                     Logger.getLogger(MergeVerification.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    try {
+                        bufferedWriter.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(MergeVerification.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+                    
 
             }
         }

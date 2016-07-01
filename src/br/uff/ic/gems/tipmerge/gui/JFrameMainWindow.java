@@ -10,7 +10,6 @@ import br.uff.ic.gems.tipmerge.dao.RepositoryDao;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.Repository;
 import br.uff.ic.gems.tipmerge.experiment.Experiment;
-import br.uff.ic.gems.tipmerge.experiment.Git;
 import br.uff.ic.gems.tipmerge.experiment.RevisionAnalyzer;
 import java.awt.BorderLayout;
 import java.awt.Color;
