@@ -218,12 +218,18 @@ public class Experiment {
     }
 
     public Map<String, Integer> getDatasFromMerges(File file)  throws IOException { //
-        Map<String, Integer> mapValues = new HashMap<>();
 
+        Map<String, Integer> mapValues = new HashMap<>();
         mapValues.put("Merges", 0);
         mapValues.put("Files", 0);
         mapValues.put("Dependencies", 0);
         mapValues.put("Conflicts", 0);
+        mapValues.put("1stPosition", 0);
+        mapValues.put("2ndPosition", 0);
+        mapValues.put("3thPosition", 0);
+        mapValues.put("isInRank", 0);
+        mapValues.put("outOfRank", 0);
+
 
         //quant. merges | arq 2 lados | arq dep | conflitos | ranking (1,2,3,9,0) -> 1a 2a 3a posição, no rank, fora do rank
         List<String> mergesList = this.getRepo().getListOfMerges();
