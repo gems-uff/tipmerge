@@ -6,6 +6,7 @@
 package br.uff.ic.gems.tipmerge.model;
 
 import br.uff.ic.gems.tipmerge.util.Statistics;
+import java.lang.instrument.Instrumentation;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -32,6 +33,7 @@ public class RankingGenerator {
     
     private List<Medalist> developers;
     private Medalist fullCoverage;
+    private BitSet availableDevelopers;
 
     private int developersQuantity;
     
@@ -50,6 +52,7 @@ public class RankingGenerator {
     
     private Comparator<Medalist> medalistComparator = new MedalistComparator();
     private Comparator<Medalist> coverageComparator;
+    private Comparator<Medalist> quantityComparator = new QuantityComparator();
     private Medalist bestMedalist = null;
 
     public RankingGenerator() {
@@ -112,11 +115,14 @@ public class RankingGenerator {
         this.setMaxDevelopersQuantity(maxDevelopers);
         this.setMinCoverage(minCoverage);
         
-        // It should use i < this.getMaxDevelopersQuantity()
+        BitSet available = this.getAvailableDevelopers();
+        // It should use quantity < this.getMaxDevelopersQuantity()
         // because createSolution changes maxDevelopersQuantity if minCoverage > 0
-        BitSet configuration = new BitSet(this.developers.size());
-        for (int i = 0; i < this.getMaxDevelopersQuantity(); i++) {
+        BitSet configuration = new BitSet(this.getDevelopersQuantity());
+        int quantity = 0;
+        for (int i = available.nextSetBit(0); i != -1 && quantity < this.getMaxDevelopersQuantity(); i = available.nextSetBit(i + 1)) {
             configuration.set(i);
+            quantity++;
             if (this.createSolution(configuration) != null) {
                 created = true;
             }
@@ -135,7 +141,7 @@ public class RankingGenerator {
      * @param fitness 
      */
     public void combineDevelopers(int maxDevelopers, double minCoverage, int maxIterations, int maxDuration, int maxRankingSize, 
-                                  double goldWeight, double silverWeight, double bronzeWeight, int fitness) {
+                                  double goldWeight, double silverWeight, double bronzeWeight, int fitness, BitSet availableDevelopers) {
         this.setFirstTime(System.currentTimeMillis());
         this.setBronzeWeight(bronzeWeight);
         this.setSilverWeight(silverWeight);
@@ -144,6 +150,8 @@ public class RankingGenerator {
         this.setMaxDuration(maxDuration);
         this.setMaxIterations(maxIterations);
         this.setFitness(fitness);
+        this.setAvailableDevelopers(availableDevelopers);
+        this.filterRanking();
         this.sortRanking();
         this.setMaxRankingSize(maxRankingSize);
         if (this.initialSolution(maxDevelopers, minCoverage)) {
@@ -166,11 +174,13 @@ public class RankingGenerator {
 
         while (delta < maxTime && (iter - changed < this.getMaxIterations())) {
             iter++;
-            if (this.increaseDevelopers(this.getBestConfiguration())) {
-                changed = iter;
-            } else if (this.decreaseDevelopers(this.getBestConfiguration())) {
-                changed = iter;
-            } else if (this.mutateN(this.getBestConfiguration())) {
+            BitSet currentBest = this.getBestConfiguration();
+
+            this.increaseDevelopers(this.getBestConfiguration());
+            this.decreaseDevelopers(this.getBestConfiguration());
+            this.mutateN(this.getBestConfiguration());
+
+            if (currentBest != this.getBestConfiguration()) {
                 changed = iter;
             }
             delta = System.currentTimeMillis() - start;
@@ -325,10 +335,11 @@ public class RankingGenerator {
         int size = this.getDevelopersQuantity();
         ArrayList<Integer> bits0 = new ArrayList<>();
         BitSet newConfiguration = new BitSet(size);
+        BitSet available = this.getAvailableDevelopers();
         int bits1Quantity = 0;
         boolean result = false;
         
-        for (int i = 0; i < size; i++) {
+        for (int i = available.nextSetBit(0); i != -1; i = available.nextSetBit(i + 1)) {
             if (configuration.get(i)) {
                 bits1Quantity++;
                 newConfiguration.set(i);
@@ -337,7 +348,7 @@ public class RankingGenerator {
             }
         }
         
-        if (bits1Quantity == this.getMaxDevelopersQuantity() || bits1Quantity == size) {
+        if (bits1Quantity >= this.getMaxDevelopersQuantity() || bits1Quantity == size) {
             return result;
         }
         
@@ -362,10 +373,11 @@ public class RankingGenerator {
         ArrayList<Integer> bits0 = new ArrayList<>();
         ArrayList<Integer> bits1 = new ArrayList<>();
         BitSet newConfiguration = new BitSet(size);
+        BitSet available = this.getAvailableDevelopers();
         int bits1Quantity = 0;
         int bits0Quantity = 0;
         
-        for (int i = 0; i < size; i++) {
+        for (int i = available.nextSetBit(0); i != -1; i = available.nextSetBit(i + 1)) {
             if (configuration.get(i)) {
                 bits1.add(i);
                 bits1Quantity++;
@@ -698,7 +710,8 @@ public class RankingGenerator {
         while(true) {
             if (itr.hasNext() == false) {
                 itr.add(medalist);
-                return true;
+                return ((this.getMaxRankingSize() <= 0) || 
+                        this.getRanking().size() <= this.getMaxRankingSize());
             }
             Medalist elementInList = itr.next();
             if (this.getComparator().compare(elementInList, medalist) > 0) {
@@ -731,6 +744,7 @@ public class RankingGenerator {
      * Set comparator:
      * 0: medalistComparator
      * 1: coverageComparator
+     * 2: quantityComparator
      * @param fitness 
      */
     public void setFitness(int fitness) {
@@ -841,8 +855,29 @@ public class RankingGenerator {
      */
     public void sortRanking() {
         Collections.sort(this.ranking, this.getComparator());
-        this.setBestMedalist(this.ranking.get(0));
+        if (this.ranking.size() > 0) {
+            this.setBestMedalist(this.ranking.get(0));
+        }
     }
+    
+    /**
+     * Filter ranking according to available developers
+     */
+    public void filterRanking() {
+        BitSet available = this.getAvailableDevelopers();
+        ListIterator<Medalist> itr = this.getRanking().listIterator();
+        while(itr.hasNext()) {
+            Medalist element = itr.next();
+            BitSet availableClone = (BitSet) available.clone();
+            BitSet configuration = element.getConfiguration();
+            availableClone.and(configuration);
+            if (!availableClone.equals(configuration)) {
+                itr.remove();
+            }
+        }
+    }
+    
+    
 
     /**
      * @param fullCoverage medalist 
@@ -886,8 +921,10 @@ public class RankingGenerator {
     public Comparator<Medalist> getComparator() {
         if (this.fitness == 0) {
             return this.medalistComparator;
-        } else {
+        } else if (this.fitness == 1) {
             return this.coverageComparator;
+        } else {
+            return this.quantityComparator;
         }
     }
 
@@ -924,11 +961,24 @@ public class RankingGenerator {
     
     public void adjustRankingSize() {
         if (this.maxRankingSize != 0) {
-            while (this.ranking.size() > this.maxRankingSize) {
+            int maxSize = this.mutableRankingSize();
+            while (this.ranking.size() > maxSize) {
                 this.removeSolution(this.ranking.getLast().getConfiguration());
                 this.ranking.removeLast();
+                maxSize = this.mutableRankingSize();
             }
         }
+    }
+    
+    public int mutableRankingSize() {
+        int maxSize = this.getMaxRankingSize();
+        if (this.maxRankingSize == -1) {
+            System.gc();
+            double total = (double) Runtime.getRuntime().totalMemory();
+            double freePercentage = Runtime.getRuntime().freeMemory() / total;
+            maxSize = Math.max(1000, this.ranking.size() + ((freePercentage > 0.2) ? 1 : -1));
+        }
+        return maxSize;
     }
 
     public double getGoldWeight() {
@@ -954,7 +1004,25 @@ public class RankingGenerator {
     public void setBronzeWeight(double bronzeWeight) {
         this.bronzeWeight = bronzeWeight;
     }
-    
-    
-    
+
+    public BitSet getAvailableDevelopers() {
+        return availableDevelopers;
+    }
+
+    public void setAvailableDevelopers(BitSet availableDevelopers) {
+        if (availableDevelopers != null) {
+            if (this.availableDevelopers != null) {
+                List<Medalist> devs = this.getDevelopers();
+                for (int i = availableDevelopers.nextSetBit(0); i != -1; i = availableDevelopers.nextSetBit(i + 1)) {
+                    if (!this.availableDevelopers.get(i)) {
+                        this.addToRanking(devs.get(i));
+                    }
+                }
+            }
+            this.availableDevelopers = availableDevelopers;   
+        } else {
+            this.availableDevelopers = (BitSet) this.fullCoverage.getConfiguration().clone();
+        }
+        
+    }
 }

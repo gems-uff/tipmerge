@@ -60,7 +60,9 @@ public class TreeTable {
                 //int gold = filesList.get(file)[0] , silver = filesList.get(file)[1] , bronze = filesList.get(file)[2];
                 this.content.add(new Object[]{file, filesList.get(file)[0], filesList.get(file)[1], filesList.get(file)[2], medalist.getCommitter().getName()});
             }
-
+            if (position == 1001) {
+                break;
+            }
         }
     }
 
