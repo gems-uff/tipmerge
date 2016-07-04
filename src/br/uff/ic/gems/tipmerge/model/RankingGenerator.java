@@ -77,7 +77,10 @@ public class RankingGenerator {
     
     public void reset() {
         this.ranking = new LinkedList<>(this.getDevelopers());
+        int fitness = this.fitness;
+        this.setFitness(0);
         this.initializeData();
+        this.setFitness(fitness);
     }
     
     /**
@@ -115,13 +118,23 @@ public class RankingGenerator {
         this.setMaxDevelopersQuantity(maxDevelopers);
         this.setMinCoverage(minCoverage);
         
+        List<Medalist> devs = new ArrayList();
         BitSet available = this.getAvailableDevelopers();
+        for (int i = available.nextSetBit(0); i != -1; i = available.nextSetBit(i + 1)) {
+            devs.add(this.getDevelopers().get(i));
+        }
+        Collections.sort(devs, this.getComparator());
+        
+            
         // It should use quantity < this.getMaxDevelopersQuantity()
         // because createSolution changes maxDevelopersQuantity if minCoverage > 0
         BitSet configuration = new BitSet(this.getDevelopersQuantity());
         int quantity = 0;
-        for (int i = available.nextSetBit(0); i != -1 && quantity < this.getMaxDevelopersQuantity(); i = available.nextSetBit(i + 1)) {
-            configuration.set(i);
+        for (Medalist dev : devs) {
+            if (quantity >= this.getMaxDevelopersQuantity()) {
+                break;
+            }
+            configuration.set(dev.getConfiguration().nextSetBit(0));
             quantity++;
             if (this.createSolution(configuration) != null) {
                 created = true;

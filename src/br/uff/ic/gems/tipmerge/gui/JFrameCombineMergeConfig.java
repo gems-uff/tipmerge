@@ -56,7 +56,6 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
             }
         });
         
-        this.fitnessComboBox.setSelectedIndex(1);
         int devs = rGenerator.getDevelopersQuantity();
         ((SpinnerNumberModel) this.devNumberSpinner.getModel()).setMinimum(0);
         ((SpinnerNumberModel) this.devNumberSpinner.getModel()).setMaximum(devs);
@@ -101,7 +100,7 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
                     ((DoubleSpinner) goldSpinner).getDouble(),
                     ((DoubleSpinner) silverSpinner).getDouble(),
                     ((DoubleSpinner) bronzeSpinner).getDouble(),
-                    fitnessComboBox.getSelectedIndex(),
+                    1,
                     availableDevelopers
             );
             combineButton.setEnabled(true);
@@ -128,8 +127,6 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         coverageSpinner = new DoubleSpinner(0.0, 1.0, 0.01);
         jLabel2 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        fitnessComboBox = new javax.swing.JComboBox<>();
         coverageWeights = new javax.swing.JPanel();
         bronzeSpinner = new DoubleSpinner(-1000.0, 1000.0, -0.1);
         jLabel11 = new javax.swing.JLabel();
@@ -172,10 +169,6 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
 
         jLabel2.setText("Minimum coverage");
 
-        jLabel5.setText("Objective Function");
-
-        fitnessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Maximize Medals", "Maximize Coverage", "Minimize Developers" }));
-
         javax.swing.GroupLayout mergeRequirementsLayout = new javax.swing.GroupLayout(mergeRequirements);
         mergeRequirements.setLayout(mergeRequirementsLayout);
         mergeRequirementsLayout.setHorizontalGroup(
@@ -184,11 +177,9 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(mergeRequirementsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel1))
                 .addGap(44, 44, 44)
                 .addGroup(mergeRequirementsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fitnessComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(coverageSpinner, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(devNumberSpinner, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
@@ -204,10 +195,6 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
                 .addGroup(mergeRequirementsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(coverageSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(mergeRequirementsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fitnessComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
                 .addContainerGap())
         );
 
@@ -559,7 +546,6 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
     private javax.swing.JPanel coverageWeights;
     private javax.swing.JSpinner devNumberSpinner;
     private javax.swing.JPanel developersSelection;
-    private javax.swing.JComboBox<String> fitnessComboBox;
     private javax.swing.JSpinner goldSpinner;
     private javax.swing.JLabel iterationsLabel;
     private javax.swing.JSpinner iterationsSpinner;
@@ -569,7 +555,6 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
