@@ -24,6 +24,7 @@ public class Medalist {
     private Set<String> silverList = new TreeSet();
     private Map<String, MedalBronze> bronzeList = new HashMap<>();
     private BitSet configuration;
+    private double coverage = 0.0;
 
     public BitSet getConfiguration() {
         return configuration;
@@ -220,5 +221,15 @@ public class Medalist {
 
         return fileMedal;
     }
+
+    public double getCoverage() {
+        return coverage;
+    }
+
+    public void setCoverage(double coverage) {
+        this.coverage = coverage;
+    }
+    
+    
 
 }

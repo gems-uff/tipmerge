@@ -23,7 +23,7 @@ import javax.swing.WindowConstants;
  *
  * @author j2cf
  */
-public class JFrameCombineMergeConfig extends javax.swing.JFrame {
+public class JFrameCollaborativeMergeConfig extends javax.swing.JFrame {
 
     final private JFrameRankingCoverageFile jFrameRankingCoverageFile;
     private RankingGenerator rGenerator;
@@ -35,9 +35,9 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
     
 
 
-    JFrameCombineMergeConfig(RankingGenerator rGenerator, JFrameRankingCoverageFile jFrameRankingCoverageFile) {
+    JFrameCollaborativeMergeConfig(RankingGenerator rGenerator, JFrameRankingCoverageFile jFrameRankingCoverageFile) {
         initComponents();
-        JFrameCombineMergeConfig athis = this;
+        JFrameCollaborativeMergeConfig athis = this;
         this.rGenerator = rGenerator;
         this.jFrameRankingCoverageFile = jFrameRankingCoverageFile;
         this.availableIndexes = new ArrayList<>();
@@ -159,7 +159,7 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Collaborative Merge");
 
-        mergeRequirements.setBorder(javax.swing.BorderFactory.createTitledBorder("Merge Requirements"));
+        mergeRequirements.setBorder(javax.swing.BorderFactory.createTitledBorder("Collaborative Merge Requirements"));
 
         devNumberSpinner.setValue(1);
 
@@ -288,7 +288,7 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
             .addGroup(stopConditionsLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(showHideButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(stopConditionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(timeLabel)
                     .addComponent(timeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -380,6 +380,7 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(developersSelectionLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
                         .addComponent(addSelectedButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(addAllButton)
@@ -387,7 +388,7 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
                         .addComponent(removeAllButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeSelectedButton)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 72, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -447,9 +448,9 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(mergeRequirements, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                         .addComponent(coverageWeights, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                         .addComponent(stopConditions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(developersSelection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -469,6 +470,10 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
         Runnable r = () -> {
             labelLoading.setVisible(true);
             resetButton.setEnabled(false);
+            rGenerator.setGoldWeight(1.0);
+            rGenerator.setSilverWeight(0.5);
+            rGenerator.setBronzeWeight(0.1);
+            rGenerator.setFitness(0);
             rGenerator.reset();
             resetButton.setEnabled(true);
             labelLoading.setVisible(false);

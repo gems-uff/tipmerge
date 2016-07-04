@@ -62,17 +62,23 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="labelLoading" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="mergesList" alignment="0" pref="661" max="32767" attributes="0"/>
-                      <Component id="txProjectName" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="mergesList" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txProjectName" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          <Component id="combineButton" min="-2" pref="171" max="-2" attributes="0"/>
+                          <Component id="indicationLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="147" max="-2" attributes="0"/>
+                          <Component id="labelLoading" min="-2" pref="110" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="combineButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -93,9 +99,10 @@
                       <Component id="mergesList" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="labelLoading" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="combineButton" alignment="1" min="-2" pref="29" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="combineButton" alignment="3" min="-2" pref="29" max="-2" attributes="0"/>
+                      <Component id="labelLoading" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="indicationLabel" alignment="3" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
@@ -141,11 +148,16 @@
         </Component>
         <Component class="javax.swing.JButton" name="combineButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Collaborative Merge"/>
+            <Property name="text" type="java.lang.String" value="Recommend Collaborative Merge"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="combineButtonActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="indicationLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Recommendation based on medal counts"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

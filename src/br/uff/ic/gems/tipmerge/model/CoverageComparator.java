@@ -42,7 +42,7 @@ public class CoverageComparator implements Comparator<Medalist> {
             goldWeight * totalGoldBranch2 +
             silverWeight * totalSilver +
             bronzeWeight * totalBronze);
-        
+        fullCoverage.setCoverage(1.0);
 
         
     }
@@ -58,7 +58,9 @@ public class CoverageComparator implements Comparator<Medalist> {
             goldWeight * partialGoldBranch2 +
             silverWeight * partialSilver +
             bronzeWeight * partialBronze;
-        return partialCoverage / this.totalCoverage;
+        double coverage = partialCoverage / this.totalCoverage;
+        medalist.setCoverage(coverage);
+        return coverage;
     }
     
     @Override

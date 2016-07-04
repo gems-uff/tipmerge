@@ -106,6 +106,10 @@ public class RankingGenerator {
         }
         this.setMinCoverage(0.0);
         this.setFullCoverage(this.createSolution(full, false));
+    
+        for (int i = 0; i < size; i++) {
+            this.getCoverageComparator().coverage(developersRanking.get(i));
+        }
     }
     
     /**
@@ -762,6 +766,14 @@ public class RankingGenerator {
      */
     public void setFitness(int fitness) {
         this.fitness = fitness;
+    }
+
+    /**
+     *
+     * @return fitness
+     */
+    public int getFitness() {
+        return fitness;
     }
     
     /**

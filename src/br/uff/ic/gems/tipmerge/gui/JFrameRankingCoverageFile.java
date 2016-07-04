@@ -14,6 +14,7 @@ import br.uff.ic.gems.tipmerge.model.Repository;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GradientPaint;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
     private MergeFiles mergeFiles;
     private Map<EditedFile, Set<EditedFile>> dependenciesBranchOne;
     private Map<EditedFile, Set<EditedFile>> dependenciesBranchTwo;
-    private JFrameCombineMergeConfig jFrameCombineMergeConfig;
+    private JFrameCollaborativeMergeConfig jFrameCombineMergeConfig;
     
     public Set<EditedFile> filesOfInterest = new HashSet<>();
 
@@ -81,7 +82,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
     private void createAndShowCoverage() {
         rGenerator = new RankingGenerator();
         rGenerator.createMedals(mergeFiles, dependenciesBranchOne, dependenciesBranchTwo);
-        jFrameCombineMergeConfig = new JFrameCombineMergeConfig(rGenerator, this);
+        jFrameCombineMergeConfig = new JFrameCollaborativeMergeConfig(rGenerator, this);
         showCoverage(rGenerator);
     }
    
@@ -101,6 +102,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         mergesList = new javax.swing.JComboBox();
         labelLoading = new javax.swing.JLabel();
         combineButton = new javax.swing.JButton();
+        indicationLabel = new javax.swing.JLabel();
         jPanelCover = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -129,12 +131,14 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         labelLoading.setText("Loading ...");
         labelLoading.setVisible(false);
 
-        combineButton.setText("Collaborative Merge");
+        combineButton.setText("Recommend Collaborative Merge");
         combineButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 combineButtonActionPerformed(evt);
             }
         });
+
+        indicationLabel.setText("Recommendation based on medal counts");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -143,16 +147,20 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel14)
-                    .addComponent(labelLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(mergesList, 0, 661, Short.MAX_VALUE)
-                    .addComponent(txProjectName)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(mergesList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txProjectName)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(combineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(indicationLabel)
+                        .addGap(147, 147, 147)
+                        .addComponent(labelLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(combineButton)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -167,9 +175,10 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                     .addComponent(jLabel14)
                     .addComponent(mergesList, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelLoading, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(combineButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(combineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelLoading)
+                    .addComponent(indicationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -225,10 +234,14 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
 
     public void enableCombinedMergeButton() {
         this.combineButton.setEnabled(true);
+        this.indicationLabel.setText("Recommendation based on " +
+            Arrays.asList("medal counts", "coverage", "developers count").get(rGenerator.getFitness())
+        );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton combineButton;
+    private javax.swing.JLabel indicationLabel;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JPanel jPanel4;

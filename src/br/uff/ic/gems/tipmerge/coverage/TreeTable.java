@@ -26,7 +26,7 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
  */
 public class TreeTable {
 
-    private final String[] headings = {"Position/Committer", "Gold", "Silver", "Bronze"};
+    private final String[] headings = {"Position/Committer", "Gold", "Silver", "Bronze", "Coverage"};
     private final List<Object[]> content;
     private final RankingGenerator rankGen;
 
@@ -51,14 +51,15 @@ public class TreeTable {
                 + name,
                 iconManager.createImageIcon(medalist.getGoldMedals()),
                 iconManager.createImageIcon(medalist.getSilverMedals()),
-                iconManager.createImageIcon(medalist.getBronzeMedals())
+                iconManager.createImageIcon(medalist.getBronzeMedals()),
+                iconManager.createImageIcon(((int) (medalist.getCoverage() * 100.0)))
             });
 
             Map<String, Object[]> filesList = medalist.getFilesList();
 
             for (String file : filesList.keySet()) {
                 //int gold = filesList.get(file)[0] , silver = filesList.get(file)[1] , bronze = filesList.get(file)[2];
-                this.content.add(new Object[]{file, filesList.get(file)[0], filesList.get(file)[1], filesList.get(file)[2], medalist.getCommitter().getName()});
+                this.content.add(new Object[]{file, filesList.get(file)[0], filesList.get(file)[1], filesList.get(file)[2], "", medalist.getCommitter().getName()});
             }
             if (position == 1001) {
                 break;
@@ -77,7 +78,7 @@ public class TreeTable {
             ChildNode actualNode = new ChildNode(data);
 
             switch (data.length) {
-                case 4:
+                case 5:
                     //Object[] values = new Object[]{data[0] + " - " + data[1], data[2], data[3], data[4]};
                     //actualNode = new ChildNode(values);
                     devNode.add(actualNode);
@@ -97,7 +98,7 @@ public class TreeTable {
             @Override
             public Class getColumnClass(int column) {
 
-                if (column == 1 || column == 2 || column == 3) {
+                if (column == 1 || column == 2 || column == 3 || column == 4) {
 
                     //if(getRowCount() == devNode.getChildCount())
                     //    return Integer.class;
@@ -168,6 +169,7 @@ public class TreeTable {
         JLabel lblGold = new JLabel("Gold");
         JLabel lblSilver = new JLabel("Silver");
         JLabel lblBronze = new JLabel("Bronze");
+        JLabel lblCoverage = new JLabel("Coverage (%)");
         lblGold.setIcon(new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/gold1.png")));
         lblSilver.setIcon(new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/silver1.png")));
         lblBronze.setIcon(new ImageIcon(getClass().getResource("/br/uff/ic/gems/tipmerge/icons/bronze1.png")));
@@ -182,6 +184,8 @@ public class TreeTable {
         treeTable.getColumnModel().getColumn(3).setHeaderValue(lblBronze);
         treeTable.getColumnModel().getColumn(3).setHeaderRenderer(jTableRender);
         //treeTable.getColumnModel().getColumn(3).setCellRenderer(jTableRender);
+        treeTable.getColumnModel().getColumn(4).setHeaderValue(lblCoverage);
+        treeTable.getColumnModel().getColumn(4).setHeaderRenderer(jTableRender);
 
         //treeTable.getModel().
     }
