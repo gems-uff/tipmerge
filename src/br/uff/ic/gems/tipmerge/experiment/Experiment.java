@@ -316,7 +316,7 @@ public class Experiment {
             System.gc();
 
         }
-        //showFinalResults(mapValues, rankMapA, file);
+        showFinalResults(mapValues, mapValues, file);
         //Git.checkoutMaster(this.getRepo().getProject());
         return mapValues;
     }
