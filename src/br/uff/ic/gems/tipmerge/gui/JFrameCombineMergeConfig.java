@@ -157,7 +157,7 @@ public class JFrameCombineMergeConfig extends javax.swing.JFrame {
         combineButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Developers Recommendation");
+        setTitle("Collaborative Merge");
 
         mergeRequirements.setBorder(javax.swing.BorderFactory.createTitledBorder("Merge Requirements"));
 

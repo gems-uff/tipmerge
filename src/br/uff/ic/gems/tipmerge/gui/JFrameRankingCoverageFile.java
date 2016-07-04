@@ -129,7 +129,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         labelLoading.setText("Loading ...");
         labelLoading.setVisible(false);
 
-        combineButton.setText("Combined Merge");
+        combineButton.setText("Collaborative Merge");
         combineButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 combineButtonActionPerformed(evt);
@@ -150,9 +150,9 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(mergesList, 0, 661, Short.MAX_VALUE)
                     .addComponent(txProjectName)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(combineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(combineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
