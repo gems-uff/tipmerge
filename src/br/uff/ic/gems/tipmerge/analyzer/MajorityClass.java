@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author jjcfigueiredo
  */
-public class MajorityClassVerification {
+public class MajorityClass {
 
     /**
      * @param args the command line arguments
