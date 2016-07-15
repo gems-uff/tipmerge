@@ -72,8 +72,8 @@ public class Committer implements Comparable<Committer> {
 
     @Override
     public String toString() {
-        //return this.formatted(this.getName()) + " <" + this.formatted(this.getEmail()) + "> : " + this.getCommits();
-        return this.formatted(this.getName());
+        return this.formatted(this.getName()) + " <" + this.formatted(this.getEmail()) + "> : " + this.getCommits();
+        //return this.formatted(this.getName());
     }
     //Sets a size for one string
 

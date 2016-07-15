@@ -32,6 +32,10 @@ public class CombinedCommitter extends Committer {
     public Integer getQuantity() {
         return this.committers.size();
     }
+    
+    public List<Committer> getCommitters(){
+        return this.committers;
+    }
 
 
 }
