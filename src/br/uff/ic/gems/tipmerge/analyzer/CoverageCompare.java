@@ -98,7 +98,6 @@ public class CoverageCompare {
                         boolean hasFilesDependencies = !(dependencies.get(0).isEmpty() && dependencies.get(1).isEmpty());
 
                         if ((filesInCommon > 0) || (hasFilesDependencies)) {
-
                             RankingGenerator rGenerator = getRanking(dependencies, mergeFiles);
 
                             out = new PrintWriter(new BufferedWriter(new FileWriter(outputFileName, true)));
