@@ -55,6 +55,7 @@ public class JFrameDependencies extends javax.swing.JFrame {
         repo = repository;
         this.mergeFiles = mergeFiles;
         this.txRepositoryName.setText(repo.getName());
+        btCoverage.setVisible(false);
 
         comboMergesList.setModel(new JComboBox(new String[]{mergeFiles.getHash()}).getModel());
     }
