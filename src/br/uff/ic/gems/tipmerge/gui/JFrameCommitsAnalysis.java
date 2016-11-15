@@ -182,6 +182,7 @@ public class JFrameCommitsAnalysis extends javax.swing.JFrame {
 
             }
         ));
+        jTable4.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jScrollPane5.setViewportView(jTable4);
 
         jTabbedPane1.addTab("Previous History", jScrollPane5);

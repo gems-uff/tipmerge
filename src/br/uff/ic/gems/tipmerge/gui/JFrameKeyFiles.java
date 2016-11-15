@@ -140,7 +140,7 @@ public class JFrameKeyFiles extends javax.swing.JFrame {
                     .addComponent(txHashes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -184,6 +184,7 @@ public class JFrameKeyFiles extends javax.swing.JFrame {
 
             }
         ));
+        jTable4.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jScrollPaneHistory.setViewportView(jTable4);
 
         jTabbedPane1.addTab("Previous History", jScrollPaneHistory);

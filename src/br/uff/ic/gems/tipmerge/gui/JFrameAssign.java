@@ -315,6 +315,7 @@ public class JFrameAssign extends javax.swing.JFrame {
 
             }
         ));
+        jTable4.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jScrollPane8.setViewportView(jTable4);
 
         jTabbedPane1.addTab("Previous History", jScrollPane8);
