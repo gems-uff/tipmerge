@@ -56,7 +56,7 @@ public class CoverageCompare {
     public static void main(String[] args) throws IOException {
 
         //cria o arquivo com o nome resultados no mesmo diretório dos projetos...
-        File directory = new File("files/");
+        File directory = new File("clones/");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         String outputFileName = directory.toString() + "/Coverage-Compare-" + dateFormat.format(date) + ".txt";
@@ -115,11 +115,13 @@ public class CoverageCompare {
                             if (coverNorm > 0.0) {
                                 analysisResult.put("2devs", ((analysisResult.get("2devs") == null) ? 1 : analysisResult.get("2devs") + 1));
                             }
-
+                            
                             System.out.println("3 do rank original");
-                            coverDef = evaluateCoverage(rGenerator, out, new Double[]{gold, silver, bronze}, 3, 3);
-                            System.out.println("3 do rank otimizado");
-                            coverOpt = evaluateCoverage(rGenerator, out, new Double[]{gold, silver, bronze}, 3, rGenerator.getDevelopersQuantity());
+                            if(rGenerator.getDevelopersQuantity() >= 3){
+                                coverDef = evaluateCoverage(rGenerator, out, new Double[]{gold, silver, bronze}, 3, 3);
+                                System.out.println("3 do rank otimizado");
+                                coverOpt = evaluateCoverage(rGenerator, out, new Double[]{gold, silver, bronze}, 3, rGenerator.getDevelopersQuantity());
+                            }
 
                             coverNorm = coverOpt > coverDef ? (coverOpt - coverDef) / (1 - coverDef) : (coverOpt - coverDef) / coverDef;
                             out.print("\t" + coverNorm + "\n");

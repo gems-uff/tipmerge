@@ -73,9 +73,9 @@ public class JFrameMainWindow extends javax.swing.JFrame {
         }
         initComponents();
         super.setLocationRelativeTo(null);
-        jMenu2.setVisible(false);
-        jMenuItem2.setVisible(false);
-        jMenuItem3.setVisible(false);
+        //jMenu2.setVisible(false);
+        //jMenuItem2.setVisible(false);
+        //jMenuItem3.setVisible(false);
     }
     
     private void selectProject(File filePath) {

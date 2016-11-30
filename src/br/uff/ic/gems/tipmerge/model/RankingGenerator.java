@@ -95,7 +95,6 @@ public class RankingGenerator {
         this.solutions = new HashSet<>();
         
         int size = this.getDevelopersQuantity();
-        
         BitSet full = new BitSet(size);
         for (int i = 0; i < size; i++) {
             full.set(i);
@@ -104,8 +103,11 @@ public class RankingGenerator {
             developersRanking.get(i).setConfiguration(solution);
             this.addSolution(solution);
         }
+        System.out.println("full: " + full.toString());
         this.setMinCoverage(0.0);
-        this.setFullCoverage(this.createSolution(full, false));
+        Medalist m = this.createSolution(full, false);
+        System.out.println("Medalist: "+m.toString());
+        this.setFullCoverage(m);
     
         for (int i = 0; i < size; i++) {
             this.getCoverageComparator().coverage(developersRanking.get(i));
