@@ -111,7 +111,7 @@ public class Committer implements Comparable<Committer> {
             return false;
         }
         final Committer other = (Committer) obj;
-        return (Objects.equals(this.name, other.name) || (Objects.equals(this.email, other.email)));
+        return (Objects.equals(this.name.trim(), other.name.trim()) || (Objects.equals(this.email.trim(), other.email.trim())));
     }
 
     /**

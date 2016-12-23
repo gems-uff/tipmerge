@@ -2,7 +2,6 @@ package br.uff.ic.gems.tipmerge.model;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,10 +159,7 @@ public class Medalist {
             return false;
         }
         final Medalist other = (Medalist) obj;
-        if (!Objects.equals(this.committer, other.committer)) {
-            return false;
-        }
-        return true;
+        return this.committer.equals(other.committer);
     }
 
     public Map<String, Object[]> getFilesList() {

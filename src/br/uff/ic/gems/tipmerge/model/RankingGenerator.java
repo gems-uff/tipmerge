@@ -5,9 +5,6 @@
  */
 package br.uff.ic.gems.tipmerge.model;
 
-import br.uff.ic.gems.tipmerge.util.Statistics;
-import java.lang.instrument.Instrumentation;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
