@@ -14,23 +14,11 @@ import java.util.List;
 public class MergeStatusAnalizer {
 	public static boolean isConflict(List<String> mergeMessage) {
         String MERGE_FAIL_MESSAGE = "Automatic merge failed";
-
-        for (String line : mergeMessage) {
-            if (line.contains(MERGE_FAIL_MESSAGE)) {
-                return true;
-            }
-        }
-        return false;
+        return mergeMessage.stream().anyMatch((line) -> (line.contains(MERGE_FAIL_MESSAGE)));
     }
 
     public static boolean isFastForward(List<String> mergeMessage) {
         String MERGE_FAST_FORWARD_MESSAGE = "Fast-forward";
-
-        for (String line : mergeMessage) {
-            if (line.contains(MERGE_FAST_FORWARD_MESSAGE)) {
-                return true;
-            }
-        }
-        return false;
+        return mergeMessage.stream().anyMatch((line) -> (line.contains(MERGE_FAST_FORWARD_MESSAGE)));
     }
 }
