@@ -8,13 +8,17 @@ package br.uff.ic.gems.tipmerge.gui;
 import br.uff.ic.gems.tipmerge.model.Committer;
 import br.uff.ic.gems.tipmerge.model.EditedFile;
 import br.uff.ic.gems.tipmerge.model.MergeFiles;
+import br.uff.ic.gems.tipmerge.util.Export;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * This class is in charge of showing all results about the files analysis
@@ -75,6 +79,7 @@ public class JFrameKeyFiles extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jScrollPaneHistory = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
+        buttonExport = new javax.swing.JButton();
 
         hash1.setText("<hash>");
 
@@ -189,23 +194,47 @@ public class JFrameKeyFiles extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Previous History", jScrollPaneHistory);
 
+        buttonExport.setText("Export...");
+        buttonExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonExportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(buttonExport)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonExport)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buttonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExportActionPerformed
+        Map<String, TableModel> sheet = new LinkedHashMap<>();
+        sheet.put("Branch1", jTable1.getModel());
+        sheet.put("Branch2", jTable2.getModel());
+        sheet.put("Previous History", jTable4.getModel());
+
+        Export.toExcel(sheet);
+        JOptionPane.showMessageDialog(this, "File was sucessfully saved", null, JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_buttonExportActionPerformed
 
     private void showResultsTable() {
         //organizes the data in the table
@@ -216,6 +245,7 @@ public class JFrameKeyFiles extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonExport;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel hash1;
     private javax.swing.JFrame jFrame1;
