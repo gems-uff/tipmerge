@@ -106,7 +106,7 @@ public class JFrameRankingCoverageFile extends javax.swing.JFrame {
         jPanelCover = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Developers Recommendation");
+        setTitle("Developer Ranking");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
