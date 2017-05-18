@@ -28,7 +28,6 @@ First of all, the user must select some git project on her computer. After that,
 We would like to thank CAPES (10614-14-1), CNPq, and FAPERJ for partially supporting this work.
 
 ## License
-The MIT License (MIT)
 
 Copyright (c) 2014-2017 Universidade Federal Fluminense (UFF)
 
