@@ -1,2 +1,3 @@
 title: TIPMerge
+description: TIPMerge recommends developers who are best suited to perform branch merges, taking into consideration developers’ past experience in the project, their changes in the branches, and dependencies among modified files in the branches.
 theme: jekyll-theme-cayman
